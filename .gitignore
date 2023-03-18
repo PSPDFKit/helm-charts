@@ -1,0 +1,8 @@
+.DS_Store
+
+*.Secret.yaml
+*.yaml.swp
+Chart.lock
+
+# Helm
+*/charts/*
