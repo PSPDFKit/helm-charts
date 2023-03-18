@@ -1,0 +1,1 @@
+# PSPDFkit Helm chart repository
