@@ -1,0 +1,151 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pspdfkit-server.fullname" . }}
+  labels:
+    {{- include "pspdfkit-server.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- if .Values.updateStrategy }}
+  strategy:
+    {{ toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pspdfkit-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/server-config.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- if .Values.pspdfkit.auth.api.createSecret }}
+        checksum/auth-api: {{ include (print $.Template.BasePath "/server-auth-secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if .Values.pspdfkit.auth.dashboard.createSecret }}
+        checksum/auth-dashboard: {{ include (print $.Template.BasePath "/server-dashboard-secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if not .Values.pspdfkit.license.externalSecret.name }}
+        checksum/license-secret: {{ include (print $.Template.BasePath "/server-license-secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if .Values.pspdfkit.storage.postgres.createSecret }}
+        checksum/postgres-config: {{ include (print $.Template.BasePath "/server-db-postgres-secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if (include "pspdfkit-server.s3.createSecret" .) }}
+        checksum/s3-secret: {{ include (print $.Template.BasePath "/server-s3-secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pspdfkit-server.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pspdfkit-server.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{ toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+            - secretRef:
+                name: {{ include "pspdfkit-server.fullname" . }}
+            {{- if .Values.pspdfkit.auth.api.createSecret }}
+            - secretRef:
+                name: {{ include "pspdfkit-server.fullname" . }}-auth
+            {{- else }}
+              {{- with .Values.pspdfkit.auth.api.externalSecretName }}
+            - secretRef:
+                name: {{ . }}
+              {{- end }}
+            {{- end }}
+            - configMapRef:
+                name: {{ include "pspdfkit-server.fullname" . }}-config
+            {{- if .Values.pspdfkit.storage.postgres.createSecret }}
+            - secretRef:
+                name: {{ include "pspdfkit-server.fullname" . }}-db-postgres
+            {{- else }}
+              {{- with .Values.pspdfkit.storage.postgres.externalSecretName }}
+            - secretRef:
+                name: {{ . }}
+             {{- end }}
+            {{- end }}
+            {{- if .Values.pspdfkit.auth.dashboard.createSecret }}
+            - secretRef:
+                name: {{ include "pspdfkit-server.fullname" . }}-dashboard
+            {{- else }}
+              {{- with .Values.pspdfkit.auth.dashboard.externalSecretName }}
+            - secretRef:
+                name: {{ . }}
+             {{- end }}
+            {{- end }}
+          env:
+            - name: ACTIVATION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pspdfkit-server.license.secret.name" . }}
+                  key: {{ include "pspdfkit-server.license.secret.key" . }}
+          {{- if eq (include "pspdfkit-server.s3.enabled" .) "true" }}
+            - name: ASSET_STORAGE_S3_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pspdfkit-server.s3.secretName" . }}
+                  key: AWS_ACCESS_KEY_ID
+            - name: ASSET_STORAGE_S3_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pspdfkit-server.s3.secretName" . }}
+                  key: AWS_SECRET_ACCESS_KEY
+          {{- end }}
+          {{- if .Values.extraEnvs }}
+            {{- toYaml .Values.extraEnvs | nindent 12 }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: api
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- if .Values.startupProbe }}
+          startupProbe: {{ toYaml .Values.startupProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe }}
+          livenessProbe: {{ toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe: {{ toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+          {{- end }}
+      {{- if .Values.sidecars }}
+        {{ toYaml .Values.sidecars | nindent 8 }}
+      {{- end }}
+      {{- if .Values.extraVolumes }}
+      volumes:
+        {{ toYaml .Values.extraVolumes | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

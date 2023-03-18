@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pspdfkit-server.fullname" . }}-config
+  labels:
+    {{- include "pspdfkit-server.labels" . | nindent 4 }}
+data:
+  LOG_LEVEL: {{ default "info" .Values.pspdfkit.log.level | quote }}
+  PDF_GENERATION_TIMEOUT: "120000"
+  SERVER_REQUEST_TIMEOUT: "120000"
+  REMOTE_URL_FETCH_TIMEOUT: "20000"
+  READ_ANNOTATION_BATCH_TIMEOUT: "20000"
+  PSPDFKIT_WORKER_POOL_SIZE: "2"
+  USE_REDIS_CACHE: "false"
+{{- with .Values.pspdfkit.storage }}
+  ASSET_STORAGE_BACKEND: {{ default "built-in" .assetStorageBackend | quote }}
+{{-   if eq .assetStorageBackend "s3" }}
+  ASSET_STORAGE_S3_BUCKET: {{ default "none" .s3.bucket | quote }}
+  ASSET_STORAGE_S3_REGION: {{ default "none" .s3.region | quote }}
+{{-     if .s3.host }}
+  ASSET_STORAGE_S3_HOST: {{ .s3.host | quote }}
+  ASSET_STORAGE_S3_PORT: {{ default "443" .s3.port | quote }}
+  ASSET_STORAGE_S3_SCHEME: {{ default "https://" .s3.scheme | quote }}
+{{-     end }}
+{{-   end }}
+  ENABLE_ASSET_STORAGE_FALLBACK: {{ default "false" .enableAssetStorageFallback | quote }}
+{{- end }}
+{{- with .Values.pspdfkit.signingService }}
+{{-   if .enabled }}
+  SIGNING_SERVICE_URL: {{ default "none" .url | quote }}
+  SIGNING_SERVICE_TIMEOUT:  {{ default "10000" .timeoutMs | quote }}
+  DEFAULT_SIGNER_NAME: {{ default "none" .defaultSignerName | quote }}
+  DEFAULT_SIGNATURE_REASON: {{ default "none" .defaultSignatureReason | quote }}
+  DEFAULT_SIGNATURE_LOCATION: {{ default "none" .defaultSignatureLocation | quote }}
+  DIGITAL_SIGNATURE_HASH_ALGORITHM: {{ default "sha512" .digitalSignatureHashAlgorithm | quote }}
+  DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME: {{ default "current_time" .digitalSignatureCertificateCheckTime | quote }}
+{{-   end }}
+{{- end }}
+{{- with .Values.pspdfkit.trustedProxies }}
+  TRUSTED_PROXIES: {{ . | quote }}
+{{- end }}
+# Can be used for hash updating
+  VERSION: {{ include "pspdfkit-server.chart" . | quote }}
