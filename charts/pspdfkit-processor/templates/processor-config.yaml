@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pspdfkit-processor.fullname" . }}-config
+  labels:
+    {{- include "pspdfkit-processor.labels" . | nindent 4 }}
+data:
+  LOG_LEVEL: {{ default "info" .Values.pspdfkit.log.level | quote }}
+  PDF_GENERATION_TIMEOUT: "120000"
+  PROCESSOR_REQUEST_TIMEOUT: "120000"
+  REMOTE_URL_FETCH_TIMEOUT: "20000"
+  PSPDFKIT_WORKER_POOL_SIZE: "2"
+# Can be used for hash updating
+  VERSION: {{ include "pspdfkit-processor.chart" . | quote }}
