@@ -12,6 +12,8 @@ data:
   READ_ANNOTATION_BATCH_TIMEOUT: "20000"
   PSPDFKIT_WORKER_POOL_SIZE: "2"
   USE_REDIS_CACHE: "false"
+  ENABLE_DATABASE_MIGRATIONS: "true"
+  EXIT_AFTER_DATABASE_MIGRATIONS: "false"
 {{- with .Values.pspdfkit.storage }}
   ASSET_STORAGE_BACKEND: {{ default "built-in" .assetStorageBackend | quote }}
 {{-   if eq .assetStorageBackend "s3" }}
