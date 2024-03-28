@@ -1,0 +1,15 @@
+apiVersion: {{ .Values.apiVersion }}
+kind: {{ .Values.kind }}
+metadata:
+  name: {{ include "simple-resource-wrapper.fullname" . }}
+  labels:
+    {{- include "simple-resource-wrapper.labels" . | nindent 4 }}
+  {{- with .Values.metadata.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.metadata.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- toYaml .Values.spec | nindent 2 }}

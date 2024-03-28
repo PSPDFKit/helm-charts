@@ -1,0 +1,96 @@
+pspdfkit:
+  license:
+    activationKey: ""
+    externalSecret: 
+      name: ""
+      key: DOCUMENT_ENGINE_ACTIVATION_KEY
+  auth:
+    api:
+      apiToken: secret
+    dashboard:
+      username: admin
+      password: admin
+  log:
+    level: debug
+  trustedProxies: default
+  signingService:
+    enabled: true
+    url: http://signing-service:6000/sign
+    timeoutSeconds: 10
+  storage:
+    enableMigrationJobs: false
+    databaseEngine: postgresql
+    assetStorageBackend: built-in
+    enableAssetStorageFallback: false
+    postgres:
+      enabled: true
+      host: document-engine-postgresql
+      database: pspdfkit
+      tls:
+        enabled: false
+      auth: 
+        username: postgres
+        password: postgres
+        adminUsername: postgres
+        adminPassword: postgres
+
+replicaCount: 1
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 0
+
+resources:
+  limits:
+    cpu: "4"
+    memory: 8Gi
+  requests:
+    cpu: "1"
+    memory: 1Gi
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "180"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "180"
+    nginx.ingress.kubernetes.io/large-client-header-buffers: "4 16k"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+  hosts:
+    - paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+postgresql:
+  enabled: true
+  architecture: standalone
+  postgresqlDataDir: /ephemeral/data
+  primary:
+    extraVolumeMounts:
+      - mountPath: /ephemeral
+        name: ephemeral-data
+    extraVolumes:
+      - name: ephemeral-data
+        emptyDir:
+          sizeLimit: 1Gi
+    persistence:
+      enabled: false
+    extendedConfiguration: |
+      log_statement = all
+    pgHbaConfiguration: |
+      host     all             all             0.0.0.0/0               md5
+      host     all             all             ::/0                    md5
+      local   all             all                                     trust
+  auth:
+    enablePostgresUser: true
+    postgresPassword: postgres
+    username: pspdfkit
+    password: pspdfkit
+    database: pspdfkit
+  tls:
+    enabled: false

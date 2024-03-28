@@ -1,0 +1,6 @@
+apiVersion: v2
+name: signing-service-example
+description: PSPDFKit signing service example
+type: application
+version: 0.2.1
+appVersion: "1.1.1"

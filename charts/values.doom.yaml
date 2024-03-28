@@ -1,0 +1,71 @@
+pspdfkit:
+  storage:
+    cleanupJob:
+      enabled: false
+    
+#    assetStorageBackend: built-in
+    assetStorageBackend: s3
+    postgres:
+      enabled: true
+      # `PGUSER`
+      username: pspdfkit
+      # `PGPASSWORD`
+      password: pspdfkit
+      # `PG_ADMIN_USER`
+      adminUsername: pspdfkit
+      # `PG_ADMIN_PASSWORD`
+      adminPassword: pspdfkit
+      # ...or use external secrets:
+      # `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL` 
+      externalSecretName: ""
+      # `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD`
+      externalAdminSecretName: "qqq"
+    redis: 
+      enabled: true
+      password: pspdfkit
+      externalSecretName: "qqq"
+    s3:
+      # `ASSET_STORAGE_S3_ACCESS_KEY_ID`
+      accessKeyId: "q"
+      # `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
+      secretAccessKey: "q"
+      # `ASSET_STORAGE_S3_BUCKET`
+
+  license:
+    isOffline: false
+    activationKey: "Q"
+
+  auth:
+    api:
+      # `API_AUTH_TOKEN` should be long enough
+      apiToken: secret
+      # JSON Web Tokens
+      jwt:
+        enabled: true
+        publicKey: none
+        algorithm: RS256
+      # Use an external secret for API credentials 
+      externalSecret:
+        name: api-secret
+        apiTokenKey: Q1
+        jwtPublicKeyKey: Q2
+        jwtAlgorithmKey: Q3
+
+    # Document Engine Dashboard settings
+    dashboard:
+      password: admin
+      externalSecret: 
+        name: dashboard-secret
+
+  secretKeyBase:
+    value: "kwa"
+    externalSecret:
+      name: ""
+      key: SECRET_KEY_BASE
+
+autoscaling:
+  enabled: true
+
+ingress:
+  enabled: true
+
