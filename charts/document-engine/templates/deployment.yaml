@@ -1,0 +1,241 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "document-engine.fullname" . }}
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- if .Values.updateStrategy }}
+  strategy:
+    {{ toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "document-engine.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.ConfigMap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/config.Secret.yaml") . | sha256sum }}
+      {{- if not .Values.pspdfkit.auth.api.externalSecret.name }}
+        checksum/auth-api: {{ include (print $.Template.BasePath "/config.api-auth.Secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if not .Values.pspdfkit.auth.dashboard.externalSecret.name }}
+        checksum/auth-dashboard: {{ include (print $.Template.BasePath "/dashboard.Secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if not .Values.pspdfkit.license.externalSecret.name }}
+        checksum/license-secret: {{ include (print $.Template.BasePath "/license.Secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if  (include "document-engine.storage.postgres.createSecret" .)  }}
+        checksum/postgres-config: {{ include (print $.Template.BasePath "/config.storage-postgres.Secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if  (include "document-engine.storage.postgres.createAdminSecret" .)  }}
+        checksum/postgres-admin-config: {{ include (print $.Template.BasePath "/config.storage-postgres.admin.Secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if (include "document-engine.storage.redis.createSecret" .) }}
+        checksum/redis-secret: {{ include (print $.Template.BasePath "/config.storage-redis.Secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if (include "document-engine.storage.s3.createSecret" .) }}
+        checksum/s3-secret: {{ include (print $.Template.BasePath "/config.storage-s3.Secret.yaml") . | sha256sum }}
+      {{- end }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "document-engine.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "document-engine.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{ toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "document-engine.fullname" . }}-config
+          {{- if .Values.pspdfkit.storage.postgres.enabled }}
+            - secretRef:
+                name: {{ include "document-engine.storage.postgres.secret.name" . }}
+          {{- end }}
+          {{- if .Values.pspdfkit.storage.redis.enabled }}
+            - secretRef:
+                name: {{ include "document-engine.storage.redis.secret.name" . }}
+          {{- end }}
+          {{- if eq (include "document-engine.storage.s3.enabled" .) "true" }}
+            - secretRef:
+                name: {{ include "document-engine.storage.s3.secret.name" . }}
+          {{- end }}
+          {{- with .Values.extraEnvFrom }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: {{ include "document-engine.license.variable.name" . }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.license.secret.name" . }}
+                  key: {{ include "document-engine.license.secret.key" . }}
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.secretKeyBase.secret.name" . }}
+                  key: {{ include "document-engine.secretKeyBase.secret.key" . }}
+            - name: API_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.api.secret.name" . }}
+                  key: {{ include "document-engine.api.secret.key.apiToken" . }}
+          {{- if .Values.pspdfkit.auth.api.jwt.enabled }}
+            - name: JWT_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.api.secret.name" . }}
+                  key: {{ include "document-engine.api.secret.key.jwtPublicKey" . }}
+            - name: JWT_ALGORITHM
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.api.secret.name" . }}
+                  key: {{ include "document-engine.api.secret.key.jwtAlgorithm" . }}
+          {{- end }}
+          {{- if .Values.pspdfkit.storage.postgres.enabled }}
+            {{- if .Values.pspdfkit.storage.postgres.tls.enabled }}
+            - name: PGSSL_DISABLE_VERIFY
+              value: {{ not .Values.pspdfkit.storage.postgres.tls.verify | quote }}
+            {{-   with .Values.pspdfkit.storage.postgres.tls.trustFileName }}
+            - name: PGSSL_CA_CERT_PATH
+              value: /certificate-stores/{{ . }}
+            {{-   end }}
+            {{- end }}
+          {{- end }}
+          {{- with .Values.pspdfkit.downloaderTrustFileName }}
+            - name: DOWNLOADER_CERT_FILE_PATH
+              value: /certificate-stores/{{ . }}
+          {{- end }}
+          {{- if .Values.pspdfkit.auth.dashboard.enabled }}
+            - name: DASHBOARD_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.dashboard.secret.name" . }}
+                  key: {{ include "document-engine.dashboard.secret.key.username" . }}
+            - name: DASHBOARD_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.dashboard.secret.name" . }}
+                  key: {{ include "document-engine.dashboard.secret.key.password" . }}
+          {{- end }}
+          {{- with .Values.extraEnvs }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: api
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+            - name: statsd-metrics
+              containerPort: 9125
+              protocol: TCP
+          {{- if .Values.startupProbe }}
+          startupProbe: {{ toYaml .Values.startupProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe }}
+          livenessProbe: {{ toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe: {{ toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if or .Values.extraVolumeMounts .Values.pspdfkit.trustConfigMaps }}
+          volumeMounts:
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.pspdfkit.trustConfigMaps }}
+            {{-   range $cmName, $cmProperties := . }}
+            - name: trust-{{ $cmName }}
+              mountPath: /certificate-stores/{{ $cmProperties.path }}
+              subPath: {{ $cmProperties.path }}
+              readOnly: true
+            {{-   end }}
+            {{- end }}
+          {{- end }}
+          {{- with .Values.lifecycle }}
+          lifecycle:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- with .Values.prometheusExporter }}
+        {{- if .enabled }}
+        - name: statsd-exporter
+          image: "{{ .image.repository }}:{{ .image.tag }}"
+          imagePullPolicy: {{ .image.pullPolicy }}
+          args:
+            - --statsd.listen-udp=:{{ .statsdPort }}
+            - --statsd.listen-tcp=:{{ .statsdPort }}
+            - --web.listen-address=:{{ .port }}
+          ports:
+            - name: metrics
+              containerPort: {{ .port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+        {{- end }}
+        {{- end }}
+      {{- if .Values.sidecars }}
+        {{ toYaml .Values.sidecars | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.extraVolumeMounts .Values.pspdfkit.trustConfigMaps }}
+      volumes:
+        {{- with .Values.extraVolumes }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.pspdfkit.trustConfigMaps }}
+        {{-   range $cmName, $cmProperties := . }}
+        - name: trust-{{ $cmName }}
+          configMap:
+            name: {{ $cmName}}
+            items:
+              - key: {{ $cmProperties.key }}
+                path: {{ .path }}
+        {{-   end }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: 
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}

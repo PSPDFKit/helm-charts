@@ -1,0 +1,124 @@
+{{- if and .Values.pspdfkit.storage.postgres.enabled .Values.pspdfkit.storage.enableMigrationJobs }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "document-engine.fullname" . }}-db-migration
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+#  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      name: {{ include "document-engine.fullname" . }}-db-migration
+      annotations:
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        {{- include "document-engine.cleanupSelectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "document-engine.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{ toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "document-engine.fullname" . }}-config
+          {{- if .Values.pspdfkit.storage.postgres.enabled }}
+            - secretRef:
+                name: {{ include "document-engine.storage.postgres.secret.name" . }}
+          {{- end }}
+          {{- if .Values.pspdfkit.storage.redis.enabled }}
+            - secretRef:
+                name: {{ include "document-engine.storage.redis.secret.name" . }}
+          {{- end }}
+          {{- if eq (include "document-engine.storage.s3.enabled" .) "true" }}
+            - secretRef:
+                name: {{ include "document-engine.storage.s3.secret.name" . }}
+          {{- end }}
+          {{- with .Values.extraEnvFrom }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: {{ include "document-engine.license.variable.name" . }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.license.secret.name" . }}
+                  key: {{ include "document-engine.license.secret.key" . }}
+            - name: ENABLE_DATABASE_MIGRATIONS
+              value: 'true'
+            - name: EXIT_AFTER_DATABASE_MIGRATIONS
+              value: 'true'
+            - name: PG_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
+                  key: PG_ADMIN_USER
+            - name: PG_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
+                  key: PG_ADMIN_PASSWORD
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.secretKeyBase.secret.name" . }}
+                  key: {{ include "document-engine.secretKeyBase.secret.key" . }}
+            - name: API_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "document-engine.api.secret.name" . }}
+                  key: {{ include "document-engine.api.secret.key.apiToken" . }}
+          {{- with .Values.extraEnvs }}
+            {{- toYaml .| nindent 12 }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+          {{- end }}
+      {{- if .Values.sidecars }}
+        {{ toYaml .Values.sidecars | nindent 8 }}
+      {{- end }}
+      {{- if .Values.extraVolumes }}
+      volumes:
+        {{ toYaml .Values.extraVolumes | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

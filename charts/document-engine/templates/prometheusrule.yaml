@@ -1,0 +1,21 @@
+{{- /*
+Inspired by: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/templates/prometheusrule.yaml
+*/}}
+
+{{- if and .Values.metrics.enabled .Values.metrics.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "document-engine.fullname" . }}
+  namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+    {{- with .Values.metrics.prometheusRule.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+    - name: {{ include "document-engine.fullname" . }}
+      rules: 
+        {{- toYaml .Values.metrics.prometheusRule.rules | nindent 8 }}
+{{- end }}

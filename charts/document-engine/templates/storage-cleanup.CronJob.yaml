@@ -1,0 +1,116 @@
+{{- if (eq (include "document-engine.storage.cleanupJob.enabled" . ) "true" ) }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "document-engine.fullname" . }}-db-cleanup
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.pspdfkit.storage.cleanupJob.schedule }}
+  startingDeadlineSeconds: 600
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 1800
+      ttlSecondsAfterFinished: 300
+      successfulJobsHistoryLimit: 1
+      failedJobsHistoryLimit: 1
+      template:
+        metadata:
+          annotations:
+          {{- with .Values.podAnnotations }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          labels:
+            {{- include "document-engine.labels" . | nindent 8 }}
+        spec:
+          restartPolicy: Never
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "document-engine.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          {{- if .Values.initContainers }}
+          initContainers:
+            {{ toYaml .Values.initContainers | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: {{ .Chart.Name }}
+              envFrom:
+                - secretRef:
+                    name: {{ include "document-engine.storage.postgres.secret.name" . }}
+              {{- with .Values.extraEnvFrom }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              env:
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
+                      key: PG_ADMIN_USER
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
+                      key: PG_ADMIN_PASSWORD
+              {{- if eq (include "document-engine.storage.s3.enabled" .) "true" }}
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "document-engine.storage.s3.secret.name" . }}
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "document-engine.storage.s3.secret.name" . }}
+                      key: AWS_SECRET_ACCESS_KEY
+              {{- end }}
+              {{- with .Values.extraEnvs }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                - /bin/sh
+                - -c
+                - psql -f /cleanup.sql
+              resources:
+                {{- toYaml .Values.pspdfkit.storage.cleanupJob.resources | nindent 16 }}
+              volumeMounts:
+                - name: cleanup-query
+                  mountPath: /cleanup.sql
+                  subPath: cleanup.sql
+              {{- if .Values.extraVolumeMounts }}
+                {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
+              {{- end }}
+          {{- if .Values.sidecars }}
+            {{ toYaml .Values.sidecars | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: cleanup-query
+              configMap:
+                name: {{ include "document-engine.fullname" . }}-db-cleanup
+                items:
+                  - key: cleanup.sql
+                    path: cleanup.sql
+          {{- with .Values.extraVolumes }}
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}
