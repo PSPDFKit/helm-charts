@@ -272,6 +272,8 @@ serviceAccount:
 podLabels: {}
 podAnnotations: {}
 
+deploymentAnnotations: {}
+
 podSecurityContext: {}
   # fsGroup: 2000
 
