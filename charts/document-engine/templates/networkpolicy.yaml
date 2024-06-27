@@ -1,0 +1,96 @@
+# Inspired by: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/templates/primary/networkpolicy.yaml
+{{- if .Values.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "document-engine.fullname" . }}
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+    {{- with .Values.networkPolicy.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.networkPolicy.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels: 
+      {{- include "document-engine.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    {{- if .Values.pspdfkit.storage.postgres.enabled }}
+    - ports:
+        - port: {{ .Values.pspdfkit.storage.postgres.port }}
+          protocol: TCP
+    {{- end }}
+    {{- if .Values.pspdfkit.storage.s3.enabled }}
+    - ports:
+        - port: {{ .Values.pspdfkit.storage.s3.port }}
+          protocol: TCP
+    {{- end }}
+    {{- if .Values.pspdfkit.storage.redis.enabled }}
+    - ports:
+        - port: {{ .Values.pspdfkit.storage.redis.port }}
+          protocol: TCP
+    {{- end }}
+    {{- if .Values.allowRemoteAssetsInGeneration }}
+    - ports:
+        - port: 443
+          protocol: TCP
+    {{- end }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- tpl (toYaml .Values.networkPolicy.extraEgress) . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        # Hardcoded DE port
+        - port: {{ .Values.service.port }}
+        # Hardcoded DE metrics port
+        - port: 9125
+        # Prometheus exporter port
+        {{- if .Values.prometheusExporter.enabled }}
+        - port: {{ .Values.prometheusExporter.port }}
+        {{- end }}
+      {{- if not .Values.networkPolicy.allowExternal }}
+      from:
+        # Allow pods talk to each other
+        - podSelector:
+            matchLabels: {{- include "document-engine.selectorLabels" . | nindent 14 }}
+        # Allow cleanup job direct access
+        - podSelector:
+            matchLabels: {{- include "document-engine.cleanupSelectorLabels" . | nindent 14 }}
+        {{- with .Values.networkPolicy.ingressMatchSelectorLabels }}
+        {{- range $selector := . }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .namespaceSelectorLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .podSelectorLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .podSelectorLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- tpl (toYaml .Values.networkPolicy.extraIngress) . | nindent 4 }}
+    {{- end }}
+{{- end }}

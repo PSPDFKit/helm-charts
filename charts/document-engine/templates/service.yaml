@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "document-engine.fullname" . }}
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: api
+      protocol: TCP
+      name: api
+    - port: 9125
+      targetPort: statsd-metrics
+      protocol: TCP
+      name: statsd-metrics
+    {{- with .Values.prometheusExporter }}
+    {{- if .enabled }}
+    - port: {{ .port }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+    {{- end }}
+    {{- end }}
+  selector:
+    {{- include "document-engine.selectorLabels" . | nindent 4 }}
