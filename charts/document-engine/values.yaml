@@ -1,32 +1,30 @@
-# 
+#
 # Some of the values may be accepting templates (marked with `(tpl)`)
-# 
+#
 
 image:
   repository: pspdfkit/document-engine
-  pullPolicy: IfNotPresent  
+  pullPolicy: IfNotPresent
   tag: "" # Defaults to the Chart appVersion
-
 imagePullSecrets: []
-
 nameOverride: ""
 fullnameOverride: ""
-
 #
 # https://pspdfkit.com/guides/document-engine/configuration/overview/
 # https://pspdfkit.com/guides/document-engine/deployment/product-activation/
 #
 pspdfkit:
   license:
-    # Activation key for online activation (most common) or 
+    # Activation key for online activation (most common) or
     # license key for offline activation.
-    # Results in `ACTIVATION_KEY` or `LICENSE_KEY` (if `isOffline` is `true`) environment variable
+    # Results in `ACTIVATION_KEY` environment variable
+    # or `LICENSE_KEY` (if `isOffline` is `true`)
     activationKey: ""
-    # Is the license offline: set to `true` if 
-    # an offline license key was provided in `activationKey` 
+    # Is the license offline: set to `true` if
+    # an offline license key was provided in `activationKey`
     isOffline: false
     # Query existing secret for the activation key
-    externalSecret: 
+    externalSecret:
       # External secret name for license
       name: ""
       # The key in the secret used to retrieve the activation key
@@ -42,9 +40,10 @@ pspdfkit:
         # `JWT_PUBLIC_KEY`
         publicKey: none
         # `JWT_ALGORITHM`
-        # Supported algorithms: RS256, RS512, ES256, ES512. See RFC 7518 for details about specific algorithms.
+        # Supported algorithms: RS256, RS512, ES256, ES512.
+        # See RFC 7518 for details about specific algorithms.
         algorithm: RS256
-      # Use an external secret for API credentials 
+      # Use an external secret for API credentials
       externalSecret:
         # External secret name
         name: ""
@@ -52,7 +51,6 @@ pspdfkit:
         apiTokenKey: API_AUTH_TOKEN
         jwtPublicKeyKey: JWT_PUBLIC_KEY
         jwtAlgorithmKey: JWT_ALGORITHM
-
     # Document Engine Dashboard settings
     dashboard:
       # Enable dashboard
@@ -61,16 +59,16 @@ pspdfkit:
       username: admin
       # `DASHBOARD_PASSWORD` — will generate a random password if not set
       password: ""
-      # Use an external secret for dashboard credentials instead of the values from `pspdfkit.auth.dashboard.*`
+      # Use an external secret for dashboard credentials
+      # instead of the values from `pspdfkit.auth.dashboard.*`
       externalSecret:
         # External secret name
         name: ""
         # Key names
         usernameKey: DASHBOARD_USERNAME
         passwordKey: DASHBOARD_PASSWORD
-
-  # A string used as the base key for deriving secret keys for the purposes of authentication. 
-  # Choose a sufficiently long random string for this option. 
+  # A string used as the base key for deriving secret keys for the purposes of authentication.
+  # Choose a sufficiently long random string for this option.
   # To generate a random string, use: `openssl rand -hex 256`.
   # This will set `SECRET_KEY_BASE` environment variable.
   secretKeyBase:
@@ -81,11 +79,9 @@ pspdfkit:
       name: ""
       # Key in the secret
       key: SECRET_KEY_BASE
-
   # Log level
   log:
     level: info
-
   # `PDF_GENERATION_TIMEOUT` in seconds
   generationTimeoutSeconds: 120
   # `SERVER_REQUEST_TIMEOUT` in seconds
@@ -114,24 +110,21 @@ pspdfkit:
   automaticLinkExtraction: true
   # `MIN_SEARCH_QUERY_LENGTH`
   minSearchQueryLength: 3
-
   # `TRUSTED_PROXIES`
   trustedProxies: default
-
   # ConfigMap references for trust configuration
   trustConfigMaps: {}
-    # Root certificates to yield `/certificate-stores/root-certificates.pem`
-    # root: 
-    #  key: root-certificates.pem
-    #  path: root-certificates.pem
-    # Private certificates to yield `/certificate-stores/private-ca-certificates.pem`
-    # private-ca: 
-    #  key: private-ca-certificates.pem
-    #  path: private-ca-certificates.pem
+  # Root certificates to yield `/certificate-stores/root-certificates.pem`
+  # root:
+  #  key: root-certificates.pem
+  #  path: root-certificates.pem
+  # Private certificates to yield `/certificate-stores/private-ca-certificates.pem`
+  # private-ca:
+  #  key: private-ca-certificates.pem
+  #  path: private-ca-certificates.pem
 
-  # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH` 
+  # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH`
   downloaderTrustFileName: ""
-
   # Signing service parameters
   signingService:
     # Enable signing service integration
@@ -160,7 +153,6 @@ pspdfkit:
       username: ""
       # `TIMESTAMP_AUTHORITY_PASSWORD`
       password: ""
-
   storage:
     # Enable separate migration jobs.
     # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
@@ -189,7 +181,6 @@ pspdfkit:
     enableAssetStorageFallbackS3: false
     # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
     enableAssetStorageFallbackAzure: false
-
     # PostgreSQL database settings
     postgres:
       enabled: true
@@ -208,7 +199,7 @@ pspdfkit:
       # `PG_ADMIN_PASSWORD`
       adminPassword: pspdfkit
       # ...or use external secrets:
-      # `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PGHOST`, `PGPORT`, 
+      # `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PGHOST`, `PGPORT`,
       # `PGSSL`
       externalSecretName: ""
       # `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD`
@@ -219,9 +210,8 @@ pspdfkit:
         enabled: false
         # Negated `PGSSL_DISABLE_VERIFY`
         verify: true
-        # Path from `pspdfkit.trustConfigMaps`, wraps around `PGSSL_CA_CERT_PATH` 
+        # Path from `pspdfkit.trustConfigMaps`, wraps around `PGSSL_CA_CERT_PATH`
         trustFileName: ""
-      
     # S3 backend storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `s3
     s3:
       # `ASSET_STORAGE_S3_ACCESS_KEY_ID`
@@ -238,9 +228,8 @@ pspdfkit:
       port: 443
       # `ASSET_STORAGE_S3_SCHEME`
       scheme: "https://"
-        # External secret name
+      # External secret name
       externalSecretName: ""
-
     # Redis settings for caching and prerendering
     redis:
       # `USE_REDIS_CACHE`
@@ -256,13 +245,13 @@ pspdfkit:
       # `REDIS_DATABASE`
       database: pspdfkit
       # Sentinels
-      sentinels: 
+      sentinels:
         enabled: false
         # `REDIS_SENTINELS`
         urls: []
-          # - "redis://sentinel1:26379"
-          # - "redis://sentinel2:26379"
-          # - "redis://sentinel3:26379"
+        # - "redis://sentinel1:26379"
+        # - "redis://sentinel2:26379"
+        # - "redis://sentinel3:26379"
         # `REDIS_SENTINELS_GROUP`
         group: none
       # `REDIS_USERNAME`
@@ -274,66 +263,60 @@ pspdfkit:
         enabled: false
       # External secret name
       externalSecretName: ""
-
 serviceAccount:
   create: true
   annotations: {}
   name: ""
-
 podLabels: {}
 podAnnotations: {}
-
 deploymentAnnotations: {}
-
 podSecurityContext: {}
-  # fsGroup: 2000
+# fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
 
 service:
   type: ClusterIP
   port: 5000
-
 ingress:
   enabled: false
   className: ""
   annotations: {}
   hosts: []
-    # - host: chart-example.local
-    #   paths:
-    #     - path: /
-    #       pathType: ImplementationSpecific
-    #     - path: /special
-    #       pathType: Exact
-    #       backend:
-    #         service:
-    #           name: redirect-through-annotation
-    #           port:
-    #             name: use-annotation
+  # - host: chart-example.local
+  #   paths:
+  #     - path: /
+  #       pathType: ImplementationSpecific
+  #     - path: /special
+  #       pathType: Exact
+  #       backend:
+  #         service:
+  #           name: redirect-through-annotation
+  #           port:
+  #             name: use-annotation
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
 # Additional ingress for the dashboard
 extraIngresses: {}
-  # dashboard:
-  #   enabled: false
-  #   className: nginx
-  #   annotations: 
-  #     nginx.ingress.kubernetes.io/enable-cors: "true"
-  #   hosts:
-  #     - host: chart-example.local
-  #       paths:
-  #         - path: /dashboard
-  #           pathType: Prefix
-  #   tls: []
+# dashboard:
+#   enabled: false
+#   className: nginx
+#   annotations:
+#     nginx.ingress.kubernetes.io/enable-cors: "true"
+#   hosts:
+#     - host: chart-example.local
+#       paths:
+#         - path: /dashboard
+#           pathType: Prefix
+#   tls: []
 
 # https://kubernetes.io/docs/concepts/services-networking/network-policies/
 # https://editor.networkpolicy.io/
@@ -341,10 +324,8 @@ networkPolicy:
   enabled: true
   labels: {}
   annotations: {}
-
   # Allow access from anywhere
   allowExternal: true
-
   # Extra ingress rules
   extraIngress: []
   #   - ports:
@@ -362,12 +343,11 @@ networkPolicy:
 
   # Allow traffic from other namespaces
   ingressMatchSelectorLabels: []
-    # - namespaceSelectorLabels: {}
-    #   podSelectorLabels: {}
+  # - namespaceSelectorLabels: {}
+  #   podSelectorLabels: {}
 
   # Allow the pod to access any range of port and all destinations.
   allowExternalEgress: true
-
   # Extra egress rules
   extraEgress: []
   #   - ports:
@@ -382,13 +362,12 @@ networkPolicy:
   #                 operator: In
   #                 values:
   #                   - some-storage
-
 # StatsD exporter for Prometheus, not recommended for production use
 prometheusExporter:
   enabled: false
   image:
     repository: prom/statsd-exporter
-    pullPolicy: IfNotPresent  
+    pullPolicy: IfNotPresent
     tag: "v0.26.1"
   statsdPort: 9125
   port: 10254
@@ -399,7 +378,6 @@ prometheusExporter:
     limits:
       memory: "128Mi"
       cpu: "100m"
-
 metrics:
   enabled: true
   # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
@@ -420,18 +398,14 @@ metrics:
     namespace: ""
     labels: {}
     rules: []
-
 # https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 resources: {}
-
 # Number of replicas
 replicaCount: 1
-
 # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
-
 # Additional resources
 extraEnvs: []
 extraEnvFrom: []
@@ -439,7 +413,6 @@ extraVolumes: []
 extraVolumeMounts: []
 sidecars: []
 initContainers: []
-
 # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 startupProbe:
   httpGet:
@@ -451,7 +424,6 @@ startupProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 5
-
 livenessProbe:
   httpGet:
     path: /healthcheck
@@ -462,7 +434,6 @@ livenessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
     path: /healthcheck
@@ -473,7 +444,6 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
-
 # https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 autoscaling:
   enabled: false
@@ -482,53 +452,45 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
   behavior: {}
-    # scaleDown:
-    #   stabilizationWindowSeconds: 300
-    #   policies:
-    #   - type: Percent
-    #     value: 100
-    #     periodSeconds: 15
-    # scaleUp:
-    #   stabilizationWindowSeconds: 0
-    #   policies:
-    #   - type: Percent
-    #     value: 100
-    #     periodSeconds: 15
-    #   - type: Pods
-    #     value: 4
-    #     periodSeconds: 15
-    #   selectPolicy: Max
-
+  # scaleDown:
+  #   stabilizationWindowSeconds: 300
+  #   policies:
+  #   - type: Percent
+  #     value: 100
+  #     periodSeconds: 15
+  # scaleUp:
+  #   stabilizationWindowSeconds: 0
+  #   policies:
+  #   - type: Percent
+  #     value: 100
+  #     periodSeconds: 15
+  #   - type: Pods
+  #     value: 4
+  #     periodSeconds: 15
+  #   selectPolicy: Max
 # https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 podDisruptionBudget:
   create: false
   minAvailable: 1
   maxUnavailable: ""
-
 # https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 nodeSelector: {}
 affinity: {}
-
 # https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
 tolerations: []
-
 # https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
 topologySpreadConstraints: []
-
 # https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
 priorityClassName: ""
-
 # https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/
 schedulerName: ""
-
 # https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
 terminationGracePeriodSeconds: ""
-
 # https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
-lifecycle: {} 
+lifecycle: {}
 #  preStop:
 #    exec:
-#      command: ["/bin/sh", "-c", "sleep 180"] 
+#      command: ["/bin/sh", "-c", "sleep 180"]
 
 #
 # External PostgreSQL database chart
