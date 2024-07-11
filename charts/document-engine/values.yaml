@@ -176,7 +176,7 @@ pspdfkit:
     assetStorageBackend: built-in
     # `ENABLE_ASSET_STORAGE_FALLBACK`
     enableAssetStorageFallback: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK`
+    # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
     enableAssetStorageFallbackPostgres: false
     # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
     enableAssetStorageFallbackS3: false
