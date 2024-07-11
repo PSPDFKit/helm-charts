@@ -93,13 +93,13 @@ License secret name
   {{- end -}}
 {{- end -}}
 
-{{- define "document-engine.licenseAvailable" -}}
+{{- define "document-engine.license.available" -}}
   {{- if or .Values.pspdfkit.license.activationKey .Values.pspdfkit.license.externalSecret.name -}}
-        true
-  {{- else }}
-        false
-  {{- end }}
-{{- end }}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
+{{- end -}}
 
 {{/*
 API and dashboard secrets

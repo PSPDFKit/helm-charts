@@ -31,8 +31,8 @@ spec:
         checksum/auth-dashboard: {{ include (print $.Template.BasePath "/dashboard.Secret.yaml") . | sha256sum }}
       {{- end }}
       {{- if and 
-            ( not .Values.pspdfkit.license.externalSecret.name )
-            ( include  "document-engine.licenseAvailable" . ) }}
+            (not .Values.pspdfkit.license.externalSecret.name)
+            (eq (include  "document-engine.license.available" .) "true") }}
         checksum/license-secret: {{ include (print $.Template.BasePath "/license.Secret.yaml") . | sha256sum }}
       {{- end }}
       {{- if  (include "document-engine.storage.postgres.createSecret" .)  }}
@@ -88,13 +88,13 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
-            {{- if ( include  "document-engine.licenseAvailable" . ) -}}
+            {{- if eq (include  "document-engine.license.available" .) "true" }}
             - name: {{ include "document-engine.license.variable.name" . }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "document-engine.license.secret.name" . }}
                   key: {{ include "document-engine.license.secret.key" . }}
-            {{- end -}}
+            {{- end }}
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
