@@ -6,7 +6,7 @@ image:
   repository: pspdfkit/document-engine
   pullPolicy: IfNotPresent
   # Defaults to the Chart appVersion
-  tag: "" 
+  tag: ""
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
