@@ -1,3 +1,4 @@
+{{- if and .Values.kind .Values.apiVersion .Values.spec }}
 apiVersion: {{ .Values.apiVersion }}
 kind: {{ .Values.kind }}
 metadata:
@@ -13,3 +14,4 @@ metadata:
   {{- end }}
 spec:
   {{- toYaml .Values.spec | nindent 2 }}
+{{- end }}
