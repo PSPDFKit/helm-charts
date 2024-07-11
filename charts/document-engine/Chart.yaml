@@ -10,6 +10,7 @@ maintainers:
   - name: PSPDFKit
     email: support@pspdfkit.com
     url: https://pspdfkit.com
+
 dependencies:
   - name: postgresql
     version: 15.5.9
