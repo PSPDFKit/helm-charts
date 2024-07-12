@@ -29,6 +29,10 @@
 
 * Moved changes from [README.md](/charts/document-engine/README.md) here.
 
+### Fixed
+
+* Corrected the comment in `values.yaml` (thanks to [Blaise Schaeffer](https://github.com/blaise2s)).
+
 ## 2.7.2
 
 ### Fixed
@@ -45,7 +49,7 @@
 
 ### Added
 
-* Added `deploymentAnnotations` (courtesy of [@k11h-de]).
+* Added `deploymentAnnotations` (courtesy of [k11h.de](https://github.com/k11h-de)).
 * Added `pspdfkit.storage.cleanupJob.podAnnotations`.
 
 ### Changed
