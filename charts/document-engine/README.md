@@ -7,7 +7,8 @@
   - [License](#license)
   - [Support, Issues and License Questions](#support-issues-and-license-questions)
 
-> [!NOTE] [More on Document Engine](https://pspdfkit.com/cloud/document-engine/)
+> [!NOTE] 
+> [More on Document Engine](https://pspdfkit.com/cloud/document-engine/)
 
 ## Using this repository
 
@@ -27,7 +28,8 @@ helm upgrade --install --debug --dry-run \
 
 ## Upgrade
 
-> [!NOTE] Please consult the [changelog](/charts/document-engine/CHANGELOG.md)
+> [!NOTE] 
+> Please consult the [changelog](/charts/document-engine/CHANGELOG.md)
 
 ## License
 
