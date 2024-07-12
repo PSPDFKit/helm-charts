@@ -1,6 +1,7 @@
 # PSPDFKit Helm Charts
 
-> [!NOTE] If you are looking for [Integrify](https://www.integrify.com/) Helm charts,
+> [!NOTE] 
+> If you are looking for [Integrify](https://www.integrify.com/) Helm charts,
 > please find them in the dedicated repository: https://github.com/Integrify/helm-charts
 
 ## Using this repository
