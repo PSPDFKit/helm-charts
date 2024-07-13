@@ -1,5 +1,9 @@
 # PSPDFKit Helm Charts
 
+> [!NOTE] 
+> If you are looking for [Integrify](https://www.integrify.com/) Helm charts,
+> please find them in the dedicated repository: https://github.com/Integrify/helm-charts
+
 ## Using this repository
 
 ```
@@ -17,6 +21,7 @@ helm upgrade --install --debug --dry-run \
      -n pspdfkit-services \
      -f ./document-engine-values.yaml
 ```
+
 ## Support, Issues and License Questions
 
 PSPDFKit offers support for customers with an active SDK license via https://pspdfkit.com/support/request/
