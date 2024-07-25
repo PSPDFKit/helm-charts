@@ -264,6 +264,19 @@ pspdfkit:
         enabled: false
       # External secret name
       externalSecretName: ""
+
+  observability:
+    # OpenTelemetry
+    opentelemetry:
+    # Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
+      enabled: false
+      # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
+      otlpExporterEndpoint: ""
+      # `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
+      otlpExporterProtocol: ""
+      # `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
+      otlpResourceAttributes: ""
+
 serviceAccount:
   create: true
   annotations: {}
@@ -285,6 +298,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 5000
+ 
 ingress:
   enabled: false
   className: ""
@@ -305,7 +319,8 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-# Additional ingress for the dashboard
+
+# Additional ingresses, e.g. for the dashboard
 extraIngresses: {}
 # dashboard:
 #   enabled: false

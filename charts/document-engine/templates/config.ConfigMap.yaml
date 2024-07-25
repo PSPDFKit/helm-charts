@@ -69,5 +69,21 @@ data:
   STATSD_PORT: {{ .Values.prometheusExporter.statsdPort | quote }}
   STATSD_CUSTOM_TAGS: "namespace={{ .Release.Namespace }},app={{ include "document-engine.fullname" . }}"
 {{- end }}
+{{- with .Values.pspdfkit.observability.opentelemetry }}
+{{-   if .enabled }}
+  ENABLE_OPENTELEMETRY: "true"
+{{-     with .otlpExporterEndpoint }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ . | quote }}
+{{-     end }}
+{{-     with .otlpExporterProtocol }}
+  OTEL_EXPORTER_OTLP_PROTOCOL: {{ . | quote }}
+{{-     end }}
+{{-     with .otlpResourceAttributes }}
+  OTEL_RESOURCE_ATTRIBUTES: {{ . | quote }}
+{{-     end }}
+{{-   else }}
+  ENABLE_OPENTELEMETRY: "false"
+{{-   end }}
+{{- end }}
 # Can be used for hash updating
   VERSION: {{ include "document-engine.chart" . | quote }}
