@@ -113,19 +113,19 @@ pspdfkit:
   minSearchQueryLength: 3
   # `TRUSTED_PROXIES`
   trustedProxies: default
-  # ConfigMap references for trust configuration
+  # ConfigMap references for trust configuration, stored in `/certificate-stores-custom`
   trustConfigMaps: {}
-  # Root certificates to yield `/certificate-stores/root-certificates.pem`
+  # Root certificates to yield `/certificate-stores-custom/root-certificates.pem`
   # root:
   #  key: root-certificates.pem
   #  path: root-certificates.pem
-  # Private certificates to yield `/certificate-stores/private-ca-certificates.pem`
+  # Private certificates to yield `/certificate-stores-custom/private-ca-certificates.pem`
   # private-ca:
   #  key: private-ca-certificates.pem
   #  path: private-ca-certificates.pem
 
   # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH`
-  downloaderTrustFileName: ""
+  downloaderTrustFileName: "root-certificates.pem"
   # Signing service parameters
   signingService:
     # Enable signing service integration
