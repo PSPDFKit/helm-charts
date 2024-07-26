@@ -4,11 +4,12 @@
   - [2.8.0](#280)
     - [Added](#added)
     - [Changed](#changed)
+    - [Fixed](#fixed)
   - [2.7.3](#273)
     - [Changed](#changed-1)
-    - [Fixed](#fixed)
-  - [2.7.2](#272)
     - [Fixed](#fixed-1)
+  - [2.7.2](#272)
+    - [Fixed](#fixed-2)
   - [2.7.0](#270)
     - [Changed](#changed-2)
   - [2.6.2](#262)
@@ -44,6 +45,10 @@
 ### Changed
 
 * Slight refinement of trust information parameters: all files from `pspdfkit.trustConfigMaps` are now mounted to `/certificate-stores-custom/` to avoid confusion with `/certificate-stores/` which services for document signature validation certificates.
+
+### Fixed
+
+* Minor cleanups.
 
 ## 2.7.3
 

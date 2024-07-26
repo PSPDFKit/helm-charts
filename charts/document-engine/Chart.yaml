@@ -13,6 +13,6 @@ maintainers:
 
 dependencies:
   - name: postgresql
-    version: 15.5.9
+    version: 15.5.20
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
