@@ -89,4 +89,4 @@ data:
 {{-   end }}
 {{- end }}
 # Can be used for hash updating
-  VERSION: {{ include "document-engine.chart" . | quote }}
+  HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}
