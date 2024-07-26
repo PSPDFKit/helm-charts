@@ -38,7 +38,8 @@
   * Wrapped parameters (see `values.yaml` for more details):
     * `pspdfkit.observability.opentelemetry.otlpExporterEndpoint` (`OTEL_EXPORTER_OTLP_ENDPOINT`)
     * `pspdfkit.observability.opentelemetry.otlpExporterProtocol` (`OTEL_EXPORTER_OTLP_PROTOCOL`)
-    * `pspdfkit.observability.opentelemetry.otlpResourceAttributes` (`OTEL_RESOURCE_ATTRIBUTES`)
+    * `pspdfkit.observability.opentelemetry.otelServiceName` (`OTEL_SERVICE_NAME`)
+    * `pspdfkit.observability.opentelemetry.otelResourceAttributes` (`OTEL_RESOURCE_ATTRIBUTES`)
 
 ### Changed
 

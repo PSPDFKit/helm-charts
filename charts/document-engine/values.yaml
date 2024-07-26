@@ -274,8 +274,10 @@ pspdfkit:
       otlpExporterEndpoint: ""
       # `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
       otlpExporterProtocol: ""
+      # `OTEL_SERVICE_NAME`, service name
+      otelServiceName: ""
       # `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
-      otlpResourceAttributes: ""
+      otelResourceAttributes: ""
 
 serviceAccount:
   create: true

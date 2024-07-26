@@ -78,7 +78,10 @@ data:
 {{-     with .otlpExporterProtocol }}
   OTEL_EXPORTER_OTLP_PROTOCOL: {{ . | quote }}
 {{-     end }}
-{{-     with .otlpResourceAttributes }}
+{{-     with .otelServiceName }}
+  OTEL_SERVICE_NAME: {{ . | quote }}
+{{-     end }}
+{{-     with .otelResourceAttributes }}
   OTEL_RESOURCE_ATTRIBUTES: {{ . | quote }}
 {{-     end }}
 {{-   else }}
