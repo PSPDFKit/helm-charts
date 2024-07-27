@@ -22,7 +22,7 @@ data:
   AUTOMATIC_LINK_EXTRACTION: {{ .Values.pspdfkit.automaticLinkExtraction | quote }}
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.pspdfkit.minSearchQueryLength | quote }}
   DATABASE_CONNECTIONS: {{ .Values.pspdfkit.storage.databaseConnections | quote }}
-{{- if .Values.pspdfkit.storage.enableMigrationJobs }}
+{{- if .Values.pspdfkit.storage.databaseMigrationJob.enabled }}
   ENABLE_DATABASE_MIGRATIONS: "false"
   EXIT_AFTER_DATABASE_MIGRATIONS: "false"
 {{- else }}

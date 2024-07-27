@@ -42,9 +42,12 @@
     * `pspdfkit.observability.opentelemetry.otelServiceName` (`OTEL_SERVICE_NAME`)
     * `pspdfkit.observability.opentelemetry.otelResourceAttributes` (`OTEL_RESOURCE_ATTRIBUTES`)
     * `pspdfkit.observability.opentelemetry.otelPropagators` (`OTEL_PROPAGATORS`)
+* Dependent charts for [MinIO](https://min.io/) and [Redis](https://redis.io/).
 
 ### Changed
 
+* Changed `pspdfkit.storage.enableMigrationJobs` to `pspdfkit.storage.databaseMigrationJob.enabled`.
+* Renamed `.Values.pspdfkit.storage.redis.sentinels` to `.Values.pspdfkit.storage.redis.sentinel`.
 * Slight refinement of trust information parameters: all files from `pspdfkit.trustConfigMaps` are now mounted to `/certificate-stores-custom/` to avoid confusion with `/certificate-stores/` which services for document signature validation certificates.
 
 ### Fixed

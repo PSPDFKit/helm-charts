@@ -20,3 +20,7 @@ dependencies:
     version: 14.6.29
     repository: https://charts.bitnami.com/bitnami
     condition: minio.enabled
+  - name: redis
+    version: 19.6.4
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled

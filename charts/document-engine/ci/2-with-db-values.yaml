@@ -1,6 +1,7 @@
 pspdfkit:
   storage:
-    enableMigrationJobs: true
+    databaseMigrationJob:
+      enabled: true
     assetStorageBackend: built-in
     postgres:
       enabled: true
@@ -14,17 +15,12 @@ postgresql:
   enabled: true
   fullnameOverride: postgresql
   nameOverride: postgresql
-  postgresqlDataDir: /ephemeral/data
   primary:
-    extraVolumeMounts:
-      - mountPath: /ephemeral
-        name: ephemeral-data
-    extraVolumes:
-      - name: ephemeral-data
-        emptyDir:
-          sizeLimit: 1Gi
     persistence:
       enabled: false
 
 minio:
   enabled: false
+
+image:
+  repository: public.ecr.aws/pspdfkit/document-engine

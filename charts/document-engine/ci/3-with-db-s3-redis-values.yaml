@@ -1,0 +1,94 @@
+pspdfkit:
+  storage:
+    databaseMigrationJob:
+      enabled: true
+      podAnnotations:
+        do: "this"
+      podLabels:
+        do: "that"
+    assetStorageBackend: s3
+    postgres:
+      enabled: true
+      host: postgresql
+      port: 5432
+    s3:
+      accessKeyId: "pspdfkitObjectStorageRootKey"
+      secretAccessKey: "pspdfkitObjectStorageRootPassword"
+      bucket: "document-engine-assets"
+      region: "us-east-1"
+      host: "minio"
+      port: 9000
+      scheme: "http://"
+    redis:
+      enabled: true
+      host: redis-master
+      database: ""
+      username: ""
+      password: ""
+      ttlSeconds: 3600
+      useTtlForPrerendering: true
+      sentinel:
+        enabled: false
+        urls:
+          - redis://redis-node-0:26379
+          - redis://redis-node-1:26379
+          - redis://redis-node-2:26379
+        group: pspdfkit
+
+prometheusExporter:
+  enabled: true
+
+postgresql:
+  enabled: true
+  fullnameOverride: postgresql
+  nameOverride: postgresql
+  primary:
+    persistence:
+      enabled: false
+
+minio:
+  enabled: true
+  fullnameOverride: minio
+  nameOverride: minio
+  auth:
+    rootUser: pspdfkitObjectStorageRootKey
+    rootPassword: pspdfkitObjectStorageRootPassword
+  defaultBuckets: "document-engine-assets"
+
+redis:
+  enabled: true
+  nameOverride: redis
+  fullnameOverride: redis
+  architecture: standalone
+  auth:
+    enabled: false
+    sentinel: false
+    password: pspdfkit
+  master:
+    count: 1
+    revisionHistoryLimit: 1
+    persistence:
+      enabled: false
+    persistentVolumeClaimRetentionPolicy:
+      enabled: false
+      whenDeleted: Delete
+  # replica:
+  #   replicaCount: 2
+  #   revisionHistoryLimit: 1
+  #   persistence:
+  #     enabled: false
+  #   persistentVolumeClaimRetentionPolicy:
+  #     enabled: false
+  #     whenDeleted: Delete
+  # sentinel:
+  #   enabled: true
+  #   quorum: 3
+  #   masterSet: pspdfkit
+  #   getMasterTimeout: 90
+  #   automateClusterRecovery: true
+  #   redisShutdownWaitFailover: true
+  #   persistence:
+  #     enabled: false
+
+image:
+  repository: public.ecr.aws/pspdfkit/document-engine

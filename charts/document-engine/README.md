@@ -22,19 +22,15 @@ helm repo update
 ## Installing Document Engine
 
 ```shell
-helm upgrade --install --debug --dry-run \
-     pspdfkit/document-engine \
+helm upgrade --install \
+     document-engine pspdfkit/document-engine \
      -n pspdfkit-services \
      -f ./document-engine-values.yaml
 ```
 
 ### Dependencies
 
-By default, the chart depends upon Bitnami [postgresql](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) and [minio](https://github.com/bitnami/charts/tree/main/bitnami/minio). Disabling them in case of separately provisioned database and object storage:
-
-```yaml
-```
-
+The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) charts for PostgreSQL, [MinIO](https://min.io/) and [Redis](https://redis.io/). They are disabled by default, but can be enabled for convenience. Please consider [tests](/charts/document-engine/ci) as examples.
 
 ### Upgrade
 
