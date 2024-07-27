@@ -16,3 +16,7 @@ dependencies:
     version: 15.5.20
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
+  - name: minio
+    version: 14.6.29
+    repository: https://charts.bitnami.com/bitnami
+    condition: minio.enabled

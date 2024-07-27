@@ -44,4 +44,4 @@ jobs:
         if: steps.list-changed.outputs.changed == 'true'
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
-          ct install --target-branch ${{ github.event.repository.default_branch }} --helm-extra-set-args "--set=pspdfkit.storage.postgres.enabled=false"
+          ct install --target-branch ${{ github.event.repository.default_branch }}

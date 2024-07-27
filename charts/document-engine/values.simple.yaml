@@ -98,3 +98,6 @@ postgresql:
     database: pspdfkit
   tls:
     enabled: false
+
+minio:
+  enabled: false

@@ -1,0 +1,30 @@
+pspdfkit:
+  storage:
+    enableMigrationJobs: true
+    assetStorageBackend: built-in
+    postgres:
+      enabled: true
+      host: postgresql
+      port: 5432
+
+prometheusExporter:
+  enabled: true
+
+postgresql:
+  enabled: true
+  fullnameOverride: postgresql
+  nameOverride: postgresql
+  postgresqlDataDir: /ephemeral/data
+  primary:
+    extraVolumeMounts:
+      - mountPath: /ephemeral
+        name: ephemeral-data
+    extraVolumes:
+      - name: ephemeral-data
+        emptyDir:
+          sizeLimit: 1Gi
+    persistence:
+      enabled: false
+
+minio:
+  enabled: false

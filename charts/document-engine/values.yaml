@@ -522,9 +522,28 @@ postgresql:
   primary:
     persistence:
       enabled: false
+    extendedConfiguration: |
+      log_statement = all
+    pgHbaConfiguration: |
+      host     all             all             0.0.0.0/0               md5
+      host     all             all             ::/0                    md5
+      local   all             all                                     trust
   auth:
     enablePostgresUser: true
     postgresPassword: pspdfkit
     username: pspdfkit
     password: pspdfkit
     database: pspdfkit
+
+#
+# External MinIO chart
+# See more: https://github.com/bitnami/charts/tree/main/bitnami/minio
+#
+minio:
+  enabled: false
+  mode: standalone
+  auth:
+    rootUser: pspdfkitObjectStorageRootKey
+    rootPassword: pspdfkitObjectStorageRootPassword
+  defaultBuckets: "document-engine-assets"
+  disableWebUI: true
