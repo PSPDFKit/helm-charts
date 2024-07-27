@@ -278,6 +278,8 @@ pspdfkit:
       otelServiceName: ""
       # `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
       otelResourceAttributes: ""
+      # `OTEL_PROPAGATORS`, propagators
+      otelPropagators: ""
 
 serviceAccount:
   create: true
@@ -300,7 +302,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 5000
- 
+
 ingress:
   enabled: false
   className: ""

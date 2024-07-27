@@ -84,6 +84,9 @@ data:
 {{-     with .otelResourceAttributes }}
   OTEL_RESOURCE_ATTRIBUTES: {{ . | quote }}
 {{-     end }}
+{{-     with .otelPropagators }}
+  OTEL_PROPAGATORS: {{ . | quote }}
+{{-     end }}
 {{-   else }}
   ENABLE_OPENTELEMETRY: "false"
 {{-   end }}

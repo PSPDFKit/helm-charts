@@ -41,6 +41,7 @@
     * `pspdfkit.observability.opentelemetry.otlpExporterProtocol` (`OTEL_EXPORTER_OTLP_PROTOCOL`)
     * `pspdfkit.observability.opentelemetry.otelServiceName` (`OTEL_SERVICE_NAME`)
     * `pspdfkit.observability.opentelemetry.otelResourceAttributes` (`OTEL_RESOURCE_ATTRIBUTES`)
+    * `pspdfkit.observability.opentelemetry.otelPropagators` (`OTEL_PROPAGATORS`)
 
 ### Changed
 
