@@ -1,7 +1,7 @@
 pspdfkit:
   storage:
     databaseMigrationJob:
-      enabled: true
+      enabled: false
     assetStorageBackend: built-in
     postgres:
       enabled: true
@@ -22,5 +22,5 @@ postgresql:
 minio:
   enabled: false
 
-image:
-  repository: public.ecr.aws/pspdfkit/document-engine
+redis:
+  enabled: false

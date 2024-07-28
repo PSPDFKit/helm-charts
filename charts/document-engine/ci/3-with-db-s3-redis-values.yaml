@@ -1,7 +1,7 @@
 pspdfkit:
   storage:
     databaseMigrationJob:
-      enabled: true
+      enabled: false
       podAnnotations:
         do: "this"
       podLabels:
@@ -89,6 +89,3 @@ redis:
   #   redisShutdownWaitFailover: true
   #   persistence:
   #     enabled: false
-
-image:
-  repository: public.ecr.aws/pspdfkit/document-engine

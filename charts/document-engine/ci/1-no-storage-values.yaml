@@ -8,3 +8,9 @@ postgresql:
 
 minio:
   enabled: false
+
+redis:
+  enabled: false
+
+image:
+  repository: public.ecr.aws/pspdfkit/document-engine
