@@ -7,6 +7,7 @@ pspdfkit:
       enabled: true
       host: postgresql
       port: 5432
+      username: postgres
 
 prometheusExporter:
   enabled: true
@@ -17,7 +18,13 @@ postgresql:
   nameOverride: postgresql
   primary:
     persistence:
-      enabled: false
+      enabled: true
+      size: 1Gi
+      storageClass: standard
+      accessModes:
+        - ReadWriteOnce
+  volumePermissions:
+    enabled: true
 
 minio:
   enabled: false
