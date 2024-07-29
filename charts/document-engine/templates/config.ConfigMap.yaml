@@ -87,6 +87,12 @@ data:
 {{-     with .otelPropagators }}
   OTEL_PROPAGATORS: {{ . | quote }}
 {{-     end }}
+{{-     with .otelTracesSampler }}
+  OTEL_TRACES_SAMPLER: {{ . | quote }}
+{{-     end }}
+{{-     with .otelTracesSamplerArg }}
+  OTEL_TRACES_SAMPLER_ARG: {{ . | quote }}
+{{-     end }}
 {{-   else }}
   ENABLE_OPENTELEMETRY: "false"
 {{-   end }}
