@@ -1,19 +1,15 @@
-{{- if and .Values.pspdfkit.storage.postgres.enabled .Values.pspdfkit.storage.enableMigrationJobs }}
+{{- if and .Values.pspdfkit.storage.postgres.enabled .Values.pspdfkit.storage.databaseMigrationJob.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "document-engine.fullname" . }}-db-migration
   labels:
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    {{- include "document-engine.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
-#  ttlSecondsAfterFinished: 3600
+  ttlSecondsAfterFinished: {{ .Values.pspdfkit.storage.databaseMigrationJob.ttlSecondsAfterFinished }}
   template:
     metadata:
       name: {{ include "document-engine.fullname" . }}-db-migration
@@ -21,11 +17,14 @@ spec:
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.pspdfkit.storage.databaseMigrationJob.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
-        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        {{- include "document-engine.cleanupSelectorLabels" . | nindent 8 }}
+        {{- include "document-engine.migrationSelectorLabels" . | nindent 8 }}
+      {{- with .Values.pspdfkit.storage.databaseMigrationJob.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       restartPolicy: Never
       {{- with .Values.imagePullSecrets }}
@@ -60,11 +59,13 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
+            {{- if eq (include  "document-engine.license.available" .) "true" }}
             - name: {{ include "document-engine.license.variable.name" . }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "document-engine.license.secret.name" . }}
                   key: {{ include "document-engine.license.secret.key" . }}
+            {{- end }}
             - name: ENABLE_DATABASE_MIGRATIONS
               value: 'true'
             - name: EXIT_AFTER_DATABASE_MIGRATIONS
@@ -89,6 +90,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "document-engine.api.secret.name" . }}
                   key: {{ include "document-engine.api.secret.key.apiToken" . }}
+          {{- if .Values.pspdfkit.storage.postgres.enabled }}
+            {{- if .Values.pspdfkit.storage.postgres.tls.enabled }}
+            - name: PGSSL_DISABLE_VERIFY
+              value: {{ not .Values.pspdfkit.storage.postgres.tls.verify | quote }}
+            {{-   with .Values.pspdfkit.storage.postgres.tls.trustFileName }}
+            - name: PGSSL_CA_CERT_PATH
+              value: /certificate-stores-custom/{{ . }}
+            {{-   end }}
+            {{- end }}
+          {{- end }}
           {{- with .Values.extraEnvs }}
             {{- toYaml .| nindent 12 }}
           {{- end }}
@@ -97,7 +108,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.pspdfkit.storage.databaseMigrationJob.resources | nindent 12 }}
           {{- if .Values.extraVolumeMounts }}
           volumeMounts:
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}

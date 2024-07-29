@@ -1,0 +1,13 @@
+pspdfkit:
+  storage:
+    postgres:
+      enabled: false
+
+postgresql:
+  enabled: false
+
+minio:
+  enabled: false
+
+redis:
+  enabled: false

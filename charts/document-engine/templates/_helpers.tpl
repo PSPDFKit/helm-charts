@@ -55,6 +55,11 @@ document-engine.pspdfkit/job: cleanup
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+{{- define "document-engine.migrationSelectorLabels" -}}
+document-engine.pspdfkit/job: migration
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
 {{/*
 Create the name of the service account to use
 */}}

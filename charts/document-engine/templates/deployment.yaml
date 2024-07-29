@@ -123,13 +123,13 @@ spec:
               value: {{ not .Values.pspdfkit.storage.postgres.tls.verify | quote }}
             {{-   with .Values.pspdfkit.storage.postgres.tls.trustFileName }}
             - name: PGSSL_CA_CERT_PATH
-              value: /certificate-stores/{{ . }}
+              value: /certificate-stores-custom/{{ . }}
             {{-   end }}
             {{- end }}
           {{- end }}
           {{- with .Values.pspdfkit.downloaderTrustFileName }}
             - name: DOWNLOADER_CERT_FILE_PATH
-              value: /certificate-stores/{{ . }}
+              value: /certificate-stores-custom/{{ . }}
           {{- end }}
           {{- if .Values.pspdfkit.auth.dashboard.enabled }}
             - name: DASHBOARD_USERNAME
@@ -176,7 +176,7 @@ spec:
             {{- with .Values.pspdfkit.trustConfigMaps }}
             {{-   range $cmName, $cmProperties := . }}
             - name: trust-{{ $cmName }}
-              mountPath: /certificate-stores/{{ $cmProperties.path }}
+              mountPath: /certificate-stores-custom/{{ $cmProperties.path }}
               subPath: {{ $cmProperties.path }}
               readOnly: true
             {{-   end }}

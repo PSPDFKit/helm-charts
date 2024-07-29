@@ -113,19 +113,19 @@ pspdfkit:
   minSearchQueryLength: 3
   # `TRUSTED_PROXIES`
   trustedProxies: default
-  # ConfigMap references for trust configuration
+  # ConfigMap references for trust configuration, stored in `/certificate-stores-custom`
   trustConfigMaps: {}
-  # Root certificates to yield `/certificate-stores/root-certificates.pem`
+  # Root certificates to yield `/certificate-stores-custom/root-certificates.pem`
   # root:
   #  key: root-certificates.pem
   #  path: root-certificates.pem
-  # Private certificates to yield `/certificate-stores/private-ca-certificates.pem`
+  # Private certificates to yield `/certificate-stores-custom/private-ca-certificates.pem`
   # private-ca:
   #  key: private-ca-certificates.pem
   #  path: private-ca-certificates.pem
 
   # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH`
-  downloaderTrustFileName: ""
+  downloaderTrustFileName: "root-certificates.pem"
   # Signing service parameters
   signingService:
     # Enable signing service integration
@@ -155,9 +155,14 @@ pspdfkit:
       # `TIMESTAMP_AUTHORITY_PASSWORD`
       password: ""
   storage:
-    # Enable separate migration jobs.
-    # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
-    enableMigrationJobs: false
+    # Database migration jobs.
+    databaseMigrationJob:
+      # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
+      enabled: false
+      ttlSecondsAfterFinished: 300
+      resources: {}
+      podAnnotations: {}
+      podLabels: {}
     # Regular job to remove documents from the database.
     # Note: currently only works with the `built-in` storage backend.
     cleanupJob:
@@ -196,7 +201,7 @@ pspdfkit:
       # `PGPASSWORD`
       password: pspdfkit
       # `PG_ADMIN_USER`
-      adminUsername: pspdfkit
+      adminUsername: postgres
       # `PG_ADMIN_PASSWORD`
       adminPassword: pspdfkit
       # ...or use external secrets:
@@ -244,9 +249,9 @@ pspdfkit:
       # `REDIS_PORT`
       port: 6379
       # `REDIS_DATABASE`
-      database: pspdfkit
+      database: ""
       # Sentinels
-      sentinels:
+      sentinel:
         enabled: false
         # `REDIS_SENTINELS`
         urls: []
@@ -256,14 +261,31 @@ pspdfkit:
         # `REDIS_SENTINELS_GROUP`
         group: none
       # `REDIS_USERNAME`
-      username: pspdfkit
+      username: ""
       # `REDIS_PASSWORD`
-      password: pspdfkit
+      password: ""
       # `REDIS_SSL`
       tls:
         enabled: false
       # External secret name
       externalSecretName: ""
+
+  observability:
+    # OpenTelemetry
+    opentelemetry:
+    # Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
+      enabled: false
+      # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
+      otlpExporterEndpoint: ""
+      # `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
+      otlpExporterProtocol: ""
+      # `OTEL_SERVICE_NAME`, service name
+      otelServiceName: ""
+      # `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
+      otelResourceAttributes: ""
+      # `OTEL_PROPAGATORS`, propagators
+      otelPropagators: ""
+
 serviceAccount:
   create: true
   annotations: {}
@@ -285,6 +307,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 5000
+
 ingress:
   enabled: false
   className: ""
@@ -305,7 +328,8 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-# Additional ingress for the dashboard
+
+# Additional ingresses, e.g. for the dashboard
 extraIngresses: {}
 # dashboard:
 #   enabled: false
@@ -503,9 +527,42 @@ postgresql:
   primary:
     persistence:
       enabled: false
+    extendedConfiguration: |
+      log_statement = ddl
+    pgHbaConfiguration: |
+      local    all             all                                trust
+      host     all             all        127.0.0.1/32            trust
+      host     all             all        ::1/128                 trust
+      host     all             all        0.0.0.0/0               md5
+      host     all             all        ::/0                    md5
   auth:
     enablePostgresUser: true
     postgresPassword: pspdfkit
     username: pspdfkit
     password: pspdfkit
     database: pspdfkit
+
+#
+# External MinIO chart
+# See more: https://github.com/bitnami/charts/tree/main/bitnami/minio
+#
+minio:
+  enabled: false
+  mode: standalone
+  auth:
+    rootUser: pspdfkitObjectStorageRootKey
+    rootPassword: pspdfkitObjectStorageRootPassword
+  defaultBuckets: "document-engine-assets"
+  disableWebUI: true
+
+#
+# External Redis chart
+# See more: https://github.com/bitnami/charts/tree/main/bitnami/redis
+#
+redis:
+  enabled: false
+  architecture: standalone
+  auth:
+    enabled: true
+    sentinel: false
+    password: pspdfkit

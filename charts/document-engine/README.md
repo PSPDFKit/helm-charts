@@ -3,7 +3,9 @@
 - [Document Engine Helm chart](#document-engine-helm-chart)
   - [Using this repository](#using-this-repository)
   - [Installing Document Engine](#installing-document-engine)
-  - [Upgrade](#upgrade)
+    - [Dependencies](#dependencies)
+    - [Upgrade](#upgrade)
+  - [Contribution](#contribution)
   - [License](#license)
   - [Support, Issues and License Questions](#support-issues-and-license-questions)
 
@@ -19,17 +21,29 @@ helm repo update
 
 ## Installing Document Engine
 
-```
-helm upgrade --install --debug --dry-run \
-     pspdfkit/document-engine \
+```shell
+helm upgrade --install \
+     document-engine pspdfkit/document-engine \
      -n pspdfkit-services \
      -f ./document-engine-values.yaml
 ```
 
-## Upgrade
+### Dependencies
+
+The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) charts for PostgreSQL, [MinIO](https://min.io/) and [Redis](https://redis.io/). They are disabled by default, but can be enabled for convenience. Please consider [tests](/charts/document-engine/ci) as examples.
+
+### Upgrade
 
 > [!NOTE] 
 > Please consult the [changelog](/charts/document-engine/CHANGELOG.md)
+
+## Contribution
+
+The chart is validated using [ct](https://github.com/helm/chart-testing/tree/main) [lint](https://github.com/helm/chart-testing/blob/main/doc/ct_lint.md):
+
+```shell
+ct lint --target-branch "$(git rev-parse --abbrev-ref HEAD)"
+```
 
 ## License
 

@@ -1,0 +1,33 @@
+pspdfkit:
+  storage:
+    databaseMigrationJob:
+      enabled: false
+    assetStorageBackend: built-in
+    postgres:
+      enabled: true
+      host: postgresql
+      port: 5432
+      username: postgres
+
+prometheusExporter:
+  enabled: true
+
+postgresql:
+  enabled: true
+  fullnameOverride: postgresql
+  nameOverride: postgresql
+  primary:
+    persistence:
+      enabled: true
+      size: 1Gi
+      storageClass: standard
+      accessModes:
+        - ReadWriteOnce
+  volumePermissions:
+    enabled: true
+
+minio:
+  enabled: false
+
+redis:
+  enabled: false

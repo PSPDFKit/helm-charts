@@ -18,7 +18,8 @@ pspdfkit:
     url: http://signing-service:6000/sign
     timeoutSeconds: 10
   storage:
-    enableMigrationJobs: false
+    databaseMigrationJob: 
+      enabled: false
     databaseEngine: postgresql
     assetStorageBackend: built-in
     enableAssetStorageFallback: false
@@ -33,6 +34,10 @@ pspdfkit:
         password: postgres
         adminUsername: postgres
         adminPassword: postgres
+
+  observability:
+    opentelemetry:
+      enabled: false
 
 replicaCount: 1
 
@@ -69,23 +74,17 @@ ingress:
 postgresql:
   enabled: true
   architecture: standalone
-  postgresqlDataDir: /ephemeral/data
   primary:
-    extraVolumeMounts:
-      - mountPath: /ephemeral
-        name: ephemeral-data
-    extraVolumes:
-      - name: ephemeral-data
-        emptyDir:
-          sizeLimit: 1Gi
     persistence:
       enabled: false
     extendedConfiguration: |
-      log_statement = all
+      log_statement = ddl
     pgHbaConfiguration: |
-      host     all             all             0.0.0.0/0               md5
-      host     all             all             ::/0                    md5
-      local   all             all                                     trust
+      local    all             all                                trust
+      host     all             all        127.0.0.1/32            trust
+      host     all             all        ::1/128                 trust
+      host     all             all        0.0.0.0/0               md5
+      host     all             all        ::/0                    md5
   auth:
     enablePostgresUser: true
     postgresPassword: postgres
@@ -94,3 +93,8 @@ postgresql:
     database: pspdfkit
   tls:
     enabled: false
+
+minio:
+  enabled: false
+redis:
+  enabled: false

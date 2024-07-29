@@ -22,7 +22,7 @@ data:
   AUTOMATIC_LINK_EXTRACTION: {{ .Values.pspdfkit.automaticLinkExtraction | quote }}
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.pspdfkit.minSearchQueryLength | quote }}
   DATABASE_CONNECTIONS: {{ .Values.pspdfkit.storage.databaseConnections | quote }}
-{{- if .Values.pspdfkit.storage.enableMigrationJobs }}
+{{- if .Values.pspdfkit.storage.databaseMigrationJob.enabled }}
   ENABLE_DATABASE_MIGRATIONS: "false"
   EXIT_AFTER_DATABASE_MIGRATIONS: "false"
 {{- else }}
@@ -69,5 +69,27 @@ data:
   STATSD_PORT: {{ .Values.prometheusExporter.statsdPort | quote }}
   STATSD_CUSTOM_TAGS: "namespace={{ .Release.Namespace }},app={{ include "document-engine.fullname" . }}"
 {{- end }}
+{{- with .Values.pspdfkit.observability.opentelemetry }}
+{{-   if .enabled }}
+  ENABLE_OPENTELEMETRY: "true"
+{{-     with .otlpExporterEndpoint }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ . | quote }}
+{{-     end }}
+{{-     with .otlpExporterProtocol }}
+  OTEL_EXPORTER_OTLP_PROTOCOL: {{ . | quote }}
+{{-     end }}
+{{-     with .otelServiceName }}
+  OTEL_SERVICE_NAME: {{ . | quote }}
+{{-     end }}
+{{-     with .otelResourceAttributes }}
+  OTEL_RESOURCE_ATTRIBUTES: {{ . | quote }}
+{{-     end }}
+{{-     with .otelPropagators }}
+  OTEL_PROPAGATORS: {{ . | quote }}
+{{-     end }}
+{{-   else }}
+  ENABLE_OPENTELEMETRY: "false"
+{{-   end }}
+{{- end }}
 # Can be used for hash updating
-  VERSION: {{ include "document-engine.chart" . | quote }}
+  HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}
