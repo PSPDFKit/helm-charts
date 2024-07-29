@@ -275,6 +275,7 @@ pspdfkit:
     opentelemetry:
     # Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
       enabled: false
+      # https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
       # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
       otlpExporterEndpoint: ""
       # `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
@@ -285,6 +286,12 @@ pspdfkit:
       otelResourceAttributes: ""
       # `OTEL_PROPAGATORS`, propagators
       otelPropagators: ""
+      # `OTEL_TRACES_SAMPLER`, should normally not be touched
+      # to allow custom `parent_based` work,
+      # but something like `parentbased_traceidratio` may be considered
+      otelTracesSampler: ""
+      # `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler
+      otelTracesSamplerArg: ""
 
 serviceAccount:
   create: true
