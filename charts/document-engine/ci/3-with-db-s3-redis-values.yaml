@@ -7,6 +7,8 @@ pspdfkit:
       podLabels:
         do: "that"
     assetStorageBackend: s3
+    enableAssetStorageFallback: true
+    enableAssetStorageFallbackPostgres: true
     postgres:
       enabled: true
       host: postgresql
