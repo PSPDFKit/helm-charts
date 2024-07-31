@@ -232,7 +232,7 @@ Database secrets
 Object storage parameters
 */}}
 {{- define "document-engine.storage.s3.enabled" -}}
-  {{- if or (.Values.pspdfkit.storage.assetStorageBackend eq . "s3")
+  {{- if or (eq .Values.pspdfkit.storage.assetStorageBackend "s3")
             (and .Values.pspdfkit.storage.enableAssetStorageFallback
                  .Values.pspdfkit.storage.enableAssetStorageFallbackS3 ) -}}
     {{- true -}}
@@ -259,7 +259,7 @@ Object storage parameters
 {{- end -}}
 
 {{- define "document-engine.storage.azure.enabled" -}}
-  {{- if or (.Values.pspdfkit.storage.assetStorageBackend eq . "azure")
+  {{- if or (eq .Values.pspdfkit.storage.assetStorageBackend "azure")
             (and .Values.pspdfkit.storage.enableAssetStorageFallback
                  .Values.pspdfkit.storage.enableAssetStorageFallbackAzure ) -}}
     {{- true -}}
