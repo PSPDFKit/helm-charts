@@ -21,8 +21,8 @@ pspdfkit:
 # Azurite as sidecar
 sidecars:
   - name: azurite
-    image: mcr.microsoft.com/azure-storage/azurite
-    imageTag: latest
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    imagePullPolicy: Always
     ports:
       - containerPort: 10000
         name: blob

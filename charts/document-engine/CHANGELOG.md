@@ -3,15 +3,16 @@
 - [Changelog](#changelog)
   - [2.9.0](#290)
     - [Added](#added)
+    - [Fixed](#fixed)
   - [2.8.0](#280)
     - [Added](#added-1)
     - [Changed](#changed)
-    - [Fixed](#fixed)
+    - [Fixed](#fixed-1)
   - [2.7.3](#273)
     - [Changed](#changed-1)
-    - [Fixed](#fixed-1)
-  - [2.7.2](#272)
     - [Fixed](#fixed-2)
+  - [2.7.2](#272)
+    - [Fixed](#fixed-3)
   - [2.7.0](#270)
     - [Changed](#changed-2)
   - [2.6.2](#262)
@@ -35,6 +36,10 @@
 ### Added
 
 * Azure blob storage support.
+
+### Fixed
+
+* Asset storage fallback.
 
 ## 2.8.0
 
