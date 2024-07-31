@@ -1,8 +1,10 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [2.8.0](#280)
+  - [2.9.0](#290)
     - [Added](#added)
+  - [2.8.0](#280)
+    - [Added](#added-1)
     - [Changed](#changed)
     - [Fixed](#fixed)
   - [2.7.3](#273)
@@ -13,20 +15,26 @@
   - [2.7.0](#270)
     - [Changed](#changed-2)
   - [2.6.2](#262)
-    - [Added](#added-1)
+    - [Added](#added-2)
     - [Changed](#changed-3)
   - [2.6.0](#260)
-    - [Added](#added-2)
-  - [2.4.0](#240)
     - [Added](#added-3)
-  - [2.3.0](#230)
+  - [2.4.0](#240)
     - [Added](#added-4)
-  - [2.2.0](#220)
+  - [2.3.0](#230)
     - [Added](#added-5)
+  - [2.2.0](#220)
+    - [Added](#added-6)
   - [2.1.0](#210)
     - [Changed](#changed-4)
   - [2.0.0](#200)
     - [Changed](#changed-5)
+
+## 2.9.0
+
+### Added
+
+* Azure blob storage support.
 
 ## 2.8.0
 

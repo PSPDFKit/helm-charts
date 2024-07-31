@@ -1,0 +1,60 @@
+pspdfkit:
+  storage:
+    databaseMigrationJob:
+      enabled: false
+    assetStorageBackend: azure
+    enableAssetStorageFallback: true
+    enableAssetStorageFallbackPostgres: true
+    postgres:
+      enabled: true
+      host: postgresql
+      port: 5432
+      username: postgres
+    azure:
+      # This is "well known" storage account for Azure Storage Emulator
+      # See https://learn.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string#configure-a-connection-string-for-azurite
+      accountName: devstoreaccount1
+      accountKey: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
+      container: "document-engine-assets"
+      api_url: "http://127.0.0.1:10000/devstoreaccount1"
+
+# Azurite as sidecar
+sidecars:
+  - name: azurite
+    image: mcr.microsoft.com/azure-storage/azurite
+    imageTag: latest
+    ports:
+      - containerPort: 10000
+        name: blob
+    #   - containerPort: 10001
+    #     name: queue
+    #   - containerPort: 10002
+    #     name: table
+    # env:
+    #   - name: AZURITE_ACCOUNTS
+    #     value: "devstoreaccount1:Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+    #   - name: AZURITE_BLOB_HOST
+    #     value: "http://
+
+prometheusExporter:
+  enabled: true
+
+postgresql:
+  enabled: true
+  fullnameOverride: postgresql
+  nameOverride: postgresql
+  primary:
+    persistence:
+      enabled: true
+      size: 1Gi
+      storageClass: standard
+      accessModes:
+        - ReadWriteOnce
+  volumePermissions:
+    enabled: true
+
+minio:
+  enabled: false
+
+redis:
+  enabled: false

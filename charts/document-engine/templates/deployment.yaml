@@ -47,6 +47,9 @@ spec:
       {{- if (include "document-engine.storage.s3.createSecret" .) }}
         checksum/s3-secret: {{ include (print $.Template.BasePath "/config.storage-s3.Secret.yaml") . | sha256sum }}
       {{- end }}
+      {{- if (include "document-engine.storage.azure.createSecret" .) }}
+        checksum/azure-secret: {{ include (print $.Template.BasePath "/config.storage-azure.Secret.yaml") . | sha256sum }}
+      {{- end }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -83,6 +86,10 @@ spec:
           {{- if eq (include "document-engine.storage.s3.enabled" .) "true" }}
             - secretRef:
                 name: {{ include "document-engine.storage.s3.secret.name" . }}
+          {{- end }}
+          {{- if eq (include "document-engine.storage.azure.enabled" .) "true" }}
+            - secretRef:
+                name: {{ include "document-engine.storage.azure.secret.name" . }}
           {{- end }}
           {{- with .Values.extraEnvFrom }}
             {{- toYaml . | nindent 12 }}

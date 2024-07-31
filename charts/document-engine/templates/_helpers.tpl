@@ -99,7 +99,8 @@ License secret name
 {{- end -}}
 
 {{- define "document-engine.license.available" -}}
-  {{- if or .Values.pspdfkit.license.activationKey .Values.pspdfkit.license.externalSecret.name -}}
+  {{- if or .Values.pspdfkit.license.activationKey 
+            .Values.pspdfkit.license.externalSecret.name -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -187,7 +188,8 @@ Database secrets
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.postgres.createSecret" -}}
-  {{- if and .Values.pspdfkit.storage.postgres.enabled (not .Values.pspdfkit.storage.postgres.externalSecretName) -}}
+  {{- if and .Values.pspdfkit.storage.postgres.enabled 
+             (not .Values.pspdfkit.storage.postgres.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -202,7 +204,8 @@ Database secrets
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.postgres.createAdminSecret" -}}
-  {{- if and .Values.pspdfkit.storage.postgres.enabled (not .Values.pspdfkit.storage.postgres.externalAdminSecretName) -}}
+  {{- if and .Values.pspdfkit.storage.postgres.enabled 
+             (not .Values.pspdfkit.storage.postgres.externalAdminSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -217,7 +220,8 @@ Database secrets
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.redis.createSecret" -}}
-  {{- if and .Values.pspdfkit.storage.redis.enabled (not .Values.pspdfkit.storage.redis.externalSecretName) -}}
+  {{- if and .Values.pspdfkit.storage.redis.enabled 
+             (not .Values.pspdfkit.storage.redis.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -228,21 +232,18 @@ Database secrets
 Object storage parameters
 */}}
 {{- define "document-engine.storage.s3.enabled" -}}
-  {{- if .Values.pspdfkit.storage.assetStorageBackend -}}
-    {{- with .Values.pspdfkit.storage.assetStorageBackend -}}
-      {{- if eq . "s3" -}}
-        {{- true -}}
-      {{- else -}}
-        {{- false -}}
-      {{- end -}}
-    {{- end -}}
+  {{- if or (.Values.pspdfkit.storage.assetStorageBackend eq . "s3")
+            (and .Values.pspdfkit.storage.enableAssetStorageFallback
+                 .Values.pspdfkit.storage.enableAssetStorageFallbackS3 ) -}}
+    {{- true -}}
   {{- else -}}
     {{- false -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.storage.s3.createSecret" -}}
-  {{- if and (eq (include "document-engine.storage.s3.enabled" .) "true") (not .Values.pspdfkit.storage.s3.externalSecretName) -}}
+  {{- if and (eq (include "document-engine.storage.s3.enabled" .) "true") 
+             (not .Values.pspdfkit.storage.s3.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -254,6 +255,34 @@ Object storage parameters
     {{- printf "%s-s3" (include "document-engine.fullname" .) -}}
   {{- else -}}
     {{- .Values.pspdfkit.storage.s3.externalSecretName -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "document-engine.storage.azure.enabled" -}}
+  {{- if or (.Values.pspdfkit.storage.assetStorageBackend eq . "azure")
+            (and .Values.pspdfkit.storage.enableAssetStorageFallback
+                 .Values.pspdfkit.storage.enableAssetStorageFallbackAzure ) -}}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
+{{- end -}}
+
+
+{{- define "document-engine.storage.azure.createSecret" -}}
+  {{- if and (eq (include "document-engine.storage.azure.enabled" .) "true") 
+             (not .Values.pspdfkit.storage.azure.externalSecretName) -}}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "document-engine.storage.azure.secret.name" -}}
+  {{- if (eq (include "document-engine.storage.azure.createSecret" .) "true") -}}
+    {{- printf "%s-s3" (include "document-engine.fullname" .) -}}
+  {{- else -}}
+    {{- .Values.pspdfkit.storage.azure.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 
