@@ -48,7 +48,7 @@ postgresql:
   primary:
     persistence:
       enabled: true
-      size: 1Gi
+      size: 512Mi
       storageClass: standard
       accessModes:
         - ReadWriteOnce

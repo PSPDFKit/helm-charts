@@ -14,9 +14,9 @@ pspdfkit:
       # This is "well known" storage account for Azure Storage Emulator
       # See https://learn.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string#configure-a-connection-string-for-azurite
       accountName: devstoreaccount1
-      accountKey: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
+      accountKey: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
       container: "document-engine-assets"
-      api_url: "http://127.0.0.1:10000/devstoreaccount1"
+      apiUrl: "http://127.0.0.1:10000/devstoreaccount1"
 
 # Azurite as sidecar
 sidecars:
@@ -26,18 +26,7 @@ sidecars:
     ports:
       - containerPort: 10000
         name: blob
-    #   - containerPort: 10001
-    #     name: queue
-    #   - containerPort: 10002
-    #     name: table
-    # env:
-    #   - name: AZURITE_ACCOUNTS
-    #     value: "devstoreaccount1:Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
-    #   - name: AZURITE_BLOB_HOST
-    #     value: "http://
-
-prometheusExporter:
-  enabled: true
+        protocol: TCP
 
 postgresql:
   enabled: true
@@ -46,7 +35,7 @@ postgresql:
   primary:
     persistence:
       enabled: true
-      size: 1Gi
+      size: 512Mi
       storageClass: standard
       accessModes:
         - ReadWriteOnce
