@@ -1,38 +1,56 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [2.8.0](#280)
+  - [2.9.0](#290)
     - [Added](#added)
     - [Changed](#changed)
     - [Fixed](#fixed)
-  - [2.7.3](#273)
+  - [2.8.0](#280)
+    - [Added](#added-1)
     - [Changed](#changed-1)
     - [Fixed](#fixed-1)
-  - [2.7.2](#272)
-    - [Fixed](#fixed-2)
-  - [2.7.0](#270)
+  - [2.7.3](#273)
     - [Changed](#changed-2)
-  - [2.6.2](#262)
-    - [Added](#added-1)
+    - [Fixed](#fixed-2)
+  - [2.7.2](#272)
+    - [Fixed](#fixed-3)
+  - [2.7.0](#270)
     - [Changed](#changed-3)
-  - [2.6.0](#260)
+  - [2.6.2](#262)
     - [Added](#added-2)
-  - [2.4.0](#240)
-    - [Added](#added-3)
-  - [2.3.0](#230)
-    - [Added](#added-4)
-  - [2.2.0](#220)
-    - [Added](#added-5)
-  - [2.1.0](#210)
     - [Changed](#changed-4)
-  - [2.0.0](#200)
+  - [2.6.0](#260)
+    - [Added](#added-3)
+  - [2.4.0](#240)
+    - [Added](#added-4)
+  - [2.3.0](#230)
+    - [Added](#added-5)
+  - [2.2.0](#220)
+    - [Added](#added-6)
+  - [2.1.0](#210)
     - [Changed](#changed-5)
+  - [2.0.0](#200)
+    - [Changed](#changed-6)
+
+## 2.9.0
+
+### Added
+
+* Azure blob storage support.
+* Introduced `pspdfkit.signingTrustConfigMaps` for ConfigMaps to mount to `/certificate-stores/`
+
+### Changed
+
+* [Document Engine 1.4.1](https://pspdfkit.com/changelog/document-engine/#1.4.1)
+
+### Fixed
+
+* Asset storage fallback.
 
 ## 2.8.0
 
 ### Added
 
-* [Document Engine 1.4.0](https://pspdfkit.com/changelog/document-engine/#1.4.0)
 * Support for OpenTelemetry traces, enabled by setting `pspdfkit.observability.opentelemetry.enabled` to `true`. 
   * Unless the collector is placed as a sidecar and receives by grpc at port `4317`, other parameters are also necessary. 
   * Please note: standard OpenTelemetry environment variables are used, and the following values are just convenience wrappers, therefore other configuration approaches (e.g. setting variables through mutations or post build patches) will also work.
@@ -46,6 +64,7 @@
 
 ### Changed
 
+* [Document Engine 1.4.0](https://pspdfkit.com/changelog/document-engine/#1.4.0)
 * Changed `pspdfkit.storage.enableMigrationJobs` to `pspdfkit.storage.databaseMigrationJob.enabled`.
 * Renamed `.Values.pspdfkit.storage.redis.sentinels` to `.Values.pspdfkit.storage.redis.sentinel`.
 * Slight refinement of trust information parameters: all files from `pspdfkit.trustConfigMaps` are now mounted to `/certificate-stores-custom/` to avoid confusion with `/certificate-stores/` which services for document signature validation certificates.

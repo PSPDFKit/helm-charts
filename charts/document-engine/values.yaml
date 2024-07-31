@@ -113,16 +113,18 @@ pspdfkit:
   minSearchQueryLength: 3
   # `TRUSTED_PROXIES`
   trustedProxies: default
+  # Signing certificate trust configuration
+  signingTrustConfigMaps: {}
+  # Private certificates to yield `/certificate-stores-custom/private-ca-certificates.pem`
+  # private-ca:
+  #  key: private-ca-certificates.pem
+  #  path: private-ca-certificates.pem
   # ConfigMap references for trust configuration, stored in `/certificate-stores-custom`
   trustConfigMaps: {}
   # Root certificates to yield `/certificate-stores-custom/root-certificates.pem`
   # root:
   #  key: root-certificates.pem
   #  path: root-certificates.pem
-  # Private certificates to yield `/certificate-stores-custom/private-ca-certificates.pem`
-  # private-ca:
-  #  key: private-ca-certificates.pem
-  #  path: private-ca-certificates.pem
 
   # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH`
   downloaderTrustFileName: "root-certificates.pem"
@@ -177,7 +179,7 @@ pspdfkit:
     databaseEngine: postgresql
     # `DATABASE_CONNECTIONS`
     databaseConnections: 20
-    # `ASSET_STORAGE_BACKEND`
+    # `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
     assetStorageBackend: built-in
     # `ENABLE_ASSET_STORAGE_FALLBACK`
     enableAssetStorageFallback: false
@@ -234,6 +236,20 @@ pspdfkit:
       port: 443
       # `ASSET_STORAGE_S3_SCHEME`
       scheme: "https://"
+      # External secret name
+      externalSecretName: ""
+    # Azure blob storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `azure`
+    azure:
+      # `AZURE_STORAGE_ACCOUNT_NAME`
+      accountName: ""
+      # `AZURE_STORAGE_ACCOUNT_KEY`
+      accountKey: ""
+      # `AZURE_STORAGE_DEFAULT_CONTAINER`
+      container: ""
+      # `AZURE_STORAGE_ACCOUNT_CONNECTION_STRING`, takes priority over `accountName` and `accountKey`
+      connectionString: ""
+      # `AZURE_STORAGE_API_URL` for custom endpoints
+      apiUrl: ""
       # External secret name
       externalSecretName: ""
     # Redis settings for caching and prerendering

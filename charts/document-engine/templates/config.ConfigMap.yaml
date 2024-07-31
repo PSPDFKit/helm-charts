@@ -31,17 +31,17 @@ data:
 {{- end }}
 {{- with .Values.pspdfkit.storage }}
   ASSET_STORAGE_BACKEND: {{ default "built-in" .assetStorageBackend | quote }}
-{{- if .enableAssetStorageFallback }}
-  ENABLE_ASSET_STORAGE_FALLBACK: "false"
-  ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: "false"
-  ENABLE_ASSET_STORAGE_FALLBACK_S3: "false"
-  ENABLE_ASSET_STORAGE_FALLBACK_AZURE: "false"
-{{- else }}
+{{-   if .enableAssetStorageFallback }}
   ENABLE_ASSET_STORAGE_FALLBACK: {{ .enableAssetStorageFallback | quote }}
   ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: {{ .enableAssetStorageFallbackPostgres | quote }}
   ENABLE_ASSET_STORAGE_FALLBACK_S3: {{ .enableAssetStorageFallbackS3 | quote }}
   ENABLE_ASSET_STORAGE_FALLBACK_AZURE: {{ .enableAssetStorageFallbackAzure | quote }}
-{{- end }}
+{{-   else }}
+  ENABLE_ASSET_STORAGE_FALLBACK: "false"
+  ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: "false"
+  ENABLE_ASSET_STORAGE_FALLBACK_S3: "false"
+  ENABLE_ASSET_STORAGE_FALLBACK_AZURE: "false"
+{{-   end }}
   USE_REDIS_CACHE: {{ .redis.enabled | quote }}
   USE_REDIS_TTL_FOR_PRERENDERING: {{ .redis.useTtlForPrerendering | quote }}
   REDIS_TTL: {{ .redis.ttlSeconds | int | quote }}
