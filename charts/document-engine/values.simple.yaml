@@ -88,8 +88,6 @@ postgresql:
   auth:
     enablePostgresUser: true
     postgresPassword: postgres
-    username: pspdfkit
-    password: pspdfkit
     database: pspdfkit
   tls:
     enabled: false

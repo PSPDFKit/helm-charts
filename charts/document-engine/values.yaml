@@ -561,8 +561,6 @@ postgresql:
   auth:
     enablePostgresUser: true
     postgresPassword: pspdfkit
-    username: pspdfkit
-    password: pspdfkit
     database: pspdfkit
 
 #
