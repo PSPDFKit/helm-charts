@@ -64,6 +64,9 @@ data:
 {{- with .Values.pspdfkit.trustedProxies }}
   TRUSTED_PROXIES: {{ . | quote }}
 {{- end }}
+{{- with .Values.pspdfkit.replaceSecretsFromEnv }}
+  REPLACE_SECRETS_FROM_ENV: {{ . | quote }}
+{{- end }}
 {{- if .Values.prometheusExporter.enabled }}
   STATSD_HOST: localhost
   STATSD_PORT: {{ .Values.prometheusExporter.statsdPort | quote }}
