@@ -113,6 +113,10 @@ pspdfkit:
   minSearchQueryLength: 3
   # `TRUSTED_PROXIES`
   trustedProxies: default
+  # `REPLACE_SECRETS_FROM_ENV` — whether to consider
+  # environment variables, values and secrets for
+  # `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD`
+  replaceSecretsFromEnv: true
   # Signing certificate trust configuration
   signingTrustConfigMaps: {}
   # Private certificates to yield `/certificate-stores-custom/private-ca-certificates.pem`
@@ -561,8 +565,6 @@ postgresql:
   auth:
     enablePostgresUser: true
     postgresPassword: pspdfkit
-    username: pspdfkit
-    password: pspdfkit
     database: pspdfkit
 
 #
