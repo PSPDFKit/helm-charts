@@ -18,4 +18,3 @@ pspdfkit:
   storage:
     postgres:
       enabled: false
-
