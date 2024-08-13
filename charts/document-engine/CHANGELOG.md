@@ -41,7 +41,7 @@
 
 ### Changed
 
-* Simplified migration from Docker Compose by being even more friendly to puttling _all_ into `envFrom`.
+* Additional test to cover migration from Docker Compose by being friendly to putting _all_ into `envFrom`.
 
 ## 2.9.1 (2024-08-10)
 
