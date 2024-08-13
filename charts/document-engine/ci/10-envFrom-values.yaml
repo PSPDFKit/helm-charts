@@ -8,9 +8,9 @@ extraEnvs:
   - name: DASHBOARD_PASSWORD
     value: testPassword
   - name: MAX_UPLOAD_SIZE_BYTES
-    value: 12345678
+    value: "12345678"
   - name: ASSET_STORAGE_CACHE_SIZE
-    value: 987654321
+    value: "987654321"
   - name: LOG_LEVEL
     value: debug
 
