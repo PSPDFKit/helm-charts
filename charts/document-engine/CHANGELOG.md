@@ -1,27 +1,29 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [2.9.2 (2024-08-13)](#292-2024-08-13)
+    - [Changed](#changed)
   - [2.9.1 (2024-08-10)](#291-2024-08-10)
     - [Added](#added)
-    - [Changed](#changed)
+    - [Changed](#changed-1)
   - [2.9.0 (2024-08-01)](#290-2024-08-01)
     - [Added](#added-1)
-    - [Changed](#changed-1)
+    - [Changed](#changed-2)
     - [Fixed](#fixed)
   - [2.8.0](#280)
     - [Added](#added-2)
-    - [Changed](#changed-2)
+    - [Changed](#changed-3)
     - [Fixed](#fixed-1)
   - [2.7.3](#273)
-    - [Changed](#changed-3)
+    - [Changed](#changed-4)
     - [Fixed](#fixed-2)
   - [2.7.2](#272)
     - [Fixed](#fixed-3)
   - [2.7.0](#270)
-    - [Changed](#changed-4)
+    - [Changed](#changed-5)
   - [2.6.2](#262)
     - [Added](#added-3)
-    - [Changed](#changed-5)
+    - [Changed](#changed-6)
   - [2.6.0](#260)
     - [Added](#added-4)
   - [2.4.0](#240)
@@ -31,9 +33,15 @@
   - [2.2.0](#220)
     - [Added](#added-7)
   - [2.1.0](#210)
-    - [Changed](#changed-6)
-  - [2.0.0](#200)
     - [Changed](#changed-7)
+  - [2.0.0](#200)
+    - [Changed](#changed-8)
+
+## 2.9.2 (2024-08-13)
+
+### Changed
+
+* Simplified migration from Docker Compose by being even more friendly to puttling _all_ into `envFrom`.
 
 ## 2.9.1 (2024-08-10)
 
