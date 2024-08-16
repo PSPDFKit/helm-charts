@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [2.9.3 (2024-08-16)](#293-2024-08-16)
+    - [Fixed](#fixed)
   - [2.9.2 (2024-08-13)](#292-2024-08-13)
     - [Changed](#changed)
   - [2.9.1 (2024-08-10)](#291-2024-08-10)
@@ -9,16 +11,16 @@
   - [2.9.0 (2024-08-01)](#290-2024-08-01)
     - [Added](#added-1)
     - [Changed](#changed-2)
-    - [Fixed](#fixed)
+    - [Fixed](#fixed-1)
   - [2.8.0](#280)
     - [Added](#added-2)
     - [Changed](#changed-3)
-    - [Fixed](#fixed-1)
+    - [Fixed](#fixed-2)
   - [2.7.3](#273)
     - [Changed](#changed-4)
-    - [Fixed](#fixed-2)
-  - [2.7.2](#272)
     - [Fixed](#fixed-3)
+  - [2.7.2](#272)
+    - [Fixed](#fixed-4)
   - [2.7.0](#270)
     - [Changed](#changed-5)
   - [2.6.2](#262)
@@ -36,6 +38,12 @@
     - [Changed](#changed-7)
   - [2.0.0](#200)
     - [Changed](#changed-8)
+
+## 2.9.3 (2024-08-16)
+
+### Fixed
+
+* Signing trust certificates configuration.
 
 ## 2.9.2 (2024-08-13)
 
