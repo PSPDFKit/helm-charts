@@ -189,6 +189,7 @@ spec:
               subPath: {{ $cmProperties.path }}
               readOnly: true
             {{-   end }}
+            {{- end }}
             {{- with .Values.pspdfkit.signingTrustConfigMaps }}
             {{-   range $cmName, $cmProperties := . }}
             - name: trust-{{ $cmName }}
@@ -238,6 +239,7 @@ spec:
               - key: {{ $cmProperties.key }}
                 path: {{ .path }}
         {{-   end }}
+        {{- end }}
         {{- with .Values.pspdfkit.signingTrustConfigMaps }}
         {{-   range $cmName, $cmProperties := . }}
         - name: trust-{{ $cmName }}
