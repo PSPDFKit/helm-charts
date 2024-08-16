@@ -175,7 +175,9 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if or .Values.extraVolumeMounts .Values.pspdfkit.trustConfigMaps }}
+          {{- if or .Values.extraVolumeMounts
+                    .Values.pspdfkit.trustConfigMaps
+                    .Values.pspdfkit.signingTrustConfigMaps }}
           volumeMounts:
             {{- with .Values.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
@@ -184,6 +186,13 @@ spec:
             {{-   range $cmName, $cmProperties := . }}
             - name: trust-{{ $cmName }}
               mountPath: /certificate-stores-custom/{{ $cmProperties.path }}
+              subPath: {{ $cmProperties.path }}
+              readOnly: true
+            {{-   end }}
+            {{- with .Values.pspdfkit.signingTrustConfigMaps }}
+            {{-   range $cmName, $cmProperties := . }}
+            - name: trust-{{ $cmName }}
+              mountPath: /certificate-stores/{{ $cmProperties.path }}
               subPath: {{ $cmProperties.path }}
               readOnly: true
             {{-   end }}
@@ -213,12 +222,23 @@ spec:
       {{- if .Values.sidecars }}
         {{ toYaml .Values.sidecars | nindent 8 }}
       {{- end }}
-      {{- if or .Values.extraVolumeMounts .Values.pspdfkit.trustConfigMaps }}
+      {{- if or .Values.extraVolumeMounts
+                .Values.pspdfkit.trustConfigMaps
+                .Values.pspdfkit.signingTrustConfigMaps }}
       volumes:
         {{- with .Values.extraVolumes }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
         {{- with .Values.pspdfkit.trustConfigMaps }}
+        {{-   range $cmName, $cmProperties := . }}
+        - name: trust-{{ $cmName }}
+          configMap:
+            name: {{ $cmName}}
+            items:
+              - key: {{ $cmProperties.key }}
+                path: {{ .path }}
+        {{-   end }}
+        {{- with .Values.pspdfkit.signingTrustConfigMaps }}
         {{-   range $cmName, $cmProperties := . }}
         - name: trust-{{ $cmName }}
           configMap:
