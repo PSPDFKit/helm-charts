@@ -4,10 +4,10 @@ documentEngineLicense:
     name: ""
     key: DOCUMENT_ENGINE_ACTIVATION_KEY
 
+apiAuth:
+  apiToken: secret
+
 pspdfkit:
-  auth:
-    api:
-      apiToken: secret
   trustedProxies: default
   signingService:
     enabled: true

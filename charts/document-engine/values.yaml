@@ -10,6 +10,7 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+
 #
 # https://pspdfkit.com/guides/document-engine/configuration/overview/
 # https://pspdfkit.com/guides/document-engine/deployment/product-activation/
@@ -30,29 +31,29 @@ documentEngineLicense:
     # The key in the secret used to retrieve the activation key
     key: DOCUMENT_ENGINE_ACTIVATION_KEY
 
+# Document Enging API authentication
+apiAuth:
+  # `API_AUTH_TOKEN` should be long enough
+  apiToken: secret
+  jwt:
+    # Enable JWT
+    enabled: false
+    # `JWT_PUBLIC_KEY`
+    publicKey: none
+    # `JWT_ALGORITHM`
+    # Supported algorithms: RS256, RS512, ES256, ES512.
+    # See RFC 7518 for details about specific algorithms.
+    algorithm: RS256
+  # Use an external secret for API credentials
+  externalSecret:
+    # External secret name
+    name: ""
+    # Key names
+    apiTokenKey: API_AUTH_TOKEN
+    jwtPublicKeyKey: JWT_PUBLIC_KEY
+    jwtAlgorithmKey: JWT_ALGORITHM
+
 pspdfkit:
-  auth:
-    api:
-      # `API_AUTH_TOKEN` should be long enough
-      apiToken: secret
-      # JSON Web Tokens
-      jwt:
-        # Enable JWT
-        enabled: false
-        # `JWT_PUBLIC_KEY`
-        publicKey: none
-        # `JWT_ALGORITHM`
-        # Supported algorithms: RS256, RS512, ES256, ES512.
-        # See RFC 7518 for details about specific algorithms.
-        algorithm: RS256
-      # Use an external secret for API credentials
-      externalSecret:
-        # External secret name
-        name: ""
-        # Key names
-        apiTokenKey: API_AUTH_TOKEN
-        jwtPublicKeyKey: JWT_PUBLIC_KEY
-        jwtAlgorithmKey: JWT_ALGORITHM
   # A string used as the base key for deriving secret keys for the purposes of authentication.
   # Choose a sufficiently long random string for this option.
   # To generate a random string, use: `openssl rand -hex 256`.

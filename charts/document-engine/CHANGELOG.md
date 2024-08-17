@@ -51,6 +51,7 @@
 ### Changed
 
 * `pspdfkit.license` section moved to the top level as `documentEngineLicense`.
+* `pspdfkit.auth.api` section moved to the top level as `apiAuth`.
 * `pspdfkit.observability` section moved to the top level as `observability`.
   * `pspdfkit.log.level` moved into `observability.log.level`.
   * `metrics` section moved to `observability.metrics`.

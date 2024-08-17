@@ -1,3 +1,6 @@
+apiAuth:
+  apiToken: secret
+
 pspdfkit:
   storage:
     databaseMigrationJob:

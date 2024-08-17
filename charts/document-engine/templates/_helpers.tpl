@@ -111,32 +111,32 @@ License secret name
 API and dashboard secrets
 */}}
 {{- define "document-engine.api.secret.name" -}}
-  {{- if not .Values.pspdfkit.auth.api.externalSecret.name -}}
+  {{- if not .Values.apiAuth.externalSecret.name -}}
     {{- printf "%s-api-auth" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.auth.api.externalSecret.name -}}
+    {{- .Values.apiAuth.externalSecret.name -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.api.secret.key.apiToken" -}}
-  {{- if not .Values.pspdfkit.auth.api.externalSecret.name -}}
+  {{- if not .Values.apiAuth.externalSecret.name -}}
     API_AUTH_TOKEN
   {{- else -}}
-    {{- .Values.pspdfkit.auth.api.externalSecret.apiTokenKey -}}
+    {{- .Values.apiAuth.externalSecret.apiTokenKey -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.api.secret.key.jwtPublicKey" -}}
-  {{- if not .Values.pspdfkit.auth.api.externalSecret.name -}}
+  {{- if not .Values.apiAuth.externalSecret.name -}}
     JWT_PUBLIC_KEY
   {{- else -}}
-    {{- .Values.pspdfkit.auth.api.externalSecret.jwtPublicKeyKey -}}
+    {{- .Values.apiAuth.externalSecret.jwtPublicKeyKey -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.api.secret.key.jwtAlgorithm" -}}
-  {{- if not .Values.pspdfkit.auth.api.externalSecret.name -}}
+  {{- if not .Values.apiAuth.externalSecret.name -}}
     JWT_ALGORITHM
   {{- else -}}
-    {{- .Values.pspdfkit.auth.api.externalSecret.jwtAlgorithmKey -}}
+    {{- .Values.apiAuth.externalSecret.jwtAlgorithmKey -}}
   {{- end -}}
 {{- end -}}
 

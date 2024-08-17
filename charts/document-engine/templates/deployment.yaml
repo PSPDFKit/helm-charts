@@ -24,7 +24,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/config.ConfigMap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/config.Secret.yaml") . | sha256sum }}
-      {{- if not .Values.pspdfkit.auth.api.externalSecret.name }}
+      {{- if not .Values.apiAuth.externalSecret.name }}
         checksum/auth-api: {{ include (print $.Template.BasePath "/config.api-auth.Secret.yaml") . | sha256sum }}
       {{- end }}
       {{- if not .Values.dashboard.auth.externalSecret.name }}
@@ -112,7 +112,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "document-engine.api.secret.name" . }}
                   key: {{ include "document-engine.api.secret.key.apiToken" . }}
-          {{- if .Values.pspdfkit.auth.api.jwt.enabled }}
+          {{- if .Values.apiAuth.jwt.enabled }}
             - name: JWT_PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
