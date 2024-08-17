@@ -80,9 +80,6 @@ pspdfkit:
       name: ""
       # Key in the secret
       key: SECRET_KEY_BASE
-  # Log level
-  log:
-    level: info
   # `PDF_GENERATION_TIMEOUT` in seconds
   generationTimeoutSeconds: 120
   # `SERVER_REQUEST_TIMEOUT` in seconds
@@ -290,28 +287,55 @@ pspdfkit:
       # External secret name
       externalSecretName: ""
 
-  observability:
-    # OpenTelemetry
-    opentelemetry:
-    # Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
+observability:
+  # Logs
+  log:
+    # `LOG_LEVEL`
+    level: info
+    # `HEALTHCHECK_LOGLEVEL` — log level for health checks
+    healthcheckLevel: debug
+  # OpenTelemetry
+  opentelemetry:
+  # Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
+    enabled: false
+    # https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+    # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
+    otlpExporterEndpoint: ""
+    # `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
+    otlpExporterProtocol: ""
+    # `OTEL_SERVICE_NAME`, service name
+    otelServiceName: ""
+    # `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
+    otelResourceAttributes: ""
+    # `OTEL_PROPAGATORS`, propagators
+    otelPropagators: ""
+    # `OTEL_TRACES_SAMPLER`, should normally not be touched
+    # to allow custom `parent_based` work,
+    # but something like `parentbased_traceidratio` may be considered
+    otelTracesSampler: ""
+    # `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler
+    otelTracesSamplerArg: ""
+  # Metrics configuration
+  metrics:
+    enabled: true
+    # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
+    serviceMonitor:
       enabled: false
-      # https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
-      # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
-      otlpExporterEndpoint: ""
-      # `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
-      otlpExporterProtocol: ""
-      # `OTEL_SERVICE_NAME`, service name
-      otelServiceName: ""
-      # `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
-      otelResourceAttributes: ""
-      # `OTEL_PROPAGATORS`, propagators
-      otelPropagators: ""
-      # `OTEL_TRACES_SAMPLER`, should normally not be touched
-      # to allow custom `parent_based` work,
-      # but something like `parentbased_traceidratio` may be considered
-      otelTracesSampler: ""
-      # `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler
-      otelTracesSamplerArg: ""
+      # Release namespace, if empty
+      namespace: ""
+      interval: 30s
+      scrapeTimeout: ""
+      labels: {}
+      relabelings: []
+      metricRelabelings: []
+      honorLabels: false
+      jobLabel: ""
+    # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule
+    prometheusRule:
+      enabled: false
+      namespace: ""
+      labels: {}
+      rules: []
 
 serviceAccount:
   create: true
@@ -430,26 +454,6 @@ prometheusExporter:
     limits:
       memory: "128Mi"
       cpu: "100m"
-metrics:
-  enabled: true
-  # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
-  serviceMonitor:
-    enabled: false
-    # Release namespace, if empty
-    namespace: ""
-    interval: 30s
-    scrapeTimeout: ""
-    labels: {}
-    relabelings: []
-    metricRelabelings: []
-    honorLabels: false
-    jobLabel: ""
-  # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule
-  prometheusRule:
-    enabled: false
-    namespace: ""
-    labels: {}
-    rules: []
 # https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 resources: {}
 # Number of replicas

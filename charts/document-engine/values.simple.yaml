@@ -10,8 +10,6 @@ pspdfkit:
     dashboard:
       username: admin
       password: admin
-  log:
-    level: debug
   trustedProxies: default
   signingService:
     enabled: true
@@ -36,6 +34,8 @@ pspdfkit:
         adminPassword: postgres
 
   observability:
+    log:
+      level: debug
     opentelemetry:
       enabled: false
 
