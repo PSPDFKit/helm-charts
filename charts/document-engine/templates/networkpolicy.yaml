@@ -31,19 +31,19 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    {{- if .Values.pspdfkit.storage.postgres.enabled }}
+    {{- if .Values.config.storage.postgres.enabled }}
     - ports:
-        - port: {{ .Values.pspdfkit.storage.postgres.port }}
+        - port: {{ .Values.config.storage.postgres.port }}
           protocol: TCP
     {{- end }}
-    {{- if .Values.pspdfkit.storage.s3.enabled }}
+    {{- if .Values.config.storage.s3.enabled }}
     - ports:
-        - port: {{ .Values.pspdfkit.storage.s3.port }}
+        - port: {{ .Values.config.storage.s3.port }}
           protocol: TCP
     {{- end }}
-    {{- if .Values.pspdfkit.storage.redis.enabled }}
+    {{- if .Values.config.storage.redis.enabled }}
     - ports:
-        - port: {{ .Values.pspdfkit.storage.redis.port }}
+        - port: {{ .Values.config.storage.redis.port }}
           protocol: TCP
     {{- end }}
     {{- if .Values.allowRemoteAssetsInGeneration }}

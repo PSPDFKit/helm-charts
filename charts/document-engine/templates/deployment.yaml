@@ -75,11 +75,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "document-engine.fullname" . }}-config
-          {{- if .Values.pspdfkit.storage.postgres.enabled }}
+          {{- if .Values.config.storage.postgres.enabled }}
             - secretRef:
                 name: {{ include "document-engine.storage.postgres.secret.name" . }}
           {{- end }}
-          {{- if .Values.pspdfkit.storage.redis.enabled }}
+          {{- if .Values.config.storage.redis.enabled }}
             - secretRef:
                 name: {{ include "document-engine.storage.redis.secret.name" . }}
           {{- end }}
@@ -124,17 +124,17 @@ spec:
                   name: {{ include "document-engine.api.secret.name" . }}
                   key: {{ include "document-engine.api.secret.key.jwtAlgorithm" . }}
           {{- end }}
-          {{- if .Values.pspdfkit.storage.postgres.enabled }}
-            {{- if .Values.pspdfkit.storage.postgres.tls.enabled }}
+          {{- if .Values.config.storage.postgres.enabled }}
+            {{- if .Values.config.storage.postgres.tls.enabled }}
             - name: PGSSL_DISABLE_VERIFY
-              value: {{ not .Values.pspdfkit.storage.postgres.tls.verify | quote }}
-            {{-   with .Values.pspdfkit.storage.postgres.tls.trustFileName }}
+              value: {{ not .Values.config.storage.postgres.tls.verify | quote }}
+            {{-   with .Values.config.storage.postgres.tls.trustFileName }}
             - name: PGSSL_CA_CERT_PATH
               value: /certificate-stores-custom/{{ . }}
             {{-   end }}
             {{- end }}
           {{- end }}
-          {{- with .Values.pspdfkit.downloaderTrustFileName }}
+          {{- with .Values.config.downloaderTrustFileName }}
             - name: DOWNLOADER_CERT_FILE_PATH
               value: /certificate-stores-custom/{{ . }}
           {{- end }}
@@ -176,13 +176,13 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if or .Values.extraVolumeMounts
-                    .Values.pspdfkit.trustConfigMaps
-                    .Values.pspdfkit.signingTrustConfigMaps }}
+                    .Values.config.trustConfigMaps
+                    .Values.config.signingTrustConfigMaps }}
           volumeMounts:
             {{- with .Values.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-            {{- with .Values.pspdfkit.trustConfigMaps }}
+            {{- with .Values.config.trustConfigMaps }}
             {{-   range $cmName, $cmProperties := . }}
             - name: trust-{{ $cmName }}
               mountPath: /certificate-stores-custom/{{ $cmProperties.path }}
@@ -190,7 +190,7 @@ spec:
               readOnly: true
             {{-   end }}
             {{- end }}
-            {{- with .Values.pspdfkit.signingTrustConfigMaps }}
+            {{- with .Values.config.signingTrustConfigMaps }}
             {{-   range $cmName, $cmProperties := . }}
             - name: trust-{{ $cmName }}
               mountPath: /certificate-stores/{{ $cmProperties.path }}
@@ -224,13 +224,13 @@ spec:
         {{ toYaml .Values.sidecars | nindent 8 }}
       {{- end }}
       {{- if or .Values.extraVolumeMounts
-                .Values.pspdfkit.trustConfigMaps
-                .Values.pspdfkit.signingTrustConfigMaps }}
+                .Values.config.trustConfigMaps
+                .Values.config.signingTrustConfigMaps }}
       volumes:
         {{- with .Values.extraVolumes }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
-        {{- with .Values.pspdfkit.trustConfigMaps }}
+        {{- with .Values.config.trustConfigMaps }}
         {{-   range $cmName, $cmProperties := . }}
         - name: trust-{{ $cmName }}
           configMap:
@@ -240,7 +240,7 @@ spec:
                 path: {{ .path }}
         {{-   end }}
         {{- end }}
-        {{- with .Values.pspdfkit.signingTrustConfigMaps }}
+        {{- with .Values.config.signingTrustConfigMaps }}
         {{-   range $cmName, $cmProperties := . }}
         - name: trust-{{ $cmName }}
           configMap:

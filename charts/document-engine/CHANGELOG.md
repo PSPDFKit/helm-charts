@@ -2,8 +2,8 @@
 
 - [Changelog](#changelog)
   - [3.0.0 (2024-08-17)](#300-2024-08-17)
-    - [Added](#added)
     - [Changed](#changed)
+    - [Added](#added)
   - [2.9.3 (2024-08-16)](#293-2024-08-16)
     - [Fixed](#fixed)
   - [2.9.2 (2024-08-13)](#292-2024-08-13)
@@ -44,10 +44,6 @@
 
 ## 3.0.0 (2024-08-17)
 
-### Added
-
-* Health check log level as `observability.healthcheckLevel`
-
 ### Changed
 
 * `pspdfkit.license` section moved to the top level as `documentEngineLicense`.
@@ -56,12 +52,19 @@
   * `pspdfkit.secretKeyBase.value` moved to `apiAuth.secretKeyBase`
   * Former optional `pspdfkit.secretKeyBase.externalSecret` integrated into `apiAuth.externalSecret`:
     * In case `apiAuth.externalSecret.secretKeyBaseKey` is set, the value is used.
+* Certificate trust configuration restructured:
+  * 
 * `pspdfkit.observability` section moved to the top level as `observability`.
   * `pspdfkit.log.level` moved into `observability.log.level`.
   * `metrics` section moved to `observability.metrics`.
 * `pspdfkit.auth.dashboard` section became `dashboard`:
   * `pspdfkit.auth.dashboard.enabled` renamed to `dashboard.enabled`
-  * 
+  * The rest of the former section to `pspdfkit.dashboard.auth`
+* The remaining `pspdfkit` section renamed to `config`.
+
+### Added
+
+* Health check log level as `observability.healthcheckLevel`
 
 ## 2.9.3 (2024-08-16)
 

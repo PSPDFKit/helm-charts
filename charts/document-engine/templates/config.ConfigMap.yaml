@@ -6,29 +6,29 @@ metadata:
     {{- include "document-engine.labels" . | nindent 4 }}
 data:
   PORT: {{ .Values.service.port | quote }}
-  PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.pspdfkit.generationTimeoutSeconds | quote }}
-  SERVER_REQUEST_TIMEOUT: {{ mul 1000 .Values.pspdfkit.requestTimeoutSeconds | quote }}
-  REMOTE_URL_FETCH_TIMEOUT: {{ mul 1000 .Values.pspdfkit.urlFetchTimeoutSeconds | quote }}
-  READ_ANNOTATION_BATCH_TIMEOUT: {{ mul 1000 .Values.pspdfkit.readAnnotationBatchTimeoutSeconds | quote }}
-  MAX_UPLOAD_SIZE_BYTES: {{ mul 1048576 .Values.pspdfkit.maxUploadSizeMegaBytes | quote }}
-  PSPDFKIT_WORKER_POOL_SIZE: {{ .Values.pspdfkit.workerPoolSize | quote }}
-  ALLOW_DOCUMENT_UPLOADS: {{ .Values.pspdfkit.allowDocumentUploads | quote }}
-  ALLOW_REMOTE_DOCUMENTS: {{ .Values.pspdfkit.allowRemoteDocuments | quote }}
-  ALLOW_DOCUMENT_GENERATION: {{ .Values.pspdfkit.allowDocumentGeneration | quote }}
-  ALLOW_REMOTE_ASSETS_IN_GENERATION: {{ .Values.pspdfkit.allowRemoteAssetsInGeneration | quote }}
-  IGNORE_INVALID_ANNOTATIONS: {{ .Values.pspdfkit.ignoreInvalidAnnotations | quote }}
-  ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .Values.pspdfkit.assetStorageCacheSizeMegaBytes | quote }}
-  AUTOMATIC_LINK_EXTRACTION: {{ .Values.pspdfkit.automaticLinkExtraction | quote }}
-  MIN_SEARCH_QUERY_LENGTH: {{ .Values.pspdfkit.minSearchQueryLength | quote }}
-  DATABASE_CONNECTIONS: {{ .Values.pspdfkit.storage.databaseConnections | quote }}
-{{- if .Values.pspdfkit.storage.databaseMigrationJob.enabled }}
+  PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
+  SERVER_REQUEST_TIMEOUT: {{ mul 1000 .Values.config.requestTimeoutSeconds | quote }}
+  REMOTE_URL_FETCH_TIMEOUT: {{ mul 1000 .Values.config.urlFetchTimeoutSeconds | quote }}
+  READ_ANNOTATION_BATCH_TIMEOUT: {{ mul 1000 .Values.config.readAnnotationBatchTimeoutSeconds | quote }}
+  MAX_UPLOAD_SIZE_BYTES: {{ mul 1048576 .Values.config.maxUploadSizeMegaBytes | quote }}
+  PSPDFKIT_WORKER_POOL_SIZE: {{ .Values.config.workerPoolSize | quote }}
+  ALLOW_DOCUMENT_UPLOADS: {{ .Values.config.allowDocumentUploads | quote }}
+  ALLOW_REMOTE_DOCUMENTS: {{ .Values.config.allowRemoteDocuments | quote }}
+  ALLOW_DOCUMENT_GENERATION: {{ .Values.config.allowDocumentGeneration | quote }}
+  ALLOW_REMOTE_ASSETS_IN_GENERATION: {{ .Values.config.allowRemoteAssetsInGeneration | quote }}
+  IGNORE_INVALID_ANNOTATIONS: {{ .Values.config.ignoreInvalidAnnotations | quote }}
+  ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .Values.config.assetStorageCacheSizeMegaBytes | quote }}
+  AUTOMATIC_LINK_EXTRACTION: {{ .Values.config.automaticLinkExtraction | quote }}
+  MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
+  DATABASE_CONNECTIONS: {{ .Values.config.storage.databaseConnections | quote }}
+{{- if .Values.config.storage.databaseMigrationJob.enabled }}
   ENABLE_DATABASE_MIGRATIONS: "false"
   EXIT_AFTER_DATABASE_MIGRATIONS: "false"
 {{- else }}
   ENABLE_DATABASE_MIGRATIONS: "true"
   EXIT_AFTER_DATABASE_MIGRATIONS: "false"
 {{- end }}
-{{- with .Values.pspdfkit.storage }}
+{{- with .Values.config.storage }}
   ASSET_STORAGE_BACKEND: {{ default "built-in" .assetStorageBackend | quote }}
 {{-   if .enableAssetStorageFallback }}
   ENABLE_ASSET_STORAGE_FALLBACK: {{ .enableAssetStorageFallback | quote }}
@@ -45,7 +45,7 @@ data:
   USE_REDIS_TTL_FOR_PRERENDERING: {{ .redis.useTtlForPrerendering | quote }}
   REDIS_TTL: {{ .redis.ttlSeconds | int | quote }}
 {{- end }}
-{{- with .Values.pspdfkit.signingService }}
+{{- with .Values.config.signingService }}
 {{-   if .enabled }}
   SIGNING_SERVICE_URL: {{ .url | quote }}
   SIGNING_SERVICE_TIMEOUT:  {{ mul 1000 .timeoutSeconds | quote }}
@@ -60,10 +60,10 @@ data:
   TIMESTAMP_AUTHORITY_PASSWORD: {{ .timestampAuthority.password | quote }}
 {{-   end }}
 {{- end }}
-{{- with .Values.pspdfkit.trustedProxies }}
+{{- with .Values.config.trustedProxies }}
   TRUSTED_PROXIES: {{ . | quote }}
 {{- end }}
-{{- with .Values.pspdfkit.replaceSecretsFromEnv }}
+{{- with .Values.config.replaceSecretsFromEnv }}
   REPLACE_SECRETS_FROM_ENV: {{ . | quote }}
 {{- end }}
 {{- if .Values.prometheusExporter.enabled }}

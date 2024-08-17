@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
 data:
-  {{- with .Values.pspdfkit.storage.cleanupJob }}
+  {{- with .Values.config.storage.cleanupJob }}
   cleanup.sql: |
     DELETE FROM asset_blobs 
     WHERE asset_blobs.sha256 in (

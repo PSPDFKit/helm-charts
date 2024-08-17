@@ -184,15 +184,15 @@ API and dashboard secrets
 Database secrets
 */}}
 {{- define "document-engine.storage.postgres.secret.name" -}}
-  {{- if not .Values.pspdfkit.storage.postgres.externalSecretName -}}
+  {{- if not .Values.config.storage.postgres.externalSecretName -}}
     {{- printf "%s-db-postgres" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.postgres.externalSecretName -}}
+    {{- .Values.config.storage.postgres.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.postgres.createSecret" -}}
-  {{- if and .Values.pspdfkit.storage.postgres.enabled 
-             (not .Values.pspdfkit.storage.postgres.externalSecretName) -}}
+  {{- if and .Values.config.storage.postgres.enabled 
+             (not .Values.config.storage.postgres.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -200,15 +200,15 @@ Database secrets
 {{- end -}}
 
 {{- define "document-engine.storage.postgres.adminSecret.name" -}}
-  {{- if not .Values.pspdfkit.storage.postgres.externalAdminSecretName -}}
+  {{- if not .Values.config.storage.postgres.externalAdminSecretName -}}
     {{- printf "%s-db-postgres-admin" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.postgres.externalAdminSecretName -}}
+    {{- .Values.config.storage.postgres.externalAdminSecretName -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.postgres.createAdminSecret" -}}
-  {{- if and .Values.pspdfkit.storage.postgres.enabled 
-             (not .Values.pspdfkit.storage.postgres.externalAdminSecretName) -}}
+  {{- if and .Values.config.storage.postgres.enabled 
+             (not .Values.config.storage.postgres.externalAdminSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -216,15 +216,15 @@ Database secrets
 {{- end -}}
 
 {{- define "document-engine.storage.redis.secret.name" -}}
-  {{- if not .Values.pspdfkit.storage.redis.externalSecretName -}}
+  {{- if not .Values.config.storage.redis.externalSecretName -}}
     {{- printf "%s-redis" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.redis.externalSecretName -}}
+    {{- .Values.config.storage.redis.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.redis.createSecret" -}}
-  {{- if and .Values.pspdfkit.storage.redis.enabled 
-             (not .Values.pspdfkit.storage.redis.externalSecretName) -}}
+  {{- if and .Values.config.storage.redis.enabled 
+             (not .Values.config.storage.redis.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -235,9 +235,9 @@ Database secrets
 Object storage parameters
 */}}
 {{- define "document-engine.storage.s3.enabled" -}}
-  {{- if or (eq .Values.pspdfkit.storage.assetStorageBackend "s3")
-            (and .Values.pspdfkit.storage.enableAssetStorageFallback
-                 .Values.pspdfkit.storage.enableAssetStorageFallbackS3 ) -}}
+  {{- if or (eq .Values.config.storage.assetStorageBackend "s3")
+            (and .Values.config.storage.enableAssetStorageFallback
+                 .Values.config.storage.enableAssetStorageFallbackS3 ) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -246,7 +246,7 @@ Object storage parameters
 
 {{- define "document-engine.storage.s3.createSecret" -}}
   {{- if and (eq (include "document-engine.storage.s3.enabled" .) "true") 
-             (not .Values.pspdfkit.storage.s3.externalSecretName) -}}
+             (not .Values.config.storage.s3.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -257,14 +257,14 @@ Object storage parameters
   {{- if (eq (include "document-engine.storage.s3.createSecret" .) "true") -}}
     {{- printf "%s-s3" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.s3.externalSecretName -}}
+    {{- .Values.config.storage.s3.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.storage.azure.enabled" -}}
-  {{- if or (eq .Values.pspdfkit.storage.assetStorageBackend "azure")
-            (and .Values.pspdfkit.storage.enableAssetStorageFallback
-                 .Values.pspdfkit.storage.enableAssetStorageFallbackAzure ) -}}
+  {{- if or (eq .Values.config.storage.assetStorageBackend "azure")
+            (and .Values.config.storage.enableAssetStorageFallback
+                 .Values.config.storage.enableAssetStorageFallbackAzure ) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -274,7 +274,7 @@ Object storage parameters
 
 {{- define "document-engine.storage.azure.createSecret" -}}
   {{- if and (eq (include "document-engine.storage.azure.enabled" .) "true") 
-             (not .Values.pspdfkit.storage.azure.externalSecretName) -}}
+             (not .Values.config.storage.azure.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -285,7 +285,7 @@ Object storage parameters
   {{- if (eq (include "document-engine.storage.azure.createSecret" .) "true") -}}
     {{- printf "%s-s3" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.azure.externalSecretName -}}
+    {{- .Values.config.storage.azure.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 
@@ -293,7 +293,7 @@ Object storage parameters
 Jobs
 */}}
 {{- define "document-engine.storage.cleanupJob.enabled" -}}
-{{- and .Values.pspdfkit.storage.postgres.enabled 
-        .Values.pspdfkit.storage.cleanupJob.enabled 
-        (eq .Values.pspdfkit.storage.assetStorageBackend "built-in") -}}
+{{- and .Values.config.storage.postgres.enabled 
+        .Values.config.storage.cleanupJob.enabled 
+        (eq .Values.config.storage.assetStorageBackend "built-in") -}}
 {{- end -}}

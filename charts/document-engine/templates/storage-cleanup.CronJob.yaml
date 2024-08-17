@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
 spec:
-  schedule: {{ .Values.pspdfkit.storage.cleanupJob.schedule }}
+  schedule: {{ .Values.config.storage.cleanupJob.schedule }}
   startingDeadlineSeconds: 600
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -22,12 +22,12 @@ spec:
           {{- with .Values.podAnnotations }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.pspdfkit.storage.cleanupJob.podAnnotations }}
+          {{- with .Values.config.storage.cleanupJob.podAnnotations }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           labels:
           {{- include "document-engine.cleanupSelectorLabels" . | nindent 12 }}
-          {{- with .Values.pspdfkit.storage.cleanupJob.podLabels }}
+          {{- with .Values.config.storage.cleanupJob.podLabels }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
         spec:
@@ -86,7 +86,7 @@ spec:
                 - -c
                 - psql -f /cleanup.sql
               resources:
-                {{- toYaml .Values.pspdfkit.storage.cleanupJob.resources | nindent 16 }}
+                {{- toYaml .Values.config.storage.cleanupJob.resources | nindent 16 }}
               volumeMounts:
                 - name: cleanup-query
                   mountPath: /cleanup.sql
