@@ -7,7 +7,7 @@ documentEngineLicense:
 apiAuth:
   apiToken: secret
 
-pspdfkit:
+config:
   trustedProxies: default
   signingService:
     enabled: true

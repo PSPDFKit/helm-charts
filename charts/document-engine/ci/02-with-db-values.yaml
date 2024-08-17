@@ -12,7 +12,7 @@ apiAuth:
       -----END PUBLIC KEY-----
     algorithm: RS256
 
-pspdfkit:
+config:
   storage:
     databaseMigrationJob:
       enabled: false

@@ -2,7 +2,7 @@ apiAuth:
   apiToken: secret
   secretKeyBase: verySecretStringToNeverBeUsedInProduction
 
-pspdfkit:
+config:
   storage:
     postgres:
       enabled: false
