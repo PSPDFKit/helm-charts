@@ -9,27 +9,29 @@ apiAuth:
 
 config:
   trustedProxies: default
-  signingService:
+
+documentSigningService:
+  enabled: true
+  url: http://signing-service:6000/sign
+  timeoutSeconds: 10
+
+assetStorage:
+  databaseMigrationJob: 
+    enabled: false
+  databaseEngine: postgresql
+  assetStorageBackend: built-in
+  enableAssetStorageFallback: false
+  postgres:
     enabled: true
-    url: http://signing-service:6000/sign
-    timeoutSeconds: 10
-  storage:
-    databaseMigrationJob: 
+    host: document-engine-postgresql
+    database: pspdfkit
+    tls:
       enabled: false
-    databaseEngine: postgresql
-    assetStorageBackend: built-in
-    enableAssetStorageFallback: false
-    postgres:
-      enabled: true
-      host: document-engine-postgresql
-      database: pspdfkit
-      tls:
-        enabled: false
-      auth: 
-        username: postgres
-        password: postgres
-        adminUsername: postgres
-        adminPassword: postgres
+    auth: 
+      username: postgres
+      password: postgres
+      adminUsername: postgres
+      adminPassword: postgres
 
 dashboard:
   auth:

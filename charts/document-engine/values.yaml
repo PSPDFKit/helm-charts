@@ -117,162 +117,162 @@ config:
   # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH`
   downloaderTrustFileName: "root-certificates.pem"
   # Signing service parameters
-  signingService:
-    # Enable signing service integration
+documentSigningService:
+  # Enable signing service integration
+  enabled: false
+  # `SIGNING_SERVICE_URL`
+  url: https://signing-thing.local/sign
+  # `SIGNING_SERVICE_TIMEOUT` in seconds
+  timeoutSeconds: 10
+  # `DEFAULT_SIGNER_NAME`
+  defaultSignerName: "John Doe"
+  # `DEFAULT_SIGNATURE_REASON`
+  defaultSignatureReason: "approved"
+  # `DEFAULT_SIGNATURE_LOCATION`
+  defaultSignatureLocation: "Head Quarters"
+  # `DIGITAL_SIGNATURE_HASH_ALGORITHM`
+  digitalSignatureHashAlgorithm: sha512
+  # `DIGITAL_SIGNATURE_CADES_LEVEL`
+  digitalSignatureCadesLevel: "b-lt"
+  # `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
+  digitalSignatureCertificateCheckTime: current_time
+  # Timestamp Authority (TSA) settings
+  timestampAuthority:
+    # `TIMESTAMP_AUTHORITY_URL`
+    url: https://freetsa.org/
+    # `TIMESTAMP_AUTHORITY_USERNAME`
+    username: ""
+    # `TIMESTAMP_AUTHORITY_PASSWORD`
+    password: ""
+assetStorage:
+  # Database migration jobs.
+  databaseMigrationJob:
+    # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
     enabled: false
-    # `SIGNING_SERVICE_URL`
-    url: https://signing-thing.local/sign
-    # `SIGNING_SERVICE_TIMEOUT` in seconds
-    timeoutSeconds: 10
-    # `DEFAULT_SIGNER_NAME`
-    defaultSignerName: "John Doe"
-    # `DEFAULT_SIGNATURE_REASON`
-    defaultSignatureReason: "approved"
-    # `DEFAULT_SIGNATURE_LOCATION`
-    defaultSignatureLocation: "Head Quarters"
-    # `DIGITAL_SIGNATURE_HASH_ALGORITHM`
-    digitalSignatureHashAlgorithm: sha512
-    # `DIGITAL_SIGNATURE_CADES_LEVEL`
-    digitalSignatureCadesLevel: "b-lt"
-    # `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
-    digitalSignatureCertificateCheckTime: current_time
-    # Timestamp Authority (TSA) settings
-    timestampAuthority:
-      # `TIMESTAMP_AUTHORITY_URL`
-      url: https://freetsa.org/
-      # `TIMESTAMP_AUTHORITY_USERNAME`
-      username: ""
-      # `TIMESTAMP_AUTHORITY_PASSWORD`
-      password: ""
-  storage:
-    # Database migration jobs.
-    databaseMigrationJob:
-      # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
-      enabled: false
-      ttlSecondsAfterFinished: 300
-      resources: {}
-      podAnnotations: {}
-      podLabels: {}
-    # Regular job to remove documents from the database.
-    # Note: currently only works with the `built-in` storage backend.
-    cleanupJob:
-      enabled: false
-      schedule: "13 * * * *"
-      keepHours: 24
-      persistentLike: "persistent%"
-      resources: {}
-      podAnnotations: {}
-      podLabels: {}
-    # Database engine: only `postgresql` is currently supported
-    databaseEngine: postgresql
-    # `DATABASE_CONNECTIONS`
-    databaseConnections: 20
-    # `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
-    assetStorageBackend: built-in
-    # `ENABLE_ASSET_STORAGE_FALLBACK`
-    enableAssetStorageFallback: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
-    enableAssetStorageFallbackPostgres: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
-    enableAssetStorageFallbackS3: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
-    enableAssetStorageFallbackAzure: false
-    # PostgreSQL database settings
-    postgres:
-      enabled: true
-      # `PGHOST`
-      host: postgresql
-      # `PGPORT`
-      port: 5432
-      # `PGDATABASE`
-      database: pspdfkit
-      # `PGUSER`
-      username: pspdfkit
-      # `PGPASSWORD`
-      password: pspdfkit
-      # `PG_ADMIN_USER`
-      adminUsername: postgres
-      # `PG_ADMIN_PASSWORD`
-      adminPassword: pspdfkit
-      # ...or use external secrets:
-      # `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PGHOST`, `PGPORT`,
+    ttlSecondsAfterFinished: 300
+    resources: {}
+    podAnnotations: {}
+    podLabels: {}
+  # Regular job to remove documents from the database.
+  # Note: currently only works with the `built-in` storage backend.
+  cleanupJob:
+    enabled: false
+    schedule: "13 * * * *"
+    keepHours: 24
+    persistentLike: "persistent%"
+    resources: {}
+    podAnnotations: {}
+    podLabels: {}
+  # Database engine: only `postgresql` is currently supported
+  databaseEngine: postgresql
+  # `DATABASE_CONNECTIONS`
+  databaseConnections: 20
+  # `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
+  assetStorageBackend: built-in
+  # `ENABLE_ASSET_STORAGE_FALLBACK`
+  enableAssetStorageFallback: false
+  # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
+  enableAssetStorageFallbackPostgres: false
+  # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
+  enableAssetStorageFallbackS3: false
+  # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
+  enableAssetStorageFallbackAzure: false
+  # PostgreSQL database settings
+  postgres:
+    enabled: true
+    # `PGHOST`
+    host: postgresql
+    # `PGPORT`
+    port: 5432
+    # `PGDATABASE`
+    database: pspdfkit
+    # `PGUSER`
+    username: pspdfkit
+    # `PGPASSWORD`
+    password: pspdfkit
+    # `PG_ADMIN_USER`
+    adminUsername: postgres
+    # `PG_ADMIN_PASSWORD`
+    adminPassword: pspdfkit
+    # ...or use external secrets:
+    # `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PGHOST`, `PGPORT`,
+    # `PGSSL`
+    externalSecretName: ""
+    # `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD`
+    externalAdminSecretName: ""
+    # TLS settings
+    tls:
       # `PGSSL`
-      externalSecretName: ""
-      # `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD`
-      externalAdminSecretName: ""
-      # TLS settings
-      tls:
-        # `PGSSL`
-        enabled: false
-        # Negated `PGSSL_DISABLE_VERIFY`
-        verify: true
-        # Path from `pspdfkit.trustConfigMaps`, wraps around `PGSSL_CA_CERT_PATH`
-        trustFileName: ""
-    # S3 backend storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `s3
-    s3:
-      # `ASSET_STORAGE_S3_ACCESS_KEY_ID`
-      accessKeyId: ""
-      # `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
-      secretAccessKey: ""
-      # `ASSET_STORAGE_S3_BUCKET`
-      bucket: "document-engine-assets"
-      # `ASSET_STORAGE_S3_REGION`
-      region: "us-east-1"
-      # `ASSET_STORAGE_S3_HOST`
-      # host: "os.local"
-      # `ASSET_STORAGE_S3_PORT`
-      port: 443
-      # `ASSET_STORAGE_S3_SCHEME`
-      scheme: "https://"
-      # External secret name
-      externalSecretName: ""
-    # Azure blob storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `azure`
-    azure:
-      # `AZURE_STORAGE_ACCOUNT_NAME`
-      accountName: ""
-      # `AZURE_STORAGE_ACCOUNT_KEY`
-      accountKey: ""
-      # `AZURE_STORAGE_DEFAULT_CONTAINER`
-      container: ""
-      # `AZURE_STORAGE_ACCOUNT_CONNECTION_STRING`, takes priority over `accountName` and `accountKey`
-      connectionString: ""
-      # `AZURE_STORAGE_API_URL` for custom endpoints
-      apiUrl: ""
-      # External secret name
-      externalSecretName: ""
-    # Redis settings for caching and prerendering
-    redis:
-      # `USE_REDIS_CACHE`
       enabled: false
-      # `REDIS_TTL`
-      ttlSeconds: 86400000
-      # `USE_REDIS_TTL_FOR_PRERENDERING`
-      useTtlForPrerendering: true
-      # `REDIS_HOST`
-      host: redis
-      # `REDIS_PORT`
-      port: 6379
-      # `REDIS_DATABASE`
-      database: ""
-      # Sentinels
-      sentinel:
-        enabled: false
-        # `REDIS_SENTINELS`
-        urls: []
-        # - "redis://sentinel1:26379"
-        # - "redis://sentinel2:26379"
-        # - "redis://sentinel3:26379"
-        # `REDIS_SENTINELS_GROUP`
-        group: none
-      # `REDIS_USERNAME`
-      username: ""
-      # `REDIS_PASSWORD`
-      password: ""
-      # `REDIS_SSL`
-      tls:
-        enabled: false
-      # External secret name
-      externalSecretName: ""
+      # Negated `PGSSL_DISABLE_VERIFY`
+      verify: true
+      # Path from `pspdfkit.trustConfigMaps`, wraps around `PGSSL_CA_CERT_PATH`
+      trustFileName: ""
+  # S3 backend storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `s3
+  s3:
+    # `ASSET_STORAGE_S3_ACCESS_KEY_ID`
+    accessKeyId: ""
+    # `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
+    secretAccessKey: ""
+    # `ASSET_STORAGE_S3_BUCKET`
+    bucket: "document-engine-assets"
+    # `ASSET_STORAGE_S3_REGION`
+    region: "us-east-1"
+    # `ASSET_STORAGE_S3_HOST`
+    # host: "os.local"
+    # `ASSET_STORAGE_S3_PORT`
+    port: 443
+    # `ASSET_STORAGE_S3_SCHEME`
+    scheme: "https://"
+    # External secret name
+    externalSecretName: ""
+  # Azure blob storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `azure`
+  azure:
+    # `AZURE_STORAGE_ACCOUNT_NAME`
+    accountName: ""
+    # `AZURE_STORAGE_ACCOUNT_KEY`
+    accountKey: ""
+    # `AZURE_STORAGE_DEFAULT_CONTAINER`
+    container: ""
+    # `AZURE_STORAGE_ACCOUNT_CONNECTION_STRING`, takes priority over `accountName` and `accountKey`
+    connectionString: ""
+    # `AZURE_STORAGE_API_URL` for custom endpoints
+    apiUrl: ""
+    # External secret name
+    externalSecretName: ""
+  # Redis settings for caching and prerendering
+  redis:
+    # `USE_REDIS_CACHE`
+    enabled: false
+    # `REDIS_TTL`
+    ttlSeconds: 86400000
+    # `USE_REDIS_TTL_FOR_PRERENDERING`
+    useTtlForPrerendering: true
+    # `REDIS_HOST`
+    host: redis
+    # `REDIS_PORT`
+    port: 6379
+    # `REDIS_DATABASE`
+    database: ""
+    # Sentinels
+    sentinel:
+      enabled: false
+      # `REDIS_SENTINELS`
+      urls: []
+      # - "redis://sentinel1:26379"
+      # - "redis://sentinel2:26379"
+      # - "redis://sentinel3:26379"
+      # `REDIS_SENTINELS_GROUP`
+      group: none
+    # `REDIS_USERNAME`
+    username: ""
+    # `REDIS_PASSWORD`
+    password: ""
+    # `REDIS_SSL`
+    tls:
+      enabled: false
+    # External secret name
+    externalSecretName: ""
 
 # Document Engine Dashboard settings
 dashboard:

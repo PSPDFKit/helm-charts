@@ -2,10 +2,9 @@ apiAuth:
   apiToken: secret
   secretKeyBase: verySecretStringToNeverBeUsedInProduction
 
-config:
-  storage:
-    postgres:
-      enabled: false
+assetStorage:
+  postgres:
+    enabled: false
 
 postgresql:
   enabled: false

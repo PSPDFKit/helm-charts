@@ -1,42 +1,41 @@
-config:
-  storage:
-    databaseMigrationJob:
+assetStorage:
+  databaseMigrationJob:
+    enabled: false
+    podAnnotations:
+      do: "this"
+    podLabels:
+      do: "that"
+  assetStorageBackend: s3
+  enableAssetStorageFallback: true
+  enableAssetStorageFallbackPostgres: true
+  postgres:
+    enabled: true
+    host: postgresql
+    port: 5432
+    username: postgres
+  s3:
+    accessKeyId: "pspdfkitObjectStorageRootKey"
+    secretAccessKey: "pspdfkitObjectStorageRootPassword"
+    bucket: "document-engine-assets"
+    region: "us-east-1"
+    host: "minio"
+    port: 9000
+    scheme: "http://"
+  redis:
+    enabled: true
+    host: redis-master
+    database: ""
+    username: ""
+    password: ""
+    ttlSeconds: 3600
+    useTtlForPrerendering: true
+    sentinel:
       enabled: false
-      podAnnotations:
-        do: "this"
-      podLabels:
-        do: "that"
-    assetStorageBackend: s3
-    enableAssetStorageFallback: true
-    enableAssetStorageFallbackPostgres: true
-    postgres:
-      enabled: true
-      host: postgresql
-      port: 5432
-      username: postgres
-    s3:
-      accessKeyId: "pspdfkitObjectStorageRootKey"
-      secretAccessKey: "pspdfkitObjectStorageRootPassword"
-      bucket: "document-engine-assets"
-      region: "us-east-1"
-      host: "minio"
-      port: 9000
-      scheme: "http://"
-    redis:
-      enabled: true
-      host: redis-master
-      database: ""
-      username: ""
-      password: ""
-      ttlSeconds: 3600
-      useTtlForPrerendering: true
-      sentinel:
-        enabled: false
-        urls:
-          - redis://redis-node-0:26379
-          - redis://redis-node-1:26379
-          - redis://redis-node-2:26379
-        group: pspdfkit
+      urls:
+        - redis://redis-node-0:26379
+        - redis://redis-node-1:26379
+        - redis://redis-node-2:26379
+      group: pspdfkit
 
 prometheusExporter:
   enabled: true

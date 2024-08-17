@@ -12,16 +12,15 @@ apiAuth:
       -----END PUBLIC KEY-----
     algorithm: RS256
 
-config:
-  storage:
-    databaseMigrationJob:
-      enabled: false
-    assetStorageBackend: built-in
-    postgres:
-      enabled: true
-      host: postgresql
-      port: 5432
-      username: postgres
+assetStorage:
+  databaseMigrationJob:
+    enabled: false
+  assetStorageBackend: built-in
+  postgres:
+    enabled: true
+    host: postgresql
+    port: 5432
+    username: postgres
 
 prometheusExporter:
   enabled: true

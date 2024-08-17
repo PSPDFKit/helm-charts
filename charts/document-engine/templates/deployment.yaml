@@ -75,11 +75,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "document-engine.fullname" . }}-config
-          {{- if .Values.config.storage.postgres.enabled }}
+          {{- if .Values.assetStorage.postgres.enabled }}
             - secretRef:
                 name: {{ include "document-engine.storage.postgres.secret.name" . }}
           {{- end }}
-          {{- if .Values.config.storage.redis.enabled }}
+          {{- if .Values.assetStorage.redis.enabled }}
             - secretRef:
                 name: {{ include "document-engine.storage.redis.secret.name" . }}
           {{- end }}
@@ -124,11 +124,11 @@ spec:
                   name: {{ include "document-engine.api.secret.name" . }}
                   key: {{ include "document-engine.api.secret.key.jwtAlgorithm" . }}
           {{- end }}
-          {{- if .Values.config.storage.postgres.enabled }}
-            {{- if .Values.config.storage.postgres.tls.enabled }}
+          {{- if .Values.assetStorage.postgres.enabled }}
+            {{- if .Values.assetStorage.postgres.tls.enabled }}
             - name: PGSSL_DISABLE_VERIFY
-              value: {{ not .Values.config.storage.postgres.tls.verify | quote }}
-            {{-   with .Values.config.storage.postgres.tls.trustFileName }}
+              value: {{ not .Values.assetStorage.postgres.tls.verify | quote }}
+            {{-   with .Values.assetStorage.postgres.tls.trustFileName }}
             - name: PGSSL_CA_CERT_PATH
               value: /certificate-stores-custom/{{ . }}
             {{-   end }}

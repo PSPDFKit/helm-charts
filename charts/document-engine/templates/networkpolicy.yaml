@@ -31,19 +31,19 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    {{- if .Values.config.storage.postgres.enabled }}
+    {{- if .Values.assetStorage.postgres.enabled }}
     - ports:
-        - port: {{ .Values.config.storage.postgres.port }}
+        - port: {{ .Values.assetStorage.postgres.port }}
           protocol: TCP
     {{- end }}
-    {{- if .Values.config.storage.s3.enabled }}
+    {{- if .Values.assetStorage.s3.enabled }}
     - ports:
-        - port: {{ .Values.config.storage.s3.port }}
+        - port: {{ .Values.assetStorage.s3.port }}
           protocol: TCP
     {{- end }}
-    {{- if .Values.config.storage.redis.enabled }}
+    {{- if .Values.assetStorage.redis.enabled }}
     - ports:
-        - port: {{ .Values.config.storage.redis.port }}
+        - port: {{ .Values.assetStorage.redis.port }}
           protocol: TCP
     {{- end }}
     {{- if .Values.allowRemoteAssetsInGeneration }}

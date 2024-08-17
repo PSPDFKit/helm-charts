@@ -1,4 +1,4 @@
-{{- if and .Values.config.storage.postgres.enabled .Values.config.storage.databaseMigrationJob.enabled }}
+{{- if and .Values.assetStorage.postgres.enabled .Values.assetStorage.databaseMigrationJob.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -9,7 +9,7 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "-5"
 spec:
-  ttlSecondsAfterFinished: {{ .Values.config.storage.databaseMigrationJob.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ .Values.assetStorage.databaseMigrationJob.ttlSecondsAfterFinished }}
   template:
     metadata:
       name: {{ include "document-engine.fullname" . }}-db-migration
@@ -17,12 +17,12 @@ spec:
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.config.storage.databaseMigrationJob.podAnnotations }}
+      {{- with .Values.assetStorage.databaseMigrationJob.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "document-engine.migrationSelectorLabels" . | nindent 8 }}
-      {{- with .Values.config.storage.databaseMigrationJob.podLabels }}
+      {{- with .Values.assetStorage.databaseMigrationJob.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
@@ -43,11 +43,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "document-engine.fullname" . }}-config
-          {{- if .Values.config.storage.postgres.enabled }}
+          {{- if .Values.assetStorage.postgres.enabled }}
             - secretRef:
                 name: {{ include "document-engine.storage.postgres.secret.name" . }}
           {{- end }}
-          {{- if .Values.config.storage.redis.enabled }}
+          {{- if .Values.assetStorage.redis.enabled }}
             - secretRef:
                 name: {{ include "document-engine.storage.redis.secret.name" . }}
           {{- end }}
@@ -90,11 +90,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "document-engine.api.secret.name" . }}
                   key: {{ include "document-engine.api.secret.key.apiToken" . }}
-          {{- if .Values.config.storage.postgres.enabled }}
-            {{- if .Values.config.storage.postgres.tls.enabled }}
+          {{- if .Values.assetStorage.postgres.enabled }}
+            {{- if .Values.assetStorage.postgres.tls.enabled }}
             - name: PGSSL_DISABLE_VERIFY
-              value: {{ not .Values.config.storage.postgres.tls.verify | quote }}
-            {{-   with .Values.config.storage.postgres.tls.trustFileName }}
+              value: {{ not .Values.assetStorage.postgres.tls.verify | quote }}
+            {{-   with .Values.assetStorage.postgres.tls.trustFileName }}
             - name: PGSSL_CA_CERT_PATH
               value: /certificate-stores-custom/{{ . }}
             {{-   end }}
@@ -108,7 +108,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
-            {{- toYaml .Values.config.storage.databaseMigrationJob.resources | nindent 12 }}
+            {{- toYaml .Values.assetStorage.databaseMigrationJob.resources | nindent 12 }}
           {{- if .Values.extraVolumeMounts }}
           volumeMounts:
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}

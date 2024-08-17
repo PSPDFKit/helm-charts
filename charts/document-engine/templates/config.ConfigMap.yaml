@@ -20,15 +20,15 @@ data:
   ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .Values.config.assetStorageCacheSizeMegaBytes | quote }}
   AUTOMATIC_LINK_EXTRACTION: {{ .Values.config.automaticLinkExtraction | quote }}
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
-  DATABASE_CONNECTIONS: {{ .Values.config.storage.databaseConnections | quote }}
-{{- if .Values.config.storage.databaseMigrationJob.enabled }}
+  DATABASE_CONNECTIONS: {{ .Values.assetStorage.databaseConnections | quote }}
+{{- if .Values.assetStorage.databaseMigrationJob.enabled }}
   ENABLE_DATABASE_MIGRATIONS: "false"
   EXIT_AFTER_DATABASE_MIGRATIONS: "false"
 {{- else }}
   ENABLE_DATABASE_MIGRATIONS: "true"
   EXIT_AFTER_DATABASE_MIGRATIONS: "false"
 {{- end }}
-{{- with .Values.config.storage }}
+{{- with .Values.assetStorage }}
   ASSET_STORAGE_BACKEND: {{ default "built-in" .assetStorageBackend | quote }}
 {{-   if .enableAssetStorageFallback }}
   ENABLE_ASSET_STORAGE_FALLBACK: {{ .enableAssetStorageFallback | quote }}
@@ -45,7 +45,7 @@ data:
   USE_REDIS_TTL_FOR_PRERENDERING: {{ .redis.useTtlForPrerendering | quote }}
   REDIS_TTL: {{ .redis.ttlSeconds | int | quote }}
 {{- end }}
-{{- with .Values.config.signingService }}
+{{- with .Values.documentSigningService }}
 {{-   if .enabled }}
   SIGNING_SERVICE_URL: {{ .url | quote }}
   SIGNING_SERVICE_TIMEOUT:  {{ mul 1000 .timeoutSeconds | quote }}
