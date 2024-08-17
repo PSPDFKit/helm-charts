@@ -1,5 +1,16 @@
 apiAuth:
-  apiToken: secret
+  apiToken: secretThatIsNotSoSecret
+  secretKeyBase: verySecretStringToNeverBeUsedInProduction
+  jwt:
+    enabled: true
+    publicKey: |
+      -----BEGIN PUBLIC KEY-----
+      MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDcfcSsDu9Yh06oBdHqvfJVe0X0
+      Jd99MadCdnsEwFDnwIxzyaZMBkGN7MyGICAky3QFb0b2wEwQSTVBvTycbI/nI/Ua
+      CzUFlwrVNSuhyAjhA9pb8ig3c3z3HciCT9KsHPqqPRjmgxW4B0exCNDO0Mjckg9R
+      nP8vqa0VnqmV4LdnxQIDAQAB
+      -----END PUBLIC KEY-----
+    algorithm: RS256
 
 pspdfkit:
   storage:

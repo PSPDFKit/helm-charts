@@ -126,17 +126,35 @@ API and dashboard secrets
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.api.secret.key.jwtPublicKey" -}}
-  {{- if not .Values.apiAuth.externalSecret.name -}}
+  {{- if not (and .Values.apiAuth.externalSecret.name 
+                  .Values.apiAuth.externalSecret.jwtPublicKeyKey ) -}}
     JWT_PUBLIC_KEY
   {{- else -}}
     {{- .Values.apiAuth.externalSecret.jwtPublicKeyKey -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.api.secret.key.jwtAlgorithm" -}}
-  {{- if not .Values.apiAuth.externalSecret.name -}}
+  {{- if not (and .Values.apiAuth.externalSecret.name 
+                  .Values.apiAuth.externalSecret.jwtAlgorithmKey ) -}}
     JWT_ALGORITHM
   {{- else -}}
     {{- .Values.apiAuth.externalSecret.jwtAlgorithmKey -}}
+  {{- end -}}
+{{- end -}}
+{{- define "document-engine.secretKeyBase.secret.name" -}}
+  {{- if not (and .Values.apiAuth.externalSecret.name
+                  .Values.apiAuth.externalSecret.secretKeyBaseKey ) -}}
+    {{- printf "%s-secretkeybase" (include "document-engine.fullname" .) -}}
+  {{- else -}}
+    {{- .Values.apiAuth.externalSecret.secretKeyBaseKey -}}
+  {{- end -}}
+{{- end -}}
+{{- define "document-engine.secretKeyBase.secret.key" -}}
+  {{- if not (and .Values.apiAuth.externalSecret.name
+                  .Values.apiAuth.externalSecret.secretKeyBaseKey ) -}}
+    SECRET_KEY_BASE
+  {{- else -}}
+    {{- .Values.apiAuth.externalSecret.secretKeyBaseKey -}}
   {{- end -}}
 {{- end -}}
 
@@ -159,21 +177,6 @@ API and dashboard secrets
     DASHBOARD_PASSWORD
   {{- else -}}
     {{- .Values.dashboard.auth.externalSecret.passwordKey -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "document-engine.secretKeyBase.secret.name" -}}
-  {{- if not .Values.pspdfkit.secretKeyBase.externalSecret.name -}}
-    {{- printf "%s-secretkeybase" (include "document-engine.fullname" .) -}}
-  {{- else -}}
-    {{- .Values.pspdfkit.secretKeyBase.externalSecret.name -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.secretKeyBase.secret.key" -}}
-  {{- if not .Values.pspdfkit.secretKeyBase.externalSecret.name -}}
-    SECRET_KEY_BASE
-  {{- else -}}
-    {{- .Values.pspdfkit.secretKeyBase.externalSecret.key -}}
   {{- end -}}
 {{- end -}}
 

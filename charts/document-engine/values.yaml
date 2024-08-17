@@ -44,28 +44,29 @@ apiAuth:
     # Supported algorithms: RS256, RS512, ES256, ES512.
     # See RFC 7518 for details about specific algorithms.
     algorithm: RS256
+  # A string used as the base key for deriving secret keys for the purposes of authentication.
+  # Choose a sufficiently long random string for this option.
+  # To generate a random string, use: `openssl rand -hex 256`.
+  # This will set `SECRET_KEY_BASE` environment variable.
+  secretKeyBase: ""
   # Use an external secret for API credentials
   externalSecret:
     # External secret name
     name: ""
     # Key names
     apiTokenKey: API_AUTH_TOKEN
-    jwtPublicKeyKey: JWT_PUBLIC_KEY
+    # If external secret is enabled, but `jwtAlgorithmKey` is not set,
+    # the algorithm will be retrieved from the `apiAuth.jwt.algorithm` value
     jwtAlgorithmKey: JWT_ALGORITHM
+    # If external secret is enabled, but `jwtPublicKeyKey` is not set,
+    # the public key will be retrieved from the `apiAuth.jwt.publicKey` value
+    jwtPublicKeyKey: JWT_PUBLIC_KEY
+    # If external secret is enabled, but `secretKeyBaseKey` is not set,
+    # the secret key base will be retrieved from the `apiAuth.secretKeyBase` value
+    # or generated automatically
+    secretKeyBaseKey: SECRET_KEY_BASE
 
 pspdfkit:
-  # A string used as the base key for deriving secret keys for the purposes of authentication.
-  # Choose a sufficiently long random string for this option.
-  # To generate a random string, use: `openssl rand -hex 256`.
-  # This will set `SECRET_KEY_BASE` environment variable.
-  secretKeyBase:
-    value: ""
-    # Alternatively, provide an external secret
-    externalSecret:
-      # External secret
-      name: ""
-      # Key in the secret
-      key: SECRET_KEY_BASE
   # `PDF_GENERATION_TIMEOUT` in seconds
   generationTimeoutSeconds: 120
   # `SERVER_REQUEST_TIMEOUT` in seconds

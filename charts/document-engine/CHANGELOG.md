@@ -51,7 +51,11 @@
 ### Changed
 
 * `pspdfkit.license` section moved to the top level as `documentEngineLicense`.
-* `pspdfkit.auth.api` section moved to the top level as `apiAuth`.
+* `pspdfkit.auth.api` section moved to the top level as `apiAuth`, both `pspdfkit.auth.api.apiToken` and `pspdfkit.auth.api.jwt` section.
+* `pspdfkit.secretKeyBase` restructured:
+  * `pspdfkit.secretKeyBase.value` moved to `apiAuth.secretKeyBase`
+  * Former optional `pspdfkit.secretKeyBase.externalSecret` integrated into `apiAuth.externalSecret`:
+    * In case `apiAuth.externalSecret.secretKeyBaseKey` is set, the value is used.
 * `pspdfkit.observability` section moved to the top level as `observability`.
   * `pspdfkit.log.level` moved into `observability.log.level`.
   * `metrics` section moved to `observability.metrics`.
