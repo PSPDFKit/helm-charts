@@ -27,11 +27,11 @@ spec:
       {{- if not .Values.pspdfkit.auth.api.externalSecret.name }}
         checksum/auth-api: {{ include (print $.Template.BasePath "/config.api-auth.Secret.yaml") . | sha256sum }}
       {{- end }}
-      {{- if not .Values.pspdfkit.auth.dashboard.externalSecret.name }}
+      {{- if not .Values.dashboard.auth.externalSecret.name }}
         checksum/auth-dashboard: {{ include (print $.Template.BasePath "/dashboard.Secret.yaml") . | sha256sum }}
       {{- end }}
       {{- if and 
-            (not .Values.pspdfkit.license.externalSecret.name)
+            (not .Values.documentEngineLicense.externalSecret.name)
             (eq (include  "document-engine.license.available" .) "true") }}
         checksum/license-secret: {{ include (print $.Template.BasePath "/license.Secret.yaml") . | sha256sum }}
       {{- end }}
@@ -138,7 +138,7 @@ spec:
             - name: DOWNLOADER_CERT_FILE_PATH
               value: /certificate-stores-custom/{{ . }}
           {{- end }}
-          {{- if .Values.pspdfkit.auth.dashboard.enabled }}
+          {{- if .Values.dashboard.enabled }}
             - name: DASHBOARD_USERNAME
               valueFrom:
                 secretKeyRef:

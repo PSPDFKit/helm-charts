@@ -50,9 +50,13 @@
 
 ### Changed
 
+* `pspdfkit.license` section moved to the top level as `documentEngineLicense`.
 * `pspdfkit.observability` section moved to the top level as `observability`.
-* `pspdfkit.log.level` moved into `observability.log.level`.
-* `metrics` section moved to `observability.metrics`.
+  * `pspdfkit.log.level` moved into `observability.log.level`.
+  * `metrics` section moved to `observability.metrics`.
+* `pspdfkit.auth.dashboard` section became `dashboard`:
+  * `pspdfkit.auth.dashboard.enabled` renamed to `dashboard.enabled`
+  * 
 
 ## 2.9.3 (2024-08-16)
 

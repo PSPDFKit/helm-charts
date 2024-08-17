@@ -1,15 +1,13 @@
+documentEngineLicense:
+  activationKey: ""
+  externalSecret: 
+    name: ""
+    key: DOCUMENT_ENGINE_ACTIVATION_KEY
+
 pspdfkit:
-  license:
-    activationKey: ""
-    externalSecret: 
-      name: ""
-      key: DOCUMENT_ENGINE_ACTIVATION_KEY
   auth:
     api:
       apiToken: secret
-    dashboard:
-      username: admin
-      password: admin
   trustedProxies: default
   signingService:
     enabled: true
@@ -33,11 +31,16 @@ pspdfkit:
         adminUsername: postgres
         adminPassword: postgres
 
-  observability:
-    log:
-      level: debug
-    opentelemetry:
-      enabled: false
+dashboard:
+  auth:
+    username: admin
+    password: admin
+
+observability:
+  log:
+    level: debug
+  opentelemetry:
+    enabled: false
 
 replicaCount: 1
 

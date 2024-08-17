@@ -14,22 +14,23 @@ fullnameOverride: ""
 # https://pspdfkit.com/guides/document-engine/configuration/overview/
 # https://pspdfkit.com/guides/document-engine/deployment/product-activation/
 #
+documentEngineLicense:
+  # Activation key for online activation (most common) or
+  # license key for offline activation.
+  # Results in `ACTIVATION_KEY` environment variable
+  # or `LICENSE_KEY` (if `isOffline` is `true`)
+  activationKey: ""
+  # Is the license offline: set to `true` if
+  # an offline license key was provided in `activationKey`
+  isOffline: false
+  # Query existing secret for the activation key
+  externalSecret:
+    # External secret name for license
+    name: ""
+    # The key in the secret used to retrieve the activation key
+    key: DOCUMENT_ENGINE_ACTIVATION_KEY
+
 pspdfkit:
-  license:
-    # Activation key for online activation (most common) or
-    # license key for offline activation.
-    # Results in `ACTIVATION_KEY` environment variable
-    # or `LICENSE_KEY` (if `isOffline` is `true`)
-    activationKey: ""
-    # Is the license offline: set to `true` if
-    # an offline license key was provided in `activationKey`
-    isOffline: false
-    # Query existing secret for the activation key
-    externalSecret:
-      # External secret name for license
-      name: ""
-      # The key in the secret used to retrieve the activation key
-      key: DOCUMENT_ENGINE_ACTIVATION_KEY
   auth:
     api:
       # `API_AUTH_TOKEN` should be long enough
@@ -52,22 +53,6 @@ pspdfkit:
         apiTokenKey: API_AUTH_TOKEN
         jwtPublicKeyKey: JWT_PUBLIC_KEY
         jwtAlgorithmKey: JWT_ALGORITHM
-    # Document Engine Dashboard settings
-    dashboard:
-      # Enable dashboard
-      enabled: true
-      # `DASHBOARD_USERNAME`
-      username: admin
-      # `DASHBOARD_PASSWORD` — will generate a random password if not set
-      password: ""
-      # Use an external secret for dashboard credentials
-      # instead of the values from `pspdfkit.auth.dashboard.*`
-      externalSecret:
-        # External secret name
-        name: ""
-        # Key names
-        usernameKey: DASHBOARD_USERNAME
-        passwordKey: DASHBOARD_PASSWORD
   # A string used as the base key for deriving secret keys for the purposes of authentication.
   # Choose a sufficiently long random string for this option.
   # To generate a random string, use: `openssl rand -hex 256`.
@@ -287,6 +272,26 @@ pspdfkit:
       # External secret name
       externalSecretName: ""
 
+# Document Engine Dashboard settings
+dashboard:
+  # Enable dashboard
+  enabled: true
+  # Dashboard authentication
+  auth:
+    # `DASHBOARD_USERNAME`
+    username: admin
+    # `DASHBOARD_PASSWORD` — will generate a random password if not set
+    password: ""
+    # Use an external secret for dashboard credentials
+    # instead of the values from `pspdfkit.auth.dashboard.*`
+    externalSecret:
+      # External secret name
+      name: ""
+      # Key names
+      usernameKey: DASHBOARD_USERNAME
+      passwordKey: DASHBOARD_PASSWORD
+
+# Observability settings
 observability:
   # Logs
   log:

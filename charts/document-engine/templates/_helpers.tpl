@@ -75,15 +75,15 @@ Create the name of the service account to use
 License secret name
 */}}
 {{- define "document-engine.license.secret.name" -}}
-  {{- if not .Values.pspdfkit.license.externalSecret.name -}}
+  {{- if not .Values.documentEngineLicense.externalSecret.name -}}
     {{- printf "%s-license" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.license.externalSecret.name -}}
+    {{- .Values.documentEngineLicense.externalSecret.name -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.license.variable.name" -}}
-  {{- if not .Values.pspdfkit.license.isOffline -}}
+  {{- if not .Values.documentEngineLicense.isOffline -}}
   ACTIVATION_KEY
   {{- else -}}
   LICENSE_KEY
@@ -91,16 +91,16 @@ License secret name
 {{- end -}}
 
 {{- define "document-engine.license.secret.key" -}}
-  {{- if not .Values.pspdfkit.license.externalSecret.name -}}
+  {{- if not .Values.documentEngineLicense.externalSecret.name -}}
     {{- include "document-engine.license.variable.name" . -}}
   {{- else -}}
-    {{- .Values.pspdfkit.license.externalSecret.key -}}
+    {{- .Values.documentEngineLicense.externalSecret.key -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.license.available" -}}
-  {{- if or .Values.pspdfkit.license.activationKey 
-            .Values.pspdfkit.license.externalSecret.name -}}
+  {{- if or .Values.documentEngineLicense.activationKey 
+            .Values.documentEngineLicense.externalSecret.name -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -141,24 +141,24 @@ API and dashboard secrets
 {{- end -}}
 
 {{- define "document-engine.dashboard.secret.name" -}}
-  {{- if not .Values.pspdfkit.auth.dashboard.externalSecret.name -}}
+  {{- if not .Values.dashboard.auth.externalSecret.name -}}
     {{- printf "%s-dashboard-auth" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.auth.dashboard.externalSecret.name -}}
+    {{- .Values.dashboard.auth.externalSecret.name -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.dashboard.secret.key.username" -}}
-  {{- if not .Values.pspdfkit.auth.dashboard.externalSecret.name -}}
+  {{- if not .Values.dashboard.auth.externalSecret.name -}}
     DASHBOARD_USERNAME
   {{- else -}}
-    {{- .Values.pspdfkit.auth.dashboard.externalSecret.usernameKey -}}
+    {{- .Values.dashboard.auth.externalSecret.usernameKey -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.dashboard.secret.key.password" -}}
-  {{- if not .Values.pspdfkit.auth.dashboard.externalSecret.name -}}
+  {{- if not .Values.dashboard.auth.externalSecret.name -}}
     DASHBOARD_PASSWORD
   {{- else -}}
-    {{- .Values.pspdfkit.auth.dashboard.externalSecret.passwordKey -}}
+    {{- .Values.dashboard.auth.externalSecret.passwordKey -}}
   {{- end -}}
 {{- end -}}
 
