@@ -67,18 +67,22 @@ apiAuth:
     secretKeyBaseKey: SECRET_KEY_BASE
 
 config:
+  # `PSPDFKIT_WORKER_POOL_SIZE`
+  workerPoolSize: 16
+  # Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`)
+  requestTimeoutSeconds: 60
+  # Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`)
+  workerTimeoutSeconds: 60
   # `PDF_GENERATION_TIMEOUT` in seconds
-  generationTimeoutSeconds: 120
-  # `SERVER_REQUEST_TIMEOUT` in seconds
-  requestTimeoutSeconds: 120
+  generationTimeoutSeconds: 20
   # `REMOTE_URL_FETCH_TIMEOUT` in seconds
-  urlFetchTimeoutSeconds: 20
+  urlFetchTimeoutSeconds: 5
   # `READ_ANNOTATION_BATCH_TIMEOUT` in seconds
   readAnnotationBatchTimeoutSeconds: 20
   # `MAX_UPLOAD_SIZE_BYTES` in megabytes
-  maxUploadSizeMegaBytes: 128
-  # `PSPDFKIT_WORKER_POOL_SIZE`
-  workerPoolSize: 8
+  maxUploadSizeMegaBytes: 950
+  # `ASYNC_JOBS_TTL`
+  asyncJobsTtlSeconds: 172800
   # `ALLOW_DOCUMENT_UPLOADS`
   allowDocumentUploads: true
   # `ALLOW_REMOTE_DOCUMENTS`
@@ -90,11 +94,15 @@ config:
   # `IGNORE_INVALID_ANNOTATIONS`
   ignoreInvalidAnnotations: true
   # `AUTOMATIC_LINK_EXTRACTION`
-  automaticLinkExtraction: true
+  automaticLinkExtraction: false
   # `MIN_SEARCH_QUERY_LENGTH`
   minSearchQueryLength: 3
   # `TRUSTED_PROXIES`
   trustedProxies: default
+  # Proxy settings, `HTTP_PROXY` amd `HTTPS_PROXY`
+  proxy:
+    http: ""
+    https: ""
   # `REPLACE_SECRETS_FROM_ENV` — whether to consider
   # environment variables, values and secrets for
   # `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD`
@@ -181,6 +189,11 @@ assetStorage:
       enabled: false
       # Negated `PGSSL_DISABLE_VERIFY`
       verify: true
+      # Negated `PGSSL_DISABLE_HOSTNAME_VERIFY`
+      hostVerify: true
+      # Common name for the certificate (`PGSSL_CERT_COMMON_NAME`), 
+      # defaults to `PGHOST` value
+      commonName: ""
       # Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`,
       # mutually exclusive with `trustFileName` and takes precedence
       trustBundle: ""

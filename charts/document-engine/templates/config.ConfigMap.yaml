@@ -10,11 +10,13 @@ data:
 {{- end }}
   PSPDFKIT_WORKER_POOL_SIZE: {{ .Values.config.workerPoolSize | quote }}
   PORT: {{ .Values.service.port | quote }}
-  PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
   SERVER_REQUEST_TIMEOUT: {{ mul 1000 .Values.config.requestTimeoutSeconds | quote }}
+  PSPDFKIT_WORKER_TIMEOUT: {{ mul 1000 .Values.config.workerTimeoutSeconds | quote }}
+  PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
   REMOTE_URL_FETCH_TIMEOUT: {{ mul 1000 .Values.config.urlFetchTimeoutSeconds | quote }}
   READ_ANNOTATION_BATCH_TIMEOUT: {{ mul 1000 .Values.config.readAnnotationBatchTimeoutSeconds | quote }}
   MAX_UPLOAD_SIZE_BYTES: {{ mul 1048576 .Values.config.maxUploadSizeMegaBytes | quote }}
+  ASYNC_JOBS_TTL: {{ .Values.config.asyncJobsTtlSeconds | quote }}
   ALLOW_DOCUMENT_UPLOADS: {{ .Values.config.allowDocumentUploads | quote }}
   ALLOW_REMOTE_DOCUMENTS: {{ .Values.config.allowRemoteDocuments | quote }}
   ALLOW_DOCUMENT_GENERATION: {{ .Values.config.allowDocumentGeneration | quote }}
@@ -22,6 +24,12 @@ data:
   IGNORE_INVALID_ANNOTATIONS: {{ .Values.config.ignoreInvalidAnnotations | quote }}
   AUTOMATIC_LINK_EXTRACTION: {{ .Values.config.automaticLinkExtraction | quote }}
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
+{{- with .Values.config.proxy.http }}
+  HTTP_PROXY: {{ . | quote }}
+{{- end }}
+{{- with .Values.config.proxy.https }}
+  HTTPS_PROXY: {{ . | quote }}
+{{- end }}
 {{- with .Values.config.trustedProxies }}
   TRUSTED_PROXIES: {{ . | quote }}
 {{- end }}
@@ -53,11 +61,15 @@ data:
 {{-   with .postgres }}
 {{-     if and .enabled .tls.enabled }}
   PGSSL_DISABLE_VERIFY: {{ not .postgres.tls.verify | quote }}
-{{-     end }}
-{{-     if .tls.trustBundle }}
+  PGSSL_DISABLE_HOSTNAME_VERIFY: {{ not .postgres.tls.hostVerify | quote }}
+{{-       with .tls.commonName }}
+  PGSSL_CA_CERTS: {{ . | quote }}
+{{-       end }}
+{{-       if .tls.trustBundle }}
   PGSSL_CA_CERTS: {{ .tls.trustBundle | quote }}
-{{-     else if .tls.trustFileName }}
+{{-       else if .tls.trustFileName }}
   PGSSL_CA_CERT_PATH: "/certificate-stores-custom/{{ .tls.trustFileName }}"
+{{-       end }}
 {{-     end }}
 {{-   end }}
   USE_REDIS_CACHE: {{ .redis.enabled | quote }}

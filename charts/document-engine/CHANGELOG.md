@@ -67,11 +67,23 @@
   * `pspdfkit.auth.dashboard.enabled` renamed to `dashboard.enabled`
   * The rest of the former section to `pspdfkit.dashboard.auth`
 * The remaining `pspdfkit` section renamed to `config`.
+* Aligned default values with the default [Document Engine configuration values](https://pspdfkit.com/guides/document-engine/configuration/options/), affects the following default values: 
+  * `config.workerPoolSize` changed from `8` to `16`
+  * `config.maxUploadSizeMegaBytes` changed from `128` to `950`
+  * `config.urlFetchTimeoutSeconds` changed from `20` to `5`
+  * `config.generationTimeoutSeconds` changed from `120` to `20`
+  * `config.requestTimeoutSeconds` changed from `120` to `60`
+  * `config.automaticLinkExtraction` changed from `true` to `false`
+* Exceptions to the previous list:
+  * `config.trustedProxies` is left as `default` for safety reasons
 
 ### Added
 
-* Health check log level as `observability.healthcheckLevel`
+* Health check log level as `observability.healthcheckLevel`.
 * Direct trust bundle for PostgreSQL as `assetStorage.postgres.trustBundle`.
+* Worker timeout in seconds as `config.workerTimeoutSeconds`.
+* Asynchronous jobs timeout in seconds as `config.asyncJobsTtlSeconds`.
+* HTTP proxy settings: `config.proxy.http` for HTTP and `config.proxy.https` for HTTPS
 
 ## 2.9.3 (2024-08-16)
 
