@@ -107,6 +107,8 @@ config:
   # environment variables, values and secrets for
   # `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD`
   replaceSecretsFromEnv: true
+
+certificateTrust:
   # Signing certificate trust configuration
   signingTrustConfigMaps: {}
   # Private certificates to yield `/certificate-stores-custom/private-ca-certificates.pem`
@@ -191,7 +193,7 @@ assetStorage:
       verify: true
       # Negated `PGSSL_DISABLE_HOSTNAME_VERIFY`
       hostVerify: true
-      # Common name for the certificate (`PGSSL_CERT_COMMON_NAME`), 
+      # Common name for the certificate (`PGSSL_CERT_COMMON_NAME`),
       # defaults to `PGHOST` value
       commonName: ""
       # Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`,
@@ -344,11 +346,11 @@ observability:
     otelTracesSamplerArg: ""
   # Metrics configuration
   metrics:
-    enabled: true
+    enabled: false
     # StatsD parameters
     statsd:
       # Enable StatsD exporting, required for Prometheus exporter
-      enabled: true
+      enabled: false
       # StatsD host, `STATSD_HOST`
       # Set to `localhost` if using the Prometheus exporter
       host: localhost
@@ -378,7 +380,7 @@ observability:
 # StatsD exporter for Prometheus, not recommended for production use
 # Requires `pspdfkit.observability.metrics.enabled` and `pspdfkit.observability.metrics.statsd.enabled`
 prometheusExporter:
-  enabled: true
+  enabled: false
   image:
     repository: prom/statsd-exporter
     pullPolicy: IfNotPresent
