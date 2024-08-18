@@ -17,7 +17,7 @@ data:
   ALLOW_DOCUMENT_GENERATION: {{ .Values.config.allowDocumentGeneration | quote }}
   ALLOW_REMOTE_ASSETS_IN_GENERATION: {{ .Values.config.allowRemoteAssetsInGeneration | quote }}
   IGNORE_INVALID_ANNOTATIONS: {{ .Values.config.ignoreInvalidAnnotations | quote }}
-  ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .Values.config.assetStorageCacheSizeMegaBytes | quote }}
+  ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .Values.assetStorage.localAssetStorageCacheSizeMegaBytes | quote }}
   AUTOMATIC_LINK_EXTRACTION: {{ .Values.config.automaticLinkExtraction | quote }}
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
   DATABASE_CONNECTIONS: {{ .Values.assetStorage.databaseConnections | quote }}
@@ -29,7 +29,7 @@ data:
   EXIT_AFTER_DATABASE_MIGRATIONS: "false"
 {{- end }}
 {{- with .Values.assetStorage }}
-  ASSET_STORAGE_BACKEND: {{ default "built-in" .assetStorageBackend | quote }}
+  ASSET_STORAGE_BACKEND: {{ .assetStorageBackend | quote }}
 {{-   if .enableAssetStorageFallback }}
   ENABLE_ASSET_STORAGE_FALLBACK: {{ .enableAssetStorageFallback | quote }}
   ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: {{ .enableAssetStorageFallbackPostgres | quote }}

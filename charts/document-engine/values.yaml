@@ -89,8 +89,6 @@ config:
   allowRemoteAssetsInGeneration: true
   # `IGNORE_INVALID_ANNOTATIONS`
   ignoreInvalidAnnotations: true
-  # `ASSET_STORAGE_CACHE_SIZE` in megabytes
-  assetStorageCacheSizeMegaBytes: 2000
   # `AUTOMATIC_LINK_EXTRACTION`
   automaticLinkExtraction: true
   # `MIN_SEARCH_QUERY_LENGTH`
@@ -116,7 +114,8 @@ config:
 
   # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH`
   downloaderTrustFileName: "root-certificates.pem"
-  # Signing service parameters
+
+# Signing service parameters
 documentSigningService:
   # Enable signing service integration
   enabled: false
@@ -144,7 +143,12 @@ documentSigningService:
     username: ""
     # `TIMESTAMP_AUTHORITY_PASSWORD`
     password: ""
+
+# Everything about storing and caching assets
 assetStorage:
+  # Sets local asset storage value in megabytes
+  # Results in `ASSET_STORAGE_CACHE_SIZE` (in bytes)
+  localAssetStorageCacheSizeMegaBytes: 2000
   # Database migration jobs.
   databaseMigrationJob:
     # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container

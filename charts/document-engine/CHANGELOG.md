@@ -53,6 +53,7 @@
   * Former optional `pspdfkit.secretKeyBase.externalSecret` integrated into `apiAuth.externalSecret`:
     * In case `apiAuth.externalSecret.secretKeyBaseKey` is set, the value is used.
 * `pspdfkit.storage` section moved to the top level as `assetStorage`.
+* `pspdfkit.assetStorageCacheSizeMegaBytes` renamed to `assetStorage.localAssetStorageCacheSizeMegaBytes`.
 * `pspdfkit.signingService` section moved to the top level as `documentSigningService`.
 * Certificate trust configuration restructured:
   * 
