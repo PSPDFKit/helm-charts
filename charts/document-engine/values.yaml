@@ -345,6 +345,17 @@ observability:
   # Metrics configuration
   metrics:
     enabled: true
+    # StatsD parameters
+    statsd:
+      # Enable StatsD exporting, required for Prometheus exporter
+      enabled: true
+      # StatsD host, `STATSD_HOST`
+      # Set to `localhost` if using the Prometheus exporter
+      host: localhost
+      # StatsD port, `STATSD_PORT`
+      port: 9125
+      # (tpl) StatsD custom tags, `STATSD_CUSTOM_TAGS`
+      customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
     # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
     serviceMonitor:
       enabled: false
@@ -364,6 +375,24 @@ observability:
       labels: {}
       rules: []
 
+# StatsD exporter for Prometheus, not recommended for production use
+# Requires `pspdfkit.observability.metrics.enabled` and `pspdfkit.observability.metrics.statsd.enabled`
+prometheusExporter:
+  enabled: true
+  image:
+    repository: prom/statsd-exporter
+    pullPolicy: IfNotPresent
+    tag: "v0.27.1"
+  port: 10254
+  resources:
+    requests:
+      memory: "32Mi"
+      cpu: "50m"
+    limits:
+      memory: "128Mi"
+      cpu: "100m"
+
+# Ordinary Kubernetes settings
 serviceAccount:
   create: true
   annotations: {}
@@ -465,22 +494,7 @@ networkPolicy:
   #                 operator: In
   #                 values:
   #                   - some-storage
-# StatsD exporter for Prometheus, not recommended for production use
-prometheusExporter:
-  enabled: false
-  image:
-    repository: prom/statsd-exporter
-    pullPolicy: IfNotPresent
-    tag: "v0.26.1"
-  statsdPort: 9125
-  port: 10254
-  resources:
-    requests:
-      memory: "32Mi"
-      cpu: "50m"
-    limits:
-      memory: "128Mi"
-      cpu: "100m"
+
 # https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 resources: {}
 # Number of replicas

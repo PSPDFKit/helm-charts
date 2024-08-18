@@ -190,13 +190,14 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- with .Values.prometheusExporter }}
-        {{- if .enabled }}
+        {{- if and .enabled 
+                   $.Values.observability.metrics.statsd.enabled }}
         - name: statsd-exporter
           image: "{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ .image.pullPolicy }}
           args:
-            - --statsd.listen-udp=:{{ .statsdPort }}
-            - --statsd.listen-tcp=:{{ .statsdPort }}
+            - --statsd.listen-udp=:{{ $.Values.observability.metrics.statsd.port }}
+            - --statsd.listen-tcp=:{{ $.Values.observability.metrics.statsd.port }}
             - --web.listen-address=:{{ .port }}
           ports:
             - name: metrics

@@ -91,39 +91,43 @@ data:
   TIMESTAMP_AUTHORITY_PASSWORD: {{ .timestampAuthority.password | quote }}
 {{-   end }}
 {{- end }}
-{{- if .Values.prometheusExporter.enabled }}
-  STATSD_HOST: localhost
-  STATSD_PORT: {{ .Values.prometheusExporter.statsdPort | quote }}
-  STATSD_CUSTOM_TAGS: "namespace={{ .Release.Namespace }},app={{ include "document-engine.fullname" . }}"
-{{- end }}
-  LOG_LEVEL: {{ .Values.observability.log.level | quote }}
-  HEALTHCHECK_LOGLEVEL: {{ .Values.observability.log.healthcheckLevel | quote }}
-{{- with .Values.observability.opentelemetry }}
-{{-   if .enabled }}
+{{- with .Values.observability }}
+{{-   if and .metrics.enabled .metrics.statsd.enabled }}
+{{-     with .metrics.statsd }}
+  STATSD_HOST: {{ .host | quote }}
+  STATSD_PORT: {{ .port | quote }}
+  STATSD_CUSTOM_TAGS: {{ tpl .customTags $ | quote }}
+{{-     end }}
+{{-   end }}
+  LOG_LEVEL: {{ .log.level | quote }}
+  HEALTHCHECK_LOGLEVEL: {{ .log.healthcheckLevel | quote }}
+{{-   with .opentelemetry }}
+{{-     if .enabled }}
   ENABLE_OPENTELEMETRY: "true"
-{{-     with .otlpExporterEndpoint }}
+{{-       with .otlpExporterEndpoint }}
   OTEL_EXPORTER_OTLP_ENDPOINT: {{ . | quote }}
-{{-     end }}
-{{-     with .otlpExporterProtocol }}
+{{-       end }}
+{{-       with .otlpExporterProtocol }}
   OTEL_EXPORTER_OTLP_PROTOCOL: {{ . | quote }}
-{{-     end }}
-{{-     with .otelServiceName }}
+{{-       end }}
+{{-       with .otelServiceName }}
   OTEL_SERVICE_NAME: {{ . | quote }}
-{{-     end }}
-{{-     with .otelResourceAttributes }}
+{{-       end }}
+{{-       with .otelResourceAttributes }}
   OTEL_RESOURCE_ATTRIBUTES: {{ . | quote }}
-{{-     end }}
-{{-     with .otelPropagators }}
+{{-       end }}
+{{-       with .otelPropagators }}
   OTEL_PROPAGATORS: {{ . | quote }}
-{{-     end }}
-{{-     with .otelTracesSampler }}
+{{-       end }}
+{{-       with .otelTracesSampler }}
   OTEL_TRACES_SAMPLER: {{ . | quote }}
-{{-     end }}
-{{-     with .otelTracesSamplerArg }}
+{{-       end }}
+{{-       with .otelTracesSamplerArg }}
   OTEL_TRACES_SAMPLER_ARG: {{ . | quote }}
-{{-     end }}
-{{-   else }}
+{{-       end }}
+{{-     else }}
   ENABLE_OPENTELEMETRY: "false"
+{{-     end }}
 {{-   end }}
 {{- end }}
 # Can be used for hash updating

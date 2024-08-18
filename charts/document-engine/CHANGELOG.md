@@ -85,6 +85,7 @@
 * Worker timeout in seconds as `config.workerTimeoutSeconds`.
 * Asynchronous jobs timeout in seconds as `config.asyncJobsTtlSeconds`.
 * HTTP proxy settings: `config.proxy.http` for HTTP and `config.proxy.https` for HTTPS
+* Explicit StatsD exporting parameters in `observability.metrics.statsd` section.
 
 ## 2.9.3 (2024-08-16)
 
