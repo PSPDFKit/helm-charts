@@ -181,6 +181,9 @@ assetStorage:
       enabled: false
       # Negated `PGSSL_DISABLE_VERIFY`
       verify: true
+      # Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`,
+      # mutually exclusive with `trustFileName` and takes precedence
+      trustBundle: ""
       # Path from `pspdfkit.trustConfigMaps`, wraps around `PGSSL_CA_CERT_PATH`
       trustFileName: ""
   # S3 backend storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `s3

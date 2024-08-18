@@ -5,13 +5,16 @@ metadata:
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
 data:
+{{- with .Values.config.replaceSecretsFromEnv }}
+  REPLACE_SECRETS_FROM_ENV: {{ . | quote }}
+{{- end }}
+  PSPDFKIT_WORKER_POOL_SIZE: {{ .Values.config.workerPoolSize | quote }}
   PORT: {{ .Values.service.port | quote }}
   PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
   SERVER_REQUEST_TIMEOUT: {{ mul 1000 .Values.config.requestTimeoutSeconds | quote }}
   REMOTE_URL_FETCH_TIMEOUT: {{ mul 1000 .Values.config.urlFetchTimeoutSeconds | quote }}
   READ_ANNOTATION_BATCH_TIMEOUT: {{ mul 1000 .Values.config.readAnnotationBatchTimeoutSeconds | quote }}
   MAX_UPLOAD_SIZE_BYTES: {{ mul 1048576 .Values.config.maxUploadSizeMegaBytes | quote }}
-  PSPDFKIT_WORKER_POOL_SIZE: {{ .Values.config.workerPoolSize | quote }}
   ALLOW_DOCUMENT_UPLOADS: {{ .Values.config.allowDocumentUploads | quote }}
   ALLOW_REMOTE_DOCUMENTS: {{ .Values.config.allowRemoteDocuments | quote }}
   ALLOW_DOCUMENT_GENERATION: {{ .Values.config.allowDocumentGeneration | quote }}
@@ -19,6 +22,12 @@ data:
   IGNORE_INVALID_ANNOTATIONS: {{ .Values.config.ignoreInvalidAnnotations | quote }}
   AUTOMATIC_LINK_EXTRACTION: {{ .Values.config.automaticLinkExtraction | quote }}
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
+{{- with .Values.config.trustedProxies }}
+  TRUSTED_PROXIES: {{ . | quote }}
+{{- end }}
+{{- with .Values.config.downloaderTrustFileName }}
+  DOWNLOADER_CERT_FILE_PATH: "/certificate-stores-custom/{{ . }}"
+{{- end }}
   DATABASE_CONNECTIONS: {{ .Values.assetStorage.databaseConnections | quote }}
   ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .Values.assetStorage.localAssetStorageCacheSizeMegaBytes | quote }}
 {{- if .Values.assetStorage.databaseMigrationJob.enabled }}
@@ -41,6 +50,16 @@ data:
   ENABLE_ASSET_STORAGE_FALLBACK_S3: "false"
   ENABLE_ASSET_STORAGE_FALLBACK_AZURE: "false"
 {{-   end }}
+{{-   with .postgres }}
+{{-     if and .enabled .tls.enabled }}
+  PGSSL_DISABLE_VERIFY: {{ not .postgres.tls.verify | quote }}
+{{-     end }}
+{{-     if .tls.trustBundle }}
+  PGSSL_CA_CERTS: {{ .tls.trustBundle | quote }}
+{{-     else if .tls.trustFileName }}
+  PGSSL_CA_CERT_PATH: "/certificate-stores-custom/{{ .tls.trustFileName }}"
+{{-     end }}
+{{-   end }}
   USE_REDIS_CACHE: {{ .redis.enabled | quote }}
   USE_REDIS_TTL_FOR_PRERENDERING: {{ .redis.useTtlForPrerendering | quote }}
   REDIS_TTL: {{ .redis.ttlSeconds | int | quote }}
@@ -59,12 +78,6 @@ data:
   TIMESTAMP_AUTHORITY_USERNAME: {{ .timestampAuthority.username | quote }}
   TIMESTAMP_AUTHORITY_PASSWORD: {{ .timestampAuthority.password | quote }}
 {{-   end }}
-{{- end }}
-{{- with .Values.config.trustedProxies }}
-  TRUSTED_PROXIES: {{ . | quote }}
-{{- end }}
-{{- with .Values.config.replaceSecretsFromEnv }}
-  REPLACE_SECRETS_FROM_ENV: {{ . | quote }}
 {{- end }}
 {{- if .Values.prometheusExporter.enabled }}
   STATSD_HOST: localhost

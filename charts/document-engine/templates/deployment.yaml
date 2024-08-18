@@ -124,20 +124,6 @@ spec:
                   name: {{ include "document-engine.api.secret.name" . }}
                   key: {{ include "document-engine.api.secret.key.jwtAlgorithm" . }}
           {{- end }}
-          {{- if .Values.assetStorage.postgres.enabled }}
-            {{- if .Values.assetStorage.postgres.tls.enabled }}
-            - name: PGSSL_DISABLE_VERIFY
-              value: {{ not .Values.assetStorage.postgres.tls.verify | quote }}
-            {{-   with .Values.assetStorage.postgres.tls.trustFileName }}
-            - name: PGSSL_CA_CERT_PATH
-              value: /certificate-stores-custom/{{ . }}
-            {{-   end }}
-            {{- end }}
-          {{- end }}
-          {{- with .Values.config.downloaderTrustFileName }}
-            - name: DOWNLOADER_CERT_FILE_PATH
-              value: /certificate-stores-custom/{{ . }}
-          {{- end }}
           {{- if .Values.dashboard.enabled }}
             - name: DASHBOARD_USERNAME
               valueFrom:

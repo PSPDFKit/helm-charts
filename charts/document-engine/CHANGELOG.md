@@ -1,7 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [3.0.0 (2024-08-17)](#300-2024-08-17)
+  - [3.0.0 (2024-08-20)](#300-2024-08-20)
     - [Changed](#changed)
     - [Added](#added)
   - [2.9.3 (2024-08-16)](#293-2024-08-16)
@@ -42,7 +42,7 @@
   - [2.0.0](#200)
     - [Changed](#changed-9)
 
-## 3.0.0 (2024-08-17)
+## 3.0.0 (2024-08-20)
 
 ### Changed
 
@@ -68,6 +68,7 @@
 ### Added
 
 * Health check log level as `observability.healthcheckLevel`
+* Direct trust bundle for PostgreSQL as `assetStorage.postgres.trustBundle`.
 
 ## 2.9.3 (2024-08-16)
 
