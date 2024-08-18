@@ -115,35 +115,6 @@ config:
   # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH`
   downloaderTrustFileName: "root-certificates.pem"
 
-# Signing service parameters
-documentSigningService:
-  # Enable signing service integration
-  enabled: false
-  # `SIGNING_SERVICE_URL`
-  url: https://signing-thing.local/sign
-  # `SIGNING_SERVICE_TIMEOUT` in seconds
-  timeoutSeconds: 10
-  # `DEFAULT_SIGNER_NAME`
-  defaultSignerName: "John Doe"
-  # `DEFAULT_SIGNATURE_REASON`
-  defaultSignatureReason: "approved"
-  # `DEFAULT_SIGNATURE_LOCATION`
-  defaultSignatureLocation: "Head Quarters"
-  # `DIGITAL_SIGNATURE_HASH_ALGORITHM`
-  digitalSignatureHashAlgorithm: sha512
-  # `DIGITAL_SIGNATURE_CADES_LEVEL`
-  digitalSignatureCadesLevel: "b-lt"
-  # `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
-  digitalSignatureCertificateCheckTime: current_time
-  # Timestamp Authority (TSA) settings
-  timestampAuthority:
-    # `TIMESTAMP_AUTHORITY_URL`
-    url: https://freetsa.org/
-    # `TIMESTAMP_AUTHORITY_USERNAME`
-    username: ""
-    # `TIMESTAMP_AUTHORITY_PASSWORD`
-    password: ""
-
 # Everything about storing and caching assets
 assetStorage:
   # Sets local asset storage value in megabytes
@@ -277,6 +248,35 @@ assetStorage:
       enabled: false
     # External secret name
     externalSecretName: ""
+
+# Signing service parameters
+documentSigningService:
+  # Enable signing service integration
+  enabled: false
+  # `SIGNING_SERVICE_URL`
+  url: https://signing-thing.local/sign
+  # `SIGNING_SERVICE_TIMEOUT` in seconds
+  timeoutSeconds: 10
+  # `DEFAULT_SIGNER_NAME`
+  defaultSignerName: "John Doe"
+  # `DEFAULT_SIGNATURE_REASON`
+  defaultSignatureReason: "approved"
+  # `DEFAULT_SIGNATURE_LOCATION`
+  defaultSignatureLocation: "Head Quarters"
+  # `DIGITAL_SIGNATURE_HASH_ALGORITHM`
+  digitalSignatureHashAlgorithm: sha512
+  # `DIGITAL_SIGNATURE_CADES_LEVEL`
+  digitalSignatureCadesLevel: "b-lt"
+  # `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
+  digitalSignatureCertificateCheckTime: current_time
+  # Timestamp Authority (TSA) settings
+  timestampAuthority:
+    # `TIMESTAMP_AUTHORITY_URL`
+    url: https://freetsa.org/
+    # `TIMESTAMP_AUTHORITY_USERNAME`
+    username: ""
+    # `TIMESTAMP_AUTHORITY_PASSWORD`
+    password: ""
 
 # Document Engine Dashboard settings
 dashboard:
