@@ -81,6 +81,7 @@
 
 * Health check log level as `observability.healthcheckLevel`.
 * Direct trust bundle for PostgreSQL as `assetStorage.postgres.trustBundle`.
+* Option for host verification of PostgreSQL, `assetStorage.postgres.hostVerify`.
 * Worker timeout in seconds as `config.workerTimeoutSeconds`.
 * Asynchronous jobs timeout in seconds as `config.asyncJobsTtlSeconds`.
 * HTTP proxy settings: `config.proxy.http` for HTTP and `config.proxy.https` for HTTPS
