@@ -44,6 +44,9 @@
 
 ## 3.0.0 (2024-08-20)
 
+> [!WARNING] Breaking changes. 
+> We hope that `values.yaml` will now be much more readable and usable.
+
 ### Changed
 
 * `pspdfkit.license` section moved to the top level as `documentEngineLicense`.
