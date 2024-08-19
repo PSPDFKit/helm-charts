@@ -34,7 +34,8 @@ database:
 
 assetStorage:
   backendType: built-in
-  enableAssetStorageFallback: false
+  backendFallback:
+    enabled: false
 
 dashboard:
   auth:
@@ -94,7 +95,7 @@ postgresql:
       host     all             all        0.0.0.0/0               md5
       host     all             all        ::/0                    md5
   auth:
-    enablePostgresUser: true
+    enabledPostgresUser: true
     postgresPassword: postgres
     database: document-engine
   tls:

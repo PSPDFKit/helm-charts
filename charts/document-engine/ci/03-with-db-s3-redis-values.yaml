@@ -13,8 +13,9 @@ database:
 
 assetStorage:
   backendType: s3
-  enableAssetStorageFallback: true
-  enableAssetStorageFallbackPostgres: true
+  backendFallback:
+    enabled: true
+    enabledPostgres: true
   s3:
     accessKeyId: "documentEngineObjectStorageRootKey"
     secretAccessKey: "documentEngineObjectStorageRootPassword"

@@ -65,8 +65,9 @@
   * `pspdfkit.storage.databaseConnections` becomes `database.connections`
   * `pspdfkit.storage.databaseMigrationJob` becomes `database.migrationJob`
 * The remaining `pspdfkit.storage` section moved to the top level as `assetStorage`.
+  * `pspdfkit.assetStorageCacheSizeMegaBytes` renamed to `assetStorage.localCacheSizeMegabytes`.
   * `pspdfkit.storage.assetStorageBackend` renamed to `assetStorage.backendType`
-  * `pspdfkit.assetStorageCacheSizeMegaBytes` renamed to `assetStorage.localAssetStorageCacheSizeMegaBytes`.
+  * `pspdfkit.storage.enableAssetStorageFallback*` moved  to `assetStorage.backendFallback` section
 * `pspdfkit.signingService` section moved to the top level as `documentSigningService`.
 * Certificate trust configuration restructured into the new `certificateTrust` section:
   * Map `pspdfkit.signingTrustConfigMaps` becomes list `certificateTrust.digitalSignatures` allowing both ConfigMaps and Secrets

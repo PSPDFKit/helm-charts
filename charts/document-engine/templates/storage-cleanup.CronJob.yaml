@@ -46,6 +46,8 @@ spec:
           containers:
             - name: {{ .Chart.Name }}
               envFrom:
+                - configMapRef:
+                    name: {{ include "document-engine.fullname" . }}-database
                 - secretRef:
                     name: {{ include "document-engine.storage.postgres.secret.name" . }}
               {{- with .Values.extraEnvFrom }}

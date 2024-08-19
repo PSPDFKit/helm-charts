@@ -9,8 +9,9 @@ database:
 
 assetStorage:
   backendType: azure
-  enableAssetStorageFallback: true
-  enableAssetStorageFallbackPostgres: true
+  backendFallback:
+    enabled: true
+    enabledPostgres: true
   azure:
     # This is "well known" storage account for Azure Storage Emulator
     # See https://learn.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string#configure-a-connection-string-for-azurite

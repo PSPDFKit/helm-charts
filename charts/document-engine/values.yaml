@@ -192,6 +192,7 @@ documentLifecycle:
     enabled: false
     schedule: "13 * * * *"
     keepHours: 24
+    # Keep documents with IDs beginning with `persistent` indefinitely
     persistentLike: "persistent%"
     resources: {}
     podAnnotations: {}
@@ -201,18 +202,20 @@ documentLifecycle:
 assetStorage:
   # Sets local asset storage value in megabytes
   # Results in `ASSET_STORAGE_CACHE_SIZE` (in bytes)
-  localAssetStorageCacheSizeMegaBytes: 2000
+  localCacheSizeMegabytes: 2000
   # Asset storage backend is only available if `database.enabled` is `true`
   # Sets `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
   backendType: built-in
-  # `ENABLE_ASSET_STORAGE_FALLBACK`
-  enableAssetStorageFallback: false
-  # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
-  enableAssetStorageFallbackPostgres: false
-  # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
-  enableAssetStorageFallbackS3: false
-  # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
-  enableAssetStorageFallbackAzure: false
+  # Asset storage fallback settings
+  backendFallback:
+    # `ENABLE_ASSET_STORAGE_FALLBACK`
+    enabled: false
+    # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
+    enabledPostgres: false
+    # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
+    enabledS3: false
+    # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
+    enabledAzure: false
   # S3 backend storage settings, in case `assetStorage.backendType` is set to `s3
   s3:
     # `ASSET_STORAGE_S3_ACCESS_KEY_ID`
@@ -622,7 +625,7 @@ postgresql:
       host     all             all        0.0.0.0/0               md5
       host     all             all        ::/0                    md5
   auth:
-    enablePostgresUser: true
+    enabledPostgresUser: true
     postgresPassword: despair
     database: document-engine
 

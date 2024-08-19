@@ -237,8 +237,8 @@ Object storage parameters
 */}}
 {{- define "document-engine.storage.s3.enabled" -}}
   {{- if or (eq .Values.assetStorage.backendType "s3")
-            (and .Values.assetStorage.enableAssetStorageFallback
-                 .Values.assetStorage.enableAssetStorageFallbackS3 ) -}}
+            (and .Values.assetStorage.backendFallback.enabled
+                 .Values.assetStorage.backendFallback.enabledS3 ) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -264,8 +264,8 @@ Object storage parameters
 
 {{- define "document-engine.storage.azure.enabled" -}}
   {{- if or (eq .Values.assetStorage.backendType "azure")
-            (and .Values.assetStorage.enableAssetStorageFallback
-                 .Values.assetStorage.enableAssetStorageFallbackAzure ) -}}
+            (and .Values.assetStorage.backendFallback.enabled
+                 .Values.assetStorage.backendFallback.enabledAzure ) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
