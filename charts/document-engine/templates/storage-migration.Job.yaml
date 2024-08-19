@@ -60,7 +60,7 @@ spec:
           {{- end }}
           env:
             {{- if eq (include  "document-engine.license.available" .) "true" }}
-            - name: {{ include "document-engine.license.variable.name" . }}
+            - name: ACTIVATION_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "document-engine.license.secret.name" . }}
@@ -85,11 +85,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "document-engine.secretKeyBase.secret.name" . }}
                   key: {{ include "document-engine.secretKeyBase.secret.key" . }}
-            - name: API_AUTH_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "document-engine.api.secret.name" . }}
-                  key: {{ include "document-engine.api.secret.key.apiToken" . }}
           {{- with .Values.extraEnvs }}
             {{- toYaml .| nindent 12 }}
           {{- end }}
@@ -99,16 +94,50 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
             {{- toYaml .Values.assetStorage.databaseMigrationJob.resources | nindent 12 }}
-          {{- if .Values.extraVolumeMounts }}
+          {{- if or .Values.extraVolumeMounts 
+                    .Values.certificateTrust.customCertificates }}
           volumeMounts:
-            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.certificateTrust.customCertificates }}
+            {{-   range $trustSource := . }}
+            - name: custom-trust-{{ $trustSource.name }}
+              mountPath: /certificate-stores-custom/{{ $trustSource.path }}
+              subPath: {{ $trustSource.path }}
+              readOnly: true
+            {{-   end }}
+            {{- end }}
           {{- end }}
       {{- if .Values.sidecars }}
         {{ toYaml .Values.sidecars | nindent 8 }}
       {{- end }}
-      {{- if .Values.extraVolumes }}
+      {{- if or .Values.extraVolumeMounts 
+                .Values.certificateTrust.customCertificates }}
       volumes:
-        {{ toYaml .Values.extraVolumes | nindent 8 }}
+        {{- with .Values.extraVolumes }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.certificateTrust.customCertificates }}
+        {{-   range $trustSource := . }}
+        - name: custom-trust-{{ $trustSource.name }}
+        {{-     if $trustSource.configMap }}
+          configMap:
+            name: {{ $trustSource.configMap.name }}
+            items:
+              - key: {{ $trustSource.configMap.key }}
+                path: {{ $trustSource.path }}
+        {{-     else if $trustSource.secret }}
+          secret:
+            secretName: {{ $trustSource.secret.name }}
+            items:
+              - key: {{ $trustSource.secret.key }}
+                path: {{ $trustSource.path }}
+        {{-     else }}
+        {{-       fail "Expecting ConfigMap or Secret for a certificate trust" }}
+        {{-     end }}
+        {{-   end }}
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
