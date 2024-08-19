@@ -82,17 +82,9 @@ License secret name
   {{- end -}}
 {{- end -}}
 
-{{- define "document-engine.license.variable.name" -}}
-  {{- if not .Values.documentEngineLicense.isOffline -}}
-  ACTIVATION_KEY
-  {{- else -}}
-  LICENSE_KEY
-  {{- end -}}
-{{- end -}}
-
 {{- define "document-engine.license.secret.key" -}}
   {{- if not .Values.documentEngineLicense.externalSecret.name -}}
-    {{- include "document-engine.license.variable.name" . -}}
+    ACTIVATION_KEY
   {{- else -}}
     {{- .Values.documentEngineLicense.externalSecret.key -}}
   {{- end -}}

@@ -18,12 +18,8 @@ fullnameOverride: ""
 documentEngineLicense:
   # Activation key for online activation (most common) or
   # license key for offline activation.
-  # Results in `ACTIVATION_KEY` environment variable
-  # or `LICENSE_KEY` (if `isOffline` is `true`)
+  # Results in `ACTIVATION_KEY` environment variable.
   activationKey: ""
-  # Is the license offline: set to `true` if
-  # an offline license key was provided in `activationKey`
-  isOffline: false
   # Query existing secret for the activation key
   externalSecret:
     # External secret name for license
