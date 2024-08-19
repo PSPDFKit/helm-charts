@@ -33,7 +33,7 @@ data:
 {{- with .Values.config.trustedProxies }}
   TRUSTED_PROXIES: {{ . | quote }}
 {{- end }}
-{{- with .Values.config.downloaderTrustFileName }}
+{{- with .Values.certificateTrust.downloaderTrustFileName }}
   DOWNLOADER_CERT_FILE_PATH: "/certificate-stores-custom/{{ . }}"
 {{- end }}
   DATABASE_CONNECTIONS: {{ .Values.assetStorage.databaseConnections | quote }}

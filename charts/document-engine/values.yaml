@@ -109,21 +109,23 @@ config:
   replaceSecretsFromEnv: true
 
 certificateTrust:
-  # Signing certificate trust configuration
+  # CAs for digital signatures (`/certificate-stores/`)
   signingTrustConfigMaps: {}
-  # Private certificates to yield `/certificate-stores-custom/private-ca-certificates.pem`
-  # private-ca:
-  #  key: private-ca-certificates.pem
-  #  path: private-ca-certificates.pem
+    # To yield `/certificate-stores/private-ca-certificates.pem`:
+    # private-ca:
+    #  key: private-ca-certificates.pem
+    #  path: private-ca-certificates.pem
   # ConfigMap references for trust configuration, stored in `/certificate-stores-custom`
   trustConfigMaps: {}
-  # Root certificates to yield `/certificate-stores-custom/root-certificates.pem`
-  # root:
-  #  key: root-certificates.pem
-  #  path: root-certificates.pem
+    # To yield `/certificate-stores-custom/my-certificates.pem`
+    # my:
+    #  key: some-root-certificates.pem
+    #  path: my-certificates.pem
 
-  # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH`
-  downloaderTrustFileName: "root-certificates.pem"
+  # Override `DOWNLOADER_CERT_FILE_PATH` to set HTTP client trust.
+  # If empty, defaults to  Mozilla's CA bundle, which is provided 
+  # as `/certificate-stores-downloader/root-certificates.pem`
+  downloaderTrustFileName: ""
 
 # Everything about storing and caching assets
 assetStorage:

@@ -162,24 +162,24 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if or .Values.extraVolumeMounts
-                    .Values.config.trustConfigMaps
-                    .Values.config.signingTrustConfigMaps }}
+                    .Values.certificateTrust.signingTrustConfigMaps 
+                    .Values.certificateTrust.trustConfigMaps }}
           volumeMounts:
             {{- with .Values.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-            {{- with .Values.config.trustConfigMaps }}
+            {{- with .Values.certificateTrust.signingTrustConfigMaps }}
             {{-   range $cmName, $cmProperties := . }}
-            - name: trust-{{ $cmName }}
-              mountPath: /certificate-stores-custom/{{ $cmProperties.path }}
+            - name: signing-trust-{{ $cmName }}
+              mountPath: /certificate-stores/{{ $cmProperties.path }}
               subPath: {{ $cmProperties.path }}
               readOnly: true
             {{-   end }}
             {{- end }}
-            {{- with .Values.config.signingTrustConfigMaps }}
+            {{- with .Values.certificateTrust.trustConfigMaps }}
             {{-   range $cmName, $cmProperties := . }}
             - name: trust-{{ $cmName }}
-              mountPath: /certificate-stores/{{ $cmProperties.path }}
+              mountPath: /certificate-stores-custom/{{ $cmProperties.path }}
               subPath: {{ $cmProperties.path }}
               readOnly: true
             {{-   end }}
@@ -211,15 +211,15 @@ spec:
         {{ toYaml .Values.sidecars | nindent 8 }}
       {{- end }}
       {{- if or .Values.extraVolumeMounts
-                .Values.config.trustConfigMaps
-                .Values.config.signingTrustConfigMaps }}
+                .Values.certificateTrust.signingTrustConfigMaps 
+                .Values.certificateTrust.trustConfigMaps }}
       volumes:
         {{- with .Values.extraVolumes }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
-        {{- with .Values.config.trustConfigMaps }}
+        {{- with .Values.certificateTrust.signingTrustConfigMaps }}
         {{-   range $cmName, $cmProperties := . }}
-        - name: trust-{{ $cmName }}
+        - name: signing-trust-{{ $cmName }}
           configMap:
             name: {{ $cmName}}
             items:
@@ -227,7 +227,7 @@ spec:
                 path: {{ .path }}
         {{-   end }}
         {{- end }}
-        {{- with .Values.config.signingTrustConfigMaps }}
+        {{- with .Values.certificateTrust.trustConfigMaps }}
         {{-   range $cmName, $cmProperties := . }}
         - name: trust-{{ $cmName }}
           configMap:

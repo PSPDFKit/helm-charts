@@ -56,10 +56,12 @@
   * Former optional `pspdfkit.secretKeyBase.externalSecret` integrated into `apiAuth.externalSecret`:
     * In case `apiAuth.externalSecret.secretKeyBaseKey` is set, the value is used.
 * `pspdfkit.storage` section moved to the top level as `assetStorage`.
-* `pspdfkit.assetStorageCacheSizeMegaBytes` renamed to `assetStorage.localAssetStorageCacheSizeMegaBytes`.
+  * `pspdfkit.assetStorageCacheSizeMegaBytes` renamed to `assetStorage.localAssetStorageCacheSizeMegaBytes`.
 * `pspdfkit.signingService` section moved to the top level as `documentSigningService`.
-* Certificate trust configuration restructured:
-  * 
+* Certificate trust configuration restructured into the new `certificateTrust` section:
+  * `pspdfkit.downloaderTrustFileName` moved to `certificateTrust.downloaderTrustFileName` and is now empty by default which will set HTTP client trust to Mozilla CA bundle
+  * `pspdfkit.signingTrustConfigMaps` becomes `certificateTrust.signingTrustConfigMaps`
+  * `pspdfkit.trustConfigMaps` becomes `certificateTrust.trustConfigMaps`
 * `pspdfkit.observability` section moved to the top level as `observability`.
   * `pspdfkit.log.level` moved into `observability.log.level`.
   * `metrics` section moved to `observability.metrics`.
