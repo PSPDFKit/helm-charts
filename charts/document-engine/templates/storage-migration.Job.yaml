@@ -1,4 +1,4 @@
-{{- if and .Values.assetStorage.postgres.enabled .Values.assetStorage.databaseMigrationJob.enabled }}
+{{- if and .Values.database.enabled .Values.database.migrationJob.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -9,7 +9,7 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "-5"
 spec:
-  ttlSecondsAfterFinished: {{ .Values.assetStorage.databaseMigrationJob.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ .Values.database.migrationJob.ttlSecondsAfterFinished }}
   template:
     metadata:
       name: {{ include "document-engine.fullname" . }}-db-migration
@@ -17,12 +17,12 @@ spec:
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.assetStorage.databaseMigrationJob.podAnnotations }}
+      {{- with .Values.engine.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "document-engine.migrationSelectorLabels" . | nindent 8 }}
-      {{- with .Values.assetStorage.databaseMigrationJob.podLabels }}
+      {{- with .Values.database.migrationJob.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
@@ -43,10 +43,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "document-engine.fullname" . }}-config
-          {{- if .Values.assetStorage.postgres.enabled }}
+            - configMapRef:
+                name: {{ include "document-engine.fullname" . }}-database
             - secretRef:
                 name: {{ include "document-engine.storage.postgres.secret.name" . }}
-          {{- end }}
           {{- if .Values.assetStorage.redis.enabled }}
             - secretRef:
                 name: {{ include "document-engine.storage.redis.secret.name" . }}
@@ -93,7 +93,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
-            {{- toYaml .Values.assetStorage.databaseMigrationJob.resources | nindent 12 }}
+            {{- toYaml .Values.database.migrationJob.resources | nindent 12 }}
           {{- if or .Values.extraVolumeMounts 
                     .Values.certificateTrust.customCertificates }}
           volumeMounts:

@@ -31,9 +31,9 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    {{- if .Values.assetStorage.postgres.enabled }}
+    {{- if eq (include "document-engine.storage.postgres.enabled" .) "true"  }}
     - ports:
-        - port: {{ .Values.assetStorage.postgres.port }}
+        - port: {{ .Values.database.postgres.port }}
           protocol: TCP
     {{- end }}
     {{- if .Values.assetStorage.s3.enabled }}
@@ -58,9 +58,9 @@ spec:
   ingress:
     - ports:
         # Hardcoded DE port
-        - port: {{ .Values.service.port }}
+        - port: {{ .Values.config.port }}
         # Hardcoded DE metrics port
-        - port: 9125
+        - port: {{ .Values.observability.metrics.statsd.port }}
         # Prometheus exporter port
         {{- if .Values.prometheusExporter.enabled }}
         - port: {{ .Values.prometheusExporter.port }}

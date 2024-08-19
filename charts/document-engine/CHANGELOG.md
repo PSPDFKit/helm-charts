@@ -50,13 +50,22 @@
 
 ### Changed
 
+* `pspdfkit.license.isOffline` is removed, as it is no longer necessary
 * `pspdfkit.license` section moved to the top level as `documentEngineLicense`.
 * `pspdfkit.auth.api` section moved to the top level as `apiAuth`, both `pspdfkit.auth.api.apiToken` and `pspdfkit.auth.api.jwt` section.
 * `pspdfkit.secretKeyBase` restructured:
   * `pspdfkit.secretKeyBase.value` moved to `apiAuth.secretKeyBase`
   * Former optional `pspdfkit.secretKeyBase.externalSecret` integrated into `apiAuth.externalSecret`:
     * In case `apiAuth.externalSecret.secretKeyBaseKey` is set, the value is used.
-* `pspdfkit.storage` section moved to the top level as `assetStorage`.
+* `pspdfkit.storage.cleanupJob` becomes `documentLifecycle.cleanupJob`
+* Database-related part of `pspdfkit.storage` moved to `database`:
+  * `pspdfkit.storage.postgres.enabled` becomes `database.enabled`
+  * The rest of `pspdfkit.storage.postgres` becomes `database.postgres`
+  * `pspdfkit.storage.databaseEngine` becomes `database.engine`, only `postgres` is currently supported (formerly `postgresql`)
+  * `pspdfkit.storage.databaseConnections` becomes `database.connections`
+  * `pspdfkit.storage.databaseMigrationJob` becomes `database.migrationJob`
+* The remaining `pspdfkit.storage` section moved to the top level as `assetStorage`.
+  * `pspdfkit.storage.assetStorageBackend` renamed to `assetStorage.backendType`
   * `pspdfkit.assetStorageCacheSizeMegaBytes` renamed to `assetStorage.localAssetStorageCacheSizeMegaBytes`.
 * `pspdfkit.signingService` section moved to the top level as `documentSigningService`.
 * Certificate trust configuration restructured into the new `certificateTrust` section:

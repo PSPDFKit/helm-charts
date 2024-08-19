@@ -35,11 +35,14 @@ spec:
             (eq (include  "document-engine.license.available" .) "true") }}
         checksum/license-secret: {{ include (print $.Template.BasePath "/license.Secret.yaml") . | sha256sum }}
       {{- end }}
+      {{- if  .Values.database.enabled  }}
+        checksum/database-config: {{ include (print $.Template.BasePath "/config.database.ConfigMap.yaml") . | sha256sum }}
+      {{- end }}
       {{- if  (include "document-engine.storage.postgres.createSecret" .)  }}
-        checksum/postgres-config: {{ include (print $.Template.BasePath "/config.storage-postgres.Secret.yaml") . | sha256sum }}
+        checksum/postgres-config: {{ include (print $.Template.BasePath "/config.database-postgres.Secret.yaml") . | sha256sum }}
       {{- end }}
       {{- if  (include "document-engine.storage.postgres.createAdminSecret" .)  }}
-        checksum/postgres-admin-config: {{ include (print $.Template.BasePath "/config.storage-postgres.admin.Secret.yaml") . | sha256sum }}
+        checksum/postgres-admin-config: {{ include (print $.Template.BasePath "/config.database-postgres.admin.Secret.yaml") . | sha256sum }}
       {{- end }}
       {{- if (include "document-engine.storage.redis.createSecret" .) }}
         checksum/redis-secret: {{ include (print $.Template.BasePath "/config.storage-redis.Secret.yaml") . | sha256sum }}
@@ -75,7 +78,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "document-engine.fullname" . }}-config
-          {{- if .Values.assetStorage.postgres.enabled }}
+          {{- if  .Values.database.enabled  }}
+            - configMapRef:
+                name: {{ include "document-engine.fullname" . }}-database
+          {{- end }}
+          {{- if eq (include "document-engine.storage.postgres.enabled" .) "true"  }}
             - secretRef:
                 name: {{ include "document-engine.storage.postgres.secret.name" . }}
           {{- end }}
@@ -145,10 +152,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: api
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.config.port }}
               protocol: TCP
             - name: statsd-metrics
-              containerPort: 9125
+              containerPort: {{ .Values.observability.metrics.statsd.port }}
               protocol: TCP
           {{- if .Values.startupProbe }}
           startupProbe: {{ toYaml .Values.startupProbe | nindent 12 }}

@@ -15,16 +15,15 @@ documentSigningService:
   url: http://signing-service:6000/sign
   timeoutSeconds: 10
 
-assetStorage:
-  databaseMigrationJob: 
+database: 
+  enabled: true
+  engine: postgres
+  migrationJob:
     enabled: false
-  databaseEngine: postgresql
-  assetStorageBackend: built-in
-  enableAssetStorageFallback: false
   postgres:
     enabled: true
     host: document-engine-postgresql
-    database: pspdfkit
+    database: document-engine
     tls:
       enabled: false
     auth: 
@@ -32,6 +31,10 @@ assetStorage:
       password: postgres
       adminUsername: postgres
       adminPassword: postgres
+
+assetStorage:
+  backendType: built-in
+  enableAssetStorageFallback: false
 
 dashboard:
   auth:
@@ -93,7 +96,7 @@ postgresql:
   auth:
     enablePostgresUser: true
     postgresPassword: postgres
-    database: pspdfkit
+    database: document-engine
   tls:
     enabled: false
 

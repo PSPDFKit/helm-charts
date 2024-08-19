@@ -9,7 +9,7 @@ data:
   REPLACE_SECRETS_FROM_ENV: {{ . | quote }}
 {{- end }}
   PSPDFKIT_WORKER_POOL_SIZE: {{ .Values.config.workerPoolSize | quote }}
-  PORT: {{ .Values.service.port | quote }}
+  PORT: {{ .Values.config.port | quote }}
   SERVER_REQUEST_TIMEOUT: {{ mul 1000 .Values.config.requestTimeoutSeconds | quote }}
   PSPDFKIT_WORKER_TIMEOUT: {{ mul 1000 .Values.config.workerTimeoutSeconds | quote }}
   PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
@@ -36,17 +36,9 @@ data:
 {{- with .Values.certificateTrust.downloaderTrustFileName }}
   DOWNLOADER_CERT_FILE_PATH: "/certificate-stores-custom/{{ . }}"
 {{- end }}
-  DATABASE_CONNECTIONS: {{ .Values.assetStorage.databaseConnections | quote }}
   ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .Values.assetStorage.localAssetStorageCacheSizeMegaBytes | quote }}
-{{- if .Values.assetStorage.databaseMigrationJob.enabled }}
-  ENABLE_DATABASE_MIGRATIONS: "false"
-  EXIT_AFTER_DATABASE_MIGRATIONS: "false"
-{{- else }}
-  ENABLE_DATABASE_MIGRATIONS: "true"
-  EXIT_AFTER_DATABASE_MIGRATIONS: "false"
-{{- end }}
 {{- with .Values.assetStorage }}
-  ASSET_STORAGE_BACKEND: {{ .assetStorageBackend | quote }}
+  ASSET_STORAGE_BACKEND: {{ .backendType | quote }}
 {{-   if .enableAssetStorageFallback }}
   ENABLE_ASSET_STORAGE_FALLBACK: {{ .enableAssetStorageFallback | quote }}
   ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: {{ .enableAssetStorageFallbackPostgres | quote }}
@@ -57,20 +49,6 @@ data:
   ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: "false"
   ENABLE_ASSET_STORAGE_FALLBACK_S3: "false"
   ENABLE_ASSET_STORAGE_FALLBACK_AZURE: "false"
-{{-   end }}
-{{-   with .postgres }}
-{{-     if and .enabled .tls.enabled }}
-  PGSSL_DISABLE_VERIFY: {{ not .postgres.tls.verify | quote }}
-  PGSSL_DISABLE_HOSTNAME_VERIFY: {{ not .postgres.tls.hostVerify | quote }}
-{{-       with .tls.commonName }}
-  PGSSL_CA_CERTS: {{ . | quote }}
-{{-       end }}
-{{-       if .tls.trustBundle }}
-  PGSSL_CA_CERTS: {{ .tls.trustBundle | quote }}
-{{-       else if .tls.trustFileName }}
-  PGSSL_CA_CERT_PATH: "/certificate-stores-custom/{{ .tls.trustFileName }}"
-{{-       end }}
-{{-     end }}
 {{-   end }}
   USE_REDIS_CACHE: {{ .redis.enabled | quote }}
   USE_REDIS_TTL_FOR_PRERENDERING: {{ .redis.useTtlForPrerendering | quote }}

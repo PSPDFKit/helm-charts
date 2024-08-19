@@ -99,6 +99,8 @@ config:
   proxy:
     http: ""
     https: ""
+  # `PORT` for the Document Engine API
+  port: 5000
   # `REPLACE_SECRETS_FROM_ENV` — whether to consider
   # environment variables, values and secrets for
   # `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD`
@@ -127,63 +129,33 @@ certificateTrust:
   # as `/certificate-stores-downloader/root-certificates.pem`
   downloaderTrustFileName: ""
 
-# Everything about storing and caching assets
-assetStorage:
-  # Sets local asset storage value in megabytes
-  # Results in `ASSET_STORAGE_CACHE_SIZE` (in bytes)
-  localAssetStorageCacheSizeMegaBytes: 2000
-  # Database migration jobs.
-  databaseMigrationJob:
-    # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
-    enabled: false
-    ttlSecondsAfterFinished: 300
-    resources: {}
-    podAnnotations: {}
-    podLabels: {}
-  # Regular job to remove documents from the database.
-  # Note: currently only works with the `built-in` storage backend.
-  cleanupJob:
-    enabled: false
-    schedule: "13 * * * *"
-    keepHours: 24
-    persistentLike: "persistent%"
-    resources: {}
-    podAnnotations: {}
-    podLabels: {}
-  # Database engine: only `postgresql` is currently supported
-  databaseEngine: postgresql
+# Database
+database:
+  # Persistent storage enabled
+  enabled: true
+  # Database engine: only `postgres` is currently supported
+  engine: postgres
   # `DATABASE_CONNECTIONS`
-  databaseConnections: 20
-  # `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
-  assetStorageBackend: built-in
-  # `ENABLE_ASSET_STORAGE_FALLBACK`
-  enableAssetStorageFallback: false
-  # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
-  enableAssetStorageFallbackPostgres: false
-  # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
-  enableAssetStorageFallbackS3: false
-  # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
-  enableAssetStorageFallbackAzure: false
+  connections: 20
   # PostgreSQL database settings
   postgres:
-    enabled: true
     # `PGHOST`
     host: postgresql
     # `PGPORT`
     port: 5432
     # `PGDATABASE`
-    database: pspdfkit
+    database: document-engine
     # `PGUSER`
-    username: pspdfkit
+    username: de-user
     # `PGPASSWORD`
-    password: pspdfkit
+    password: despair
     # `PG_ADMIN_USER`
     adminUsername: postgres
     # `PG_ADMIN_PASSWORD`
-    adminPassword: pspdfkit
+    adminPassword: despair
     # ...or use external secrets:
-    # `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PGHOST`, `PGPORT`,
-    # `PGSSL`
+    # `PGUSER` and `PGPASSWORD` must be provided
+    # and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL`
     externalSecretName: ""
     # `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD`
     externalAdminSecretName: ""
@@ -201,9 +173,47 @@ assetStorage:
       # Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`,
       # mutually exclusive with `trustFileName` and takes precedence
       trustBundle: ""
-      # Path from `pspdfkit.customCertificates`, wraps around `PGSSL_CA_CERT_PATH`
+      # Path from `certificateTrust.customCertificates`, wraps around `PGSSL_CA_CERT_PATH`
       trustFileName: ""
-  # S3 backend storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `s3
+  # Database migration jobs.
+  migrationJob:
+    # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
+    enabled: false
+    ttlSecondsAfterFinished: 300
+    resources: {}
+    podAnnotations: {}
+    podLabels: {}
+
+# Document lifecycle management
+documentLifecycle:
+  # Regular job to remove documents from the database.
+  # Note: currently only works with the `built-in` storage backend.
+  cleanupJob:
+    enabled: false
+    schedule: "13 * * * *"
+    keepHours: 24
+    persistentLike: "persistent%"
+    resources: {}
+    podAnnotations: {}
+    podLabels: {}
+
+# Everything about storing and caching assets
+assetStorage:
+  # Sets local asset storage value in megabytes
+  # Results in `ASSET_STORAGE_CACHE_SIZE` (in bytes)
+  localAssetStorageCacheSizeMegaBytes: 2000
+  # Asset storage backend is only available if `database.enabled` is `true`
+  # Sets `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
+  backendType: built-in
+  # `ENABLE_ASSET_STORAGE_FALLBACK`
+  enableAssetStorageFallback: false
+  # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
+  enableAssetStorageFallbackPostgres: false
+  # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
+  enableAssetStorageFallbackS3: false
+  # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
+  enableAssetStorageFallbackAzure: false
+  # S3 backend storage settings, in case `assetStorage.backendType` is set to `s3
   s3:
     # `ASSET_STORAGE_S3_ACCESS_KEY_ID`
     accessKeyId: ""
@@ -221,7 +231,7 @@ assetStorage:
     scheme: "https://"
     # External secret name
     externalSecretName: ""
-  # Azure blob storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `azure`
+  # Azure blob storage settings, in case `assetStorage.backendType` is set to `azure`
   azure:
     # `AZURE_STORAGE_ACCOUNT_NAME`
     accountName: ""
@@ -397,6 +407,10 @@ prometheusExporter:
       cpu: "100m"
 
 # Ordinary Kubernetes settings
+service:
+  type: ClusterIP
+  port: 5000
+
 serviceAccount:
   create: true
   annotations: {}
@@ -414,10 +428,6 @@ securityContext: {}
 # readOnlyRootFilesystem: true
 # runAsNonRoot: true
 # runAsUser: 1000
-
-service:
-  type: ClusterIP
-  port: 5000
 
 ingress:
   enabled: false
@@ -613,8 +623,8 @@ postgresql:
       host     all             all        ::/0                    md5
   auth:
     enablePostgresUser: true
-    postgresPassword: pspdfkit
-    database: pspdfkit
+    postgresPassword: despair
+    database: document-engine
 
 #
 # External MinIO chart
@@ -624,8 +634,8 @@ minio:
   enabled: false
   mode: standalone
   auth:
-    rootUser: pspdfkitObjectStorageRootKey
-    rootPassword: pspdfkitObjectStorageRootPassword
+    rootUser: documentEngineObjectStorageRootKey
+    rootPassword: documentEngineObjectStorageRootPassword
   defaultBuckets: "document-engine-assets"
   disableWebUI: true
 
@@ -639,4 +649,4 @@ redis:
   auth:
     enabled: true
     sentinel: false
-    password: pspdfkit
+    password: ""

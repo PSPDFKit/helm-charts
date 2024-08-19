@@ -1,14 +1,16 @@
-assetStorage:
-  databaseMigrationJob:
+database:
+  enabled: true
+  migrationJob:
     enabled: false
-  assetStorageBackend: azure
-  enableAssetStorageFallback: true
-  enableAssetStorageFallbackPostgres: true
   postgres:
-    enabled: true
     host: postgresql
     port: 5432
     username: postgres
+
+assetStorage:
+  backendType: azure
+  enableAssetStorageFallback: true
+  enableAssetStorageFallbackPostgres: true
   azure:
     # This is "well known" storage account for Azure Storage Emulator
     # See https://learn.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string#configure-a-connection-string-for-azurite

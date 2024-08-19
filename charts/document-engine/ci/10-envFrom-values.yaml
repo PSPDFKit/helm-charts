@@ -14,6 +14,5 @@ extraEnvs:
   - name: LOG_LEVEL
     value: debug
 
-assetStorage:
-  postgres:
-    enabled: false
+database:
+  enabled: false

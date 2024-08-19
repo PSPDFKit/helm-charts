@@ -1,0 +1,47 @@
+{{- if .Values.database.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "document-engine.fullname" . }}-database
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+data:
+{{- with .Values.database }}
+  DATABASE_CONNECTIONS: {{ .connections | quote }}
+{{-   if .migrationJob.enabled }}
+  ENABLE_DATABASE_MIGRATIONS: "false"
+  EXIT_AFTER_DATABASE_MIGRATIONS: "false"
+{{-   else }}
+  ENABLE_DATABASE_MIGRATIONS: "true"
+  EXIT_AFTER_DATABASE_MIGRATIONS: "false"
+{{-   end }}
+{{-   with .postgres }}
+{{-     with .host }}
+  PGHOST: {{ . | quote }}
+{{-     end }}
+{{-     with .port }}
+  PGPORT: {{ . | quote }}
+{{-     end }}
+{{-     with .database }}
+  PGDATABASE: {{ . | quote }}
+{{-     end }}
+{{-     if .tls.enabled }}
+  PGSSL: "true"
+  PGSSL_DISABLE_VERIFY: {{ not .postgres.tls.verify | quote }}
+  PGSSL_DISABLE_HOSTNAME_VERIFY: {{ not .postgres.tls.hostVerify | quote }}
+{{-       with .tls.commonName }}
+  PGSSL_CA_CERTS: {{ . | quote }}
+{{-       end }}
+{{-       if .tls.trustBundle }}
+  PGSSL_CA_CERTS: {{ .tls.trustBundle | quote }}
+{{-       else if .tls.trustFileName }}
+  PGSSL_CA_CERT_PATH: "/certificate-stores-custom/{{ .tls.trustFileName }}"
+{{-       end }}
+{{-     else }}
+  PGSSL: "false"
+{{-     end }}
+{{-   end }}
+{{- end }}
+# Can be used for hash updating
+  HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}
+{{- end }}

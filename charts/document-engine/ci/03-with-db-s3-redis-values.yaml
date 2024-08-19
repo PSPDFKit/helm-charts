@@ -1,21 +1,23 @@
-assetStorage:
-  databaseMigrationJob:
+database:
+  enabled: true
+  migrationJob:
     enabled: false
     podAnnotations:
       do: "this"
     podLabels:
       do: "that"
-  assetStorageBackend: s3
-  enableAssetStorageFallback: true
-  enableAssetStorageFallbackPostgres: true
   postgres:
-    enabled: true
     host: postgresql
     port: 5432
     username: postgres
+
+assetStorage:
+  backendType: s3
+  enableAssetStorageFallback: true
+  enableAssetStorageFallbackPostgres: true
   s3:
-    accessKeyId: "pspdfkitObjectStorageRootKey"
-    secretAccessKey: "pspdfkitObjectStorageRootPassword"
+    accessKeyId: "documentEngineObjectStorageRootKey"
+    secretAccessKey: "documentEngineObjectStorageRootPassword"
     bucket: "document-engine-assets"
     region: "us-east-1"
     host: "minio"
@@ -35,7 +37,7 @@ assetStorage:
         - redis://redis-node-0:26379
         - redis://redis-node-1:26379
         - redis://redis-node-2:26379
-      group: pspdfkit
+      group: despair
 
 prometheusExporter:
   enabled: true
@@ -59,8 +61,8 @@ minio:
   fullnameOverride: minio
   nameOverride: minio
   auth:
-    rootUser: pspdfkitObjectStorageRootKey
-    rootPassword: pspdfkitObjectStorageRootPassword
+    rootUser: documentEngineObjectStorageRootKey
+    rootPassword: documentEngineObjectStorageRootPassword
   defaultBuckets: "document-engine-assets"
 
 redis:
@@ -70,8 +72,6 @@ redis:
   architecture: standalone
   auth:
     enabled: false
-    sentinel: false
-    password: pspdfkit
   master:
     count: 1
     revisionHistoryLimit: 1
@@ -91,7 +91,7 @@ redis:
   # sentinel:
   #   enabled: true
   #   quorum: 3
-  #   masterSet: pspdfkit
+  #   masterSet: despair
   #   getMasterTimeout: 90
   #   automateClusterRecovery: true
   #   redisShutdownWaitFailover: true

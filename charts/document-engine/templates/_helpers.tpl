@@ -51,12 +51,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "document-engine.cleanupSelectorLabels" -}}
-document-engine.pspdfkit/job: cleanup
+document-engine.something/job: cleanup
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "document-engine.migrationSelectorLabels" -}}
-document-engine.pspdfkit/job: migration
+document-engine.something/job: migration
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -173,18 +173,27 @@ API and dashboard secrets
 {{- end -}}
 
 {{/*
-Database secrets
+Database parameters
 */}}
+{{- define "document-engine.storage.postgres.enabled" -}}
+  {{- if and .Values.database.enabled 
+             (eq .Values.database.engine "postgres") -}}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "document-engine.storage.postgres.secret.name" -}}
-  {{- if not .Values.assetStorage.postgres.externalSecretName -}}
+  {{- if not .Values.database.postgres.externalSecretName -}}
     {{- printf "%s-db-postgres" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.assetStorage.postgres.externalSecretName -}}
+    {{- .Values.database.postgres.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.postgres.createSecret" -}}
-  {{- if and .Values.assetStorage.postgres.enabled 
-             (not .Values.assetStorage.postgres.externalSecretName) -}}
+  {{- if and (eq (include "document-engine.storage.postgres.enabled" .) "true") 
+             (not .Values.database.postgres.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -192,15 +201,15 @@ Database secrets
 {{- end -}}
 
 {{- define "document-engine.storage.postgres.adminSecret.name" -}}
-  {{- if not .Values.assetStorage.postgres.externalAdminSecretName -}}
+  {{- if not .Values.database.postgres.externalAdminSecretName -}}
     {{- printf "%s-db-postgres-admin" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.assetStorage.postgres.externalAdminSecretName -}}
+    {{- .Values.database.postgres.externalAdminSecretName -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.postgres.createAdminSecret" -}}
-  {{- if and .Values.assetStorage.postgres.enabled 
-             (not .Values.assetStorage.postgres.externalAdminSecretName) -}}
+  {{- if and (eq (include "document-engine.storage.postgres.enabled" .) "true") 
+             (not .Values.database.postgres.externalAdminSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -227,7 +236,7 @@ Database secrets
 Object storage parameters
 */}}
 {{- define "document-engine.storage.s3.enabled" -}}
-  {{- if or (eq .Values.assetStorage.assetStorageBackend "s3")
+  {{- if or (eq .Values.assetStorage.backendType "s3")
             (and .Values.assetStorage.enableAssetStorageFallback
                  .Values.assetStorage.enableAssetStorageFallbackS3 ) -}}
     {{- true -}}
@@ -254,7 +263,7 @@ Object storage parameters
 {{- end -}}
 
 {{- define "document-engine.storage.azure.enabled" -}}
-  {{- if or (eq .Values.assetStorage.assetStorageBackend "azure")
+  {{- if or (eq .Values.assetStorage.backendType "azure")
             (and .Values.assetStorage.enableAssetStorageFallback
                  .Values.assetStorage.enableAssetStorageFallbackAzure ) -}}
     {{- true -}}
@@ -285,7 +294,14 @@ Object storage parameters
 Jobs
 */}}
 {{- define "document-engine.storage.cleanupJob.enabled" -}}
-{{- and .Values.assetStorage.postgres.enabled 
-        .Values.assetStorage.cleanupJob.enabled 
-        (eq .Values.assetStorage.assetStorageBackend "built-in") -}}
+  {{- if and .Values.database.enabled 
+             .Values.documentLifecycle.cleanupJob.enabled -}}
+    {{- if (eq .Values.assetStorage.backendType "built-in") -}}
+      {{- true -}}
+    {{- else -}}
+      {{- fail "Can only do cleanup jobs with 'built-in' asset storage backend" }}
+    {{- end -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
 {{- end -}}
