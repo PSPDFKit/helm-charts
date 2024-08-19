@@ -44,7 +44,8 @@
 
 ## 3.0.0 (2024-08-20)
 
-> [!WARNING] Breaking changes. 
+> [!WARNING]
+> Breaking changes. 
 > We hope that `values.yaml` will now be much more readable and usable.
 
 ### Changed
