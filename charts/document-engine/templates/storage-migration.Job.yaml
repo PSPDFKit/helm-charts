@@ -90,16 +90,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "document-engine.api.secret.name" . }}
                   key: {{ include "document-engine.api.secret.key.apiToken" . }}
-          {{- if .Values.assetStorage.postgres.enabled }}
-            {{- if .Values.assetStorage.postgres.tls.enabled }}
-            - name: PGSSL_DISABLE_VERIFY
-              value: {{ not .Values.assetStorage.postgres.tls.verify | quote }}
-            {{-   with .Values.assetStorage.postgres.tls.trustFileName }}
-            - name: PGSSL_CA_CERT_PATH
-              value: /certificate-stores-custom/{{ . }}
-            {{-   end }}
-            {{- end }}
-          {{- end }}
           {{- with .Values.extraEnvs }}
             {{- toYaml .| nindent 12 }}
           {{- end }}

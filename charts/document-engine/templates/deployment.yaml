@@ -162,25 +162,25 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if or .Values.extraVolumeMounts
-                    .Values.certificateTrust.signingTrustConfigMaps 
-                    .Values.certificateTrust.trustConfigMaps }}
+                    .Values.certificateTrust.digitalSignatures 
+                    .Values.certificateTrust.customCertificates }}
           volumeMounts:
             {{- with .Values.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-            {{- with .Values.certificateTrust.signingTrustConfigMaps }}
-            {{-   range $cmName, $cmProperties := . }}
-            - name: signing-trust-{{ $cmName }}
-              mountPath: /certificate-stores/{{ $cmProperties.path }}
-              subPath: {{ $cmProperties.path }}
+            {{- with .Values.certificateTrust.digitalSignatures }}
+            {{-   range $trustSource := . }}
+            - name: signing-trust-{{ $trustSource.name }}
+              mountPath: /certificate-stores/{{ $trustSource.path }}
+              subPath: {{ $trustSource.path }}
               readOnly: true
             {{-   end }}
             {{- end }}
-            {{- with .Values.certificateTrust.trustConfigMaps }}
-            {{-   range $cmName, $cmProperties := . }}
-            - name: trust-{{ $cmName }}
-              mountPath: /certificate-stores-custom/{{ $cmProperties.path }}
-              subPath: {{ $cmProperties.path }}
+            {{- with .Values.certificateTrust.customCertificates }}
+            {{-   range $trustSource := . }}
+            - name: custom-trust-{{ $trustSource.name }}
+              mountPath: /certificate-stores-custom/{{ $trustSource.path }}
+              subPath: {{ $trustSource.path }}
               readOnly: true
             {{-   end }}
             {{- end }}
@@ -211,30 +211,50 @@ spec:
         {{ toYaml .Values.sidecars | nindent 8 }}
       {{- end }}
       {{- if or .Values.extraVolumeMounts
-                .Values.certificateTrust.signingTrustConfigMaps 
-                .Values.certificateTrust.trustConfigMaps }}
+                .Values.certificateTrust.digitalSignatures 
+                .Values.certificateTrust.customCertificates }}
       volumes:
         {{- with .Values.extraVolumes }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
-        {{- with .Values.certificateTrust.signingTrustConfigMaps }}
-        {{-   range $cmName, $cmProperties := . }}
-        - name: signing-trust-{{ $cmName }}
+        {{- with .Values.certificateTrust.digitalSignatures }}
+        {{-   range $trustSource := . }}
+        - name: signing-trust-{{ $trustSource.name }}
+        {{-     if $trustSource.configMap }}
           configMap:
-            name: {{ $cmName}}
+            name: {{ $trustSource.configMap.name }}
             items:
-              - key: {{ $cmProperties.key }}
-                path: {{ .path }}
+              - key: {{ $trustSource.configMap.key }}
+                path: {{ $trustSource.path }}
+        {{-     else if $trustSource.secret }}
+          secret:
+            secretName: {{ $trustSource.secret.name }}
+            items:
+              - key: {{ $trustSource.secret.key }}
+                path: {{ $trustSource.path }}
+        {{-     else }}
+        {{-       fail "Expecting ConfigMap or Secret for a certificate trust" }}
+        {{-     end }}
         {{-   end }}
         {{- end }}
-        {{- with .Values.certificateTrust.trustConfigMaps }}
-        {{-   range $cmName, $cmProperties := . }}
-        - name: trust-{{ $cmName }}
+        {{- with .Values.certificateTrust.customCertificates }}
+        {{-   range $trustSource := . }}
+        - name: custom-trust-{{ $trustSource.name }}
+        {{-     if $trustSource.configMap }}
           configMap:
-            name: {{ $cmName}}
+            name: {{ $trustSource.configMap.name }}
             items:
-              - key: {{ $cmProperties.key }}
-                path: {{ .path }}
+              - key: {{ $trustSource.configMap.key }}
+                path: {{ $trustSource.path }}
+        {{-     else if $trustSource.secret }}
+          secret:
+            secretName: {{ $trustSource.secret.name }}
+            items:
+              - key: {{ $trustSource.secret.key }}
+                path: {{ $trustSource.path }}
+        {{-     else }}
+        {{-       fail "Expecting ConfigMap or Secret for a certificate trust" }}
+        {{-     end }}
         {{-   end }}
         {{- end }}
       {{- end }}

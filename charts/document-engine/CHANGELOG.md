@@ -60,10 +60,10 @@
   * `pspdfkit.assetStorageCacheSizeMegaBytes` renamed to `assetStorage.localAssetStorageCacheSizeMegaBytes`.
 * `pspdfkit.signingService` section moved to the top level as `documentSigningService`.
 * Certificate trust configuration restructured into the new `certificateTrust` section:
-  * `pspdfkit.signingTrustConfigMaps` becomes `certificateTrust.signingTrustConfigMaps`
-  * `pspdfkit.trustConfigMaps` becomes `certificateTrust.trustConfigMaps`
+  * Map `pspdfkit.signingTrustConfigMaps` becomes list `certificateTrust.digitalSignatures` allowing both ConfigMaps and Secrets
+  * Map `pspdfkit.trustConfigMaps` becomes list `certificateTrust.customCertificates` allowing both ConfigMaps and Secrets
   * `pspdfkit.downloaderTrustFileName` moved to `certificateTrust.downloaderTrustFileName` and is now empty by default which will set HTTP client trust to Mozilla CA bundle
-  * `assetStorage.postgres.tls.trustFileName` will assume a file name from `/certificate-stores-custom`, which is filled from `certificateTrust.trustConfigMaps`
+  * `assetStorage.postgres.tls.trustFileName` will assume a file name from `/certificate-stores-custom`, which is filled from `certificateTrust.customCertificates`
 * `pspdfkit.observability` section moved to the top level as `observability`.
   * `pspdfkit.log.level` moved into `observability.log.level`.
   * `metrics` section moved to `observability.metrics`.

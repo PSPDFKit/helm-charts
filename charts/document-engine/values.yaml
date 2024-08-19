@@ -110,18 +110,22 @@ config:
 
 certificateTrust:
   # CAs for digital signatures (`/certificate-stores/`)
-  signingTrustConfigMaps: {}
-    # To yield `/certificate-stores/private-ca-certificates.pem`:
-    # private-ca:
-    #  key: private-ca-certificates.pem
-    #  path: private-ca-certificates.pem
-  # ConfigMap references for trust configuration, stored in `/certificate-stores-custom`
-  trustConfigMaps: {}
-    # To yield `/certificate-stores-custom/my-certificates.pem`:
-    # my:
-    #  key: some-root-certificates.pem
-    #  path: my-certificates.pem
-
+  # from ConfigMap and Secret resources
+  digitalSignatures: []
+    ## To yield `/certificate-stores/private-ca-certificates.pem`:
+    # - name: private-ca
+    #   path: private-ca-certificates.pem
+    #   configMap:
+    #     name: private-ca
+    #     key: private-ca-certificates.pem
+  # ConfigMap and Secret references for trust configuration, stored in `/certificate-stores-custom`
+  customCertificates: []
+    ## To yield `/certificate-stores-custom/my-certificates.pem`:
+    # - name: my
+    #   path: my-certificates.pem
+    #   secret:
+    #     name: my-config-map
+    #     key: some-certificates.pem
   # Override `DOWNLOADER_CERT_FILE_PATH` to set HTTP client trust.
   # If empty, defaults to  Mozilla's CA bundle, which is provided
   # as `/certificate-stores-downloader/root-certificates.pem`
@@ -201,7 +205,7 @@ assetStorage:
       # Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`,
       # mutually exclusive with `trustFileName` and takes precedence
       trustBundle: ""
-      # Path from `pspdfkit.trustConfigMaps`, wraps around `PGSSL_CA_CERT_PATH`
+      # Path from `pspdfkit.customCertificates`, wraps around `PGSSL_CA_CERT_PATH`
       trustFileName: ""
   # S3 backend storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `s3
   s3:
