@@ -117,13 +117,13 @@ certificateTrust:
     #  path: private-ca-certificates.pem
   # ConfigMap references for trust configuration, stored in `/certificate-stores-custom`
   trustConfigMaps: {}
-    # To yield `/certificate-stores-custom/my-certificates.pem`
+    # To yield `/certificate-stores-custom/my-certificates.pem`:
     # my:
     #  key: some-root-certificates.pem
     #  path: my-certificates.pem
 
   # Override `DOWNLOADER_CERT_FILE_PATH` to set HTTP client trust.
-  # If empty, defaults to  Mozilla's CA bundle, which is provided 
+  # If empty, defaults to  Mozilla's CA bundle, which is provided
   # as `/certificate-stores-downloader/root-certificates.pem`
   downloaderTrustFileName: ""
 
