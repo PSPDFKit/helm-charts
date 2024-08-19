@@ -36,24 +36,6 @@ data:
 {{- with .Values.certificateTrust.downloaderTrustFileName }}
   DOWNLOADER_CERT_FILE_PATH: "/certificate-stores-custom/{{ . }}"
 {{- end }}
-  ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .Values.assetStorage.localCacheSizeMegabytes | quote }}
-{{- with .Values.assetStorage }}
-  ASSET_STORAGE_BACKEND: {{ .backendType | quote }}
-{{-   if .backendFallback.enabled }}
-  ENABLE_ASSET_STORAGE_FALLBACK: "true"
-  ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: {{ .backendFallback.enabledPostgres | quote }}
-  ENABLE_ASSET_STORAGE_FALLBACK_S3: {{ .backendFallback.enabledS3 | quote }}
-  ENABLE_ASSET_STORAGE_FALLBACK_AZURE: {{ .backendFallback.enabledAzure | quote }}
-{{-   else }}
-  ENABLE_ASSET_STORAGE_FALLBACK: "false"
-  ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: "false"
-  ENABLE_ASSET_STORAGE_FALLBACK_S3: "false"
-  ENABLE_ASSET_STORAGE_FALLBACK_AZURE: "false"
-{{-   end }}
-  USE_REDIS_CACHE: {{ .redis.enabled | quote }}
-  USE_REDIS_TTL_FOR_PRERENDERING: {{ .redis.useTtlForPrerendering | quote }}
-  REDIS_TTL: {{ .redis.ttlSeconds | int | quote }}
-{{- end }}
 {{- with .Values.documentSigningService }}
 {{-   if .enabled }}
   SIGNING_SERVICE_URL: {{ .url | quote }}

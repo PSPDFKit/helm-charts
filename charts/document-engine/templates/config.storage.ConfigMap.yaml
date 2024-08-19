@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "document-engine.fullname" . }}-storage
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+data:
+{{- with .Values.assetStorage }}
+  ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .localCacheSizeMegabytes | quote }}
+  ASSET_STORAGE_BACKEND: {{ .backendType | quote }}
+{{-   if .Values.database.enabled }}
+{{-     if .backendFallback.enabled }}
+  ENABLE_ASSET_STORAGE_FALLBACK: "true"
+  ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: {{ .backendFallback.enabledPostgres | quote }}
+  ENABLE_ASSET_STORAGE_FALLBACK_S3: {{ .backendFallback.enabledS3 | quote }}
+  ENABLE_ASSET_STORAGE_FALLBACK_AZURE: {{ .backendFallback.enabledAzure | quote }}
+{{-     else }}
+  ENABLE_ASSET_STORAGE_FALLBACK: "false"
+  ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: "false"
+  ENABLE_ASSET_STORAGE_FALLBACK_S3: "false"
+  ENABLE_ASSET_STORAGE_FALLBACK_AZURE: "false"
+{{-     end }}
+  USE_REDIS_CACHE: {{ .redis.enabled | quote }}
+  USE_REDIS_TTL_FOR_PRERENDERING: {{ .redis.useTtlForPrerendering | quote }}
+  REDIS_TTL: {{ .redis.ttlSeconds | int | quote }}
+{{-   end }}
+{{- end }}
+# Can be used for hash updating
+  HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}

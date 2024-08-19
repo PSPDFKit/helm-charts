@@ -48,6 +48,8 @@ spec:
               envFrom:
                 - configMapRef:
                     name: {{ include "document-engine.fullname" . }}-database
+                - configMapRef:
+                    name: {{ include "document-engine.fullname" . }}-storage
                 - secretRef:
                     name: {{ include "document-engine.storage.postgres.secret.name" . }}
               {{- with .Values.extraEnvFrom }}
