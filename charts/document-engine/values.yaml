@@ -232,7 +232,9 @@ assetStorage:
     port: 443
     # `ASSET_STORAGE_S3_SCHEME`
     scheme: "https://"
-    # External secret name
+    # External secret name. Must contain
+    # `ASSET_STORAGE_S3_ACCESS_KEY_ID` and `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
+    # if they are needed, and _may_ set other values
     externalSecretName: ""
   # Azure blob storage settings, in case `assetStorage.backendType` is set to `azure`
   azure:
@@ -246,7 +248,9 @@ assetStorage:
     connectionString: ""
     # `AZURE_STORAGE_API_URL` for custom endpoints
     apiUrl: ""
-    # External secret name
+    # External secret name. Must contain
+    # `AZURE_STORAGE_ACCOUNT_NAME` and `AZURE_STORAGE_ACCOUNT_KEY`
+    # if they are needed, and _may_ set other values
     externalSecretName: ""
   # Redis settings for caching and prerendering
   redis:
@@ -279,7 +283,8 @@ assetStorage:
     # `REDIS_SSL`
     tls:
       enabled: false
-    # External secret name
+    # External secret name. Must contain
+    # credentials if they are needed, and _may_ set other values
     externalSecretName: ""
 
 # Signing service parameters
