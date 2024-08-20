@@ -42,13 +42,14 @@ spec:
         - name: {{ .Chart.Name }}
           envFrom:
             - configMapRef:
-                name: {{ include "document-engine.fullname" . }}-config
-            - configMapRef:
-                name: {{ include "document-engine.fullname" . }}-database
-            - configMapRef:
-                name: {{ include "document-engine.fullname" . }}-storage
+                name: {{ include "document-engine.fullname" . }}
             - secretRef:
-                name: {{ include "document-engine.storage.postgres.secret.name" . }}
+                name: {{ include "document-engine.fullname" . }}
+          {{- if .Values.database.postgres.externalAdminSecretName  }}
+            - secretRef:
+                name: {{ .Values.database.postgres.externalAdminSecretName }}
+          {{- end }}
+
           {{- if .Values.assetStorage.redis.enabled }}
             - secretRef:
                 name: {{ include "document-engine.storage.redis.secret.name" . }}
@@ -61,32 +62,28 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
-            {{- if eq (include  "document-engine.license.available" .) "true" }}
+          {{- if .Values.documentEngineLicense.externalSecret.name }}
             - name: ACTIVATION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.license.secret.name" . }}
-                  key: {{ include "document-engine.license.secret.key" . }}
-            {{- end }}
+                  name: {{ .Values.documentEngineLicense.externalSecret.name }}
+                  key: {{ .Values.documentEngineLicense.externalSecret.key }}
+          {{- end }}
             - name: ENABLE_DATABASE_MIGRATIONS
               value: 'true'
             - name: EXIT_AFTER_DATABASE_MIGRATIONS
               value: 'true'
-            - name: PG_ADMIN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
-                  key: PG_ADMIN_USER
-            - name: PG_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
-                  key: PG_ADMIN_PASSWORD
+          {{- if .Values.apiAuth.externalSecret.name -}}
+            {{- with .Values.apiAuth.externalSecret -}}
+              {{- if .secretKeyBaseKey -}}
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.secretKeyBase.secret.name" . }}
-                  key: {{ include "document-engine.secretKeyBase.secret.key" . }}
+                  name: {{ .name }}
+                  key: {{ .secretKeyBaseKey }}
+              {{- end }}
+            {{- end }}
+          {{- end -}}
           {{- with .Values.extraEnvs }}
             {{- toYaml .| nindent 12 }}
           {{- end }}

@@ -27,6 +27,12 @@ data:
       documents.created_at < NOW() - INTERVAL '{{ .keepHours }} hours'
     ;
   {{- end }}
+  run.sh: |
+    #!/bin/bash
+    set -e
+    export PGUSER=$PG_ADMIN_USER
+    export PGPASSWORD=$PG_ADMIN_PASSWORD
+    psql -f /document-engine-cleanup/cleanup.sql
 
 # Can be used for hash updating
   HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}

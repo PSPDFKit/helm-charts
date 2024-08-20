@@ -22,38 +22,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/config.ConfigMap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/config.Secret.yaml") . | sha256sum }}
-      {{- if not .Values.apiAuth.externalSecret.name }}
-        checksum/auth-api: {{ include (print $.Template.BasePath "/config.api-auth.Secret.yaml") . | sha256sum }}
-      {{- end }}
-      {{- if not .Values.dashboard.auth.externalSecret.name }}
-        checksum/auth-dashboard: {{ include (print $.Template.BasePath "/dashboard.Secret.yaml") . | sha256sum }}
-      {{- end }}
-      {{- if and 
-            (not .Values.documentEngineLicense.externalSecret.name)
-            (eq (include  "document-engine.license.available" .) "true") }}
-        checksum/license-secret: {{ include (print $.Template.BasePath "/license.Secret.yaml") . | sha256sum }}
-      {{- end }}
-      {{- if  .Values.database.enabled  }}
-        checksum/database-config: {{ include (print $.Template.BasePath "/config.database.ConfigMap.yaml") . | sha256sum }}
-      {{- end }}
-        checksum/storage-config: {{ include (print $.Template.BasePath "/config.storage.ConfigMap.yaml") . | sha256sum }}
-      {{- if  (include "document-engine.storage.postgres.createSecret" .)  }}
-        checksum/postgres-config: {{ include (print $.Template.BasePath "/config.database-postgres.Secret.yaml") . | sha256sum }}
-      {{- end }}
-      {{- if  (include "document-engine.storage.postgres.createAdminSecret" .)  }}
-        checksum/postgres-admin-config: {{ include (print $.Template.BasePath "/config.database-postgres.admin.Secret.yaml") . | sha256sum }}
-      {{- end }}
-      {{- if (include "document-engine.storage.redis.createSecret" .) }}
-        checksum/redis-secret: {{ include (print $.Template.BasePath "/config.storage-redis.Secret.yaml") . | sha256sum }}
-      {{- end }}
-      {{- if (include "document-engine.storage.s3.createSecret" .) }}
-        checksum/s3-secret: {{ include (print $.Template.BasePath "/config.storage-s3.Secret.yaml") . | sha256sum }}
-      {{- end }}
-      {{- if (include "document-engine.storage.azure.createSecret" .) }}
-        checksum/azure-secret: {{ include (print $.Template.BasePath "/config.storage-azure.Secret.yaml") . | sha256sum }}
-      {{- end }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -78,73 +48,92 @@ spec:
         - name: {{ .Chart.Name }}
           envFrom:
             - configMapRef:
-                name: {{ include "document-engine.fullname" . }}-config
-          {{- if  .Values.database.enabled  }}
-            - configMapRef:
-                name: {{ include "document-engine.fullname" . }}-database
-          {{- end }}
-            - configMapRef:
-                name: {{ include "document-engine.fullname" . }}-storage
-          {{- if eq (include "document-engine.storage.postgres.enabled" .) "true"  }}
+                name: {{ include "document-engine.fullname" . }}
             - secretRef:
-                name: {{ include "document-engine.storage.postgres.secret.name" . }}
-          {{- end }}
-          {{- if .Values.assetStorage.redis.enabled }}
+                name: {{ include "document-engine.fullname" . }}
+          {{- if and .Values.database.enabled 
+                     .Values.database.postgres.externalSecretName  }}
             - secretRef:
-                name: {{ include "document-engine.storage.redis.secret.name" . }}
+                name: {{ .Values.database.postgres.externalSecretName }}
           {{- end }}
-          {{- if eq (include "document-engine.storage.s3.enabled" .) "true" }}
+          {{- if and .Values.database.enabled 
+                     .Values.database.migrationJob.enabled
+                     .Values.database.postgres.externalAdminSecretName  }}
             - secretRef:
-                name: {{ include "document-engine.storage.s3.secret.name" . }}
+                name: {{ .Values.database.postgres.externalAdminSecretName }}
           {{- end }}
-          {{- if eq (include "document-engine.storage.azure.enabled" .) "true" }}
+          {{- with .Values.assetStorage }}
+            {{- if and (eq (include "document-engine.storage.s3.enabled" $) "true") 
+                       .s3.externalSecretName }}
             - secretRef:
-                name: {{ include "document-engine.storage.azure.secret.name" . }}
+                name: {{ .s3.externalSecretName }}
+            {{- end }}
+            {{- if and (eq (include "document-engine.storage.azure.enabled" $) "true")
+                       .azure.externalSecretName }}
+            - secretRef:
+                name: {{ .azure.externalSecretName }}
+            {{- end }}
+            {{- if and .redis.enabled 
+                       .redis.externalSecretName }}
+            - secretRef:
+                name: {{ .redis.externalSecretName  }}
+            {{- end }}
           {{- end }}
           {{- with .Values.extraEnvFrom }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
-            {{- if eq (include  "document-engine.license.available" .) "true" }}
+          {{- if .Values.documentEngineLicense.externalSecret.name }}
             - name: ACTIVATION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.license.secret.name" . }}
-                  key: {{ include "document-engine.license.secret.key" . }}
-            {{- end }}
-            - name: SECRET_KEY_BASE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "document-engine.secretKeyBase.secret.name" . }}
-                  key: {{ include "document-engine.secretKeyBase.secret.key" . }}
+                  name: {{ .Values.documentEngineLicense.externalSecret.name }}
+                  key: {{ .Values.documentEngineLicense.externalSecret.key }}
+          {{- end }}
+          {{- if .Values.apiAuth.externalSecret.name -}}
+            {{- with .Values.apiAuth.externalSecret -}}
+              {{- if .apiTokenKey -}}
             - name: API_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.api.secret.name" . }}
-                  key: {{ include "document-engine.api.secret.key.apiToken" . }}
-          {{- if .Values.apiAuth.jwt.enabled }}
+                  name: {{ .name }}
+                  key: {{ .apiTokenKey }}
+              {{- end }}
+              {{- if .secretKeyBaseKey -}}
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .name }}
+                  key: {{ .secretKeyBaseKey }}
+              {{- end }}
+              {{- if and .jwt.enabled .jwt.publicKeyKey -}}
             - name: JWT_PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.api.secret.name" . }}
-                  key: {{ include "document-engine.api.secret.key.jwtPublicKey" . }}
+                  name: {{ .name }}
+                  key: {{ .jwt.publicKeyKey }}
+              {{- end }}
+              {{- if and .jwt.enabled .jwt.jwtAlgorithmKey -}}
             - name: JWT_ALGORITHM
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.api.secret.name" . }}
-                  key: {{ include "document-engine.api.secret.key.jwtAlgorithm" . }}
-          {{- end }}
-          {{- if .Values.dashboard.enabled }}
+                  name: {{ .name }}
+                  key: {{ .jwt.jwtAlgorithmKey }}
+              {{- end }}
+            {{- end }}
+          {{- end -}}
+          {{- if and .Values.dashboard.enabled 
+                     .Values.dashboard.auth.externalSecret.name}}
             - name: DASHBOARD_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.dashboard.secret.name" . }}
-                  key: {{ include "document-engine.dashboard.secret.key.username" . }}
+                  name: {{ .Values.dashboard.auth.externalSecret.name }}
+                  key: {{ .Values.dashboard.auth.externalSecret.usernameKey }}
             - name: DASHBOARD_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.dashboard.secret.name" . }}
-                  key: {{ include "document-engine.dashboard.secret.key.password" . }}
+                  name: {{ .Values.dashboard.auth.externalSecret.name }}
+                  key: {{ .Values.dashboard.auth.externalSecret.passwordKey }}
           {{- end }}
           {{- with .Values.extraEnvs }}
             {{- toYaml . | nindent 12 }}
