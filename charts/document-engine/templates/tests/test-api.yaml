@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "document-engine.fullname" . }}-test-api"
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: curl-api
+      image: curlimages/curl
+      envFrom:
+        - secretRef:
+            name: {{ include "document-engine.fullname" . }}
+      env:
+      {{- if .Values.apiAuth.externalSecret.name -}}
+        {{- with .Values.apiAuth.externalSecret -}}
+          {{- if .apiTokenKey -}}
+        - name: API_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ .name }}
+              key: {{ .apiTokenKey }}
+          {{- end }}
+        {{- end }}
+      {{- end -}}
+      command: ['curl']
+      args: 
+        - '-X' 
+        - 'POST'
+        - '{{ include "document-engine.fullname" . }}:{{ .Values.service.port }}/api/build'
+        - '-H' 
+        - 'accept: application/pdf'
+        - '-H' 
+        - 'Authorization: Token token=${API_AUTH_TOKEN}"'
+        - '-H' 
+        - 'Content-Type: application/json'
+        - '-d' 
+        - '{ "parts": [ { "html": { "url": "https://status.w3.org/" } } ] }'
+  restartPolicy: Never

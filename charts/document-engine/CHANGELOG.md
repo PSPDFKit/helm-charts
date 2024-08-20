@@ -50,6 +50,7 @@
 
 ### Changed
 
+* Massive internal refactoring.
 * `pspdfkit.license.isOffline` is removed, as it is no longer necessary
 * `pspdfkit.license` section moved to the top level as `documentEngineLicense`.
 * `pspdfkit.auth.api` section moved to the top level as `apiAuth`, both `pspdfkit.auth.api.apiToken` and `pspdfkit.auth.api.jwt` section.
@@ -100,6 +101,7 @@
 * Asynchronous jobs timeout in seconds as `config.asyncJobsTtlSeconds`.
 * HTTP proxy settings: `config.proxy.http` for HTTP and `config.proxy.https` for HTTPS
 * Explicit StatsD exporting parameters in `observability.metrics.statsd` section.
+* One more chart test.
 
 ## 2.9.3 (2024-08-16)
 
