@@ -61,8 +61,8 @@ data:
 {{-     end }}
 {{-     if .tls.enabled }}
   PGSSL: "true"
-  PGSSL_DISABLE_VERIFY: {{ not .postgres.tls.verify | quote }}
-  PGSSL_DISABLE_HOSTNAME_VERIFY: {{ not .postgres.tls.hostVerify | quote }}
+  PGSSL_DISABLE_VERIFY: {{ not .tls.verify | quote }}
+  PGSSL_DISABLE_HOSTNAME_VERIFY: {{ not .tls.hostVerify | quote }}
 {{-       with .tls.commonName }}
   PGSSL_CA_CERTS: {{ . | quote }}
 {{-       end }}
