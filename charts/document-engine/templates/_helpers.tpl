@@ -51,12 +51,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "document-engine.cleanupSelectorLabels" -}}
-document-engine.pspdfkit/job: cleanup
+document-engine.something/job: cleanup
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "document-engine.migrationSelectorLabels" -}}
-document-engine.pspdfkit/job: migration
+document-engine.something/job: migration
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -75,32 +75,24 @@ Create the name of the service account to use
 License secret name
 */}}
 {{- define "document-engine.license.secret.name" -}}
-  {{- if not .Values.pspdfkit.license.externalSecret.name -}}
+  {{- if not .Values.documentEngineLicense.externalSecret.name -}}
     {{- printf "%s-license" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.license.externalSecret.name -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "document-engine.license.variable.name" -}}
-  {{- if not .Values.pspdfkit.license.isOffline -}}
-  ACTIVATION_KEY
-  {{- else -}}
-  LICENSE_KEY
+    {{- .Values.documentEngineLicense.externalSecret.name -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.license.secret.key" -}}
-  {{- if not .Values.pspdfkit.license.externalSecret.name -}}
-    {{- include "document-engine.license.variable.name" . -}}
+  {{- if not .Values.documentEngineLicense.externalSecret.name -}}
+    ACTIVATION_KEY
   {{- else -}}
-    {{- .Values.pspdfkit.license.externalSecret.key -}}
+    {{- .Values.documentEngineLicense.externalSecret.key -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.license.available" -}}
-  {{- if or .Values.pspdfkit.license.activationKey 
-            .Values.pspdfkit.license.externalSecret.name -}}
+  {{- if or .Values.documentEngineLicense.activationKey 
+            .Values.documentEngineLicense.externalSecret.name -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -111,85 +103,97 @@ License secret name
 API and dashboard secrets
 */}}
 {{- define "document-engine.api.secret.name" -}}
-  {{- if not .Values.pspdfkit.auth.api.externalSecret.name -}}
+  {{- if not .Values.apiAuth.externalSecret.name -}}
     {{- printf "%s-api-auth" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.auth.api.externalSecret.name -}}
+    {{- .Values.apiAuth.externalSecret.name -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.api.secret.key.apiToken" -}}
-  {{- if not .Values.pspdfkit.auth.api.externalSecret.name -}}
+  {{- if not .Values.apiAuth.externalSecret.name -}}
     API_AUTH_TOKEN
   {{- else -}}
-    {{- .Values.pspdfkit.auth.api.externalSecret.apiTokenKey -}}
+    {{- .Values.apiAuth.externalSecret.apiTokenKey -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.api.secret.key.jwtPublicKey" -}}
-  {{- if not .Values.pspdfkit.auth.api.externalSecret.name -}}
+  {{- if not (and .Values.apiAuth.externalSecret.name 
+                  .Values.apiAuth.externalSecret.jwtPublicKeyKey ) -}}
     JWT_PUBLIC_KEY
   {{- else -}}
-    {{- .Values.pspdfkit.auth.api.externalSecret.jwtPublicKeyKey -}}
+    {{- .Values.apiAuth.externalSecret.jwtPublicKeyKey -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.api.secret.key.jwtAlgorithm" -}}
-  {{- if not .Values.pspdfkit.auth.api.externalSecret.name -}}
+  {{- if not (and .Values.apiAuth.externalSecret.name 
+                  .Values.apiAuth.externalSecret.jwtAlgorithmKey ) -}}
     JWT_ALGORITHM
   {{- else -}}
-    {{- .Values.pspdfkit.auth.api.externalSecret.jwtAlgorithmKey -}}
+    {{- .Values.apiAuth.externalSecret.jwtAlgorithmKey -}}
+  {{- end -}}
+{{- end -}}
+{{- define "document-engine.secretKeyBase.secret.name" -}}
+  {{- if not (and .Values.apiAuth.externalSecret.name
+                  .Values.apiAuth.externalSecret.secretKeyBaseKey ) -}}
+    {{- printf "%s-secretkeybase" (include "document-engine.fullname" .) -}}
+  {{- else -}}
+    {{- .Values.apiAuth.externalSecret.secretKeyBaseKey -}}
+  {{- end -}}
+{{- end -}}
+{{- define "document-engine.secretKeyBase.secret.key" -}}
+  {{- if not (and .Values.apiAuth.externalSecret.name
+                  .Values.apiAuth.externalSecret.secretKeyBaseKey ) -}}
+    SECRET_KEY_BASE
+  {{- else -}}
+    {{- .Values.apiAuth.externalSecret.secretKeyBaseKey -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.dashboard.secret.name" -}}
-  {{- if not .Values.pspdfkit.auth.dashboard.externalSecret.name -}}
+  {{- if not .Values.dashboard.auth.externalSecret.name -}}
     {{- printf "%s-dashboard-auth" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.auth.dashboard.externalSecret.name -}}
+    {{- .Values.dashboard.auth.externalSecret.name -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.dashboard.secret.key.username" -}}
-  {{- if not .Values.pspdfkit.auth.dashboard.externalSecret.name -}}
+  {{- if not .Values.dashboard.auth.externalSecret.name -}}
     DASHBOARD_USERNAME
   {{- else -}}
-    {{- .Values.pspdfkit.auth.dashboard.externalSecret.usernameKey -}}
+    {{- .Values.dashboard.auth.externalSecret.usernameKey -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.dashboard.secret.key.password" -}}
-  {{- if not .Values.pspdfkit.auth.dashboard.externalSecret.name -}}
+  {{- if not .Values.dashboard.auth.externalSecret.name -}}
     DASHBOARD_PASSWORD
   {{- else -}}
-    {{- .Values.pspdfkit.auth.dashboard.externalSecret.passwordKey -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "document-engine.secretKeyBase.secret.name" -}}
-  {{- if not .Values.pspdfkit.secretKeyBase.externalSecret.name -}}
-    {{- printf "%s-secretkeybase" (include "document-engine.fullname" .) -}}
-  {{- else -}}
-    {{- .Values.pspdfkit.secretKeyBase.externalSecret.name -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.secretKeyBase.secret.key" -}}
-  {{- if not .Values.pspdfkit.secretKeyBase.externalSecret.name -}}
-    SECRET_KEY_BASE
-  {{- else -}}
-    {{- .Values.pspdfkit.secretKeyBase.externalSecret.key -}}
+    {{- .Values.dashboard.auth.externalSecret.passwordKey -}}
   {{- end -}}
 {{- end -}}
 
 {{/*
-Database secrets
+Database parameters
 */}}
+{{- define "document-engine.storage.postgres.enabled" -}}
+  {{- if and .Values.database.enabled 
+             (eq .Values.database.engine "postgres") -}}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
+{{- end -}}
+
 {{- define "document-engine.storage.postgres.secret.name" -}}
-  {{- if not .Values.pspdfkit.storage.postgres.externalSecretName -}}
+  {{- if not .Values.database.postgres.externalSecretName -}}
     {{- printf "%s-db-postgres" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.postgres.externalSecretName -}}
+    {{- .Values.database.postgres.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.postgres.createSecret" -}}
-  {{- if and .Values.pspdfkit.storage.postgres.enabled 
-             (not .Values.pspdfkit.storage.postgres.externalSecretName) -}}
+  {{- if and (eq (include "document-engine.storage.postgres.enabled" .) "true") 
+             (not .Values.database.postgres.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -197,15 +201,15 @@ Database secrets
 {{- end -}}
 
 {{- define "document-engine.storage.postgres.adminSecret.name" -}}
-  {{- if not .Values.pspdfkit.storage.postgres.externalAdminSecretName -}}
+  {{- if not .Values.database.postgres.externalAdminSecretName -}}
     {{- printf "%s-db-postgres-admin" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.postgres.externalAdminSecretName -}}
+    {{- .Values.database.postgres.externalAdminSecretName -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.postgres.createAdminSecret" -}}
-  {{- if and .Values.pspdfkit.storage.postgres.enabled 
-             (not .Values.pspdfkit.storage.postgres.externalAdminSecretName) -}}
+  {{- if and (eq (include "document-engine.storage.postgres.enabled" .) "true") 
+             (not .Values.database.postgres.externalAdminSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -213,15 +217,15 @@ Database secrets
 {{- end -}}
 
 {{- define "document-engine.storage.redis.secret.name" -}}
-  {{- if not .Values.pspdfkit.storage.redis.externalSecretName -}}
+  {{- if not .Values.assetStorage.redis.externalSecretName -}}
     {{- printf "%s-redis" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.redis.externalSecretName -}}
+    {{- .Values.assetStorage.redis.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 {{- define "document-engine.storage.redis.createSecret" -}}
-  {{- if and .Values.pspdfkit.storage.redis.enabled 
-             (not .Values.pspdfkit.storage.redis.externalSecretName) -}}
+  {{- if and .Values.assetStorage.redis.enabled 
+             (not .Values.assetStorage.redis.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -232,9 +236,9 @@ Database secrets
 Object storage parameters
 */}}
 {{- define "document-engine.storage.s3.enabled" -}}
-  {{- if or (eq .Values.pspdfkit.storage.assetStorageBackend "s3")
-            (and .Values.pspdfkit.storage.enableAssetStorageFallback
-                 .Values.pspdfkit.storage.enableAssetStorageFallbackS3 ) -}}
+  {{- if or (eq .Values.assetStorage.backendType "s3")
+            (and .Values.assetStorage.backendFallback.enabled
+                 .Values.assetStorage.backendFallback.enabledS3 ) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -243,7 +247,7 @@ Object storage parameters
 
 {{- define "document-engine.storage.s3.createSecret" -}}
   {{- if and (eq (include "document-engine.storage.s3.enabled" .) "true") 
-             (not .Values.pspdfkit.storage.s3.externalSecretName) -}}
+             (not .Values.assetStorage.s3.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -254,14 +258,14 @@ Object storage parameters
   {{- if (eq (include "document-engine.storage.s3.createSecret" .) "true") -}}
     {{- printf "%s-s3" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.s3.externalSecretName -}}
+    {{- .Values.assetStorage.s3.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.storage.azure.enabled" -}}
-  {{- if or (eq .Values.pspdfkit.storage.assetStorageBackend "azure")
-            (and .Values.pspdfkit.storage.enableAssetStorageFallback
-                 .Values.pspdfkit.storage.enableAssetStorageFallbackAzure ) -}}
+  {{- if or (eq .Values.assetStorage.backendType "azure")
+            (and .Values.assetStorage.backendFallback.enabled
+                 .Values.assetStorage.backendFallback.enabledAzure ) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -271,7 +275,7 @@ Object storage parameters
 
 {{- define "document-engine.storage.azure.createSecret" -}}
   {{- if and (eq (include "document-engine.storage.azure.enabled" .) "true") 
-             (not .Values.pspdfkit.storage.azure.externalSecretName) -}}
+             (not .Values.assetStorage.azure.externalSecretName) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
@@ -282,7 +286,7 @@ Object storage parameters
   {{- if (eq (include "document-engine.storage.azure.createSecret" .) "true") -}}
     {{- printf "%s-s3" (include "document-engine.fullname" .) -}}
   {{- else -}}
-    {{- .Values.pspdfkit.storage.azure.externalSecretName -}}
+    {{- .Values.assetStorage.azure.externalSecretName -}}
   {{- end -}}
 {{- end -}}
 
@@ -290,7 +294,14 @@ Object storage parameters
 Jobs
 */}}
 {{- define "document-engine.storage.cleanupJob.enabled" -}}
-{{- and .Values.pspdfkit.storage.postgres.enabled 
-        .Values.pspdfkit.storage.cleanupJob.enabled 
-        (eq .Values.pspdfkit.storage.assetStorageBackend "built-in") -}}
+  {{- if and .Values.database.enabled 
+             .Values.documentLifecycle.cleanupJob.enabled -}}
+    {{- if (eq .Values.assetStorage.backendType "built-in") -}}
+      {{- true -}}
+    {{- else -}}
+      {{- fail "Can only do cleanup jobs with 'built-in' asset storage backend" }}
+    {{- end -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
 {{- end -}}

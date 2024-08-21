@@ -1,22 +1,24 @@
-pspdfkit:
-  storage:
-    databaseMigrationJob:
-      enabled: false
-    assetStorageBackend: azure
-    enableAssetStorageFallback: true
-    enableAssetStorageFallbackPostgres: true
-    postgres:
-      enabled: true
-      host: postgresql
-      port: 5432
-      username: postgres
-    azure:
-      # This is "well known" storage account for Azure Storage Emulator
-      # See https://learn.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string#configure-a-connection-string-for-azurite
-      accountName: devstoreaccount1
-      accountKey: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
-      container: "document-engine-assets"
-      apiUrl: "http://127.0.0.1:10000/devstoreaccount1"
+database:
+  enabled: true
+  migrationJob:
+    enabled: false
+  postgres:
+    host: postgresql
+    port: 5432
+    username: postgres
+
+assetStorage:
+  backendType: azure
+  backendFallback:
+    enabled: true
+    enabledPostgres: true
+  azure:
+    # This is "well known" storage account for Azure Storage Emulator
+    # See https://learn.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string#configure-a-connection-string-for-azurite
+    accountName: devstoreaccount1
+    accountKey: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+    container: "document-engine-assets"
+    apiUrl: "http://127.0.0.1:10000/devstoreaccount1"
 
 # Azurite as sidecar
 sidecars:

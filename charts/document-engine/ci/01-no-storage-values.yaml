@@ -1,7 +1,9 @@
-pspdfkit:
-  storage:
-    postgres:
-      enabled: false
+apiAuth:
+  apiToken: secret
+  secretKeyBase: verySecretStringToNeverBeUsedInProduction
+
+database:
+  enabled: false
 
 postgresql:
   enabled: false

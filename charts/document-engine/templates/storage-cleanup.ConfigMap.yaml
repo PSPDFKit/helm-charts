@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
 data:
-  {{- with .Values.pspdfkit.storage.cleanupJob }}
+  {{- with .Values.documentLifecycle.cleanupJob }}
   cleanup.sql: |
     DELETE FROM asset_blobs 
     WHERE asset_blobs.sha256 in (
@@ -27,9 +27,15 @@ data:
       documents.created_at < NOW() - INTERVAL '{{ .keepHours }} hours'
     ;
   {{- end }}
+  run.sh: |
+    #!/bin/bash
+    set -e
+    export PGUSER=$PG_ADMIN_USER
+    export PGPASSWORD=$PG_ADMIN_PASSWORD
+    psql -f /document-engine-cleanup/cleanup.sql
 
 # Can be used for hash updating
-  VERSION: {{ include "document-engine.chart" . | quote }}
+  HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}
 {{- end }}
 
 

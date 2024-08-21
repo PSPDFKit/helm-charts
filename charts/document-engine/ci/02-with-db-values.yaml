@@ -1,13 +1,32 @@
-pspdfkit:
-  storage:
-    databaseMigrationJob:
-      enabled: false
-    assetStorageBackend: built-in
-    postgres:
-      enabled: true
-      host: postgresql
-      port: 5432
-      username: postgres
+apiAuth:
+  apiToken: secretThatIsNotSoSecret
+  secretKeyBase: verySecretStringToNeverBeUsedInProduction
+  jwt:
+    enabled: true
+    publicKey: |
+      -----BEGIN PUBLIC KEY-----
+      MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDcfcSsDu9Yh06oBdHqvfJVe0X0
+      Jd99MadCdnsEwFDnwIxzyaZMBkGN7MyGICAky3QFb0b2wEwQSTVBvTycbI/nI/Ua
+      CzUFlwrVNSuhyAjhA9pb8ig3c3z3HciCT9KsHPqqPRjmgxW4B0exCNDO0Mjckg9R
+      nP8vqa0VnqmV4LdnxQIDAQAB
+      -----END PUBLIC KEY-----
+    algorithm: RS256
+
+database:
+  enabled: true
+  migrationJob:
+    enabled: false
+  postgres:
+    host: postgresql
+    port: 5432
+    username: postgres
+
+documentLifecycle:
+  cleanupJob:
+    enabled: true
+
+assetStorage:
+  backendType: built-in
 
 prometheusExporter:
   enabled: true

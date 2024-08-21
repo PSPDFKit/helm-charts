@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
 spec:
-  schedule: {{ .Values.pspdfkit.storage.cleanupJob.schedule }}
+  schedule: {{ .Values.documentLifecycle.cleanupJob.schedule }}
   startingDeadlineSeconds: 600
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -22,12 +22,12 @@ spec:
           {{- with .Values.podAnnotations }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.pspdfkit.storage.cleanupJob.podAnnotations }}
+          {{- with .Values.documentLifecycle.cleanupJob.podAnnotations }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           labels:
           {{- include "document-engine.cleanupSelectorLabels" . | nindent 12 }}
-          {{- with .Values.pspdfkit.storage.cleanupJob.podLabels }}
+          {{- with .Values.documentLifecycle.cleanupJob.podLabels }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
         spec:
@@ -46,35 +46,24 @@ spec:
           containers:
             - name: {{ .Chart.Name }}
               envFrom:
+                - configMapRef:
+                    name: {{ include "document-engine.fullname" . }}
                 - secretRef:
-                    name: {{ include "document-engine.storage.postgres.secret.name" . }}
+                    name: {{ include "document-engine.fullname" . }}
+              {{- if .Values.database.postgres.externalSecretName  }}
+                - secretRef:
+                    name: {{ .Values.database.postgres.externalSecretName }}
+              {{- end }}
+              {{- if and .Values.database.migrationJob.enabled
+                         .Values.database.postgres.externalAdminSecretName  }}
+                - secretRef:
+                    name: {{ .Values.database.postgres.externalAdminSecretName }}
+              {{- end }}
               {{- with .Values.extraEnvFrom }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
-              env:
-                - name: PGUSER
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
-                      key: PG_ADMIN_USER
-                - name: PGPASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
-                      key: PG_ADMIN_PASSWORD
-              {{- if eq (include "document-engine.storage.s3.enabled" .) "true" }}
-                - name: AWS_ACCESS_KEY_ID
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "document-engine.storage.s3.secret.name" . }}
-                      key: AWS_ACCESS_KEY_ID
-                - name: AWS_SECRET_ACCESS_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ include "document-engine.storage.s3.secret.name" . }}
-                      key: AWS_SECRET_ACCESS_KEY
-              {{- end }}
               {{- with .Values.extraEnvs }}
+              env:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
               securityContext:
@@ -82,15 +71,12 @@ spec:
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               command:
-                - /bin/sh
-                - -c
-                - psql -f /cleanup.sql
+                - /document-engine-cleanup/run.sh
               resources:
-                {{- toYaml .Values.pspdfkit.storage.cleanupJob.resources | nindent 16 }}
+                {{- toYaml .Values.documentLifecycle.cleanupJob.resources | nindent 16 }}
               volumeMounts:
-                - name: cleanup-query
-                  mountPath: /cleanup.sql
-                  subPath: cleanup.sql
+                - name: cleanup-assets
+                  mountPath: /document-engine-cleanup
               {{- if .Values.extraVolumeMounts }}
                 {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
               {{- end }}
@@ -98,12 +84,10 @@ spec:
             {{ toYaml .Values.sidecars | nindent 12 }}
           {{- end }}
           volumes:
-            - name: cleanup-query
+            - name: cleanup-assets
               configMap:
                 name: {{ include "document-engine.fullname" . }}-db-cleanup
-                items:
-                  - key: cleanup.sql
-                    path: cleanup.sql
+                defaultMode: 0755
           {{- with .Values.extraVolumes }}
             {{ toYaml . | nindent 12 }}
           {{- end }}

@@ -31,19 +31,19 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    {{- if .Values.pspdfkit.storage.postgres.enabled }}
+    {{- if eq (include "document-engine.storage.postgres.enabled" .) "true"  }}
     - ports:
-        - port: {{ .Values.pspdfkit.storage.postgres.port }}
+        - port: {{ .Values.database.postgres.port }}
           protocol: TCP
     {{- end }}
-    {{- if .Values.pspdfkit.storage.s3.enabled }}
+    {{- if .Values.assetStorage.s3.enabled }}
     - ports:
-        - port: {{ .Values.pspdfkit.storage.s3.port }}
+        - port: {{ .Values.assetStorage.s3.port }}
           protocol: TCP
     {{- end }}
-    {{- if .Values.pspdfkit.storage.redis.enabled }}
+    {{- if .Values.assetStorage.redis.enabled }}
     - ports:
-        - port: {{ .Values.pspdfkit.storage.redis.port }}
+        - port: {{ .Values.assetStorage.redis.port }}
           protocol: TCP
     {{- end }}
     {{- if .Values.allowRemoteAssetsInGeneration }}
@@ -58,9 +58,9 @@ spec:
   ingress:
     - ports:
         # Hardcoded DE port
-        - port: {{ .Values.service.port }}
+        - port: {{ .Values.config.port }}
         # Hardcoded DE metrics port
-        - port: 9125
+        - port: {{ .Values.observability.metrics.statsd.port }}
         # Prometheus exporter port
         {{- if .Values.prometheusExporter.enabled }}
         - port: {{ .Values.prometheusExporter.port }}

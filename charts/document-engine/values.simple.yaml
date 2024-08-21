@@ -1,43 +1,52 @@
-pspdfkit:
-  license:
-    activationKey: ""
-    externalSecret: 
-      name: ""
-      key: DOCUMENT_ENGINE_ACTIVATION_KEY
+documentEngineLicense:
+  activationKey: ""
+  externalSecret: 
+    name: ""
+    key: DOCUMENT_ENGINE_ACTIVATION_KEY
+
+apiAuth:
+  apiToken: secret
+
+config:
+  trustedProxies: default
+
+documentSigningService:
+  enabled: true
+  url: http://signing-service:6000/sign
+  timeoutSeconds: 10
+
+database: 
+  enabled: true
+  engine: postgres
+  migrationJob:
+    enabled: false
+  postgres:
+    enabled: true
+    host: document-engine-postgresql
+    database: document-engine
+    tls:
+      enabled: false
+    auth: 
+      username: postgres
+      password: postgres
+      adminUsername: postgres
+      adminPassword: postgres
+
+assetStorage:
+  backendType: built-in
+  backendFallback:
+    enabled: false
+
+dashboard:
   auth:
-    api:
-      apiToken: secret
-    dashboard:
-      username: admin
-      password: admin
+    username: admin
+    password: admin
+
+observability:
   log:
     level: debug
-  trustedProxies: default
-  signingService:
-    enabled: true
-    url: http://signing-service:6000/sign
-    timeoutSeconds: 10
-  storage:
-    databaseMigrationJob: 
-      enabled: false
-    databaseEngine: postgresql
-    assetStorageBackend: built-in
-    enableAssetStorageFallback: false
-    postgres:
-      enabled: true
-      host: document-engine-postgresql
-      database: pspdfkit
-      tls:
-        enabled: false
-      auth: 
-        username: postgres
-        password: postgres
-        adminUsername: postgres
-        adminPassword: postgres
-
-  observability:
-    opentelemetry:
-      enabled: false
+  opentelemetry:
+    enabled: false
 
 replicaCount: 1
 
@@ -86,9 +95,9 @@ postgresql:
       host     all             all        0.0.0.0/0               md5
       host     all             all        ::/0                    md5
   auth:
-    enablePostgresUser: true
+    enabledPostgresUser: true
     postgresPassword: postgres
-    database: pspdfkit
+    database: document-engine
   tls:
     enabled: false
 

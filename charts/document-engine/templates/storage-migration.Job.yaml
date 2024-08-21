@@ -1,4 +1,4 @@
-{{- if and .Values.pspdfkit.storage.postgres.enabled .Values.pspdfkit.storage.databaseMigrationJob.enabled }}
+{{- if and .Values.database.enabled .Values.database.migrationJob.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -9,7 +9,7 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "-5"
 spec:
-  ttlSecondsAfterFinished: {{ .Values.pspdfkit.storage.databaseMigrationJob.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ .Values.database.migrationJob.ttlSecondsAfterFinished }}
   template:
     metadata:
       name: {{ include "document-engine.fullname" . }}-db-migration
@@ -17,12 +17,12 @@ spec:
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.pspdfkit.storage.databaseMigrationJob.podAnnotations }}
+      {{- with .Values.engine.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "document-engine.migrationSelectorLabels" . | nindent 8 }}
-      {{- with .Values.pspdfkit.storage.databaseMigrationJob.podLabels }}
+      {{- with .Values.database.migrationJob.podLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
@@ -42,12 +42,15 @@ spec:
         - name: {{ .Chart.Name }}
           envFrom:
             - configMapRef:
-                name: {{ include "document-engine.fullname" . }}-config
-          {{- if .Values.pspdfkit.storage.postgres.enabled }}
+                name: {{ include "document-engine.fullname" . }}
             - secretRef:
-                name: {{ include "document-engine.storage.postgres.secret.name" . }}
+                name: {{ include "document-engine.fullname" . }}
+          {{- if .Values.database.postgres.externalAdminSecretName  }}
+            - secretRef:
+                name: {{ .Values.database.postgres.externalAdminSecretName }}
           {{- end }}
-          {{- if .Values.pspdfkit.storage.redis.enabled }}
+
+          {{- if .Values.assetStorage.redis.enabled }}
             - secretRef:
                 name: {{ include "document-engine.storage.redis.secret.name" . }}
           {{- end }}
@@ -59,47 +62,28 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
-            {{- if eq (include  "document-engine.license.available" .) "true" }}
-            - name: {{ include "document-engine.license.variable.name" . }}
+          {{- if .Values.documentEngineLicense.externalSecret.name }}
+            - name: ACTIVATION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.license.secret.name" . }}
-                  key: {{ include "document-engine.license.secret.key" . }}
-            {{- end }}
+                  name: {{ .Values.documentEngineLicense.externalSecret.name }}
+                  key: {{ .Values.documentEngineLicense.externalSecret.key }}
+          {{- end }}
             - name: ENABLE_DATABASE_MIGRATIONS
               value: 'true'
             - name: EXIT_AFTER_DATABASE_MIGRATIONS
               value: 'true'
-            - name: PG_ADMIN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
-                  key: PG_ADMIN_USER
-            - name: PG_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "document-engine.storage.postgres.adminSecret.name" . }}
-                  key: PG_ADMIN_PASSWORD
+          {{- if .Values.apiAuth.externalSecret.name -}}
+            {{- with .Values.apiAuth.externalSecret -}}
+              {{- if .secretKeyBaseKey -}}
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "document-engine.secretKeyBase.secret.name" . }}
-                  key: {{ include "document-engine.secretKeyBase.secret.key" . }}
-            - name: API_AUTH_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "document-engine.api.secret.name" . }}
-                  key: {{ include "document-engine.api.secret.key.apiToken" . }}
-          {{- if .Values.pspdfkit.storage.postgres.enabled }}
-            {{- if .Values.pspdfkit.storage.postgres.tls.enabled }}
-            - name: PGSSL_DISABLE_VERIFY
-              value: {{ not .Values.pspdfkit.storage.postgres.tls.verify | quote }}
-            {{-   with .Values.pspdfkit.storage.postgres.tls.trustFileName }}
-            - name: PGSSL_CA_CERT_PATH
-              value: /certificate-stores-custom/{{ . }}
-            {{-   end }}
+                  name: {{ .name }}
+                  key: {{ .secretKeyBaseKey }}
+              {{- end }}
             {{- end }}
-          {{- end }}
+          {{- end -}}
           {{- with .Values.extraEnvs }}
             {{- toYaml .| nindent 12 }}
           {{- end }}
@@ -108,17 +92,51 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
-            {{- toYaml .Values.pspdfkit.storage.databaseMigrationJob.resources | nindent 12 }}
-          {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.database.migrationJob.resources | nindent 12 }}
+          {{- if or .Values.extraVolumeMounts 
+                    .Values.certificateTrust.customCertificates }}
           volumeMounts:
-            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.certificateTrust.customCertificates }}
+            {{-   range $trustSource := . }}
+            - name: custom-trust-{{ $trustSource.name }}
+              mountPath: /certificate-stores-custom/{{ $trustSource.path }}
+              subPath: {{ $trustSource.path }}
+              readOnly: true
+            {{-   end }}
+            {{- end }}
           {{- end }}
       {{- if .Values.sidecars }}
         {{ toYaml .Values.sidecars | nindent 8 }}
       {{- end }}
-      {{- if .Values.extraVolumes }}
+      {{- if or .Values.extraVolumeMounts 
+                .Values.certificateTrust.customCertificates }}
       volumes:
-        {{ toYaml .Values.extraVolumes | nindent 8 }}
+        {{- with .Values.extraVolumes }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.certificateTrust.customCertificates }}
+        {{-   range $trustSource := . }}
+        - name: custom-trust-{{ $trustSource.name }}
+        {{-     if $trustSource.configMap }}
+          configMap:
+            name: {{ $trustSource.configMap.name }}
+            items:
+              - key: {{ $trustSource.configMap.key }}
+                path: {{ $trustSource.path }}
+        {{-     else if $trustSource.secret }}
+          secret:
+            secretName: {{ $trustSource.secret.name }}
+            items:
+              - key: {{ $trustSource.secret.key }}
+                path: {{ $trustSource.path }}
+        {{-     else }}
+        {{-       fail "Expecting ConfigMap or Secret for a certificate trust" }}
+        {{-     end }}
+        {{-   end }}
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

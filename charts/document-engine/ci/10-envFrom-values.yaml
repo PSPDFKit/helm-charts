@@ -14,7 +14,5 @@ extraEnvs:
   - name: LOG_LEVEL
     value: debug
 
-pspdfkit:
-  storage:
-    postgres:
-      enabled: false
+database:
+  enabled: false

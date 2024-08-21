@@ -10,91 +10,76 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+
 #
 # https://pspdfkit.com/guides/document-engine/configuration/overview/
 # https://pspdfkit.com/guides/document-engine/deployment/product-activation/
 #
-pspdfkit:
-  license:
-    # Activation key for online activation (most common) or
-    # license key for offline activation.
-    # Results in `ACTIVATION_KEY` environment variable
-    # or `LICENSE_KEY` (if `isOffline` is `true`)
-    activationKey: ""
-    # Is the license offline: set to `true` if
-    # an offline license key was provided in `activationKey`
-    isOffline: false
-    # Query existing secret for the activation key
-    externalSecret:
-      # External secret name for license
-      name: ""
-      # The key in the secret used to retrieve the activation key
-      key: DOCUMENT_ENGINE_ACTIVATION_KEY
-  auth:
-    api:
-      # `API_AUTH_TOKEN` should be long enough
-      apiToken: secret
-      # JSON Web Tokens
-      jwt:
-        # Enable JWT
-        enabled: false
-        # `JWT_PUBLIC_KEY`
-        publicKey: none
-        # `JWT_ALGORITHM`
-        # Supported algorithms: RS256, RS512, ES256, ES512.
-        # See RFC 7518 for details about specific algorithms.
-        algorithm: RS256
-      # Use an external secret for API credentials
-      externalSecret:
-        # External secret name
-        name: ""
-        # Key names
-        apiTokenKey: API_AUTH_TOKEN
-        jwtPublicKeyKey: JWT_PUBLIC_KEY
-        jwtAlgorithmKey: JWT_ALGORITHM
-    # Document Engine Dashboard settings
-    dashboard:
-      # Enable dashboard
-      enabled: true
-      # `DASHBOARD_USERNAME`
-      username: admin
-      # `DASHBOARD_PASSWORD` — will generate a random password if not set
-      password: ""
-      # Use an external secret for dashboard credentials
-      # instead of the values from `pspdfkit.auth.dashboard.*`
-      externalSecret:
-        # External secret name
-        name: ""
-        # Key names
-        usernameKey: DASHBOARD_USERNAME
-        passwordKey: DASHBOARD_PASSWORD
+documentEngineLicense:
+  # Activation key for online activation (most common) or
+  # license key for offline activation.
+  # Results in `ACTIVATION_KEY` environment variable.
+  activationKey: ""
+  # Query existing secret for the activation key
+  externalSecret:
+    # External secret name for license
+    name: ""
+    # The key in the secret used to retrieve the activation key
+    key: DOCUMENT_ENGINE_ACTIVATION_KEY
+
+# Document Enging API authentication
+apiAuth:
+  # `API_AUTH_TOKEN` should be long enough
+  apiToken: secret
+  # JSON Web Token (JWT) settings
+  jwt:
+    # Enable JWT
+    enabled: false
+    # `JWT_PUBLIC_KEY`
+    publicKey: none
+    # `JWT_ALGORITHM`
+    # Supported algorithms: RS256, RS512, ES256, ES512.
+    # See RFC 7518 for details about specific algorithms.
+    algorithm: RS256
   # A string used as the base key for deriving secret keys for the purposes of authentication.
   # Choose a sufficiently long random string for this option.
   # To generate a random string, use: `openssl rand -hex 256`.
   # This will set `SECRET_KEY_BASE` environment variable.
-  secretKeyBase:
-    value: ""
-    # Alternatively, provide an external secret
-    externalSecret:
-      # External secret
-      name: ""
-      # Key in the secret
-      key: SECRET_KEY_BASE
-  # Log level
-  log:
-    level: info
+  secretKeyBase: ""
+  # Use an external secret for API credentials
+  externalSecret:
+    # External secret name
+    name: ""
+    # Key names
+    apiTokenKey: API_AUTH_TOKEN
+    # If external secret is enabled, but `jwtAlgorithmKey` is not set,
+    # the algorithm will be retrieved from the `apiAuth.jwt.algorithm` value
+    jwtAlgorithmKey: JWT_ALGORITHM
+    # If external secret is enabled, but `jwtPublicKeyKey` is not set,
+    # the public key will be retrieved from the `apiAuth.jwt.publicKey` value
+    jwtPublicKeyKey: JWT_PUBLIC_KEY
+    # If external secret is enabled, but `secretKeyBaseKey` is not set,
+    # the secret key base will be retrieved from the `apiAuth.secretKeyBase` value
+    # or generated automatically
+    secretKeyBaseKey: SECRET_KEY_BASE
+
+config:
+  # `PSPDFKIT_WORKER_POOL_SIZE`
+  workerPoolSize: 16
+  # Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`)
+  requestTimeoutSeconds: 60
+  # Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`)
+  workerTimeoutSeconds: 60
   # `PDF_GENERATION_TIMEOUT` in seconds
-  generationTimeoutSeconds: 120
-  # `SERVER_REQUEST_TIMEOUT` in seconds
-  requestTimeoutSeconds: 120
+  generationTimeoutSeconds: 20
   # `REMOTE_URL_FETCH_TIMEOUT` in seconds
-  urlFetchTimeoutSeconds: 20
+  urlFetchTimeoutSeconds: 5
   # `READ_ANNOTATION_BATCH_TIMEOUT` in seconds
   readAnnotationBatchTimeoutSeconds: 20
   # `MAX_UPLOAD_SIZE_BYTES` in megabytes
-  maxUploadSizeMegaBytes: 128
-  # `PSPDFKIT_WORKER_POOL_SIZE`
-  workerPoolSize: 8
+  maxUploadSizeMegaBytes: 950
+  # `ASYNC_JOBS_TTL`
+  asyncJobsTtlSeconds: 172800
   # `ALLOW_DOCUMENT_UPLOADS`
   allowDocumentUploads: true
   # `ALLOW_REMOTE_DOCUMENTS`
@@ -105,213 +90,335 @@ pspdfkit:
   allowRemoteAssetsInGeneration: true
   # `IGNORE_INVALID_ANNOTATIONS`
   ignoreInvalidAnnotations: true
-  # `ASSET_STORAGE_CACHE_SIZE` in megabytes
-  assetStorageCacheSizeMegaBytes: 2000
   # `AUTOMATIC_LINK_EXTRACTION`
-  automaticLinkExtraction: true
+  automaticLinkExtraction: false
   # `MIN_SEARCH_QUERY_LENGTH`
   minSearchQueryLength: 3
   # `TRUSTED_PROXIES`
   trustedProxies: default
+  # Proxy settings, `HTTP_PROXY` amd `HTTPS_PROXY`
+  proxy:
+    http: ""
+    https: ""
+  # `PORT` for the Document Engine API
+  port: 5000
   # `REPLACE_SECRETS_FROM_ENV` — whether to consider
   # environment variables, values and secrets for
   # `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD`
   replaceSecretsFromEnv: true
-  # Signing certificate trust configuration
-  signingTrustConfigMaps: {}
-  # Private certificates to yield `/certificate-stores-custom/private-ca-certificates.pem`
-  # private-ca:
-  #  key: private-ca-certificates.pem
-  #  path: private-ca-certificates.pem
-  # ConfigMap references for trust configuration, stored in `/certificate-stores-custom`
-  trustConfigMaps: {}
-  # Root certificates to yield `/certificate-stores-custom/root-certificates.pem`
-  # root:
-  #  key: root-certificates.pem
-  #  path: root-certificates.pem
 
-  # Path from `pspdfkit.trustConfigMaps`, wraps around `DOWNLOADER_CERT_FILE_PATH`
-  downloaderTrustFileName: "root-certificates.pem"
-  # Signing service parameters
-  signingService:
-    # Enable signing service integration
-    enabled: false
-    # `SIGNING_SERVICE_URL`
-    url: https://signing-thing.local/sign
-    # `SIGNING_SERVICE_TIMEOUT` in seconds
-    timeoutSeconds: 10
-    # `DEFAULT_SIGNER_NAME`
-    defaultSignerName: "John Doe"
-    # `DEFAULT_SIGNATURE_REASON`
-    defaultSignatureReason: "approved"
-    # `DEFAULT_SIGNATURE_LOCATION`
-    defaultSignatureLocation: "Head Quarters"
-    # `DIGITAL_SIGNATURE_HASH_ALGORITHM`
-    digitalSignatureHashAlgorithm: sha512
-    # `DIGITAL_SIGNATURE_CADES_LEVEL`
-    digitalSignatureCadesLevel: "b-lt"
-    # `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
-    digitalSignatureCertificateCheckTime: current_time
-    # Timestamp Authority (TSA) settings
-    timestampAuthority:
-      # `TIMESTAMP_AUTHORITY_URL`
-      url: https://freetsa.org/
-      # `TIMESTAMP_AUTHORITY_USERNAME`
-      username: ""
-      # `TIMESTAMP_AUTHORITY_PASSWORD`
-      password: ""
-  storage:
-    # Database migration jobs.
-    databaseMigrationJob:
-      # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
-      enabled: false
-      ttlSecondsAfterFinished: 300
-      resources: {}
-      podAnnotations: {}
-      podLabels: {}
-    # Regular job to remove documents from the database.
-    # Note: currently only works with the `built-in` storage backend.
-    cleanupJob:
-      enabled: false
-      schedule: "13 * * * *"
-      keepHours: 24
-      persistentLike: "persistent%"
-      resources: {}
-      podAnnotations: {}
-      podLabels: {}
-    # Database engine: only `postgresql` is currently supported
-    databaseEngine: postgresql
-    # `DATABASE_CONNECTIONS`
-    databaseConnections: 20
-    # `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
-    assetStorageBackend: built-in
-    # `ENABLE_ASSET_STORAGE_FALLBACK`
-    enableAssetStorageFallback: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
-    enableAssetStorageFallbackPostgres: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
-    enableAssetStorageFallbackS3: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
-    enableAssetStorageFallbackAzure: false
-    # PostgreSQL database settings
-    postgres:
-      enabled: true
-      # `PGHOST`
-      host: postgresql
-      # `PGPORT`
-      port: 5432
-      # `PGDATABASE`
-      database: pspdfkit
-      # `PGUSER`
-      username: pspdfkit
-      # `PGPASSWORD`
-      password: pspdfkit
-      # `PG_ADMIN_USER`
-      adminUsername: postgres
-      # `PG_ADMIN_PASSWORD`
-      adminPassword: pspdfkit
-      # ...or use external secrets:
-      # `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PGHOST`, `PGPORT`,
+certificateTrust:
+  # CAs for digital signatures (`/certificate-stores/`)
+  # from ConfigMap and Secret resources
+  digitalSignatures: []
+    ## To yield `/certificate-stores/private-ca-certificates.pem`:
+    # - name: private-ca
+    #   path: private-ca-certificates.pem
+    #   configMap:
+    #     name: private-ca
+    #     key: private-ca-certificates.pem
+  # ConfigMap and Secret references for trust configuration, stored in `/certificate-stores-custom`
+  customCertificates: []
+    ## To yield `/certificate-stores-custom/my-certificates.pem`:
+    # - name: my
+    #   path: my-certificates.pem
+    #   secret:
+    #     name: my-config-map
+    #     key: some-certificates.pem
+  # Override `DOWNLOADER_CERT_FILE_PATH` to set HTTP client trust.
+  # If empty, defaults to  Mozilla's CA bundle, which is provided
+  # as `/certificate-stores-downloader/root-certificates.pem`
+  downloaderTrustFileName: ""
+
+# Database
+database:
+  # Persistent storage enabled
+  enabled: true
+  # Database engine: only `postgres` is currently supported
+  engine: postgres
+  # `DATABASE_CONNECTIONS`
+  connections: 20
+  # PostgreSQL database settings
+  postgres:
+    # `PGHOST`
+    host: postgresql
+    # `PGPORT`
+    port: 5432
+    # `PGDATABASE`
+    database: document-engine
+    # `PGUSER`
+    username: de-user
+    # `PGPASSWORD`
+    password: despair
+    # `PG_ADMIN_USER`
+    adminUsername: postgres
+    # `PG_ADMIN_PASSWORD`
+    adminPassword: despair
+    # ...or use external secrets:
+    # `PGUSER` and `PGPASSWORD` must be provided
+    # and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL`
+    externalSecretName: ""
+    # `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD` — for migrations
+    externalAdminSecretName: ""
+    # TLS settings
+    tls:
       # `PGSSL`
-      externalSecretName: ""
-      # `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD`
-      externalAdminSecretName: ""
-      # TLS settings
-      tls:
-        # `PGSSL`
-        enabled: false
-        # Negated `PGSSL_DISABLE_VERIFY`
-        verify: true
-        # Path from `pspdfkit.trustConfigMaps`, wraps around `PGSSL_CA_CERT_PATH`
-        trustFileName: ""
-    # S3 backend storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `s3
-    s3:
-      # `ASSET_STORAGE_S3_ACCESS_KEY_ID`
-      accessKeyId: ""
-      # `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
-      secretAccessKey: ""
-      # `ASSET_STORAGE_S3_BUCKET`
-      bucket: "document-engine-assets"
-      # `ASSET_STORAGE_S3_REGION`
-      region: "us-east-1"
-      # `ASSET_STORAGE_S3_HOST`
-      # host: "os.local"
-      # `ASSET_STORAGE_S3_PORT`
-      port: 443
-      # `ASSET_STORAGE_S3_SCHEME`
-      scheme: "https://"
-      # External secret name
-      externalSecretName: ""
-    # Azure blob storage settings, in case `pspdfkit.storage.assetStorageBackend` is set to `azure`
-    azure:
-      # `AZURE_STORAGE_ACCOUNT_NAME`
-      accountName: ""
-      # `AZURE_STORAGE_ACCOUNT_KEY`
-      accountKey: ""
-      # `AZURE_STORAGE_DEFAULT_CONTAINER`
-      container: ""
-      # `AZURE_STORAGE_ACCOUNT_CONNECTION_STRING`, takes priority over `accountName` and `accountKey`
-      connectionString: ""
-      # `AZURE_STORAGE_API_URL` for custom endpoints
-      apiUrl: ""
-      # External secret name
-      externalSecretName: ""
-    # Redis settings for caching and prerendering
-    redis:
-      # `USE_REDIS_CACHE`
       enabled: false
-      # `REDIS_TTL`
-      ttlSeconds: 86400000
-      # `USE_REDIS_TTL_FOR_PRERENDERING`
-      useTtlForPrerendering: true
-      # `REDIS_HOST`
-      host: redis
-      # `REDIS_PORT`
-      port: 6379
-      # `REDIS_DATABASE`
-      database: ""
-      # Sentinels
-      sentinel:
-        enabled: false
-        # `REDIS_SENTINELS`
-        urls: []
-        # - "redis://sentinel1:26379"
-        # - "redis://sentinel2:26379"
-        # - "redis://sentinel3:26379"
-        # `REDIS_SENTINELS_GROUP`
-        group: none
-      # `REDIS_USERNAME`
-      username: ""
-      # `REDIS_PASSWORD`
-      password: ""
-      # `REDIS_SSL`
-      tls:
-        enabled: false
-      # External secret name
-      externalSecretName: ""
+      # Negated `PGSSL_DISABLE_VERIFY`
+      verify: true
+      # Negated `PGSSL_DISABLE_HOSTNAME_VERIFY`
+      hostVerify: true
+      # Common name for the certificate (`PGSSL_CERT_COMMON_NAME`),
+      # defaults to `PGHOST` value
+      commonName: ""
+      # Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`,
+      # mutually exclusive with `trustFileName` and takes precedence
+      trustBundle: ""
+      # Path from `certificateTrust.customCertificates`, wraps around `PGSSL_CA_CERT_PATH`
+      trustFileName: ""
+  # Database migration jobs.
+  migrationJob:
+    # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
+    enabled: false
+    ttlSecondsAfterFinished: 300
+    resources: {}
+    podAnnotations: {}
+    podLabels: {}
 
-  observability:
-    # OpenTelemetry
-    opentelemetry:
-    # Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
+# Document lifecycle management
+documentLifecycle:
+  # Regular job to remove documents from the database.
+  # Note: currently only works with the `built-in` storage backend.
+  cleanupJob:
+    enabled: false
+    schedule: "13 * * * *"
+    keepHours: 24
+    # Keep documents with IDs beginning with `persistent` indefinitely
+    persistentLike: "persistent%"
+    resources: {}
+    podAnnotations: {}
+    podLabels: {}
+
+# Everything about storing and caching assets
+assetStorage:
+  # Sets local asset storage value in megabytes
+  # Results in `ASSET_STORAGE_CACHE_SIZE` (in bytes)
+  localCacheSizeMegabytes: 2000
+  # Asset storage backend is only available if `database.enabled` is `true`
+  # Sets `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
+  backendType: built-in
+  # Asset storage fallback settings
+  backendFallback:
+    # `ENABLE_ASSET_STORAGE_FALLBACK`
+    enabled: false
+    # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
+    enabledPostgres: false
+    # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
+    enabledS3: false
+    # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
+    enabledAzure: false
+  # S3 backend storage settings, in case `assetStorage.backendType` is set to `s3
+  s3:
+    # `ASSET_STORAGE_S3_ACCESS_KEY_ID`
+    accessKeyId: ""
+    # `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
+    secretAccessKey: ""
+    # `ASSET_STORAGE_S3_BUCKET`
+    bucket: "document-engine-assets"
+    # `ASSET_STORAGE_S3_REGION`
+    region: "us-east-1"
+    # `ASSET_STORAGE_S3_HOST`
+    # host: "os.local"
+    # `ASSET_STORAGE_S3_PORT`
+    port: 443
+    # `ASSET_STORAGE_S3_SCHEME`
+    scheme: "https://"
+    # External secret name. Must contain
+    # `ASSET_STORAGE_S3_ACCESS_KEY_ID` and `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
+    # if they are needed, and _may_ set other values
+    externalSecretName: ""
+  # Azure blob storage settings, in case `assetStorage.backendType` is set to `azure`
+  azure:
+    # `AZURE_STORAGE_ACCOUNT_NAME`
+    accountName: ""
+    # `AZURE_STORAGE_ACCOUNT_KEY`
+    accountKey: ""
+    # `AZURE_STORAGE_DEFAULT_CONTAINER`
+    container: ""
+    # `AZURE_STORAGE_ACCOUNT_CONNECTION_STRING`, takes priority over `accountName` and `accountKey`
+    connectionString: ""
+    # `AZURE_STORAGE_API_URL` for custom endpoints
+    apiUrl: ""
+    # External secret name. Must contain
+    # `AZURE_STORAGE_ACCOUNT_NAME` and `AZURE_STORAGE_ACCOUNT_KEY`
+    # if they are needed, and _may_ set other values
+    externalSecretName: ""
+  # Redis settings for caching and prerendering
+  redis:
+    # `USE_REDIS_CACHE`
+    enabled: false
+    # `REDIS_TTL`
+    ttlSeconds: 86400000
+    # `USE_REDIS_TTL_FOR_PRERENDERING`
+    useTtlForPrerendering: true
+    # `REDIS_HOST`
+    host: redis
+    # `REDIS_PORT`
+    port: 6379
+    # `REDIS_DATABASE`
+    database: ""
+    # Sentinels
+    sentinel:
       enabled: false
-      # https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
-      # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
-      otlpExporterEndpoint: ""
-      # `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
-      otlpExporterProtocol: ""
-      # `OTEL_SERVICE_NAME`, service name
-      otelServiceName: ""
-      # `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
-      otelResourceAttributes: ""
-      # `OTEL_PROPAGATORS`, propagators
-      otelPropagators: ""
-      # `OTEL_TRACES_SAMPLER`, should normally not be touched
-      # to allow custom `parent_based` work,
-      # but something like `parentbased_traceidratio` may be considered
-      otelTracesSampler: ""
-      # `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler
-      otelTracesSamplerArg: ""
+      # `REDIS_SENTINELS`
+      urls: []
+      # - "redis://sentinel1:26379"
+      # - "redis://sentinel2:26379"
+      # - "redis://sentinel3:26379"
+      # `REDIS_SENTINELS_GROUP`
+      group: none
+    # `REDIS_USERNAME`
+    username: ""
+    # `REDIS_PASSWORD`
+    password: ""
+    # `REDIS_SSL`
+    tls:
+      enabled: false
+    # External secret name. Must contain `REDIS_USERNAME` and `REDIS_PASSWORD`
+    # if they are needed, and _may_ set other values
+    externalSecretName: ""
+
+# Signing service parameters
+documentSigningService:
+  # Enable signing service integration
+  enabled: false
+  # `SIGNING_SERVICE_URL`
+  url: https://signing-thing.local/sign
+  # `SIGNING_SERVICE_TIMEOUT` in seconds
+  timeoutSeconds: 10
+  # `DEFAULT_SIGNER_NAME`
+  defaultSignerName: "John Doe"
+  # `DEFAULT_SIGNATURE_REASON`
+  defaultSignatureReason: "approved"
+  # `DEFAULT_SIGNATURE_LOCATION`
+  defaultSignatureLocation: "Head Quarters"
+  # `DIGITAL_SIGNATURE_HASH_ALGORITHM`
+  digitalSignatureHashAlgorithm: sha512
+  # `DIGITAL_SIGNATURE_CADES_LEVEL`
+  digitalSignatureCadesLevel: "b-lt"
+  # `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
+  digitalSignatureCertificateCheckTime: current_time
+  # Timestamp Authority (TSA) settings
+  timestampAuthority:
+    # `TIMESTAMP_AUTHORITY_URL`
+    url: https://freetsa.org/
+    # `TIMESTAMP_AUTHORITY_USERNAME`
+    username: ""
+    # `TIMESTAMP_AUTHORITY_PASSWORD`
+    password: ""
+
+# Document Engine Dashboard settings
+dashboard:
+  # Enable dashboard
+  enabled: true
+  # Dashboard authentication
+  auth:
+    # `DASHBOARD_USERNAME`
+    username: admin
+    # `DASHBOARD_PASSWORD` — will generate a random password if not set
+    password: ""
+    # Use an external secret for dashboard credentials
+    # instead of the values from `pspdfkit.auth.dashboard.*`
+    externalSecret:
+      # External secret name
+      name: ""
+      # Key names
+      usernameKey: DASHBOARD_USERNAME
+      passwordKey: DASHBOARD_PASSWORD
+
+# Observability settings
+observability:
+  # Logs
+  log:
+    # `LOG_LEVEL`
+    level: info
+    # `HEALTHCHECK_LOGLEVEL` — log level for health checks
+    healthcheckLevel: debug
+  # OpenTelemetry
+  opentelemetry:
+  # Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
+    enabled: false
+    # https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+    # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
+    otlpExporterEndpoint: ""
+    # `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
+    otlpExporterProtocol: ""
+    # `OTEL_SERVICE_NAME`, service name
+    otelServiceName: ""
+    # `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
+    otelResourceAttributes: ""
+    # `OTEL_PROPAGATORS`, propagators
+    otelPropagators: ""
+    # `OTEL_TRACES_SAMPLER`, should normally not be touched
+    # to allow custom `parent_based` work,
+    # but something like `parentbased_traceidratio` may be considered
+    otelTracesSampler: ""
+    # `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler
+    otelTracesSamplerArg: ""
+  # Metrics configuration
+  metrics:
+    enabled: false
+    # StatsD parameters
+    statsd:
+      # Enable StatsD exporting, required for Prometheus exporter
+      enabled: false
+      # StatsD host, `STATSD_HOST`
+      # Set to `localhost` if using the Prometheus exporter
+      host: localhost
+      # StatsD port, `STATSD_PORT`
+      port: 9125
+      # (tpl) StatsD custom tags, `STATSD_CUSTOM_TAGS`
+      customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
+    # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
+    serviceMonitor:
+      enabled: false
+      # Release namespace, if empty
+      namespace: ""
+      interval: 30s
+      scrapeTimeout: ""
+      labels: {}
+      relabelings: []
+      metricRelabelings: []
+      honorLabels: false
+      jobLabel: ""
+    # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule
+    prometheusRule:
+      enabled: false
+      namespace: ""
+      labels: {}
+      rules: []
+
+# StatsD exporter for Prometheus, not recommended for production use
+# Requires `pspdfkit.observability.metrics.enabled` and `pspdfkit.observability.metrics.statsd.enabled`
+prometheusExporter:
+  enabled: false
+  image:
+    repository: prom/statsd-exporter
+    pullPolicy: IfNotPresent
+    tag: "v0.27.1"
+  port: 10254
+  resources:
+    requests:
+      memory: "32Mi"
+      cpu: "50m"
+    limits:
+      memory: "128Mi"
+      cpu: "100m"
+
+# Ordinary Kubernetes settings
+service:
+  type: ClusterIP
+  port: 5000
 
 serviceAccount:
   create: true
@@ -330,10 +437,6 @@ securityContext: {}
 # readOnlyRootFilesystem: true
 # runAsNonRoot: true
 # runAsUser: 1000
-
-service:
-  type: ClusterIP
-  port: 5000
 
 ingress:
   enabled: false
@@ -414,42 +517,7 @@ networkPolicy:
   #                 operator: In
   #                 values:
   #                   - some-storage
-# StatsD exporter for Prometheus, not recommended for production use
-prometheusExporter:
-  enabled: false
-  image:
-    repository: prom/statsd-exporter
-    pullPolicy: IfNotPresent
-    tag: "v0.26.1"
-  statsdPort: 9125
-  port: 10254
-  resources:
-    requests:
-      memory: "32Mi"
-      cpu: "50m"
-    limits:
-      memory: "128Mi"
-      cpu: "100m"
-metrics:
-  enabled: true
-  # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
-  serviceMonitor:
-    enabled: false
-    # Release namespace, if empty
-    namespace: ""
-    interval: 30s
-    scrapeTimeout: ""
-    labels: {}
-    relabelings: []
-    metricRelabelings: []
-    honorLabels: false
-    jobLabel: ""
-  # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule
-  prometheusRule:
-    enabled: false
-    namespace: ""
-    labels: {}
-    rules: []
+
 # https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 resources: {}
 # Number of replicas
@@ -563,9 +631,9 @@ postgresql:
       host     all             all        0.0.0.0/0               md5
       host     all             all        ::/0                    md5
   auth:
-    enablePostgresUser: true
-    postgresPassword: pspdfkit
-    database: pspdfkit
+    enabledPostgresUser: true
+    postgresPassword: despair
+    database: document-engine
 
 #
 # External MinIO chart
@@ -575,8 +643,8 @@ minio:
   enabled: false
   mode: standalone
   auth:
-    rootUser: pspdfkitObjectStorageRootKey
-    rootPassword: pspdfkitObjectStorageRootPassword
+    rootUser: documentEngineObjectStorageRootKey
+    rootPassword: documentEngineObjectStorageRootPassword
   defaultBuckets: "document-engine-assets"
   disableWebUI: true
 
@@ -590,4 +658,4 @@ redis:
   auth:
     enabled: true
     sentinel: false
-    password: pspdfkit
+    password: ""

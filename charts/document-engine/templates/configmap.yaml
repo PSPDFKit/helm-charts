@@ -1,0 +1,198 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "document-engine.fullname" . }}
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+data:
+{{- with .Values.config.replaceSecretsFromEnv }}
+  REPLACE_SECRETS_FROM_ENV: {{ . | quote }}
+{{- end }}
+  PSPDFKIT_WORKER_POOL_SIZE: {{ .Values.config.workerPoolSize | quote }}
+  PORT: {{ .Values.config.port | quote }}
+  SERVER_REQUEST_TIMEOUT: {{ mul 1000 .Values.config.requestTimeoutSeconds | quote }}
+  PSPDFKIT_WORKER_TIMEOUT: {{ mul 1000 .Values.config.workerTimeoutSeconds | quote }}
+  PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
+  REMOTE_URL_FETCH_TIMEOUT: {{ mul 1000 .Values.config.urlFetchTimeoutSeconds | quote }}
+  READ_ANNOTATION_BATCH_TIMEOUT: {{ mul 1000 .Values.config.readAnnotationBatchTimeoutSeconds | quote }}
+  MAX_UPLOAD_SIZE_BYTES: {{ mul 1048576 .Values.config.maxUploadSizeMegaBytes | quote }}
+  ASYNC_JOBS_TTL: {{ .Values.config.asyncJobsTtlSeconds | quote }}
+  ALLOW_DOCUMENT_UPLOADS: {{ .Values.config.allowDocumentUploads | quote }}
+  ALLOW_REMOTE_DOCUMENTS: {{ .Values.config.allowRemoteDocuments | quote }}
+  ALLOW_DOCUMENT_GENERATION: {{ .Values.config.allowDocumentGeneration | quote }}
+  ALLOW_REMOTE_ASSETS_IN_GENERATION: {{ .Values.config.allowRemoteAssetsInGeneration | quote }}
+  IGNORE_INVALID_ANNOTATIONS: {{ .Values.config.ignoreInvalidAnnotations | quote }}
+  AUTOMATIC_LINK_EXTRACTION: {{ .Values.config.automaticLinkExtraction | quote }}
+  MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
+{{- with .Values.config.proxy.http }}
+  HTTP_PROXY: {{ . | quote }}
+{{- end }}
+{{- with .Values.config.proxy.https }}
+  HTTPS_PROXY: {{ . | quote }}
+{{- end }}
+{{- with .Values.config.trustedProxies }}
+  TRUSTED_PROXIES: {{ . | quote }}
+{{- end }}
+{{- with .Values.certificateTrust.downloaderTrustFileName }}
+  DOWNLOADER_CERT_FILE_PATH: "/certificate-stores-custom/{{ . }}"
+{{- end }}
+#
+# Database
+#
+{{- if .Values.database.enabled }}
+{{- with .Values.database }}
+  DATABASE_CONNECTIONS: {{ .connections | quote }}
+{{-   if .migrationJob.enabled }}
+  ENABLE_DATABASE_MIGRATIONS: "false"
+  EXIT_AFTER_DATABASE_MIGRATIONS: "false"
+{{-   else }}
+  ENABLE_DATABASE_MIGRATIONS: "true"
+  EXIT_AFTER_DATABASE_MIGRATIONS: "false"
+{{-   end }}
+{{-   with .postgres }}
+{{-     with .host }}
+  PGHOST: {{ . | quote }}
+{{-     end }}
+{{-     with .port }}
+  PGPORT: {{ . | quote }}
+{{-     end }}
+{{-     with .database }}
+  PGDATABASE: {{ . | quote }}
+{{-     end }}
+{{-     if .tls.enabled }}
+  PGSSL: "true"
+  PGSSL_DISABLE_VERIFY: {{ not .postgres.tls.verify | quote }}
+  PGSSL_DISABLE_HOSTNAME_VERIFY: {{ not .postgres.tls.hostVerify | quote }}
+{{-       with .tls.commonName }}
+  PGSSL_CA_CERTS: {{ . | quote }}
+{{-       end }}
+{{-       if .tls.trustBundle }}
+  PGSSL_CA_CERTS: {{ .tls.trustBundle | quote }}
+{{-       else if .tls.trustFileName }}
+  PGSSL_CA_CERT_PATH: "/certificate-stores-custom/{{ .tls.trustFileName }}"
+{{-       end }}
+{{-     else }}
+  PGSSL: "false"
+{{-     end }}
+{{-   end }}
+{{- end }}
+{{- end }}
+#
+# Asset storage
+#
+{{- with .Values.assetStorage }}
+  ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .localCacheSizeMegabytes | quote }}
+  ASSET_STORAGE_BACKEND: {{ .backendType | quote }}
+{{-   if $.Values.database.enabled }}
+{{-     if .backendFallback.enabled }}
+  ENABLE_ASSET_STORAGE_FALLBACK: "true"
+  ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: {{ .backendFallback.enabledPostgres | quote }}
+  ENABLE_ASSET_STORAGE_FALLBACK_S3: {{ .backendFallback.enabledS3 | quote }}
+  ENABLE_ASSET_STORAGE_FALLBACK_AZURE: {{ .backendFallback.enabledAzure | quote }}
+{{-     else }}
+  ENABLE_ASSET_STORAGE_FALLBACK: "false"
+  ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES: "false"
+  ENABLE_ASSET_STORAGE_FALLBACK_S3: "false"
+  ENABLE_ASSET_STORAGE_FALLBACK_AZURE: "false"
+{{-     end }}
+{{-     if .s3.bucket }}
+  ASSET_STORAGE_S3_BUCKET: {{ .s3.bucket | quote }}
+  ASSET_STORAGE_S3_REGION: {{ .s3.region | quote }}
+{{-       if .s3.host }}
+  ASSET_STORAGE_S3_HOST: {{ .s3.host | quote }}
+  ASSET_STORAGE_S3_PORT: {{ .s3.port | quote }}
+  ASSET_STORAGE_S3_SCHEME: {{ .s3.scheme | quote }}
+{{-       end }}
+{{-     end }}
+{{-     if .azure.container }}
+  AZURE_STORAGE_DEFAULT_CONTAINER: {{ .azure.container | quote }}
+{{-       if .azure.apiUrl }}
+  AZURE_STORAGE_API_URL: {{ .azure.apiUrl | quote }}
+{{-       end }}
+{{-     end }}
+{{-     if .redis.enabled }}
+  USE_REDIS_CACHE: "true"
+{{-       with .redis }}
+  USE_REDIS_TTL_FOR_PRERENDERING: {{ .useTtlForPrerendering | quote }}
+  REDIS_TTL: {{ .ttlSeconds | int | quote }}
+{{-         if .sentinel.enabled }}
+  REDIS_SENTINELS: {{ .sentinel.urls | join ";" | quote }}
+  REDIS_SENTINELS_GROUP: {{ .sentinel.group | quote }}
+{{-         else }}
+  REDIS_HOST: {{ .host | quote }}
+  REDIS_SSL: {{ .tls.enabled | toString | quote }}
+{{-         end }}
+  REDIS_PORT: {{ .port | toString | quote }}
+{{-         with .database }}
+  REDIS_DATABASE: {{ . | quote }}
+{{-         end }}
+{{-       end }}
+{{-     else }}
+  USE_REDIS_CACHE: "false"
+{{-     end }}
+{{-   end }}
+{{- end }}
+#
+# Digital Signatures
+#
+{{- with .Values.documentSigningService }}
+{{-   if .enabled }}
+  SIGNING_SERVICE_URL: {{ .url | quote }}
+  SIGNING_SERVICE_TIMEOUT:  {{ mul 1000 .timeoutSeconds | quote }}
+  DEFAULT_SIGNER_NAME: {{ default "none" .defaultSignerName | quote }}
+  DEFAULT_SIGNATURE_REASON: {{ default "none" .defaultSignatureReason | quote }}
+  DEFAULT_SIGNATURE_LOCATION: {{ default "none" .defaultSignatureLocation | quote }}
+  DIGITAL_SIGNATURE_HASH_ALGORITHM: {{ .digitalSignatureHashAlgorithm | quote }}
+  DIGITAL_SIGNATURE_CADES_LEVEL: {{ .digitalSignatureCadesLevel | quote }}
+  DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME: {{ default "current_time" .digitalSignatureCertificateCheckTime | quote }}
+  TIMESTAMP_AUTHORITY_URL: {{ .timestampAuthority.url | quote }}
+  TIMESTAMP_AUTHORITY_USERNAME: {{ .timestampAuthority.username | quote }}
+  TIMESTAMP_AUTHORITY_PASSWORD: {{ .timestampAuthority.password | quote }}
+{{-   end }}
+{{- end }}
+#
+# Observability
+#
+{{- with .Values.observability }}
+{{-   if and .metrics.enabled .metrics.statsd.enabled }}
+{{-     with .metrics.statsd }}
+  STATSD_HOST: {{ .host | quote }}
+  STATSD_PORT: {{ .port | quote }}
+  STATSD_CUSTOM_TAGS: {{ tpl .customTags $ | quote }}
+{{-     end }}
+{{-   end }}
+  LOG_LEVEL: {{ .log.level | quote }}
+  HEALTHCHECK_LOGLEVEL: {{ .log.healthcheckLevel | quote }}
+{{-   with .opentelemetry }}
+{{-     if .enabled }}
+  ENABLE_OPENTELEMETRY: "true"
+{{-       with .otlpExporterEndpoint }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ . | quote }}
+{{-       end }}
+{{-       with .otlpExporterProtocol }}
+  OTEL_EXPORTER_OTLP_PROTOCOL: {{ . | quote }}
+{{-       end }}
+{{-       with .otelServiceName }}
+  OTEL_SERVICE_NAME: {{ . | quote }}
+{{-       end }}
+{{-       with .otelResourceAttributes }}
+  OTEL_RESOURCE_ATTRIBUTES: {{ . | quote }}
+{{-       end }}
+{{-       with .otelPropagators }}
+  OTEL_PROPAGATORS: {{ . | quote }}
+{{-       end }}
+{{-       with .otelTracesSampler }}
+  OTEL_TRACES_SAMPLER: {{ . | quote }}
+{{-       end }}
+{{-       with .otelTracesSamplerArg }}
+  OTEL_TRACES_SAMPLER_ARG: {{ . | quote }}
+{{-       end }}
+{{-     else }}
+  ENABLE_OPENTELEMETRY: "false"
+{{-     end }}
+{{-   end }}
+{{- end }}
+#
+# Can be used for hash updating
+#
+  HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}

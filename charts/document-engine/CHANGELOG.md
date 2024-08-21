@@ -1,43 +1,107 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [3.0.0 (2024-08-20)](#300-2024-08-20)
+    - [Changed](#changed)
+    - [Added](#added)
   - [2.9.3 (2024-08-16)](#293-2024-08-16)
     - [Fixed](#fixed)
   - [2.9.2 (2024-08-13)](#292-2024-08-13)
-    - [Changed](#changed)
-  - [2.9.1 (2024-08-10)](#291-2024-08-10)
-    - [Added](#added)
     - [Changed](#changed-1)
-  - [2.9.0 (2024-08-01)](#290-2024-08-01)
+  - [2.9.1 (2024-08-10)](#291-2024-08-10)
     - [Added](#added-1)
     - [Changed](#changed-2)
-    - [Fixed](#fixed-1)
-  - [2.8.0](#280)
+  - [2.9.0 (2024-08-01)](#290-2024-08-01)
     - [Added](#added-2)
     - [Changed](#changed-3)
+    - [Fixed](#fixed-1)
+  - [2.8.0](#280)
+    - [Added](#added-3)
+    - [Changed](#changed-4)
     - [Fixed](#fixed-2)
   - [2.7.3](#273)
-    - [Changed](#changed-4)
+    - [Changed](#changed-5)
     - [Fixed](#fixed-3)
   - [2.7.2](#272)
     - [Fixed](#fixed-4)
   - [2.7.0](#270)
-    - [Changed](#changed-5)
-  - [2.6.2](#262)
-    - [Added](#added-3)
     - [Changed](#changed-6)
-  - [2.6.0](#260)
+  - [2.6.2](#262)
     - [Added](#added-4)
-  - [2.4.0](#240)
-    - [Added](#added-5)
-  - [2.3.0](#230)
-    - [Added](#added-6)
-  - [2.2.0](#220)
-    - [Added](#added-7)
-  - [2.1.0](#210)
     - [Changed](#changed-7)
-  - [2.0.0](#200)
+  - [2.6.0](#260)
+    - [Added](#added-5)
+  - [2.4.0](#240)
+    - [Added](#added-6)
+  - [2.3.0](#230)
+    - [Added](#added-7)
+  - [2.2.0](#220)
+    - [Added](#added-8)
+  - [2.1.0](#210)
     - [Changed](#changed-8)
+  - [2.0.0](#200)
+    - [Changed](#changed-9)
+
+## 3.0.0 (2024-08-20)
+
+> [!WARNING]
+> Breaking changes. 
+> We hope that `values.yaml` will now be much more readable and usable.
+
+### Changed
+
+* Massive internal refactoring.
+* `pspdfkit.license.isOffline` is removed, as it is no longer necessary
+* `pspdfkit.license` section moved to the top level as `documentEngineLicense`.
+* `pspdfkit.auth.api` section moved to the top level as `apiAuth`, both `pspdfkit.auth.api.apiToken` and `pspdfkit.auth.api.jwt` section.
+* `pspdfkit.secretKeyBase` restructured:
+  * `pspdfkit.secretKeyBase.value` moved to `apiAuth.secretKeyBase`
+  * Former optional `pspdfkit.secretKeyBase.externalSecret` integrated into `apiAuth.externalSecret`:
+    * In case `apiAuth.externalSecret.secretKeyBaseKey` is set, the value is used.
+* `pspdfkit.storage.cleanupJob` becomes `documentLifecycle.cleanupJob`
+* Database-related part of `pspdfkit.storage` moved to `database`:
+  * `pspdfkit.storage.postgres.enabled` becomes `database.enabled`
+  * The rest of `pspdfkit.storage.postgres` becomes `database.postgres`
+  * `pspdfkit.storage.databaseEngine` becomes `database.engine`, only `postgres` is currently supported (formerly `postgresql`)
+  * `pspdfkit.storage.databaseConnections` becomes `database.connections`
+  * `pspdfkit.storage.databaseMigrationJob` becomes `database.migrationJob`
+* The remaining `pspdfkit.storage` section moved to the top level as `assetStorage`.
+  * `pspdfkit.assetStorageCacheSizeMegaBytes` renamed to `assetStorage.localCacheSizeMegabytes`.
+  * `pspdfkit.storage.assetStorageBackend` renamed to `assetStorage.backendType`
+  * `pspdfkit.storage.enableAssetStorageFallback*` moved  to `assetStorage.backendFallback` section
+* `pspdfkit.signingService` section moved to the top level as `documentSigningService`.
+* Certificate trust configuration restructured into the new `certificateTrust` section:
+  * Map `pspdfkit.signingTrustConfigMaps` becomes list `certificateTrust.digitalSignatures` allowing both ConfigMaps and Secrets
+  * Map `pspdfkit.trustConfigMaps` becomes list `certificateTrust.customCertificates` allowing both ConfigMaps and Secrets
+  * `pspdfkit.downloaderTrustFileName` moved to `certificateTrust.downloaderTrustFileName` and is now empty by default which will set HTTP client trust to Mozilla CA bundle
+  * `assetStorage.postgres.tls.trustFileName` will assume a file name from `/certificate-stores-custom`, which is filled from `certificateTrust.customCertificates`
+* `pspdfkit.observability` section moved to the top level as `observability`.
+  * `pspdfkit.log.level` moved into `observability.log.level`.
+  * `metrics` section moved to `observability.metrics`.
+* `pspdfkit.auth.dashboard` section became `dashboard`:
+  * `pspdfkit.auth.dashboard.enabled` renamed to `dashboard.enabled`
+  * The rest of the former section to `pspdfkit.dashboard.auth`
+* The remaining `pspdfkit` section renamed to `config`.
+* Aligned default values with the default [Document Engine configuration values](https://pspdfkit.com/guides/document-engine/configuration/options/), affects the following default values: 
+  * `config.workerPoolSize` changed from `8` to `16`
+  * `config.maxUploadSizeMegaBytes` changed from `128` to `950`
+  * `config.urlFetchTimeoutSeconds` changed from `20` to `5`
+  * `config.generationTimeoutSeconds` changed from `120` to `20`
+  * `config.requestTimeoutSeconds` changed from `120` to `60`
+  * `config.automaticLinkExtraction` changed from `true` to `false`
+* Exceptions to the previous list:
+  * `config.trustedProxies` is left as `default` for safety reasons
+
+### Added
+
+* Health check log level as `observability.healthcheckLevel`.
+* Direct trust bundle for PostgreSQL as `assetStorage.postgres.trustBundle`.
+* Option for host verification of PostgreSQL, `assetStorage.postgres.hostVerify`.
+* Worker timeout in seconds as `config.workerTimeoutSeconds`.
+* Asynchronous jobs timeout in seconds as `config.asyncJobsTtlSeconds`.
+* HTTP proxy settings: `config.proxy.http` for HTTP and `config.proxy.https` for HTTPS
+* Explicit StatsD exporting parameters in `observability.metrics.statsd` section.
+* One more chart test.
 
 ## 2.9.3 (2024-08-16)
 
