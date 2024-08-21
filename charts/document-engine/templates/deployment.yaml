@@ -91,34 +91,34 @@ spec:
                   key: {{ .Values.documentEngineLicense.externalSecret.key }}
           {{- end }}
           {{- if .Values.apiAuth.externalSecret.name -}}
-            {{- with .Values.apiAuth.externalSecret -}}
-              {{- if .apiTokenKey -}}
+            {{- with .Values.apiAuth -}}
+              {{- if .externalSecret.apiTokenKey -}}
             - name: API_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .name }}
-                  key: {{ .apiTokenKey }}
+                  name: {{ .externalSecret.name }}
+                  key: {{ .externalSecret.apiTokenKey }}
               {{- end }}
-              {{- if .secretKeyBaseKey -}}
+              {{- if .externalSecret.secretKeyBaseKey -}}
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
-                  name: {{ .name }}
-                  key: {{ .secretKeyBaseKey }}
+                  name: {{ .externalSecret.name }}
+                  key: {{ .externalSecret.secretKeyBaseKey }}
               {{- end }}
-              {{- if and .jwt.enabled .jwt.publicKeyKey -}}
+              {{- if and .jwt.enabled .externalSecret.jwtPublicKeyKey -}}
             - name: JWT_PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .name }}
-                  key: {{ .jwt.publicKeyKey }}
+                  name: {{ .externalSecret.name }}
+                  key: {{ .externalSecret.jwtPublicKeyKey }}
               {{- end }}
-              {{- if and .jwt.enabled .jwt.jwtAlgorithmKey -}}
+              {{- if and .jwt.enabled .externalSecret.jwtAlgorithmKey -}}
             - name: JWT_ALGORITHM
               valueFrom:
                 secretKeyRef:
-                  name: {{ .name }}
-                  key: {{ .jwt.jwtAlgorithmKey }}
+                  name: {{ .externalSecret.name }}
+                  key: {{ .externalSecret.jwtAlgorithmKey }}
               {{- end }}
             {{- end }}
           {{- end -}}
