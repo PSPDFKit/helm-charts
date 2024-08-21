@@ -1,34 +1,36 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [3.0.3 (2024-08-20)](#303-2024-08-20)
+  - [3.0.4 (2024-08-21)](#304-2024-08-21)
     - [Changed](#changed)
+  - [3.0.3 (2024-08-20)](#303-2024-08-20)
+    - [Changed](#changed-1)
     - [Added](#added)
   - [2.9.3 (2024-08-16)](#293-2024-08-16)
     - [Fixed](#fixed)
   - [2.9.2 (2024-08-13)](#292-2024-08-13)
-    - [Changed](#changed-1)
+    - [Changed](#changed-2)
   - [2.9.1 (2024-08-10)](#291-2024-08-10)
     - [Added](#added-1)
-    - [Changed](#changed-2)
+    - [Changed](#changed-3)
   - [2.9.0 (2024-08-01)](#290-2024-08-01)
     - [Added](#added-2)
-    - [Changed](#changed-3)
+    - [Changed](#changed-4)
     - [Fixed](#fixed-1)
   - [2.8.0](#280)
     - [Added](#added-3)
-    - [Changed](#changed-4)
+    - [Changed](#changed-5)
     - [Fixed](#fixed-2)
   - [2.7.3](#273)
-    - [Changed](#changed-5)
+    - [Changed](#changed-6)
     - [Fixed](#fixed-3)
   - [2.7.2](#272)
     - [Fixed](#fixed-4)
   - [2.7.0](#270)
-    - [Changed](#changed-6)
+    - [Changed](#changed-7)
   - [2.6.2](#262)
     - [Added](#added-4)
-    - [Changed](#changed-7)
+    - [Changed](#changed-8)
   - [2.6.0](#260)
     - [Added](#added-5)
   - [2.4.0](#240)
@@ -38,9 +40,16 @@
   - [2.2.0](#220)
     - [Added](#added-8)
   - [2.1.0](#210)
-    - [Changed](#changed-8)
-  - [2.0.0](#200)
     - [Changed](#changed-9)
+  - [2.0.0](#200)
+    - [Changed](#changed-10)
+
+## 3.0.4 (2024-08-21)
+
+### Changed
+
+* Documentation generation.
+* Renamed `assetStorage.redis.useTtlForPrerendering` to `assetStorage.redis.useTtl`.
 
 ## 3.0.3 (2024-08-20)
 

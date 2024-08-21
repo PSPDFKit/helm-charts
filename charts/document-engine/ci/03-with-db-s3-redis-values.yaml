@@ -31,7 +31,7 @@ assetStorage:
     username: ""
     password: ""
     ttlSeconds: 3600
-    useTtlForPrerendering: true
+    useTtl: true
     sentinel:
       enabled: false
       urls:

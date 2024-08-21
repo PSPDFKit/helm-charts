@@ -113,7 +113,7 @@ data:
 {{-     if .redis.enabled }}
   USE_REDIS_CACHE: "true"
 {{-       with .redis }}
-  USE_REDIS_TTL_FOR_PRERENDERING: {{ .useTtlForPrerendering | quote }}
+  USE_REDIS_TTL_FOR_PRERENDERING: {{ .useTtl | quote }}
   REDIS_TTL: {{ .ttlSeconds | int | quote }}
 {{-         if .sentinel.enabled }}
   REDIS_SENTINELS: {{ .sentinel.urls | join ";" | quote }}
