@@ -73,9 +73,9 @@ spec:
               value: 'true'
             - name: EXIT_AFTER_DATABASE_MIGRATIONS
               value: 'true'
-          {{- if .Values.apiAuth.externalSecret.name -}}
-            {{- with .Values.apiAuth.externalSecret -}}
-              {{- if .secretKeyBaseKey -}}
+          {{- if .Values.apiAuth.externalSecret.name }}
+            {{- with .Values.apiAuth.externalSecret }}
+              {{- if .secretKeyBaseKey }}
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
@@ -83,7 +83,7 @@ spec:
                   key: {{ .secretKeyBaseKey }}
               {{- end }}
             {{- end }}
-          {{- end -}}
+          {{- end }}
           {{- with .Values.extraEnvs }}
             {{- toYaml .| nindent 12 }}
           {{- end }}

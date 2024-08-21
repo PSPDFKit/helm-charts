@@ -14,9 +14,9 @@ spec:
         - secretRef:
             name: {{ include "document-engine.fullname" . }}
       env:
-      {{- if .Values.apiAuth.externalSecret.name -}}
-        {{- with .Values.apiAuth.externalSecret -}}
-          {{- if .apiTokenKey -}}
+      {{- if .Values.apiAuth.externalSecret.name }}
+        {{- with .Values.apiAuth.externalSecret }}
+          {{- if .apiTokenKey }}
         - name: API_AUTH_TOKEN
           valueFrom:
             secretKeyRef:
@@ -24,7 +24,7 @@ spec:
               key: {{ .apiTokenKey }}
           {{- end }}
         {{- end }}
-      {{- end -}}
+      {{- end }}
       command: ['curl']
       args: 
         - '-X' 

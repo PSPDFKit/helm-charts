@@ -14,7 +14,7 @@ spec:
   {{- end }}
   {{- if .Values.updateStrategy }}
   strategy:
-    {{ toYaml .Values.updateStrategy | nindent 4 }}
+    {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels:
@@ -52,7 +52,7 @@ spec:
             - secretRef:
                 name: {{ include "document-engine.fullname" . }}
           {{- if and .Values.database.enabled 
-                     .Values.database.postgres.externalSecretName  }}
+                     .Values.database.postgres.externalSecretName }}
             - secretRef:
                 name: {{ .Values.database.postgres.externalSecretName }}
           {{- end }}
@@ -90,30 +90,30 @@ spec:
                   name: {{ .Values.documentEngineLicense.externalSecret.name }}
                   key: {{ .Values.documentEngineLicense.externalSecret.key }}
           {{- end }}
-          {{- if .Values.apiAuth.externalSecret.name -}}
-            {{- with .Values.apiAuth -}}
-              {{- if .externalSecret.apiTokenKey -}}
+          {{- if .Values.apiAuth.externalSecret.name }}
+            {{- with .Values.apiAuth }}
+              {{- if .externalSecret.apiTokenKey }}
             - name: API_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ .externalSecret.name }}
                   key: {{ .externalSecret.apiTokenKey }}
               {{- end }}
-              {{- if .externalSecret.secretKeyBaseKey -}}
+              {{- if .externalSecret.secretKeyBaseKey }}
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
                   name: {{ .externalSecret.name }}
                   key: {{ .externalSecret.secretKeyBaseKey }}
               {{- end }}
-              {{- if and .jwt.enabled .externalSecret.jwtPublicKeyKey -}}
+              {{- if and .jwt.enabled .externalSecret.jwtPublicKeyKey }}
             - name: JWT_PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ .externalSecret.name }}
                   key: {{ .externalSecret.jwtPublicKeyKey }}
               {{- end }}
-              {{- if and .jwt.enabled .externalSecret.jwtAlgorithmKey -}}
+              {{- if and .jwt.enabled .externalSecret.jwtAlgorithmKey }}
             - name: JWT_ALGORITHM
               valueFrom:
                 secretKeyRef:
@@ -121,7 +121,7 @@ spec:
                   key: {{ .externalSecret.jwtAlgorithmKey }}
               {{- end }}
             {{- end }}
-          {{- end -}}
+          {{- end }}
           {{- if and .Values.dashboard.enabled 
                      .Values.dashboard.auth.externalSecret.name}}
             - name: DASHBOARD_USERNAME
