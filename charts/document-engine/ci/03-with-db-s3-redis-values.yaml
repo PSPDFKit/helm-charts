@@ -32,7 +32,6 @@ assetStorage:
     password: ""
     ttlSeconds: 3600
     useTtlForPrerendering: true
-    externalSecretName: qq
     sentinel:
       enabled: false
       urls:
