@@ -507,81 +507,81 @@ documentSigningService:
     # @ignored
     password: ""
 
-# -- Document Engine Dashboard settings
-dashboard:
-  # -- Enable dashboard
-  enabled: true
-  # -- Dashboard authentication
-  auth:
-    # -- `DASHBOARD_USERNAME`
-    username: admin
-    # -- `DASHBOARD_PASSWORD` — will generate a random password if not set
-    password: ""
-    # -- Use an external secret for dashboard credentials
-    # -- instead of the values from `pspdfkit.auth.dashboard.*`
-    externalSecret:
-      # -- External secret name
-      name: ""
-      # -- Key names
-      usernameKey: DASHBOARD_USERNAME
-      passwordKey: DASHBOARD_PASSWORD
-
-# -- Observability settings
+# -- (object) Observability settings
+# @section -- 9. Observability
+# @notationType -- none
 observability:
-  # -- Logs
+  # -- (object) Logs
+  # @section -- 9. Observability
+  # @notationType -- reference
   log:
     # -- `LOG_LEVEL`
+    # @section -- 9. Observability
     level: info
     # -- `HEALTHCHECK_LOGLEVEL` — log level for health checks
+    # @section -- 9. Observability
     healthcheckLevel: debug
-  # -- OpenTelemetry
+  # -- (object) OpenTelemetry settings
+  # @section -- 9. Observability
+  # @notationType -- reference
   opentelemetry:
-  # -- Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
+    # -- Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
+    # @section -- 9. Observability
     enabled: false
     # -- https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
     # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
+    # @section -- 9. Observability
     otlpExporterEndpoint: ""
     # -- `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
+    # @section -- 9. Observability
     otlpExporterProtocol: ""
     # -- `OTEL_SERVICE_NAME`, service name
+    # @section -- 9. Observability
     otelServiceName: ""
     # -- `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
+    # @section -- 9. Observability
     otelResourceAttributes: ""
     # -- `OTEL_PROPAGATORS`, propagators
+    # @section -- 9. Observability
     otelPropagators: ""
     # -- `OTEL_TRACES_SAMPLER`, should normally not be touched
     # to allow custom `parent_based` work,
     # but something like `parentbased_traceidratio` may be considered
+    # @section -- 9. Observability
     otelTracesSampler: ""
     # -- `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler
+    # @section -- 9. Observability
     otelTracesSamplerArg: ""
-  # -- Metrics configuration
+  # -- (object) Metrics configuration
+  # @section -- 9. Observability
+  # @notationType -- reference
   metrics:
     # -- Enable metrics exporting
-    # @section -- Observability settings
+    # @section -- 9. Observability
     enabled: false
-    # -- StatsD parameters
-    # @section -- Observability settings
-    # @default -- *See below*
-    # @notationType -- plain
+    # -- (object) StatsD parameters
+    # @section -- 9. Observability
+    # @notationType -- reference
     statsd:
       #  -- Enable StatsD exporting, required for Prometheus exporter
-      # @section -- Observability settings
+      # @section -- 9. Observability
       enabled: false
       #  -- StatsD host, `STATSD_HOST`
       # Set to `localhost` if using the Prometheus exporter
-      # @section -- Observability settings
+      # @section -- 9. Observability
       host: localhost
       # -- StatsD port, `STATSD_PORT`
-      # @section -- Observability settings
+      # @section -- 9. Observability
       port: 9125
       # -- (tpl/string) StatsD custom tags, `STATSD_CUSTOM_TAGS`
       # @notationType -- tpl
-      # @section -- Observability settings
+      # @section -- 9. Observability
       # @default -- *generated*
       # @notationType -- plain
       customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
-    # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
+    # -- (object) Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor)
+    # @section -- 9. Observability
+    # @notationType -- reference
     serviceMonitor:
       enabled: false
       # Release namespace, if empty
@@ -593,16 +593,22 @@ observability:
       metricRelabelings: []
       honorLabels: false
       jobLabel: ""
-    # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule
+    # -- (object) Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule)
+    # @section -- 9. Observability
+    # @notationType -- reference
     prometheusRule:
       enabled: false
       namespace: ""
       labels: {}
       rules: []
 
-# StatsD exporter for Prometheus, not recommended for production use
-# Requires `pspdfkit.observability.metrics.enabled` and `pspdfkit.observability.metrics.statsd.enabled`
+# -- (object) StatsD exporter for Prometheus, not recommended for production use
+# Requires `observability.metrics.enabled` and `observability.metrics.statsd.enabled`
+# @section -- 9. Observability
+# @notationType -- reference
 prometheusExporter:
+  # -- Enable the Prometheus exporter
+  # @section -- 9. Observability
   enabled: false
   image:
     repository: prom/statsd-exporter
@@ -617,21 +623,58 @@ prometheusExporter:
       memory: "128Mi"
       cpu: "100m"
 
-# Ordinary Kubernetes settings
+# -- (object) Document Engine Dashboard settings
+# @section -- Dashboard
+# @notationType -- none
+dashboard:
+  # -- Enable dashboard
+  # @section -- Dashboard
+  enabled: true
+  # -- (object) Dashboard authentication
+  # @section -- Dashboard
+  # @notationType -- reference
+  auth:
+    # -- `DASHBOARD_USERNAME`
+    # @section -- Dashboard
+    username: admin
+    # -- `DASHBOARD_PASSWORD` — will generate a random password if not set
+    # @section -- Dashboard
+    password: ""
+    # -- (object) Use an external secret for dashboard credentials
+    # @section -- Dashboard
+    # @notationType -- reference
+    externalSecret:
+      # -- External secret name
+      # @section -- Dashboard
+      name: ""
+      # -- Secret key name for the username
+      # @section -- Dashboard
+      usernameKey: DASHBOARD_USERNAME
+      # -- Secret key name for the password
+      # @section -- Dashboard
+      passwordKey: DASHBOARD_PASSWORD
+
+# -- (object) Service
+# @section -- Networking
+# @notationType -- reference
 service:
   type: ClusterIP
   port: 5000
 
+# -- (object) ServiceAccount
+# @section -- Pod environment
+# @notationType -- reference
 serviceAccount:
   create: true
   annotations: {}
   name: ""
-podLabels: {}
-podAnnotations: {}
-deploymentAnnotations: {}
+
+# -- Pod security context
+# @section -- Pod environment
 podSecurityContext: {}
 # fsGroup: 2000
-
+# -- Security context
+# @section -- Pod environment
 securityContext: {}
 # capabilities:
 #   drop:
@@ -640,6 +683,38 @@ securityContext: {}
 # runAsNonRoot: true
 # runAsUser: 1000
 
+# -- Extra environment variables
+# @section -- Pod environment
+extraEnvs: []
+# -- Extra environment variables from resources
+# @section -- Pod environment
+extraEnvFrom: []
+# -- Additional volumes
+# @section -- Pod environment
+extraVolumes: []
+# -- Additional volume mounts for Document Engine container
+# @section -- Pod environment
+extraVolumeMounts: []
+# -- Additional containers
+# @section -- Pod environment
+sidecars: []
+# -- Init containers
+# @section -- Pod environment
+initContainers: []
+
+# -- Pod labels
+# @section -- Kubernetes metadata
+podLabels: {}
+# -- Pod annotations
+# @section -- Kubernetes metadata
+podAnnotations: {}
+# -- Deployment annotations
+# @section -- Kubernetes metadata
+deploymentAnnotations: {}
+
+# -- (object) Ingress
+# @section -- Networking
+# @notationType -- reference
 ingress:
   enabled: false
   className: ""
@@ -661,7 +736,9 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-# Additional ingresses, e.g. for the dashboard
+# -- (object) Additional ingresses, e.g. for the dashboard
+# @section -- Networking
+# @notationType -- reference
 extraIngresses: {}
 # dashboard:
 #   enabled: false
@@ -675,8 +752,10 @@ extraIngresses: {}
 #           pathType: Prefix
 #   tls: []
 
-# https://kubernetes.io/docs/concepts/services-networking/network-policies/
 # https://editor.networkpolicy.io/
+# -- (object) [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+# @section -- Networking
+# @notationType -- reference
 networkPolicy:
   enabled: true
   labels: {}
@@ -720,22 +799,9 @@ networkPolicy:
   #                 values:
   #                   - some-storage
 
-# https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-resources: {}
-# Number of replicas
-replicaCount: 1
-# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-updateStrategy:
-  type: RollingUpdate
-  rollingUpdate: {}
-# Additional resources
-extraEnvs: []
-extraEnvFrom: []
-extraVolumes: []
-extraVolumeMounts: []
-sidecars: []
-initContainers: []
-# https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+# -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# @section -- Pod lifecycle
+# @notationType -- reference
 startupProbe:
   httpGet:
     path: /healthcheck
@@ -746,6 +812,9 @@ startupProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 5
+# -- (object) [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# @section -- Pod lifecycle
+# @notationType -- reference
 livenessProbe:
   httpGet:
     path: /healthcheck
@@ -756,6 +825,9 @@ livenessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
+# -- (object) [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# @section -- Pod lifecycle
+# @notationType -- reference
 readinessProbe:
   httpGet:
     path: /healthcheck
@@ -766,7 +838,17 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
-# https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+
+# -- [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)
+# @section -- Pod lifecycle
+lifecycle: {}
+#  preStop:
+#    exec:
+#      command: ["/bin/sh", "-c", "sleep 180"]
+
+# -- (object) [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+# @section -- Scheduling
+# @notationType -- reference
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -790,33 +872,52 @@ autoscaling:
   #     value: 4
   #     periodSeconds: 15
   #   selectPolicy: Max
-# https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+
+# -- [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+# @section -- Scheduling
+resources: {}
+# -- Number of replicas
+# @section -- Scheduling
+replicaCount: 1
+# -- [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+# @section -- Scheduling
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+
+# -- (object) [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
+# @section -- Scheduling
+# @notationType -- reference
 podDisruptionBudget:
   create: false
   minAvailable: 1
   maxUnavailable: ""
-# https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+
+# -- [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
+# @section -- Scheduling
 nodeSelector: {}
+# -- Node affinity
+# @section -- Scheduling
 affinity: {}
-# https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+# -- [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+# @section -- Scheduling
 tolerations: []
-# https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+# -- [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/)
+# @section -- Scheduling
 topologySpreadConstraints: []
-# https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+# -- [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/)
+# @section -- Scheduling
 priorityClassName: ""
-# https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/
+# -- [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/)
+# @section -- Scheduling
 schedulerName: ""
-# https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
+# -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
+# @section -- Scheduling
 terminationGracePeriodSeconds: ""
-# https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
-lifecycle: {}
-#  preStop:
-#    exec:
-#      command: ["/bin/sh", "-c", "sleep 180"]
 
 # -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
-# @default -- *See below*
-# @notationType -- plain
+# @section -- Dependencies
+# @notationType -- reference
 postgresql:
   enabled: false
   architecture: standalone
@@ -837,8 +938,8 @@ postgresql:
     database: document-engine
 
 # -- [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)
-# @default -- *See below*
-# @notationType -- plain
+# @section -- Dependencies
+# @notationType -- reference
 minio:
   enabled: false
   mode: standalone
@@ -849,6 +950,8 @@ minio:
   disableWebUI: true
 
 # -- [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis)
+# @section -- Dependencies
+# @notationType -- reference
 redis:
   enabled: false
   architecture: standalone

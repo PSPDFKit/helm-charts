@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 3.0.4](https://img.shields.io/badge/Version-3.0.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
+![Version: 3.0.5](https://img.shields.io/badge/Version-3.0.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -188,132 +188,120 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [documentSigningService.timestampAuthority.url](./values.yaml#L500) | *string* | `"https://freetsa.org/"` | `TIMESTAMP_AUTHORITY_URL` |
 | [documentSigningService.url](./values.yaml#L470) | *string* | `"https://signing-thing.local/sign"` | `SIGNING_SERVICE_URL` |
 
-### [Observability settings](./values.yaml#L562)
+### [Observability](./values.yaml#L513)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| [observability.metrics.enabled](./values.yaml#L562) | *bool* | `false` | Enable metrics exporting |
-| [observability.metrics.statsd](./values.yaml#L567) | *plain* | *See below* | StatsD parameters |
-| [observability.metrics.statsd.customTags](./values.yaml#L583) | *tpl/string* | *generated* | StatsD custom tags, `STATSD_CUSTOM_TAGS` |
-| [observability.metrics.statsd.port](./values.yaml#L577) | *int* | `9125` | StatsD port, `STATSD_PORT` |
+| [observability](./values.yaml#L513) | *object* |  | Observability settings |
+| [observability.log](./values.yaml#L517) | *object* | [...](./values.yaml#L517) | Logs |
+| [observability.log.healthcheckLevel](./values.yaml#L523) | *string* | `"debug"` | `HEALTHCHECK_LOGLEVEL` — log level for health checks |
+| [observability.log.level](./values.yaml#L520) | *string* | `"info"` | `LOG_LEVEL` |
+| [observability.metrics](./values.yaml#L558) | *object* | [...](./values.yaml#L558) | Metrics configuration |
+| [observability.metrics.enabled](./values.yaml#L561) | *bool* | `false` | Enable metrics exporting |
+| [observability.metrics.prometheusRule](./values.yaml#L599) | *object* | [...](./values.yaml#L599) | Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule) |
+| [observability.metrics.serviceMonitor](./values.yaml#L585) | *object* | [...](./values.yaml#L585) | Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor) |
+| [observability.metrics.statsd](./values.yaml#L565) | *object* | [...](./values.yaml#L565) | StatsD parameters |
+| [observability.metrics.statsd.customTags](./values.yaml#L581) | *tpl/string* | *generated* | StatsD custom tags, `STATSD_CUSTOM_TAGS` |
+| [observability.metrics.statsd.port](./values.yaml#L575) | *int* | `9125` | StatsD port, `STATSD_PORT` |
+| [observability.opentelemetry](./values.yaml#L527) | *object* | [...](./values.yaml#L527) | OpenTelemetry settings |
+| [observability.opentelemetry.enabled](./values.yaml#L530) | *bool* | `false` | Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported |
+| [observability.opentelemetry.otelPropagators](./values.yaml#L546) | *string* | `""` | `OTEL_PROPAGATORS`, propagators |
+| [observability.opentelemetry.otelResourceAttributes](./values.yaml#L543) | *string* | `""` | `OTEL_RESOURCE_ATTRIBUTES`, resource attributes |
+| [observability.opentelemetry.otelServiceName](./values.yaml#L540) | *string* | `""` | `OTEL_SERVICE_NAME`, service name |
+| [observability.opentelemetry.otelTracesSampler](./values.yaml#L551) | *string* | `""` | `OTEL_TRACES_SAMPLER`, should normally not be touched to allow custom `parent_based` work, but something like `parentbased_traceidratio` may be considered |
+| [observability.opentelemetry.otelTracesSamplerArg](./values.yaml#L554) | *string* | `""` | `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler |
+| [observability.opentelemetry.otlpExporterEndpoint](./values.yaml#L534) | *string* | `""` | https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317` |
+| [observability.opentelemetry.otlpExporterProtocol](./values.yaml#L537) | *string* | `""` | `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc` |
+| [prometheusExporter](./values.yaml#L609) | *object* | [...](./values.yaml#L609) | StatsD exporter for Prometheus, not recommended for production use Requires `observability.metrics.enabled` and `observability.metrics.statsd.enabled` |
+| [prometheusExporter.enabled](./values.yaml#L612) | *bool* | `false` | Enable the Prometheus exporter |
+
+### [Dashboard](./values.yaml#L629)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| [dashboard](./values.yaml#L629) | *object* |  | Document Engine Dashboard settings |
+| [dashboard.auth](./values.yaml#L636) | *object* | [...](./values.yaml#L636) | Dashboard authentication |
+| [dashboard.auth.externalSecret](./values.yaml#L646) | *object* | [...](./values.yaml#L646) | Use an external secret for dashboard credentials |
+| [dashboard.auth.externalSecret.name](./values.yaml#L649) | *string* | `""` | External secret name |
+| [dashboard.auth.externalSecret.passwordKey](./values.yaml#L655) | *string* | `"DASHBOARD_PASSWORD"` | Secret key name for the password |
+| [dashboard.auth.externalSecret.usernameKey](./values.yaml#L652) | *string* | `"DASHBOARD_USERNAME"` | Secret key name for the username |
+| [dashboard.auth.password](./values.yaml#L642) | *string* | `""` | `DASHBOARD_PASSWORD` — will generate a random password if not set |
+| [dashboard.auth.username](./values.yaml#L639) | *string* | `"admin"` | `DASHBOARD_USERNAME` |
+| [dashboard.enabled](./values.yaml#L632) | *bool* | `true` | Enable dashboard |
+
+### [Dependencies](./values.yaml#L943)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| [minio](./values.yaml#L943) | *reference* | [...](./values.yaml#L943) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) |
+| [postgresql](./values.yaml#L921) | *reference* | [...](./values.yaml#L921) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) |
+| [redis](./values.yaml#L955) | *reference* | [...](./values.yaml#L955) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) |
+
+### [Kubernetes metadata](./values.yaml#L713)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| [deploymentAnnotations](./values.yaml#L713) | *object* | `{}` | Deployment annotations |
+| [podAnnotations](./values.yaml#L710) | *object* | `{}` | Pod annotations |
+| [podLabels](./values.yaml#L707) | *object* | `{}` | Pod labels |
+
+### [Networking](./values.yaml#L742)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| [extraIngresses](./values.yaml#L742) | *object* | `map[]` | Additional ingresses, e.g. for the dashboard |
+| [ingress](./values.yaml#L718) | *object* | [...](./values.yaml#L718) | Ingress |
+| [networkPolicy](./values.yaml#L759) | *object* | [...](./values.yaml#L759) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) |
+| [service](./values.yaml#L660) | *object* | [...](./values.yaml#L660) | Service |
+
+### [Pod environment](./values.yaml#L691)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| [extraEnvFrom](./values.yaml#L691) | *list* | `[]` | Extra environment variables from resources |
+| [extraEnvs](./values.yaml#L688) | *list* | `[]` | Extra environment variables |
+| [extraVolumeMounts](./values.yaml#L697) | *list* | `[]` | Additional volume mounts for Document Engine container |
+| [extraVolumes](./values.yaml#L694) | *list* | `[]` | Additional volumes |
+| [initContainers](./values.yaml#L703) | *list* | `[]` | Init containers |
+| [podSecurityContext](./values.yaml#L674) | *object* | `{}` | Pod security context |
+| [securityContext](./values.yaml#L678) | *object* | `{}` | Security context |
+| [serviceAccount](./values.yaml#L667) | *object* | [...](./values.yaml#L667) | ServiceAccount |
+| [sidecars](./values.yaml#L700) | *list* | `[]` | Additional containers |
+
+### [Pod lifecycle](./values.yaml#L844)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| [lifecycle](./values.yaml#L844) | *object* | `{}` | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) |
+| [livenessProbe](./values.yaml#L818) | *object* | [...](./values.yaml#L818) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
+| [readinessProbe](./values.yaml#L831) | *object* | [...](./values.yaml#L831) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
+| [startupProbe](./values.yaml#L805) | *object* | [...](./values.yaml#L805) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
+
+### [Scheduling](./values.yaml#L901)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| [affinity](./values.yaml#L901) | *object* | `{}` | Node affinity |
+| [autoscaling](./values.yaml#L852) | *object* | [...](./values.yaml#L852) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) |
+| [nodeSelector](./values.yaml#L898) | *object* | `{}` | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) |
+| [podDisruptionBudget](./values.yaml#L891) | *object* | [...](./values.yaml#L891) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) |
+| [priorityClassName](./values.yaml#L910) | *string* | `""` | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) |
+| [replicaCount](./values.yaml#L881) | *int* | `1` | Number of replicas |
+| [resources](./values.yaml#L878) | *object* | `{}` | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) |
+| [schedulerName](./values.yaml#L913) | *string* | `""` | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) |
+| [terminationGracePeriodSeconds](./values.yaml#L916) | *string* | `""` | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) |
+| [tolerations](./values.yaml#L904) | *list* | `[]` | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) |
+| [topologySpreadConstraints](./values.yaml#L907) | *list* | `[]` | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
+| [updateStrategy](./values.yaml#L884) | *object* | `{"rollingUpdate":{},"type":"RollingUpdate"}` | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) |
 
 ### Other Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| [affinity](./values.yaml#L800) | *object* | `{}` |  |
-| [autoscaling.behavior](./values.yaml#L776) | *object* | `{}` |  |
-| [autoscaling.enabled](./values.yaml#L771) | *bool* | `false` |  |
-| [autoscaling.maxReplicas](./values.yaml#L773) | *int* | `100` |  |
-| [autoscaling.minReplicas](./values.yaml#L772) | *int* | `1` |  |
-| [autoscaling.targetCPUUtilizationPercentage](./values.yaml#L774) | *int* | `80` |  |
-| [autoscaling.targetMemoryUtilizationPercentage](./values.yaml#L775) | *int* | `80` |  |
-| [dashboard](./values.yaml#L511) | *object* | `{"auth":{"externalSecret":{"name":"","passwordKey":"DASHBOARD_PASSWORD","usernameKey":"DASHBOARD_USERNAME"},"password":"","username":"admin"},"enabled":true}` | Document Engine Dashboard settings |
-| [dashboard.auth](./values.yaml#L515) | *object* | `{"externalSecret":{"name":"","passwordKey":"DASHBOARD_PASSWORD","usernameKey":"DASHBOARD_USERNAME"},"password":"","username":"admin"}` | Dashboard authentication |
-| [dashboard.auth.externalSecret](./values.yaml#L522) | *object* | `{"name":"","passwordKey":"DASHBOARD_PASSWORD","usernameKey":"DASHBOARD_USERNAME"}` | instead of the values from `pspdfkit.auth.dashboard.*` |
-| [dashboard.auth.externalSecret.name](./values.yaml#L524) | *string* | `""` | External secret name |
-| [dashboard.auth.externalSecret.usernameKey](./values.yaml#L526) | *string* | `"DASHBOARD_USERNAME"` | Key names |
-| [dashboard.auth.password](./values.yaml#L519) | *string* | `""` | `DASHBOARD_PASSWORD` — will generate a random password if not set |
-| [dashboard.auth.username](./values.yaml#L517) | *string* | `"admin"` | `DASHBOARD_USERNAME` |
-| [dashboard.enabled](./values.yaml#L513) | *bool* | `true` | Enable dashboard |
-| [deploymentAnnotations](./values.yaml#L631) | *object* | `{}` |  |
-| [extraEnvFrom](./values.yaml#L733) | *list* | `[]` |  |
-| [extraEnvs](./values.yaml#L732) | *list* | `[]` |  |
-| [extraIngresses](./values.yaml#L665) | *object* | `{}` |  |
-| [extraVolumeMounts](./values.yaml#L735) | *list* | `[]` |  |
-| [extraVolumes](./values.yaml#L734) | *list* | `[]` |  |
 | [fullnameOverride](./values.yaml#L11) | *string* | `""` |  |
 | [image](./values.yaml#L3) | *object* |  | Image settings |
 | [imagePullSecrets](./values.yaml#L9) | *list* | `[]` | Pull secrets |
-| [ingress.annotations](./values.yaml#L646) | *object* | `{}` |  |
-| [ingress.className](./values.yaml#L645) | *string* | `""` |  |
-| [ingress.enabled](./values.yaml#L644) | *bool* | `false` |  |
-| [ingress.hosts](./values.yaml#L647) | *list* | `[]` |  |
-| [ingress.tls](./values.yaml#L659) | *list* | `[]` |  |
-| [initContainers](./values.yaml#L737) | *list* | `[]` |  |
-| [lifecycle](./values.yaml#L812) | *object* | `{}` |  |
-| [livenessProbe.failureThreshold](./values.yaml#L758) | *int* | `3` |  |
-| [livenessProbe.httpGet.path](./values.yaml#L751) | *string* | `"/healthcheck"` |  |
-| [livenessProbe.httpGet.port](./values.yaml#L752) | *string* | `"api"` |  |
-| [livenessProbe.httpGet.scheme](./values.yaml#L753) | *string* | `"HTTP"` |  |
-| [livenessProbe.initialDelaySeconds](./values.yaml#L754) | *int* | `0` |  |
-| [livenessProbe.periodSeconds](./values.yaml#L755) | *int* | `30` |  |
-| [livenessProbe.successThreshold](./values.yaml#L757) | *int* | `1` |  |
-| [livenessProbe.timeoutSeconds](./values.yaml#L756) | *int* | `1` |  |
-| [minio](./values.yaml#L842) | *plain* | *See below* | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) |
 | [nameOverride](./values.yaml#L10) | *string* | `""` |  |
-| [networkPolicy.allowExternal](./values.yaml#L685) | *bool* | `true` |  |
-| [networkPolicy.allowExternalEgress](./values.yaml#L707) | *bool* | `true` |  |
-| [networkPolicy.annotations](./values.yaml#L683) | *object* | `{}` |  |
-| [networkPolicy.enabled](./values.yaml#L681) | *bool* | `true` |  |
-| [networkPolicy.extraEgress](./values.yaml#L709) | *list* | `[]` |  |
-| [networkPolicy.extraIngress](./values.yaml#L687) | *list* | `[]` |  |
-| [networkPolicy.ingressMatchSelectorLabels](./values.yaml#L702) | *list* | `[]` |  |
-| [networkPolicy.labels](./values.yaml#L682) | *object* | `{}` |  |
-| [nodeSelector](./values.yaml#L799) | *object* | `{}` |  |
-| [observability](./values.yaml#L530) | *object* | `{"log":{"healthcheckLevel":"debug","level":"info"},"metrics":{"enabled":false,"prometheusRule":{"enabled":false,"labels":{},"namespace":"","rules":[]},"serviceMonitor":{"enabled":false,"honorLabels":false,"interval":"30s","jobLabel":"","labels":{},"metricRelabelings":[],"namespace":"","relabelings":[],"scrapeTimeout":""},"statsd":{"customTags":"namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}","enabled":false,"host":"localhost","port":9125}},"opentelemetry":{"enabled":false,"otelPropagators":"","otelResourceAttributes":"","otelServiceName":"","otelTracesSampler":"","otelTracesSamplerArg":"","otlpExporterEndpoint":"","otlpExporterProtocol":""}}` | Observability settings |
-| [observability.log](./values.yaml#L532) | *object* | `{"healthcheckLevel":"debug","level":"info"}` | Logs |
-| [observability.log.healthcheckLevel](./values.yaml#L536) | *string* | `"debug"` | `HEALTHCHECK_LOGLEVEL` — log level for health checks |
-| [observability.log.level](./values.yaml#L534) | *string* | `"info"` | `LOG_LEVEL` |
-| [observability.metrics](./values.yaml#L559) | *object* | `{"enabled":false,"prometheusRule":{"enabled":false,"labels":{},"namespace":"","rules":[]},"serviceMonitor":{"enabled":false,"honorLabels":false,"interval":"30s","jobLabel":"","labels":{},"metricRelabelings":[],"namespace":"","relabelings":[],"scrapeTimeout":""},"statsd":{"customTags":"namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}","enabled":false,"host":"localhost","port":9125}}` | Metrics configuration |
-| [observability.opentelemetry](./values.yaml#L538) | *object* | `{"enabled":false,"otelPropagators":"","otelResourceAttributes":"","otelServiceName":"","otelTracesSampler":"","otelTracesSamplerArg":"","otlpExporterEndpoint":"","otlpExporterProtocol":""}` | OpenTelemetry |
-| [observability.opentelemetry.enabled](./values.yaml#L540) | *bool* | `false` | Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported |
-| [observability.opentelemetry.otelPropagators](./values.yaml#L551) | *string* | `""` | `OTEL_PROPAGATORS`, propagators |
-| [observability.opentelemetry.otelResourceAttributes](./values.yaml#L549) | *string* | `""` | `OTEL_RESOURCE_ATTRIBUTES`, resource attributes |
-| [observability.opentelemetry.otelServiceName](./values.yaml#L547) | *string* | `""` | `OTEL_SERVICE_NAME`, service name |
-| [observability.opentelemetry.otelTracesSampler](./values.yaml#L555) | *string* | `""` | `OTEL_TRACES_SAMPLER`, should normally not be touched to allow custom `parent_based` work, but something like `parentbased_traceidratio` may be considered |
-| [observability.opentelemetry.otelTracesSamplerArg](./values.yaml#L557) | *string* | `""` | `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler |
-| [observability.opentelemetry.otlpExporterEndpoint](./values.yaml#L543) | *string* | `""` | https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317` |
-| [observability.opentelemetry.otlpExporterProtocol](./values.yaml#L545) | *string* | `""` | `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc` |
-| [podAnnotations](./values.yaml#L630) | *object* | `{}` |  |
-| [podDisruptionBudget.create](./values.yaml#L795) | *bool* | `false` |  |
-| [podDisruptionBudget.maxUnavailable](./values.yaml#L797) | *string* | `""` |  |
-| [podDisruptionBudget.minAvailable](./values.yaml#L796) | *int* | `1` |  |
-| [podLabels](./values.yaml#L629) | *object* | `{}` |  |
-| [podSecurityContext](./values.yaml#L632) | *object* | `{}` |  |
-| [postgresql](./values.yaml#L820) | *plain* | *See below* | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) |
-| [priorityClassName](./values.yaml#L806) | *string* | `""` |  |
-| [prometheusExporter.enabled](./values.yaml#L606) | *bool* | `false` |  |
-| [prometheusExporter.image.pullPolicy](./values.yaml#L609) | *string* | `"IfNotPresent"` |  |
-| [prometheusExporter.image.repository](./values.yaml#L608) | *string* | `"prom/statsd-exporter"` |  |
-| [prometheusExporter.image.tag](./values.yaml#L610) | *string* | `"v0.27.1"` |  |
-| [prometheusExporter.port](./values.yaml#L611) | *int* | `10254` |  |
-| [prometheusExporter.resources.limits.cpu](./values.yaml#L618) | *string* | `"100m"` |  |
-| [prometheusExporter.resources.limits.memory](./values.yaml#L617) | *string* | `"128Mi"` |  |
-| [prometheusExporter.resources.requests.cpu](./values.yaml#L615) | *string* | `"50m"` |  |
-| [prometheusExporter.resources.requests.memory](./values.yaml#L614) | *string* | `"32Mi"` |  |
-| [readinessProbe.failureThreshold](./values.yaml#L768) | *int* | `3` |  |
-| [readinessProbe.httpGet.path](./values.yaml#L761) | *string* | `"/healthcheck"` |  |
-| [readinessProbe.httpGet.port](./values.yaml#L762) | *string* | `"api"` |  |
-| [readinessProbe.httpGet.scheme](./values.yaml#L763) | *string* | `"HTTP"` |  |
-| [readinessProbe.initialDelaySeconds](./values.yaml#L764) | *int* | `0` |  |
-| [readinessProbe.periodSeconds](./values.yaml#L765) | *int* | `5` |  |
-| [readinessProbe.successThreshold](./values.yaml#L767) | *int* | `1` |  |
-| [readinessProbe.timeoutSeconds](./values.yaml#L766) | *int* | `1` |  |
-| [redis](./values.yaml#L852) | *object* | `{"architecture":"standalone","auth":{"enabled":true,"password":"","sentinel":false},"enabled":false}` | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) |
-| [replicaCount](./values.yaml#L726) | *int* | `1` |  |
-| [resources](./values.yaml#L724) | *object* | `{}` |  |
-| [schedulerName](./values.yaml#L808) | *string* | `""` |  |
-| [securityContext](./values.yaml#L635) | *object* | `{}` |  |
-| [service.port](./values.yaml#L623) | *int* | `5000` |  |
-| [service.type](./values.yaml#L622) | *string* | `"ClusterIP"` |  |
-| [serviceAccount.annotations](./values.yaml#L627) | *object* | `{}` |  |
-| [serviceAccount.create](./values.yaml#L626) | *bool* | `true` |  |
-| [serviceAccount.name](./values.yaml#L628) | *string* | `""` |  |
-| [sidecars](./values.yaml#L736) | *list* | `[]` |  |
-| [startupProbe.failureThreshold](./values.yaml#L748) | *int* | `5` |  |
-| [startupProbe.httpGet.path](./values.yaml#L741) | *string* | `"/healthcheck"` |  |
-| [startupProbe.httpGet.port](./values.yaml#L742) | *string* | `"api"` |  |
-| [startupProbe.httpGet.scheme](./values.yaml#L743) | *string* | `"HTTP"` |  |
-| [startupProbe.initialDelaySeconds](./values.yaml#L744) | *int* | `5` |  |
-| [startupProbe.periodSeconds](./values.yaml#L745) | *int* | `5` |  |
-| [startupProbe.successThreshold](./values.yaml#L747) | *int* | `1` |  |
-| [startupProbe.timeoutSeconds](./values.yaml#L746) | *int* | `1` |  |
-| [terminationGracePeriodSeconds](./values.yaml#L810) | *string* | `""` |  |
-| [tolerations](./values.yaml#L802) | *list* | `[]` |  |
-| [topologySpreadConstraints](./values.yaml#L804) | *list* | `[]` |  |
-| [updateStrategy.rollingUpdate](./values.yaml#L730) | *object* | `{}` |  |
-| [updateStrategy.type](./values.yaml#L729) | *string* | `"RollingUpdate"` |  |
 
 ## Contribution
 
