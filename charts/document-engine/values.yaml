@@ -484,13 +484,13 @@ documentSigningService:
   defaultSignatureLocation: "Head Quarters"
   # -- `DIGITAL_SIGNATURE_HASH_ALGORITHM`
   # @section -- 8. Digital signatures
-  digitalSignatureHashAlgorithm: sha512
+  hashAlgorithm: sha512
   # -- `DIGITAL_SIGNATURE_CADES_LEVEL`
   # @section -- 8. Digital signatures
-  digitalSignatureCadesLevel: "b-lt"
+  cadesLevel: "b-lt"
   # -- `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
   # @section -- 8. Digital signatures
-  digitalSignatureCertificateCheckTime: current_time
+  certificateCheckTime: current_time
   # -- (object) Timestamp Authority (TSA) settings
   # @section -- 8. Digital signatures
   # @notationType -- reference

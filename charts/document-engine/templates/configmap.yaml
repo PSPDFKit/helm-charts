@@ -142,9 +142,9 @@ data:
   DEFAULT_SIGNER_NAME: {{ default "none" .defaultSignerName | quote }}
   DEFAULT_SIGNATURE_REASON: {{ default "none" .defaultSignatureReason | quote }}
   DEFAULT_SIGNATURE_LOCATION: {{ default "none" .defaultSignatureLocation | quote }}
-  DIGITAL_SIGNATURE_HASH_ALGORITHM: {{ .digitalSignatureHashAlgorithm | quote }}
-  DIGITAL_SIGNATURE_CADES_LEVEL: {{ .digitalSignatureCadesLevel | quote }}
-  DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME: {{ default "current_time" .digitalSignatureCertificateCheckTime | quote }}
+  DIGITAL_SIGNATURE_HASH_ALGORITHM: {{ .hashAlgorithm | quote }}
+  DIGITAL_SIGNATURE_CADES_LEVEL: {{ .cadesLevel | quote }}
+  DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME: {{ default "current_time" .certificateCheckTime | quote }}
   TIMESTAMP_AUTHORITY_URL: {{ .timestampAuthority.url | quote }}
   TIMESTAMP_AUTHORITY_USERNAME: {{ .timestampAuthority.username | quote }}
   TIMESTAMP_AUTHORITY_PASSWORD: {{ .timestampAuthority.password | quote }}

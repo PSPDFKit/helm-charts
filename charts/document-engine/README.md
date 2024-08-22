@@ -176,13 +176,13 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | [documentSigningService](./values.yaml#L464) | *object* |  | Signing service parameters |
+| [documentSigningService.cadesLevel](./values.yaml#L490) | *string* | `"b-lt"` | `DIGITAL_SIGNATURE_CADES_LEVEL` |
+| [documentSigningService.certificateCheckTime](./values.yaml#L493) | *string* | `"current_time"` | `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME` |
 | [documentSigningService.defaultSignatureLocation](./values.yaml#L484) | *string* | `"Head Quarters"` | `DEFAULT_SIGNATURE_LOCATION` |
 | [documentSigningService.defaultSignatureReason](./values.yaml#L480) | *string* | `"approved"` | `DEFAULT_SIGNATURE_REASON` |
 | [documentSigningService.defaultSignerName](./values.yaml#L476) | *string* | `"John Doe"` | `DEFAULT_SIGNER_NAME` |
-| [documentSigningService.digitalSignatureCadesLevel](./values.yaml#L490) | *string* | `"b-lt"` | `DIGITAL_SIGNATURE_CADES_LEVEL` |
-| [documentSigningService.digitalSignatureCertificateCheckTime](./values.yaml#L493) | *string* | `"current_time"` | `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME` |
-| [documentSigningService.digitalSignatureHashAlgorithm](./values.yaml#L487) | *string* | `"sha512"` | `DIGITAL_SIGNATURE_HASH_ALGORITHM` |
 | [documentSigningService.enabled](./values.yaml#L467) | *bool* | `false` | Enable signing service integration |
+| [documentSigningService.hashAlgorithm](./values.yaml#L487) | *string* | `"sha512"` | `DIGITAL_SIGNATURE_HASH_ALGORITHM` |
 | [documentSigningService.timeoutSeconds](./values.yaml#L473) | *int* | `10` | `SIGNING_SERVICE_TIMEOUT` in seconds |
 | [documentSigningService.timestampAuthority](./values.yaml#L497) | *object* | [...](./values.yaml#L497) | Timestamp Authority (TSA) settings |
 | [documentSigningService.timestampAuthority.url](./values.yaml#L500) | *string* | `"https://freetsa.org/"` | `TIMESTAMP_AUTHORITY_URL` |
