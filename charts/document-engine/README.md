@@ -23,7 +23,7 @@ Document Engine is a backend software for processing documents and powering auto
   * [Observability](#observability)
   * [Pod lifecycle](#pod-lifecycle)
   * [Scheduling](#scheduling)
-  * [Dependencies](#dependencies)
+  * [Chart dependencies](#chart-dependencies)
 * [Contribution](#contribution)
 * [License](#license)
 * [Support, Issues and License Questions](#support-issues-and-license-questions)
@@ -326,7 +326,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [topologySpreadConstraints](./values.yaml#L937) | *list* | `[]` | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
 | [updateStrategy](./values.yaml#L914) | *object* | `{"rollingUpdate":{},"type":"RollingUpdate"}` | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) |
 
-### Dependencies
+### Chart dependencies
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
