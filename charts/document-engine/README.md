@@ -8,22 +8,22 @@ Document Engine is a backend software for processing documents and powering auto
 
 * [Using this chart](#using-this-chart)
 * [Values](#values)
-  * [Document Engine License](#document-engine-license)q
-  * [API authentication](#api-authentication)q
-  * [Configuration options](#configuration-options)q
-  * [Certificate trust](#certificate-trust)q
-  * [Database](#database)q
-  * [Document lifecycle](#document-lifecycle)q
-  * [Asset storage](#asset-storage)q
-  * [Digital signatures](#digital-signatures)q
-  * [Dashboard](#dashboard)q
-  * [Environment](#environment)q
-  * [Metadata](#metadata)q
-  * [Networking](#networking)q
-  * [Observability](#observability)q
-  * [Pod lifecycle](#pod-lifecycle)q
-  * [Scheduling](#scheduling)q
-  * [Dependencies](#dependencies)q
+  * [Document Engine License](#document-engine-license)
+  * [API authentication](#api-authentication)
+  * [Configuration options](#configuration-options)
+  * [Certificate trust](#certificate-trust)
+  * [Database](#database)
+  * [Document lifecycle](#document-lifecycle)
+  * [Asset storage](#asset-storage)
+  * [Digital signatures](#digital-signatures)
+  * [Dashboard](#dashboard)
+  * [Environment](#environment)
+  * [Metadata](#metadata)
+  * [Networking](#networking)
+  * [Observability](#observability)
+  * [Pod lifecycle](#pod-lifecycle)
+  * [Scheduling](#scheduling)
+  * [Dependencies](#dependencies)
 * [Contribution](#contribution)
 * [License](#license)
 * [Support, Issues and License Questions](#support-issues-and-license-questions)
