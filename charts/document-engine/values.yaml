@@ -646,7 +646,7 @@ prometheusExporter:
 
 # -- (object) Image settings
 # @section -- B. Environment
-# @notationType -- none
+# @notationType -- reference
 image:
   repository: pspdfkit/document-engine
   pullPolicy: IfNotPresent

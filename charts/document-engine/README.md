@@ -210,7 +210,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [extraEnvs](./values.yaml#L690) | *list* | `[]` | Extra environment variables |
 | [extraVolumeMounts](./values.yaml#L699) | *list* | `[]` | Additional volume mounts for Document Engine container |
 | [extraVolumes](./values.yaml#L696) | *list* | `[]` | Additional volumes |
-| [image](./values.yaml#L650) | *object* |  | Image settings |
+| [image](./values.yaml#L650) | *object* | [...](./values.yaml#L650) | Image settings |
 | [imagePullSecrets](./values.yaml#L657) | *list* | `[]` | Pull secrets |
 | [initContainers](./values.yaml#L705) | *list* | `[]` | Init containers |
 | [podSecurityContext](./values.yaml#L676) | *object* | `{}` | Pod security context |
