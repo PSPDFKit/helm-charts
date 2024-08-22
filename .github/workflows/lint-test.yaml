@@ -1,7 +1,14 @@
 name: Lint and Test Charts
 
-on: pull_request
+# on: 
+#   workflow_run:
+#     workflows: [Documentation]
+#     types: 
+#       - completed
 
+on: 
+  pull_request:
+      
 jobs:
   lint-test:
     runs-on: ubuntu-latest

@@ -16,7 +16,7 @@ Document Engine is a backend software for processing documents and powering auto
 
 ### Adding the repository
 
-```
+```shell
 helm repo add pspdfkit https://pspdfkit.github.io/helm-charts
 helm repo update
 ```
