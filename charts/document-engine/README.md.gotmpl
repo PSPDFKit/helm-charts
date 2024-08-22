@@ -76,7 +76,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 {{-     end }}
 {{-     range $sections }}
 
-### [{{ regexReplaceAll "^\\d+\\.\\s+" .SectionName "" }}](./values.yaml#L{{ (first .SectionItems).LineNumber }})
+### [{{ regexReplaceAll "^[0-9A-Z]+\\.\\s+" .SectionName "" }}](./values.yaml#L{{ (first .SectionItems).LineNumber }})
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
