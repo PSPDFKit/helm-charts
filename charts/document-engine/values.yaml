@@ -266,25 +266,25 @@ database:
     podLabels: {}
 
 # -- (object) Document lifecycle management
-# @section -- 6. Lifecycle
+# @section -- 6. Document lifecycle
 # @notationType -- none
 documentLifecycle:
   # -- (object) Regular job to remove documents from the database.
   # Note: currently only works with the `built-in` storage backend.
-  # @section -- 6. Lifecycle
+  # @section -- 6. Document lifecycle
   # @notationType -- reference
   cleanupJob:
     # -- Enable the cleanup job
-    # @section -- 6. Lifecycle
+    # @section -- 6. Document lifecycle
     enabled: false
     # -- Cleanup job schedule in cron format
-    # @section -- 6. Lifecycle
+    # @section -- 6. Document lifecycle
     schedule: "13 * * * *"
     # -- Documents TTL in hours
-    # @section -- 6. Lifecycle
+    # @section -- 6. Document lifecycle
     keepHours: 24
     # -- Keep documents with IDs beginning with `persistent` indefinitely
-    # @section -- 6. Lifecycle
+    # @section -- 6. Document lifecycle
     persistentLike: "persistent%"
     # @ignored
     resources: {}
@@ -830,7 +830,7 @@ networkPolicy:
     #                 - some-storage
 
 # -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-# @section -- F. Lifecycle
+# @section -- F. Pod lifecycle
 # @notationType -- reference
 startupProbe:
   httpGet:
@@ -843,7 +843,7 @@ startupProbe:
   successThreshold: 1
   failureThreshold: 5
 # -- (object) [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-# @section -- F. Lifecycle
+# @section -- F. Pod lifecycle
 # @notationType -- reference
 livenessProbe:
   httpGet:
@@ -856,7 +856,7 @@ livenessProbe:
   successThreshold: 1
   failureThreshold: 3
 # -- (object) [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-# @section -- F. Lifecycle
+# @section -- F. Pod lifecycle
 # @notationType -- reference
 readinessProbe:
   httpGet:
@@ -870,7 +870,7 @@ readinessProbe:
   failureThreshold: 3
 
 # -- [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)
-# @section -- F. Lifecycle
+# @section -- F. Pod lifecycle
 lifecycle: {}
 #  preStop:
 #    exec:

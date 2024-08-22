@@ -31,7 +31,7 @@ Functions {
 {{-     end -}}
 {{-     range $sections -}}
 {{-       $sectionAnchor := regexReplaceAll "\\s" .SectionTitle "-" | lower }}
-  * [{{ .SectionTitle }}](#{{ $sectionAnchor }})
+  * [{{ .SectionTitle }}](#{{ $sectionAnchor }})q
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
@@ -87,7 +87,7 @@ Functions {
 {{-     end -}}
 {{-     range $sections }}
 
-### {{ .SectionHeading }}
+### {{ .SectionTitle }}
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|

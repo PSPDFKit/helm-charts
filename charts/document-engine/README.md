@@ -8,22 +8,22 @@ Document Engine is a backend software for processing documents and powering auto
 
 * [Using this chart](#using-this-chart)
 * [Values](#values)
-  * [Document Engine License](#document-engine-license)
-  * [API authentication](#api-authentication)
-  * [Configuration options](#configuration-options)
-  * [Certificate trust](#certificate-trust)
-  * [Database](#database)
-  * [Lifecycle](#lifecycle)
-  * [Asset storage](#asset-storage)
-  * [Digital signatures](#digital-signatures)
-  * [Dashboard](#dashboard)
-  * [Environment](#environment)
-  * [Metadata](#metadata)
-  * [Networking](#networking)
-  * [Observability](#observability)
-  * [Lifecycle](#lifecycle)
-  * [Scheduling](#scheduling)
-  * [Dependencies](#dependencies)
+  * [Document Engine License](#document-engine-license)q
+  * [API authentication](#api-authentication)q
+  * [Configuration options](#configuration-options)q
+  * [Certificate trust](#certificate-trust)q
+  * [Database](#database)q
+  * [Document lifecycle](#document-lifecycle)q
+  * [Asset storage](#asset-storage)q
+  * [Digital signatures](#digital-signatures)q
+  * [Dashboard](#dashboard)q
+  * [Environment](#environment)q
+  * [Metadata](#metadata)q
+  * [Networking](#networking)q
+  * [Observability](#observability)q
+  * [Pod lifecycle](#pod-lifecycle)q
+  * [Scheduling](#scheduling)q
+  * [Dependencies](#dependencies)q
 * [Contribution](#contribution)
 * [License](#license)
 * [Support, Issues and License Questions](#support-issues-and-license-questions)
@@ -68,7 +68,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 
 ## Values
 
-### [Document Engine License](./values.yaml#L5)
+### Document Engine License
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -76,7 +76,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [documentEngineLicense.activationKey](./values.yaml#L10) | *string* | `""` | Activation key for online activation (most common) or license key for offline activation. Results in `ACTIVATION_KEY` environment variable. |
 | [documentEngineLicense.externalSecret](./values.yaml#L15) | *object* | [...](./values.yaml#L15) | Query existing secret for the activation key |
 
-### [API authentication](./values.yaml#L28)
+### API authentication
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -89,7 +89,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [apiAuth.jwt.publicKey](./values.yaml#L42) | *string* | `"none"` | `JWT_PUBLIC_KEY` |
 | [apiAuth.secretKeyBase](./values.yaml#L53) | *string* | `""` | A string used as the base key for deriving secret keys for the purposes of authentication. Choose a sufficiently long random string for this option. To generate a random string, use: `openssl rand -hex 256`. This will set `SECRET_KEY_BASE` environment variable. |
 
-### [Configuration options](./values.yaml#L88)
+### Configuration options
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -114,7 +114,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [config.workerPoolSize](./values.yaml#L91) | *int* | `16` | `PSPDFKIT_WORKER_POOL_SIZE` |
 | [config.workerTimeoutSeconds](./values.yaml#L97) | *int* | `60` | Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`) |
 
-### [Certificate trust](./values.yaml#L154)
+### Certificate trust
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -123,7 +123,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [certificateTrust.digitalSignatures](./values.yaml#L158) | *list* | `[]` | CAs for digital signatures (`/certificate-stores/`) from ConfigMap and Secret resources. |
 | [certificateTrust.downloaderTrustFileName](./values.yaml#L177) | *string* | `""` | Override `DOWNLOADER_CERT_FILE_PATH` to set HTTP client trust. If empty, defaults to  Mozilla's CA bundle. |
 
-### [Database](./values.yaml#L182)
+### Database
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -151,7 +151,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [database.postgres.tls.verify](./values.yaml#L237) | *bool* | `true` | Negated `PGSSL_DISABLE_VERIFY` |
 | [database.postgres.username](./values.yaml#L208) | *string* | `"de-user"` | `PGUSER` |
 
-### [Lifecycle](./values.yaml#L271)
+### Document lifecycle
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -162,7 +162,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [documentLifecycle.cleanupJob.persistentLike](./values.yaml#L288) | *string* | `"persistent%"` | Keep documents with IDs beginning with `persistent` indefinitely |
 | [documentLifecycle.cleanupJob.schedule](./values.yaml#L282) | *string* | `"13 * * * *"` | Cleanup job schedule in cron format |
 
-### [Asset storage](./values.yaml#L299)
+### Asset storage
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -193,7 +193,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [assetStorage.s3.bucket](./values.yaml#L338) | *string* | `"document-engine-assets"` | `ASSET_STORAGE_S3_BUCKET` |
 | [assetStorage.s3.region](./values.yaml#L341) | *string* | `"us-east-1"` | `ASSET_STORAGE_S3_REGION` |
 
-### [Digital signatures](./values.yaml#L452)
+### Digital signatures
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -210,7 +210,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [documentSigningService.timestampAuthority.url](./values.yaml#L488) | *string* | `"https://freetsa.org/"` | `TIMESTAMP_AUTHORITY_URL` |
 | [documentSigningService.url](./values.yaml#L458) | *string* | `"https://signing-thing.local/sign"` | `SIGNING_SERVICE_URL` |
 
-### [Dashboard](./values.yaml#L501)
+### Dashboard
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -224,7 +224,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [dashboard.auth.username](./values.yaml#L511) | *string* | `"admin"` | `DASHBOARD_USERNAME` |
 | [dashboard.enabled](./values.yaml#L504) | *bool* | `true` | Enable dashboard |
 
-### [Environment](./values.yaml#L693)
+### Environment
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -240,7 +240,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [serviceAccount](./values.yaml#L669) | *object* | [...](./values.yaml#L669) | ServiceAccount |
 | [sidecars](./values.yaml#L702) | *list* | `[]` | Additional containers |
 
-### [Metadata](./values.yaml#L715)
+### Metadata
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -250,7 +250,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [podAnnotations](./values.yaml#L712) | *object* | `{}` | Pod annotations |
 | [podLabels](./values.yaml#L709) | *object* | `{}` | Pod labels |
 
-### [Networking](./values.yaml#L766)
+### Networking
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -272,7 +272,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [service.port](./values.yaml#L726) | *int* | `5000` | Service port — see also `config.port` |
 | [service.type](./values.yaml#L723) | *string* | `"ClusterIP"` | Service type |
 
-### [Observability](./values.yaml#L532)
+### Observability
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -300,7 +300,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [prometheusExporter.enabled](./values.yaml#L631) | *bool* | `false` | Enable the Prometheus exporter |
 | [prometheusExporter.port](./values.yaml#L638) | *int* | `10254` | Prometheus metrics port |
 
-### [Lifecycle](./values.yaml#L874)
+### Pod lifecycle
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -309,7 +309,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [readinessProbe](./values.yaml#L861) | *object* | [...](./values.yaml#L861) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
 | [startupProbe](./values.yaml#L835) | *object* | [...](./values.yaml#L835) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
 
-### [Scheduling](./values.yaml#L931)
+### Scheduling
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -326,7 +326,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [topologySpreadConstraints](./values.yaml#L937) | *list* | `[]` | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
 | [updateStrategy](./values.yaml#L914) | *object* | `{"rollingUpdate":{},"type":"RollingUpdate"}` | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) |
 
-### [Dependencies](./values.yaml#L973)
+### Dependencies
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
