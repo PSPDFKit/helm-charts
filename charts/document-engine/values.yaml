@@ -729,88 +729,105 @@ service:
 # @section -- C. Networking
 # @notationType -- reference
 ingress:
+  # -- Enable ingress
+  # @section -- C. Networking
   enabled: false
+  # -- Ingress class name
+  # @section -- C. Networking
   className: ""
+  # -- Ingress annotations
+  # @section -- C. Networking
   annotations: {}
+  # -- Hosts
+  # @section -- C. Networking
   hosts: []
-  # - host: chart-example.local
-  #   paths:
-  #     - path: /
-  #       pathType: ImplementationSpecific
-  #     - path: /special
-  #       pathType: Exact
-  #       backend:
-  #         service:
-  #           name: redirect-through-annotation
-  #           port:
-  #             name: use-annotation
+    # - host: chart-example.local
+    #   paths:
+    #     - path: /
+    #       pathType: ImplementationSpecific
+    #     - path: /special
+    #       pathType: Exact
+    #       backend:
+    #         service:
+    #           name: redirect-through-annotation
+    #           port:
+    #             name: use-annotation
+  # -- Ingress TLS section
+  # @section -- C. Networking
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
 
 # -- (object) Additional ingresses, e.g. for the dashboard
 # @section -- C. Networking
+# @default -- none
 # @notationType -- reference
 extraIngresses: {}
-# dashboard:
-#   enabled: false
-#   className: nginx
-#   annotations:
-#     nginx.ingress.kubernetes.io/enable-cors: "true"
-#   hosts:
-#     - host: chart-example.local
-#       paths:
-#         - path: /dashboard
-#           pathType: Prefix
-#   tls: []
+  # dashboard:
+  #   enabled: false
+  #   className: nginx
+  #   annotations:
+  #     nginx.ingress.kubernetes.io/enable-cors: "true"
+  #   hosts:
+  #     - host: chart-example.local
+  #       paths:
+  #         - path: /dashboard
+  #           pathType: Prefix
+  #   tls: []
 
 # https://editor.networkpolicy.io/
 # -- (object) [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
 # @section -- C. Networking
 # @notationType -- reference
 networkPolicy:
+  # -- Enable network policy
+  # @section -- C. Networking
   enabled: true
   labels: {}
   annotations: {}
-  # Allow access from anywhere
+  # -- Allow access from anywhere
+  # @section -- C. Networking
   allowExternal: true
-  # Extra ingress rules
+  # -- Additional ingress rules
+  # @section -- C. Networking
   extraIngress: []
-  #   - ports:
-  #       - port: 5000
-  #     from:
-  #       - podSelector:
-  #           - matchLabels:
-  #               - role: frontend
-  #       - podSelector:
-  #           - matchExpressions:
-  #               - key: role
-  #                 operator: In
-  #                 values:
-  #                   - frontend
-
-  # Allow traffic from other namespaces
+    # - ports:
+    #     - port: 5000
+    #   from:
+    #     - podSelector:
+    #         - matchLabels:
+    #             - role: frontend
+    #     - podSelector:
+    #         - matchExpressions:
+    #             - key: role
+    #               operator: In
+    #               values:
+    #                 - frontend
+  # -- Allow traffic from other namespaces
+  # @section -- C. Networking
   ingressMatchSelectorLabels: []
   # - namespaceSelectorLabels: {}
   #   podSelectorLabels: {}
 
-  # Allow the pod to access any range of port and all destinations.
+  # -- Allow the pod to access any range of port and all destinations.
+  # @section -- C. Networking
   allowExternalEgress: true
-  # Extra egress rules
+  # -- Extra egress rules
+  # @section -- C. Networking
   extraEgress: []
-  #   - ports:
-  #       - port: 80
-  #     to:
-  #       - podSelector:
-  #           - matchLabels:
-  #               - role: some-storage
-  #       - podSelector:
-  #           - matchExpressions:
-  #               - key: role
-  #                 operator: In
-  #                 values:
-  #                   - some-storage
+    # - ports:
+    #     - port: 80
+    #   to:
+    #     - podSelector:
+    #         - matchLabels:
+    #             - role: some-storage
+    #     - podSelector:
+    #         - matchExpressions:
+    #             - key: role
+    #               operator: In
+    #               values:
+    #                 - some-storage
 
 # -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
 # @section -- F. Lifecycle

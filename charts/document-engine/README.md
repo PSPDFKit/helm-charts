@@ -228,13 +228,24 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [podAnnotations](./values.yaml#L712) | *object* | `{}` | Pod annotations |
 | [podLabels](./values.yaml#L709) | *object* | `{}` | Pod labels |
 
-### [Networking](./values.yaml#L755)
+### [Networking](./values.yaml#L766)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| [extraIngresses](./values.yaml#L755) | *object* | `map[]` | Additional ingresses, e.g. for the dashboard |
+| [extraIngresses](./values.yaml#L766) | *object* | [...](./values.yaml#L766) | Additional ingresses, e.g. for the dashboard |
 | [ingress](./values.yaml#L731) | *object* | [...](./values.yaml#L731) | Ingress |
-| [networkPolicy](./values.yaml#L772) | *object* | [...](./values.yaml#L772) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) |
+| [ingress.annotations](./values.yaml#L740) | *object* | `{}` | Ingress annotations |
+| [ingress.className](./values.yaml#L737) | *string* | `""` | Ingress class name |
+| [ingress.enabled](./values.yaml#L734) | *bool* | `false` | Enable ingress |
+| [ingress.hosts](./values.yaml#L743) | *list* | `[]` | Hosts |
+| [ingress.tls](./values.yaml#L757) | *list* | `[]` | Ingress TLS section |
+| [networkPolicy](./values.yaml#L783) | *object* | [...](./values.yaml#L783) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) |
+| [networkPolicy.allowExternal](./values.yaml#L791) | *bool* | `true` | Allow access from anywhere |
+| [networkPolicy.allowExternalEgress](./values.yaml#L815) | *bool* | `true` | Allow the pod to access any range of port and all destinations. |
+| [networkPolicy.enabled](./values.yaml#L786) | *bool* | `true` | Enable network policy |
+| [networkPolicy.extraEgress](./values.yaml#L818) | *list* | `[]` | Extra egress rules |
+| [networkPolicy.extraIngress](./values.yaml#L794) | *list* | `[]` | Additional ingress rules |
+| [networkPolicy.ingressMatchSelectorLabels](./values.yaml#L809) | *list* | `[]` | Allow traffic from other namespaces |
 | [service](./values.yaml#L720) | *object* | [...](./values.yaml#L720) | Service |
 | [service.port](./values.yaml#L726) | *int* | `5000` | Service port — see also `config.port` |
 | [service.type](./values.yaml#L723) | *string* | `"ClusterIP"` | Service type |
@@ -267,39 +278,39 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [prometheusExporter.enabled](./values.yaml#L631) | *bool* | `false` | Enable the Prometheus exporter |
 | [prometheusExporter.port](./values.yaml#L638) | *int* | `10254` | Prometheus metrics port |
 
-### [Lifecycle](./values.yaml#L857)
+### [Lifecycle](./values.yaml#L874)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| [lifecycle](./values.yaml#L857) | *object* | `{}` | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) |
-| [livenessProbe](./values.yaml#L831) | *object* | [...](./values.yaml#L831) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
-| [readinessProbe](./values.yaml#L844) | *object* | [...](./values.yaml#L844) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
-| [startupProbe](./values.yaml#L818) | *object* | [...](./values.yaml#L818) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
+| [lifecycle](./values.yaml#L874) | *object* | `{}` | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) |
+| [livenessProbe](./values.yaml#L848) | *object* | [...](./values.yaml#L848) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
+| [readinessProbe](./values.yaml#L861) | *object* | [...](./values.yaml#L861) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
+| [startupProbe](./values.yaml#L835) | *object* | [...](./values.yaml#L835) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
 
-### [Scheduling](./values.yaml#L914)
-
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| [affinity](./values.yaml#L914) | *object* | `{}` | Node affinity |
-| [autoscaling](./values.yaml#L865) | *object* | [...](./values.yaml#L865) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) |
-| [nodeSelector](./values.yaml#L911) | *object* | `{}` | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) |
-| [podDisruptionBudget](./values.yaml#L904) | *object* | [...](./values.yaml#L904) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) |
-| [priorityClassName](./values.yaml#L923) | *string* | `""` | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) |
-| [replicaCount](./values.yaml#L894) | *int* | `1` | Number of replicas |
-| [resources](./values.yaml#L891) | *object* | `{}` | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) |
-| [schedulerName](./values.yaml#L926) | *string* | `""` | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) |
-| [terminationGracePeriodSeconds](./values.yaml#L929) | *string* | `""` | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) |
-| [tolerations](./values.yaml#L917) | *list* | `[]` | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) |
-| [topologySpreadConstraints](./values.yaml#L920) | *list* | `[]` | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-| [updateStrategy](./values.yaml#L897) | *object* | `{"rollingUpdate":{},"type":"RollingUpdate"}` | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) |
-
-### [Dependencies](./values.yaml#L956)
+### [Scheduling](./values.yaml#L931)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| [minio](./values.yaml#L956) | *reference* | [...](./values.yaml#L956) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) |
-| [postgresql](./values.yaml#L934) | *reference* | [...](./values.yaml#L934) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) |
-| [redis](./values.yaml#L968) | *reference* | [...](./values.yaml#L968) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) |
+| [affinity](./values.yaml#L931) | *object* | `{}` | Node affinity |
+| [autoscaling](./values.yaml#L882) | *object* | [...](./values.yaml#L882) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) |
+| [nodeSelector](./values.yaml#L928) | *object* | `{}` | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) |
+| [podDisruptionBudget](./values.yaml#L921) | *object* | [...](./values.yaml#L921) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) |
+| [priorityClassName](./values.yaml#L940) | *string* | `""` | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) |
+| [replicaCount](./values.yaml#L911) | *int* | `1` | Number of replicas |
+| [resources](./values.yaml#L908) | *object* | `{}` | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) |
+| [schedulerName](./values.yaml#L943) | *string* | `""` | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) |
+| [terminationGracePeriodSeconds](./values.yaml#L946) | *string* | `""` | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) |
+| [tolerations](./values.yaml#L934) | *list* | `[]` | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) |
+| [topologySpreadConstraints](./values.yaml#L937) | *list* | `[]` | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
+| [updateStrategy](./values.yaml#L914) | *object* | `{"rollingUpdate":{},"type":"RollingUpdate"}` | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) |
+
+### [Dependencies](./values.yaml#L973)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| [minio](./values.yaml#L973) | *reference* | [...](./values.yaml#L973) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) |
+| [postgresql](./values.yaml#L951) | *reference* | [...](./values.yaml#L951) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) |
+| [redis](./values.yaml#L985) | *reference* | [...](./values.yaml#L985) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) |
 
 ## Contribution
 
