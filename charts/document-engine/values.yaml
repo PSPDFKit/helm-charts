@@ -1,15 +1,3 @@
-# -- (object) Image settings
-# @notationType -- none
-image:
-  repository: pspdfkit/document-engine
-  pullPolicy: IfNotPresent
-  # Defaults to the Chart appVersion
-  tag: ""
-# -- Pull secrets
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
 # -- (object) License information, see more in
 # [our guide](https://pspdfkit.com/guides/document-engine/deployment/product-activation/)
 # @section -- 0. Document Engine License
@@ -278,25 +266,25 @@ database:
     podLabels: {}
 
 # -- (object) Document lifecycle management
-# @section -- 6. Lifecycle
+# @section -- 6. Document lifecycle
 # @notationType -- none
 documentLifecycle:
   # -- (object) Regular job to remove documents from the database.
   # Note: currently only works with the `built-in` storage backend.
-  # @section -- 6. Lifecycle
+  # @section -- 6. Document lifecycle
   # @notationType -- reference
   cleanupJob:
     # -- Enable the cleanup job
-    # @section -- 6. Lifecycle
+    # @section -- 6. Document lifecycle
     enabled: false
     # -- Cleanup job schedule in cron format
-    # @section -- 6. Lifecycle
+    # @section -- 6. Document lifecycle
     schedule: "13 * * * *"
     # -- Documents TTL in hours
-    # @section -- 6. Lifecycle
+    # @section -- 6. Document lifecycle
     keepHours: 24
     # -- Keep documents with IDs beginning with `persistent` indefinitely
-    # @section -- 6. Lifecycle
+    # @section -- 6. Document lifecycle
     persistentLike: "persistent%"
     # @ignored
     resources: {}
@@ -507,80 +495,111 @@ documentSigningService:
     # @ignored
     password: ""
 
+# -- (object) Document Engine Dashboard settings
+# @section -- A. Dashboard
+# @notationType -- none
+dashboard:
+  # -- Enable dashboard
+  # @section -- A. Dashboard
+  enabled: true
+  # -- (object) Dashboard authentication
+  # @section -- A. Dashboard
+  # @notationType -- reference
+  auth:
+    # -- `DASHBOARD_USERNAME`
+    # @section -- A. Dashboard
+    username: admin
+    # -- `DASHBOARD_PASSWORD` — will generate a random password if not set
+    # @section -- A. Dashboard
+    password: ""
+    # -- (object) Use an external secret for dashboard credentials
+    # @section -- A. Dashboard
+    # @notationType -- reference
+    externalSecret:
+      # -- External secret name
+      # @section -- A. Dashboard
+      name: ""
+      # -- Secret key name for the username
+      # @section -- A. Dashboard
+      usernameKey: DASHBOARD_USERNAME
+      # -- Secret key name for the password
+      # @section -- A. Dashboard
+      passwordKey: DASHBOARD_PASSWORD
+
 # -- (object) Observability settings
-# @section -- 9. Observability
+# @section -- D. Observability
 # @notationType -- none
 observability:
   # -- (object) Logs
-  # @section -- 9. Observability
+  # @section -- D. Observability
   # @notationType -- reference
   log:
     # -- `LOG_LEVEL`
-    # @section -- 9. Observability
+    # @section -- D. Observability
     level: info
     # -- `HEALTHCHECK_LOGLEVEL` — log level for health checks
-    # @section -- 9. Observability
+    # @section -- D. Observability
     healthcheckLevel: debug
   # -- (object) OpenTelemetry settings
-  # @section -- 9. Observability
+  # @section -- D. Observability
   # @notationType -- reference
   opentelemetry:
     # -- Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
-    # @section -- 9. Observability
+    # @section -- D. Observability
     enabled: false
     # -- https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
     # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
-    # @section -- 9. Observability
+    # @section -- D. Observability
     otlpExporterEndpoint: ""
     # -- `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
-    # @section -- 9. Observability
+    # @section -- D. Observability
     otlpExporterProtocol: ""
     # -- `OTEL_SERVICE_NAME`, service name
-    # @section -- 9. Observability
+    # @section -- D. Observability
     otelServiceName: ""
     # -- `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
-    # @section -- 9. Observability
+    # @section -- D. Observability
     otelResourceAttributes: ""
     # -- `OTEL_PROPAGATORS`, propagators
-    # @section -- 9. Observability
+    # @section -- D. Observability
     otelPropagators: ""
     # -- `OTEL_TRACES_SAMPLER`, should normally not be touched
     # to allow custom `parent_based` work,
     # but something like `parentbased_traceidratio` may be considered
-    # @section -- 9. Observability
+    # @section -- D. Observability
     otelTracesSampler: ""
     # -- `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler
-    # @section -- 9. Observability
+    # @section -- D. Observability
     otelTracesSamplerArg: ""
   # -- (object) Metrics configuration
-  # @section -- 9. Observability
+  # @section -- D. Observability
   # @notationType -- reference
   metrics:
     # -- Enable metrics exporting
-    # @section -- 9. Observability
+    # @section -- D. Observability
     enabled: false
     # -- (object) StatsD parameters
-    # @section -- 9. Observability
+    # @section -- D. Observability
     # @notationType -- reference
     statsd:
       #  -- Enable StatsD exporting, required for Prometheus exporter
-      # @section -- 9. Observability
+      # @section -- D. Observability
       enabled: false
       #  -- StatsD host, `STATSD_HOST`
       # Set to `localhost` if using the Prometheus exporter
-      # @section -- 9. Observability
+      # @section -- D. Observability
       host: localhost
       # -- StatsD port, `STATSD_PORT`
-      # @section -- 9. Observability
+      # @section -- D. Observability
       port: 9125
       # -- (tpl/string) StatsD custom tags, `STATSD_CUSTOM_TAGS`
       # @notationType -- tpl
-      # @section -- 9. Observability
+      # @section -- D. Observability
       # @default -- *generated*
       # @notationType -- plain
       customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
     # -- (object) Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor)
-    # @section -- 9. Observability
+    # @section -- D. Observability
     # @notationType -- reference
     serviceMonitor:
       enabled: false
@@ -594,7 +613,7 @@ observability:
       honorLabels: false
       jobLabel: ""
     # -- (object) Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule)
-    # @section -- 9. Observability
+    # @section -- D. Observability
     # @notationType -- reference
     prometheusRule:
       enabled: false
@@ -604,16 +623,18 @@ observability:
 
 # -- (object) StatsD exporter for Prometheus, not recommended for production use
 # Requires `observability.metrics.enabled` and `observability.metrics.statsd.enabled`
-# @section -- 9. Observability
+# @section -- D. Observability
 # @notationType -- reference
 prometheusExporter:
   # -- Enable the Prometheus exporter
-  # @section -- 9. Observability
+  # @section -- D. Observability
   enabled: false
   image:
     repository: prom/statsd-exporter
     pullPolicy: IfNotPresent
     tag: "v0.27.1"
+  # -- Prometheus metrics port
+  # @section -- D. Observability
   port: 10254
   resources:
     requests:
@@ -623,46 +644,27 @@ prometheusExporter:
       memory: "128Mi"
       cpu: "100m"
 
-# -- (object) Document Engine Dashboard settings
-# @section -- Dashboard
-# @notationType -- none
-dashboard:
-  # -- Enable dashboard
-  # @section -- Dashboard
-  enabled: true
-  # -- (object) Dashboard authentication
-  # @section -- Dashboard
-  # @notationType -- reference
-  auth:
-    # -- `DASHBOARD_USERNAME`
-    # @section -- Dashboard
-    username: admin
-    # -- `DASHBOARD_PASSWORD` — will generate a random password if not set
-    # @section -- Dashboard
-    password: ""
-    # -- (object) Use an external secret for dashboard credentials
-    # @section -- Dashboard
-    # @notationType -- reference
-    externalSecret:
-      # -- External secret name
-      # @section -- Dashboard
-      name: ""
-      # -- Secret key name for the username
-      # @section -- Dashboard
-      usernameKey: DASHBOARD_USERNAME
-      # -- Secret key name for the password
-      # @section -- Dashboard
-      passwordKey: DASHBOARD_PASSWORD
-
-# -- (object) Service
-# @section -- Networking
+# -- (object) Image settings
+# @section -- B. Environment
 # @notationType -- reference
-service:
-  type: ClusterIP
-  port: 5000
+image:
+  repository: pspdfkit/document-engine
+  pullPolicy: IfNotPresent
+  # Defaults to the Chart appVersion
+  tag: ""
+# -- Pull secrets
+# @section -- B. Environment
+imagePullSecrets: []
+
+# -- Release name override
+# @section -- B. Metadata
+nameOverride: ""
+# -- Release full name override
+# @section -- B. Metadata
+fullnameOverride: ""
 
 # -- (object) ServiceAccount
-# @section -- Pod environment
+# @section -- B. Environment
 # @notationType -- reference
 serviceAccount:
   create: true
@@ -670,11 +672,11 @@ serviceAccount:
   name: ""
 
 # -- Pod security context
-# @section -- Pod environment
+# @section -- B. Environment
 podSecurityContext: {}
 # fsGroup: 2000
 # -- Security context
-# @section -- Pod environment
+# @section -- B. Environment
 securityContext: {}
 # capabilities:
 #   drop:
@@ -684,123 +686,151 @@ securityContext: {}
 # runAsUser: 1000
 
 # -- Extra environment variables
-# @section -- Pod environment
+# @section -- B. Environment
 extraEnvs: []
 # -- Extra environment variables from resources
-# @section -- Pod environment
+# @section -- B. Environment
 extraEnvFrom: []
 # -- Additional volumes
-# @section -- Pod environment
+# @section -- B. Environment
 extraVolumes: []
 # -- Additional volume mounts for Document Engine container
-# @section -- Pod environment
+# @section -- B. Environment
 extraVolumeMounts: []
 # -- Additional containers
-# @section -- Pod environment
+# @section -- B. Environment
 sidecars: []
 # -- Init containers
-# @section -- Pod environment
+# @section -- B. Environment
 initContainers: []
 
 # -- Pod labels
-# @section -- Kubernetes metadata
+# @section -- B. Metadata
 podLabels: {}
 # -- Pod annotations
-# @section -- Kubernetes metadata
+# @section -- B. Metadata
 podAnnotations: {}
 # -- Deployment annotations
-# @section -- Kubernetes metadata
+# @section -- B. Metadata
 deploymentAnnotations: {}
 
+# -- (object) Service
+# @section -- C. Networking
+# @notationType -- reference
+service:
+  # -- Service type
+  # @section -- C. Networking
+  type: ClusterIP
+  # -- Service port — see also `config.port`
+  # @section -- C. Networking
+  port: 5000
+
 # -- (object) Ingress
-# @section -- Networking
+# @section -- C. Networking
 # @notationType -- reference
 ingress:
+  # -- Enable ingress
+  # @section -- C. Networking
   enabled: false
+  # -- Ingress class name
+  # @section -- C. Networking
   className: ""
+  # -- Ingress annotations
+  # @section -- C. Networking
   annotations: {}
+  # -- Hosts
+  # @section -- C. Networking
   hosts: []
-  # - host: chart-example.local
-  #   paths:
-  #     - path: /
-  #       pathType: ImplementationSpecific
-  #     - path: /special
-  #       pathType: Exact
-  #       backend:
-  #         service:
-  #           name: redirect-through-annotation
-  #           port:
-  #             name: use-annotation
+    # - host: chart-example.local
+    #   paths:
+    #     - path: /
+    #       pathType: ImplementationSpecific
+    #     - path: /special
+    #       pathType: Exact
+    #       backend:
+    #         service:
+    #           name: redirect-through-annotation
+    #           port:
+    #             name: use-annotation
+  # -- Ingress TLS section
+  # @section -- C. Networking
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
 
 # -- (object) Additional ingresses, e.g. for the dashboard
-# @section -- Networking
+# @section -- C. Networking
+# @default -- none
 # @notationType -- reference
 extraIngresses: {}
-# dashboard:
-#   enabled: false
-#   className: nginx
-#   annotations:
-#     nginx.ingress.kubernetes.io/enable-cors: "true"
-#   hosts:
-#     - host: chart-example.local
-#       paths:
-#         - path: /dashboard
-#           pathType: Prefix
-#   tls: []
+  # dashboard:
+  #   enabled: false
+  #   className: nginx
+  #   annotations:
+  #     nginx.ingress.kubernetes.io/enable-cors: "true"
+  #   hosts:
+  #     - host: chart-example.local
+  #       paths:
+  #         - path: /dashboard
+  #           pathType: Prefix
+  #   tls: []
 
 # https://editor.networkpolicy.io/
 # -- (object) [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
-# @section -- Networking
+# @section -- C. Networking
 # @notationType -- reference
 networkPolicy:
+  # -- Enable network policy
+  # @section -- C. Networking
   enabled: true
   labels: {}
   annotations: {}
-  # Allow access from anywhere
+  # -- Allow access from anywhere
+  # @section -- C. Networking
   allowExternal: true
-  # Extra ingress rules
+  # -- Additional ingress rules
+  # @section -- C. Networking
   extraIngress: []
-  #   - ports:
-  #       - port: 5000
-  #     from:
-  #       - podSelector:
-  #           - matchLabels:
-  #               - role: frontend
-  #       - podSelector:
-  #           - matchExpressions:
-  #               - key: role
-  #                 operator: In
-  #                 values:
-  #                   - frontend
-
-  # Allow traffic from other namespaces
+    # - ports:
+    #     - port: 5000
+    #   from:
+    #     - podSelector:
+    #         - matchLabels:
+    #             - role: frontend
+    #     - podSelector:
+    #         - matchExpressions:
+    #             - key: role
+    #               operator: In
+    #               values:
+    #                 - frontend
+  # -- Allow traffic from other namespaces
+  # @section -- C. Networking
   ingressMatchSelectorLabels: []
   # - namespaceSelectorLabels: {}
   #   podSelectorLabels: {}
 
-  # Allow the pod to access any range of port and all destinations.
+  # -- Allow the pod to access any range of port and all destinations.
+  # @section -- C. Networking
   allowExternalEgress: true
-  # Extra egress rules
+  # -- Extra egress rules
+  # @section -- C. Networking
   extraEgress: []
-  #   - ports:
-  #       - port: 80
-  #     to:
-  #       - podSelector:
-  #           - matchLabels:
-  #               - role: some-storage
-  #       - podSelector:
-  #           - matchExpressions:
-  #               - key: role
-  #                 operator: In
-  #                 values:
-  #                   - some-storage
+    # - ports:
+    #     - port: 80
+    #   to:
+    #     - podSelector:
+    #         - matchLabels:
+    #             - role: some-storage
+    #     - podSelector:
+    #         - matchExpressions:
+    #             - key: role
+    #               operator: In
+    #               values:
+    #                 - some-storage
 
 # -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-# @section -- Pod lifecycle
+# @section -- F. Pod lifecycle
 # @notationType -- reference
 startupProbe:
   httpGet:
@@ -813,7 +843,7 @@ startupProbe:
   successThreshold: 1
   failureThreshold: 5
 # -- (object) [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-# @section -- Pod lifecycle
+# @section -- F. Pod lifecycle
 # @notationType -- reference
 livenessProbe:
   httpGet:
@@ -826,7 +856,7 @@ livenessProbe:
   successThreshold: 1
   failureThreshold: 3
 # -- (object) [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-# @section -- Pod lifecycle
+# @section -- F. Pod lifecycle
 # @notationType -- reference
 readinessProbe:
   httpGet:
@@ -840,14 +870,14 @@ readinessProbe:
   failureThreshold: 3
 
 # -- [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)
-# @section -- Pod lifecycle
+# @section -- F. Pod lifecycle
 lifecycle: {}
 #  preStop:
 #    exec:
 #      command: ["/bin/sh", "-c", "sleep 180"]
 
 # -- (object) [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
-# @section -- Scheduling
+# @section -- G. Scheduling
 # @notationType -- reference
 autoscaling:
   enabled: false
@@ -874,19 +904,19 @@ autoscaling:
   #   selectPolicy: Max
 
 # -- [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
-# @section -- Scheduling
+# @section -- G. Scheduling
 resources: {}
 # -- Number of replicas
-# @section -- Scheduling
+# @section -- G. Scheduling
 replicaCount: 1
 # -- [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
-# @section -- Scheduling
+# @section -- G. Scheduling
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
 
 # -- (object) [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
-# @section -- Scheduling
+# @section -- G. Scheduling
 # @notationType -- reference
 podDisruptionBudget:
   create: false
@@ -894,29 +924,29 @@ podDisruptionBudget:
   maxUnavailable: ""
 
 # -- [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
-# @section -- Scheduling
+# @section -- G. Scheduling
 nodeSelector: {}
 # -- Node affinity
-# @section -- Scheduling
+# @section -- G. Scheduling
 affinity: {}
 # -- [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
-# @section -- Scheduling
+# @section -- G. Scheduling
 tolerations: []
 # -- [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/)
-# @section -- Scheduling
+# @section -- G. Scheduling
 topologySpreadConstraints: []
 # -- [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/)
-# @section -- Scheduling
+# @section -- G. Scheduling
 priorityClassName: ""
 # -- [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/)
-# @section -- Scheduling
+# @section -- G. Scheduling
 schedulerName: ""
 # -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
-# @section -- Scheduling
+# @section -- G. Scheduling
 terminationGracePeriodSeconds: ""
 
 # -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
-# @section -- Dependencies
+# @section -- Z. Chart dependencies
 # @notationType -- reference
 postgresql:
   enabled: false
@@ -938,7 +968,7 @@ postgresql:
     database: document-engine
 
 # -- [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)
-# @section -- Dependencies
+# @section -- Z. Chart dependencies
 # @notationType -- reference
 minio:
   enabled: false
@@ -950,7 +980,7 @@ minio:
   disableWebUI: true
 
 # -- [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis)
-# @section -- Dependencies
+# @section -- Z. Chart dependencies
 # @notationType -- reference
 redis:
   enabled: false

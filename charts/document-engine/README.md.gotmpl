@@ -1,3 +1,106 @@
+{{/*
+Functions {
+*/}}
+{{- define "chart.valuesTableOfContents" -}}
+{{-   if .Sections.Sections -}}
+{{-     $sectionNames := list -}}
+{{-     range .Sections.Sections -}}
+{{-       $sectionNames = append $sectionNames .SectionName -}}
+{{-     end -}}
+{{-     $sections := list -}}
+{{-     range ($sectionNames | sortAlpha) -}}
+{{-       $currentSectionName := . -}}
+{{-       range $.Sections.Sections -}}
+{{-         if eq .SectionName $currentSectionName -}}
+{{-           $thisSection := dict -}}
+{{-           $title := regexReplaceAll "^[0-9A-Z]+\\.\\s+" .SectionName "" -}}
+{{-           $link := printf "./values.yaml#L%d" (first .SectionItems).LineNumber -}}
+{{-           $_ := set $thisSection "SectionName" .SectionName -}}
+{{-           $_ := set $thisSection "SectionItems" .SectionItems -}}
+{{-           $_ := set $thisSection "SectionTitle" $title -}}
+{{-           $sections = append $sections $thisSection -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-     if .Sections.DefaultSection.SectionItems -}}
+{{-       $thisSection := dict -}}
+{{-       $_ := set $thisSection "SectionName" .Sections.DefaultSection.SectionName -}}
+{{-       $_ := set $thisSection "SectionItems" .Sections.DefaultSection.SectionItems -}}
+{{-       $_ := set $thisSection "SectionTitle" .Sections.DefaultSection.SectionName -}}
+{{-       $sections = append $sections $thisSection -}}
+{{-     end -}}
+{{-     range $sections -}}
+{{-       $sectionAnchor := regexReplaceAll "\\s" .SectionTitle "-" | lower }}
+  * [{{ .SectionTitle }}](#{{ $sectionAnchor }})
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+
+{{- define "chart.valueDefaultColumnRender" -}}
+{{-   $defaultValue := (default .Default .AutoDefault) -}}
+{{-   $notationType := .NotationType -}}
+{{-   if .Default -}}
+{{-     $defaultValue = (trimAll "`" (default .Default .AutoDefault) ) -}}
+{{-     $notationType = "json" -}}
+{{-   end -}}
+{{-   if eq $notationType "none" -}}
+{{-   else if eq $notationType "reference" -}}
+[...](./values.yaml#L{{ .LineNumber }})
+{{-   else if eq $notationType "plain" -}}
+{{-     $defaultValue }}
+{{-   else if eq $notationType "tpl" -}}
+`{{ $defaultValue }}`
+{{-   else -}}
+`{{ $defaultValue }}`
+{{-   end -}}
+{{- end -}}
+
+{{- define "chart.valuesTable" -}}
+{{-   if .Sections.Sections -}}
+{{-     $sectionNames := list -}}
+{{-     range .Sections.Sections -}}
+{{-       $sectionNames = append $sectionNames .SectionName -}}
+{{-     end -}}
+{{-     $sections := list -}}
+{{-     range ($sectionNames | sortAlpha) -}}
+{{-       $currentSectionName := . -}}
+{{-       range $.Sections.Sections -}}
+{{-         if eq .SectionName $currentSectionName -}}
+{{-           $thisSection := dict -}}
+{{-           $title := regexReplaceAll "^[0-9A-Z]+\\.\\s+" .SectionName "" -}}
+{{-           $link := printf "./values.yaml#L%d" (first .SectionItems).LineNumber -}}
+{{-           $_ := set $thisSection "SectionName" .SectionName -}}
+{{-           $_ := set $thisSection "SectionItems" .SectionItems -}}
+{{-           $_ := set $thisSection "SectionTitle" $title -}}
+{{-           $_ := set $thisSection "SectionHeading" (printf "[%s](%s)" $title $link) -}}
+{{-           $sections = append $sections $thisSection -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-     if .Sections.DefaultSection.SectionItems -}}
+{{-       $thisSection := dict -}}
+{{-       $_ := set $thisSection "SectionName" .Sections.DefaultSection.SectionName -}}
+{{-       $_ := set $thisSection "SectionItems" .Sections.DefaultSection.SectionItems -}}
+{{-       $_ := set $thisSection "SectionTitle" .Sections.DefaultSection.SectionName -}}
+{{-       $_ := set $thisSection "SectionHeading" .Sections.DefaultSection.SectionName -}}
+{{-       $sections = append $sections $thisSection -}}
+{{-     end -}}
+{{-     range $sections }}
+
+### {{ .SectionTitle }}
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+{{-       range .SectionItems }}
+| [{{ .Key }}](./values.yaml#L{{ .LineNumber }}) | *{{ .Type }}* | {{  template "chart.valueDefaultColumnRender" . }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+{{-       end }}
+{{-     end }}
+{{-   end -}}
+{{- end -}}
+{{/*
+} End of functions
+*/ -}}
+
 # Document Engine Helm chart
 
 {{ template "chart.deprecationWarning" . }}
@@ -8,7 +111,16 @@
 
 {{ template "chart.homepageLine" . }}
 
-{{ template "chart.maintainersSection" . }}
+* [Using this chart](#using-this-chart)
+* [Values](#values)
+{{- template "chart.valuesTableOfContents" . }}
+* [Contribution](#contribution)
+* [License](#license)
+* [Support, Issues and License Questions](#support-issues-and-license-questions)
+
+## Maintainers 
+
+{{ template "chart.maintainersTable" . }}
 
 ## Using this chart
 
@@ -39,69 +151,6 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 > Please consult the [changelog](/charts/document-engine/CHANGELOG.md)
 
 ## Values
-
-{{- define "chart.valueDefaultColumnRender" -}}
-{{-   $defaultValue := (default .Default .AutoDefault) -}}
-{{-   $notationType := .NotationType }}
-{{-   if .Default -}}
-{{-     $defaultValue = (trimAll "`" (default .Default .AutoDefault) ) -}}
-{{-     $notationType = "json" -}}
-{{-   end -}}
-{{-   if eq $notationType "none" -}}
-{{-   else if eq $notationType "reference" -}}
-[...](./values.yaml#L{{ .LineNumber }})
-{{-   else if eq $notationType "plain" -}}
-{{-     $defaultValue }}
-{{-   else if eq $notationType "tpl" -}}
-`{{ $defaultValue }}`
-{{-   else -}}
-`{{ $defaultValue }}`
-{{-   end -}}
-{{- end -}}
-
-{{  define "chart.valuesTable" }}
-{{-   if .Sections.Sections }}
-{{-     $sectionNames := list -}}
-{{-     range .Sections.Sections }}
-{{-       $sectionNames = append $sectionNames .SectionName }}
-{{-     end }}
-{{-     $sections := list -}}
-{{-     range ($sectionNames | sortAlpha) }}
-{{-       $currentSectionName := . -}}
-{{-       range $.Sections.Sections }}
-{{-         if eq .SectionName $currentSectionName }}
-{{-           $sections = append $sections . }}
-{{-         end }}
-{{-       end }}
-{{-     end }}
-{{-     range $sections }}
-
-### [{{ regexReplaceAll "^\\d+\\.\\s+" .SectionName "" }}](./values.yaml#L{{ (first .SectionItems).LineNumber }})
-
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-{{-       range .SectionItems }}
-| [{{ .Key }}](./values.yaml#L{{ .LineNumber }}) | *{{ .Type }}* | {{  template "chart.valueDefaultColumnRender" . }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
-{{-       end }}
-{{-     end }}
-{{      if .Sections.DefaultSection.SectionItems}}
-
-### {{ .Sections.DefaultSection.SectionName }}
-
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-{{-       range .Sections.DefaultSection.SectionItems }}
-| [{{ .Key }}](./values.yaml#L{{ .LineNumber }}) | *{{ .Type }}* | {{  template "chart.valueDefaultColumnRender" . }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
-{{-       end }}
-{{      end }}
-{{    else }}
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-{{-     range .Values }}
-| [{{ .Key }}](./values.yaml#L{{ .LineNumber }}) | *{{ .Type }}* | {{  template "chart.valueDefaultColumnRender" . }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
-{{-     end }}
-{{    end }}
-{{  end }}
 
 {{ template "chart.valuesTable" . }}
 
