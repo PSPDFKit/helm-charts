@@ -6,12 +6,7 @@ Document Engine is a backend software for processing documents and powering auto
 
 **Homepage:** <https://pspdfkit.com/guides/document-engine/>
 
-* [Maintainers](#maintainers)
 * [Using this chart](#using-this-chart)
-  * [Adding the repository](#adding-the-repository)
-  * [Installing Document Engine](#installing-document-engine)
-  * [Dependencies](#dependencies)
-  * [Upgrade](#upgrade)
 * [Values](#values)
   * [Document Engine License](#document-engine-license)
   * [API authentication](#api-authentication)
