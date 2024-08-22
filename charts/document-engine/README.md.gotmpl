@@ -1,0 +1,126 @@
+# Document Engine Helm chart
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+## Using this chart
+
+### Adding the repository
+
+```shell
+helm repo add pspdfkit https://pspdfkit.github.io/helm-charts
+helm repo update
+```
+
+### Installing Document Engine
+
+```shell
+helm upgrade --install -n document-engine \
+     document-engine pspdfkit/document-engine \
+     -f ./document-engine-values.yaml
+```
+
+### Dependencies
+
+The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) charts for PostgreSQL, [MinIO](https://min.io/) and [Redis](https://redis.io/). They are disabled by default, but can be enabled for convenience. Please consider [tests](/charts/document-engine/ci) as examples.
+
+{{ template "chart.requirementsTable" . }}
+
+### Upgrade
+
+> [!NOTE] 
+> Please consult the [changelog](/charts/document-engine/CHANGELOG.md)
+
+## Values
+
+{{- define "chart.valueDefaultColumnRender" -}}
+{{-   $defaultValue := (default .Default .AutoDefault) -}}
+{{-   $notationType := .NotationType }}
+{{-   if .Default -}}
+{{-     $defaultValue = (trimAll "`" (default .Default .AutoDefault) ) -}}
+{{-     $notationType = "json" -}}
+{{-   end -}}
+{{-   if eq $notationType "none" -}}
+{{-   else if eq $notationType "reference" -}}
+[...](./values.yaml#L{{ .LineNumber }})
+{{-   else if eq $notationType "plain" -}}
+{{-     $defaultValue }}
+{{-   else if eq $notationType "tpl" -}}
+`{{ $defaultValue }}`
+{{-   else -}}
+`{{ $defaultValue }}`
+{{-   end -}}
+{{- end -}}
+
+{{  define "chart.valuesTable" }}
+{{-   if .Sections.Sections }}
+{{-     $sectionNames := list -}}
+{{-     range .Sections.Sections }}
+{{-       $sectionNames = append $sectionNames .SectionName }}
+{{-     end }}
+{{-     $sections := list -}}
+{{-     range ($sectionNames | sortAlpha) }}
+{{-       $currentSectionName := . -}}
+{{-       range $.Sections.Sections }}
+{{-         if eq .SectionName $currentSectionName }}
+{{-           $sections = append $sections . }}
+{{-         end }}
+{{-       end }}
+{{-     end }}
+{{-     range $sections }}
+
+### [{{ regexReplaceAll "^\\d+\\.\\s+" .SectionName "" }}](./values.yaml#L{{ (first .SectionItems).LineNumber }})
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+{{-       range .SectionItems }}
+| [{{ .Key }}](./values.yaml#L{{ .LineNumber }}) | *{{ .Type }}* | {{  template "chart.valueDefaultColumnRender" . }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+{{-       end }}
+{{-     end }}
+{{      if .Sections.DefaultSection.SectionItems}}
+
+### {{ .Sections.DefaultSection.SectionName }}
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+{{-       range .Sections.DefaultSection.SectionItems }}
+| [{{ .Key }}](./values.yaml#L{{ .LineNumber }}) | *{{ .Type }}* | {{  template "chart.valueDefaultColumnRender" . }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+{{-       end }}
+{{      end }}
+{{    else }}
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+{{-     range .Values }}
+| [{{ .Key }}](./values.yaml#L{{ .LineNumber }}) | *{{ .Type }}* | {{  template "chart.valueDefaultColumnRender" . }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+{{-     end }}
+{{    end }}
+{{  end }}
+
+{{ template "chart.valuesTable" . }}
+
+## Contribution
+
+The chart is validated using [ct](https://github.com/helm/chart-testing/tree/main) [lint](https://github.com/helm/chart-testing/blob/main/doc/ct_lint.md):
+
+```shell
+ct lint --target-branch "$(git rev-parse --abbrev-ref HEAD)"
+```
+
+## License
+
+This software is licensed under a [modified BSD license](LICENSE).
+
+## Support, Issues and License Questions
+
+PSPDFKit offers support via https://pspdfkit.com/support/request/
+
+Are you [evaluating our SDK](https://pspdfkit.com/try/)? That's great, we're happy to help out! To make sure this is fast, please use a work email and have someone from your company fill out our sales form: https://pspdfkit.com/sales/
+
+{{ template "helm-docs.versionFooter" . }}

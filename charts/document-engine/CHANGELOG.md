@@ -1,7 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [3.0.3 (2024-08-20)](#303-2024-08-20)
+  - [3.0.4 (2024-08-21)](#304-2024-08-21)
     - [Changed](#changed)
     - [Added](#added)
   - [2.9.3 (2024-08-16)](#293-2024-08-16)
@@ -42,7 +42,7 @@
   - [2.0.0](#200)
     - [Changed](#changed-9)
 
-## 3.0.3 (2024-08-20)
+## 3.0.4 (2024-08-21)
 
 > [!WARNING]
 > Breaking changes. 
@@ -51,6 +51,7 @@
 ### Changed
 
 * Massive internal refactoring.
+* Documentation generation.
 * `pspdfkit.license.isOffline` is removed, as it is no longer necessary
 * `pspdfkit.license` section moved to the top level as `documentEngineLicense`.
 * `pspdfkit.auth.api` section moved to the top level as `apiAuth`, both `pspdfkit.auth.api.apiToken` and `pspdfkit.auth.api.jwt` section.
@@ -68,8 +69,12 @@
 * The remaining `pspdfkit.storage` section moved to the top level as `assetStorage`.
   * `pspdfkit.assetStorageCacheSizeMegaBytes` renamed to `assetStorage.localCacheSizeMegabytes`.
   * `pspdfkit.storage.assetStorageBackend` renamed to `assetStorage.backendType`
-  * `pspdfkit.storage.enableAssetStorageFallback*` moved  to `assetStorage.backendFallback` section
+  * `pspdfkit.storage.enableAssetStorageFallback*` moved to `assetStorage.backendFallback` section
+  * `pspdfkit.storage.redis.useTtlForPrerendering` renamed to `assetStorage.redis.useTtl`
 * `pspdfkit.signingService` section moved to the top level as `documentSigningService`.
+  * `pspdfkit.signingService.digitalSignatureHashAlgorithm` renamed to `documentSigningService.hashAlgorithm`
+  * `pspdfkit.signingService.digitalSignatureCadesLevel` renamed to `documentSigningService.cadesLevel`
+  * `pspdfkit.signingService.digitalSignatureCertificateCheckTime` renamed to `documentSigningService.certificateCheckTime`
 * Certificate trust configuration restructured into the new `certificateTrust` section:
   * Map `pspdfkit.signingTrustConfigMaps` becomes list `certificateTrust.digitalSignatures` allowing both ConfigMaps and Secrets
   * Map `pspdfkit.trustConfigMaps` becomes list `certificateTrust.customCertificates` allowing both ConfigMaps and Secrets

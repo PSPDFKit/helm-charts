@@ -1,115 +1,172 @@
-#
-# Some of the values may be accepting templates (marked with `(tpl)`)
-#
-
+# -- (object) Image settings
+# @notationType -- none
 image:
   repository: pspdfkit/document-engine
   pullPolicy: IfNotPresent
   # Defaults to the Chart appVersion
   tag: ""
+# -- Pull secrets
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-#
-# https://pspdfkit.com/guides/document-engine/configuration/overview/
-# https://pspdfkit.com/guides/document-engine/deployment/product-activation/
-#
+# -- (object) License information, see more in
+# [our guide](https://pspdfkit.com/guides/document-engine/deployment/product-activation/)
+# @section -- 0. Document Engine License
+# @notationType -- none
 documentEngineLicense:
-  # Activation key for online activation (most common) or
+  # -- Activation key for online activation (most common) or
   # license key for offline activation.
   # Results in `ACTIVATION_KEY` environment variable.
+  # @section -- 0. Document Engine License
   activationKey: ""
-  # Query existing secret for the activation key
+  # -- (object) Query existing secret for the activation key
+  # @section -- 0. Document Engine License
+  # @default -- none
+  # @notationType -- reference
   externalSecret:
-    # External secret name for license
+    # -- External secret name for license
+    # @section -- 0. Document Engine License
+    # @ignored
     name: ""
-    # The key in the secret used to retrieve the activation key
+    # -- The key in the secret used to retrieve the activation key
+    # @section -- 0. Document Engine License
+    # @ignored
     key: DOCUMENT_ENGINE_ACTIVATION_KEY
 
-# Document Enging API authentication
+# -- (object) Document Enging API authentication
+# @section -- 1. API authentication
+# @notationType -- none
 apiAuth:
-  # `API_AUTH_TOKEN` should be long enough
+  # -- `API_AUTH_TOKEN`, a universal secret with full access to the API,
+  #  should be long enough
+  # @section -- 1. API authentication
   apiToken: secret
-  # JSON Web Token (JWT) settings
+  # -- (object) JSON Web Token (JWT) settings
+  # @section -- 1. API authentication
+  # @notationType -- reference
   jwt:
-    # Enable JWT
+    # -- Enable JWT
+    # @section -- 1. API authentication
     enabled: false
-    # `JWT_PUBLIC_KEY`
+    # -- `JWT_PUBLIC_KEY`
+    # @section -- 1. API authentication
     publicKey: none
-    # `JWT_ALGORITHM`
-    # Supported algorithms: RS256, RS512, ES256, ES512.
+    # -- `JWT_ALGORITHM`
+    # Supported algorithms: `RS256`, `RS512`, `ES256`, `ES512`.
     # See RFC 7518 for details about specific algorithms.
+    # @section -- 1. API authentication
     algorithm: RS256
-  # A string used as the base key for deriving secret keys for the purposes of authentication.
+  # -- A string used as the base key for deriving secret keys for the purposes of authentication.
   # Choose a sufficiently long random string for this option.
   # To generate a random string, use: `openssl rand -hex 256`.
   # This will set `SECRET_KEY_BASE` environment variable.
+  # @section -- 1. API authentication
   secretKeyBase: ""
-  # Use an external secret for API credentials
+  # -- (object) Use an external secret for API credentials
+  # @section -- 1. API authentication
+  # @default -- none
+  # @notationType -- reference
   externalSecret:
-    # External secret name
+    # -- External secret name
+    # @section -- 1. API authentication
+    # @ignored
     name: ""
-    # Key names
+    # -- If external secret is enabled, but `apiTokenKey` is not set,
+    # the token will be retrieved from the `apiAuth.apiToken` value
+    # @section -- 1. API authentication
+    # @ignored
     apiTokenKey: API_AUTH_TOKEN
-    # If external secret is enabled, but `jwtAlgorithmKey` is not set,
+    # -- If external secret is enabled, but `jwtAlgorithmKey` is not set,
     # the algorithm will be retrieved from the `apiAuth.jwt.algorithm` value
+    # @section -- 1. API authentication
+    # @ignored
     jwtAlgorithmKey: JWT_ALGORITHM
-    # If external secret is enabled, but `jwtPublicKeyKey` is not set,
+    # -- If external secret is enabled, but `jwtPublicKeyKey` is not set,
     # the public key will be retrieved from the `apiAuth.jwt.publicKey` value
+    # @section -- 1. API authentication
+    # @ignored
     jwtPublicKeyKey: JWT_PUBLIC_KEY
-    # If external secret is enabled, but `secretKeyBaseKey` is not set,
+    # -- If external secret is enabled, but `secretKeyBaseKey` is not set,
     # the secret key base will be retrieved from the `apiAuth.secretKeyBase` value
     # or generated automatically
+    # @section -- 1. API authentication
+    # @ignored
     secretKeyBaseKey: SECRET_KEY_BASE
 
+# -- (object) General configuration, [see more](https://pspdfkit.com/guides/document-engine/configuration/overview/)
+# @section -- 3. Configuration options
+# @notationType -- none
 config:
-  # `PSPDFKIT_WORKER_POOL_SIZE`
+  # -- `PSPDFKIT_WORKER_POOL_SIZE`
+  # @section -- 3. Configuration options
   workerPoolSize: 16
-  # Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`)
+  # -- Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`)
+  # @section -- 3. Configuration options
   requestTimeoutSeconds: 60
-  # Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`)
+  # -- Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`)
+  # @section -- 3. Configuration options
   workerTimeoutSeconds: 60
-  # `PDF_GENERATION_TIMEOUT` in seconds
+  # -- `PDF_GENERATION_TIMEOUT` in seconds
+  # @section -- 3. Configuration options
   generationTimeoutSeconds: 20
-  # `REMOTE_URL_FETCH_TIMEOUT` in seconds
+  # -- `REMOTE_URL_FETCH_TIMEOUT` in seconds
+  # @section -- 3. Configuration options
   urlFetchTimeoutSeconds: 5
-  # `READ_ANNOTATION_BATCH_TIMEOUT` in seconds
+  # -- `READ_ANNOTATION_BATCH_TIMEOUT` in seconds
+  # @section -- 3. Configuration options
   readAnnotationBatchTimeoutSeconds: 20
-  # `MAX_UPLOAD_SIZE_BYTES` in megabytes
+  # -- `MAX_UPLOAD_SIZE_BYTES` in megabytes
+  # @section -- 3. Configuration options
   maxUploadSizeMegaBytes: 950
-  # `ASYNC_JOBS_TTL`
+  # -- `ASYNC_JOBS_TTL`
+  # @section -- 3. Configuration options
   asyncJobsTtlSeconds: 172800
-  # `ALLOW_DOCUMENT_UPLOADS`
+  # -- `ALLOW_DOCUMENT_UPLOADS`
+  # @section -- 3. Configuration options
   allowDocumentUploads: true
-  # `ALLOW_REMOTE_DOCUMENTS`
+  # -- `ALLOW_REMOTE_DOCUMENTS`
+  # @section -- 3. Configuration options
   allowRemoteDocuments: true
-  # `ALLOW_DOCUMENT_GENERATION`
+  # -- `ALLOW_DOCUMENT_GENERATION`
+  # @section -- 3. Configuration options
   allowDocumentGeneration: true
-  # `ALLOW_REMOTE_ASSETS_IN_GENERATION`
+  # -- `ALLOW_REMOTE_ASSETS_IN_GENERATION`
+  # @section -- 3. Configuration options
   allowRemoteAssetsInGeneration: true
-  # `IGNORE_INVALID_ANNOTATIONS`
+  # -- `IGNORE_INVALID_ANNOTATIONS`
+  # @section -- 3. Configuration options
   ignoreInvalidAnnotations: true
-  # `AUTOMATIC_LINK_EXTRACTION`
+  # -- `AUTOMATIC_LINK_EXTRACTION`
+  # @section -- 3. Configuration options
   automaticLinkExtraction: false
-  # `MIN_SEARCH_QUERY_LENGTH`
+  # -- `MIN_SEARCH_QUERY_LENGTH`
+  # @section -- 3. Configuration options
   minSearchQueryLength: 3
-  # `TRUSTED_PROXIES`
+  # -- `TRUSTED_PROXIES`
+  # @section -- 3. Configuration options
   trustedProxies: default
-  # Proxy settings, `HTTP_PROXY` amd `HTTPS_PROXY`
+  # -- Proxy settings, `HTTP_PROXY` amd `HTTPS_PROXY`
+  # @section -- 3. Configuration options
   proxy:
     http: ""
     https: ""
-  # `PORT` for the Document Engine API
+  # -- `PORT` for the Document Engine API
+  # @section -- 3. Configuration options
   port: 5000
-  # `REPLACE_SECRETS_FROM_ENV` — whether to consider
+  # -- `REPLACE_SECRETS_FROM_ENV` — whether to consider
   # environment variables, values and secrets for
   # `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD`
+  # @section -- 3. Configuration options
   replaceSecretsFromEnv: true
 
+# -- (object) [Certificate trust](https://pspdfkit.com/guides/document-engine/configuration/certificate-trust/)
+# @section -- 4. Certificate trust
+# @notationType -- none
 certificateTrust:
-  # CAs for digital signatures (`/certificate-stores/`)
-  # from ConfigMap and Secret resources
+  # -- CAs for digital signatures (`/certificate-stores/`)
+  # from ConfigMap and Secret resources.
+  # @section -- 4. Certificate trust
   digitalSignatures: []
     ## To yield `/certificate-stores/private-ca-certificates.pem`:
     # - name: private-ca
@@ -117,7 +174,8 @@ certificateTrust:
     #   configMap:
     #     name: private-ca
     #     key: private-ca-certificates.pem
-  # ConfigMap and Secret references for trust configuration, stored in `/certificate-stores-custom`
+  # -- ConfigMap and Secret references for trust configuration, stored in `/certificate-stores-custom`
+  # @section -- 4. Certificate trust
   customCertificates: []
     ## To yield `/certificate-stores-custom/my-certificates.pem`:
     # - name: my
@@ -125,259 +183,403 @@ certificateTrust:
     #   secret:
     #     name: my-config-map
     #     key: some-certificates.pem
-  # Override `DOWNLOADER_CERT_FILE_PATH` to set HTTP client trust.
-  # If empty, defaults to  Mozilla's CA bundle, which is provided
-  # as `/certificate-stores-downloader/root-certificates.pem`
+  # -- Override `DOWNLOADER_CERT_FILE_PATH` to set HTTP client trust.
+  # If empty, defaults to  Mozilla's CA bundle.
+  # @section -- 4. Certificate trust
   downloaderTrustFileName: ""
 
-# Database
+# -- (object) Database
+# @section -- 5. Database
+# @notationType -- none
 database:
-  # Persistent storage enabled
+  # -- Persistent storage enabled
+  # @section -- 5. Database
   enabled: true
-  # Database engine: only `postgres` is currently supported
+  # -- Database engine: only `postgres` is currently supported
+  # @section -- 5. Database
   engine: postgres
-  # `DATABASE_CONNECTIONS`
+  # -- `DATABASE_CONNECTIONS`
+  # @section -- 5. Database
   connections: 20
-  # PostgreSQL database settings
+  # -- (object) PostgreSQL database settings
+  # @section -- 5. Database
+  # @default -- none
+  # @notationType -- reference
   postgres:
-    # `PGHOST`
+    # -- `PGHOST`
+    # @section -- 5. Database
     host: postgresql
-    # `PGPORT`
+    # -- `PGPORT`
+    # @section -- 5. Database
     port: 5432
-    # `PGDATABASE`
+    # -- `PGDATABASE`
+    # @section -- 5. Database
     database: document-engine
-    # `PGUSER`
+    # -- `PGUSER`
+    # @section -- 5. Database
     username: de-user
-    # `PGPASSWORD`
+    # -- `PGPASSWORD`
+    # @section -- 5. Database
     password: despair
-    # `PG_ADMIN_USER`
+    # -- `PG_ADMIN_USER`
+    # @section -- 5. Database
     adminUsername: postgres
-    # `PG_ADMIN_PASSWORD`
+    # -- `PG_ADMIN_PASSWORD`
+    # @section -- 5. Database
     adminPassword: despair
-    # ...or use external secrets:
+    # -- Use external secret for database credentials.
     # `PGUSER` and `PGPASSWORD` must be provided
     # and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL`
+    # @section -- 5. Database
     externalSecretName: ""
-    # `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD` — for migrations
+    # -- External secret for administrative database credentials,
+    # used for migrations: `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD`
+    # @section -- 5. Database
     externalAdminSecretName: ""
-    # TLS settings
+    # -- (object) TLS settings
+    # @section -- 5. Database
+    # @default -- none
+    # @notationType -- reference
     tls:
-      # `PGSSL`
+      # -- Enable TLS (`PGSSL`)
+      # @section -- 5. Database
       enabled: false
-      # Negated `PGSSL_DISABLE_VERIFY`
+      # -- Negated `PGSSL_DISABLE_VERIFY`
+      # @section -- 5. Database
       verify: true
-      # Negated `PGSSL_DISABLE_HOSTNAME_VERIFY`
+      # -- Negated `PGSSL_DISABLE_HOSTNAME_VERIFY`
+      # @section -- 5. Database
       hostVerify: true
-      # Common name for the certificate (`PGSSL_CERT_COMMON_NAME`),
+      # -- Common name for the certificate (`PGSSL_CERT_COMMON_NAME`),
       # defaults to `PGHOST` value
+      # @section -- 5. Database
       commonName: ""
-      # Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`,
+      # -- Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`,
       # mutually exclusive with `trustFileName` and takes precedence
+      # @section -- 5. Database
       trustBundle: ""
-      # Path from `certificateTrust.customCertificates`, wraps around `PGSSL_CA_CERT_PATH`
+      # -- Path from `certificateTrust.customCertificates`, wraps around `PGSSL_CA_CERT_PATH`
+      # @section -- 5. Database
       trustFileName: ""
-  # Database migration jobs.
+  # -- (object) Database migration jobs.
+  # @section -- 5. Database
+  # @notationType -- reference
   migrationJob:
-    # It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
+    # -- It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
+    # @section -- 5. Database
     enabled: false
+    # @ignored
     ttlSecondsAfterFinished: 300
+    # @ignored
     resources: {}
+    # @ignored
     podAnnotations: {}
+    # @ignored
     podLabels: {}
 
-# Document lifecycle management
+# -- (object) Document lifecycle management
+# @section -- 6. Lifecycle
+# @notationType -- none
 documentLifecycle:
-  # Regular job to remove documents from the database.
+  # -- (object) Regular job to remove documents from the database.
   # Note: currently only works with the `built-in` storage backend.
+  # @section -- 6. Lifecycle
+  # @notationType -- reference
   cleanupJob:
+    # -- Enable the cleanup job
+    # @section -- 6. Lifecycle
     enabled: false
+    # -- Cleanup job schedule in cron format
+    # @section -- 6. Lifecycle
     schedule: "13 * * * *"
+    # -- Documents TTL in hours
+    # @section -- 6. Lifecycle
     keepHours: 24
-    # Keep documents with IDs beginning with `persistent` indefinitely
+    # -- Keep documents with IDs beginning with `persistent` indefinitely
+    # @section -- 6. Lifecycle
     persistentLike: "persistent%"
+    # @ignored
     resources: {}
+    # @ignored
     podAnnotations: {}
+    # @ignored
     podLabels: {}
 
-# Everything about storing and caching assets
+# -- (object) Everything about storing and caching assets
+# @section -- 7. Asset storage
+# @notationType -- none
 assetStorage:
-  # Sets local asset storage value in megabytes
+  # -- Sets local asset storage value in megabytes
   # Results in `ASSET_STORAGE_CACHE_SIZE` (in bytes)
+  # @section -- 7. Asset storage
   localCacheSizeMegabytes: 2000
-  # Asset storage backend is only available if `database.enabled` is `true`
+  # -- Asset storage backend is only available if `database.enabled` is `true`
   # Sets `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
+  # @section -- 7. Asset storage
   backendType: built-in
-  # Asset storage fallback settings
+  # -- (object) Asset storage fallback settings
+  # @section -- 7. Asset storage
+  # @notationType -- reference
   backendFallback:
-    # `ENABLE_ASSET_STORAGE_FALLBACK`
+    # -- `ENABLE_ASSET_STORAGE_FALLBACK`
+    # @section -- 7. Asset storage
     enabled: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
+    # -- `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES`
+    # @section -- 7. Asset storage
     enabledPostgres: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK_S3`
+    # -- `ENABLE_ASSET_STORAGE_FALLBACK_S3`
+    # @section -- 7. Asset storage
     enabledS3: false
-    # `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
+    # -- `ENABLE_ASSET_STORAGE_FALLBACK_AZURE`
+    # @section -- 7. Asset storage
     enabledAzure: false
-  # S3 backend storage settings, in case `assetStorage.backendType` is set to `s3
+  # -- (object) S3 backend storage settings, in case `assetStorage.backendType` is set to `s3
+  # @section -- 7. Asset storage
+  # @notationType -- reference
   s3:
-    # `ASSET_STORAGE_S3_ACCESS_KEY_ID`
+    # -- `ASSET_STORAGE_S3_ACCESS_KEY_ID`
+    # @section -- 7. Asset storage
+    # @ignored
     accessKeyId: ""
-    # `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
+    # --`ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
+    # @section -- 7. Asset storage
+    # @ignored
     secretAccessKey: ""
-    # `ASSET_STORAGE_S3_BUCKET`
+    # --`ASSET_STORAGE_S3_BUCKET`
+    # @section -- 7. Asset storage
     bucket: "document-engine-assets"
-    # `ASSET_STORAGE_S3_REGION`
+    # --`ASSET_STORAGE_S3_REGION`
+    # @section -- 7. Asset storage
     region: "us-east-1"
-    # `ASSET_STORAGE_S3_HOST`
-    # host: "os.local"
-    # `ASSET_STORAGE_S3_PORT`
+    # --`ASSET_STORAGE_S3_HOST`
+    # @section -- 7. Asset storage
+    # @ignored
+    host: ""
+    # -- `ASSET_STORAGE_S3_PORT`
+    # @section -- 7. Asset storage
+    # @ignored
     port: 443
-    # `ASSET_STORAGE_S3_SCHEME`
+    # -- `ASSET_STORAGE_S3_SCHEME`
+    # @section -- 7. Asset storage
+    # @ignored
     scheme: "https://"
-    # External secret name. Must contain
+    # -- External secret name. Must contain
     # `ASSET_STORAGE_S3_ACCESS_KEY_ID` and `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
     # if they are needed, and _may_ set other values
+    # @section -- 7. Asset storage
+    # @ignored
     externalSecretName: ""
-  # Azure blob storage settings, in case `assetStorage.backendType` is set to `azure`
+  # -- (object) Azure blob storage settings, in case `assetStorage.backendType` is set to `azure`
+  # @section -- 7. Asset storage
+  # @notationType -- reference
   azure:
-    # `AZURE_STORAGE_ACCOUNT_NAME`
+    # -- `AZURE_STORAGE_ACCOUNT_NAME`
+    # @section -- 7. Asset storage
+    # @ignored
     accountName: ""
-    # `AZURE_STORAGE_ACCOUNT_KEY`
+    # -- `AZURE_STORAGE_ACCOUNT_KEY`
+    # @section -- 7. Asset storage
+    # @ignored
     accountKey: ""
-    # `AZURE_STORAGE_DEFAULT_CONTAINER`
+    # -- `AZURE_STORAGE_DEFAULT_CONTAINER`
+    # @section -- 7. Asset storage
     container: ""
-    # `AZURE_STORAGE_ACCOUNT_CONNECTION_STRING`, takes priority over `accountName` and `accountKey`
+    # -- `AZURE_STORAGE_ACCOUNT_CONNECTION_STRING`, takes priority over `accountName` and `accountKey`
+    # @section -- 7. Asset storage
+    # @ignored
     connectionString: ""
-    # `AZURE_STORAGE_API_URL` for custom endpoints
+    # -- `AZURE_STORAGE_API_URL` for custom endpoints
+    # @section -- 7. Asset storage
+    # @ignored
     apiUrl: ""
-    # External secret name. Must contain
+    # -- External secret name. Must contain
     # `AZURE_STORAGE_ACCOUNT_NAME` and `AZURE_STORAGE_ACCOUNT_KEY`
     # if they are needed, and _may_ set other values
+    # @section -- 7. Asset storage
+    # @ignored
     externalSecretName: ""
-  # Redis settings for caching and prerendering
+  # -- (object) Redis settings for caching and prerendering
+  # @section -- 7. Asset storage
+  # @notationType -- reference
   redis:
-    # `USE_REDIS_CACHE`
+    # -- `USE_REDIS_CACHE`
+    # @section -- 7. Asset storage
     enabled: false
-    # `REDIS_TTL`
+    # -- `REDIS_TTL`
+    # @section -- 7. Asset storage
     ttlSeconds: 86400000
-    # `USE_REDIS_TTL_FOR_PRERENDERING`
-    useTtlForPrerendering: true
-    # `REDIS_HOST`
+    # -- `USE_REDIS_TTL_FOR_PRERENDERING`
+    # @section -- 7. Asset storage
+    useTtl: true
+    # -- `REDIS_HOST`
+    # @section -- 7. Asset storage
     host: redis
-    # `REDIS_PORT`
+    # -- `REDIS_PORT`
+    # @section -- 7. Asset storage
     port: 6379
-    # `REDIS_DATABASE`
+    # -- `REDIS_DATABASE`
+    # @section -- 7. Asset storage
     database: ""
-    # Sentinels
+    # -- (object) Redis Sentinel
+    # @section -- 7. Asset storage
+    # @default -- none
+    # @notationType -- reference
     sentinel:
+      # -- Enable Redis Sentinel
+      # @section -- 7. Asset storage
+      # @ignored
       enabled: false
-      # `REDIS_SENTINELS`
+      # -- `REDIS_SENTINELS`
+      # @section -- 7. Asset storage
+      # @ignored
       urls: []
       # - "redis://sentinel1:26379"
       # - "redis://sentinel2:26379"
       # - "redis://sentinel3:26379"
       # `REDIS_SENTINELS_GROUP`
+      # @section -- 7. Asset storage
+      # @ignored
       group: none
-    # `REDIS_USERNAME`
+    # -- `REDIS_USERNAME`
+    # @section -- 7. Asset storage
     username: ""
-    # `REDIS_PASSWORD`
+    # -- `REDIS_PASSWORD`
+    # @section -- 7. Asset storage
     password: ""
-    # `REDIS_SSL`
+    # -- (object) TLS settings
+    # @section -- 7. Asset storage
+    # @notationType -- none
     tls:
+      # -- Enable TLS (`REDIS_SSL`)
+      # @section -- 7. Asset storage
       enabled: false
-    # External secret name. Must contain `REDIS_USERNAME` and `REDIS_PASSWORD`
+    # -- External secret name. Must contain `REDIS_USERNAME` and `REDIS_PASSWORD`
     # if they are needed, and _may_ set other values
+    # @section -- 7. Asset storage
     externalSecretName: ""
 
-# Signing service parameters
+# -- (object) Signing service parameters
+# @section -- 8. Digital signatures
+# @notationType -- none
 documentSigningService:
-  # Enable signing service integration
+  # -- Enable signing service integration
+  # @section -- 8. Digital signatures
   enabled: false
-  # `SIGNING_SERVICE_URL`
+  # -- `SIGNING_SERVICE_URL`
+  # @section -- 8. Digital signatures
   url: https://signing-thing.local/sign
-  # `SIGNING_SERVICE_TIMEOUT` in seconds
+  # -- `SIGNING_SERVICE_TIMEOUT` in seconds
+  # @section -- 8. Digital signatures
   timeoutSeconds: 10
-  # `DEFAULT_SIGNER_NAME`
+  # -- `DEFAULT_SIGNER_NAME`
+  # @section -- 8. Digital signatures
   defaultSignerName: "John Doe"
-  # `DEFAULT_SIGNATURE_REASON`
+  # @section -- 8. Digital signatures
+  # -- `DEFAULT_SIGNATURE_REASON`
+  # @section -- 8. Digital signatures
   defaultSignatureReason: "approved"
-  # `DEFAULT_SIGNATURE_LOCATION`
+  # @section -- 8. Digital signatures
+  # -- `DEFAULT_SIGNATURE_LOCATION`
+  # @section -- 8. Digital signatures
   defaultSignatureLocation: "Head Quarters"
-  # `DIGITAL_SIGNATURE_HASH_ALGORITHM`
-  digitalSignatureHashAlgorithm: sha512
-  # `DIGITAL_SIGNATURE_CADES_LEVEL`
-  digitalSignatureCadesLevel: "b-lt"
-  # `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
-  digitalSignatureCertificateCheckTime: current_time
-  # Timestamp Authority (TSA) settings
+  # -- `DIGITAL_SIGNATURE_HASH_ALGORITHM`
+  # @section -- 8. Digital signatures
+  hashAlgorithm: sha512
+  # -- `DIGITAL_SIGNATURE_CADES_LEVEL`
+  # @section -- 8. Digital signatures
+  cadesLevel: "b-lt"
+  # -- `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
+  # @section -- 8. Digital signatures
+  certificateCheckTime: current_time
+  # -- (object) Timestamp Authority (TSA) settings
+  # @section -- 8. Digital signatures
+  # @notationType -- reference
   timestampAuthority:
-    # `TIMESTAMP_AUTHORITY_URL`
+    # -- `TIMESTAMP_AUTHORITY_URL`
+    # @section -- 8. Digital signatures
     url: https://freetsa.org/
-    # `TIMESTAMP_AUTHORITY_USERNAME`
+    # -- `TIMESTAMP_AUTHORITY_USERNAME`
+    # @section -- 8. Digital signatures
+    # @ignored
     username: ""
-    # `TIMESTAMP_AUTHORITY_PASSWORD`
+    # -- `TIMESTAMP_AUTHORITY_PASSWORD`
+    # @section -- 8. Digital signatures
+    # @ignored
     password: ""
 
-# Document Engine Dashboard settings
+# -- Document Engine Dashboard settings
 dashboard:
-  # Enable dashboard
+  # -- Enable dashboard
   enabled: true
-  # Dashboard authentication
+  # -- Dashboard authentication
   auth:
-    # `DASHBOARD_USERNAME`
+    # -- `DASHBOARD_USERNAME`
     username: admin
-    # `DASHBOARD_PASSWORD` — will generate a random password if not set
+    # -- `DASHBOARD_PASSWORD` — will generate a random password if not set
     password: ""
-    # Use an external secret for dashboard credentials
-    # instead of the values from `pspdfkit.auth.dashboard.*`
+    # -- Use an external secret for dashboard credentials
+    # -- instead of the values from `pspdfkit.auth.dashboard.*`
     externalSecret:
-      # External secret name
+      # -- External secret name
       name: ""
-      # Key names
+      # -- Key names
       usernameKey: DASHBOARD_USERNAME
       passwordKey: DASHBOARD_PASSWORD
 
-# Observability settings
+# -- Observability settings
 observability:
-  # Logs
+  # -- Logs
   log:
-    # `LOG_LEVEL`
+    # -- `LOG_LEVEL`
     level: info
-    # `HEALTHCHECK_LOGLEVEL` — log level for health checks
+    # -- `HEALTHCHECK_LOGLEVEL` — log level for health checks
     healthcheckLevel: debug
-  # OpenTelemetry
+  # -- OpenTelemetry
   opentelemetry:
-  # Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
+  # -- Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported
     enabled: false
-    # https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+    # -- https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
     # `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317`
     otlpExporterEndpoint: ""
-    # `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
+    # -- `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc`
     otlpExporterProtocol: ""
-    # `OTEL_SERVICE_NAME`, service name
+    # -- `OTEL_SERVICE_NAME`, service name
     otelServiceName: ""
-    # `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
+    # -- `OTEL_RESOURCE_ATTRIBUTES`, resource attributes
     otelResourceAttributes: ""
-    # `OTEL_PROPAGATORS`, propagators
+    # -- `OTEL_PROPAGATORS`, propagators
     otelPropagators: ""
-    # `OTEL_TRACES_SAMPLER`, should normally not be touched
+    # -- `OTEL_TRACES_SAMPLER`, should normally not be touched
     # to allow custom `parent_based` work,
     # but something like `parentbased_traceidratio` may be considered
     otelTracesSampler: ""
-    # `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler
+    # -- `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler
     otelTracesSamplerArg: ""
-  # Metrics configuration
+  # -- Metrics configuration
   metrics:
+    # -- Enable metrics exporting
+    # @section -- Observability settings
     enabled: false
-    # StatsD parameters
+    # -- StatsD parameters
+    # @section -- Observability settings
+    # @default -- *See below*
+    # @notationType -- plain
     statsd:
-      # Enable StatsD exporting, required for Prometheus exporter
+      #  -- Enable StatsD exporting, required for Prometheus exporter
+      # @section -- Observability settings
       enabled: false
-      # StatsD host, `STATSD_HOST`
+      #  -- StatsD host, `STATSD_HOST`
       # Set to `localhost` if using the Prometheus exporter
+      # @section -- Observability settings
       host: localhost
-      # StatsD port, `STATSD_PORT`
+      # -- StatsD port, `STATSD_PORT`
+      # @section -- Observability settings
       port: 9125
-      # (tpl) StatsD custom tags, `STATSD_CUSTOM_TAGS`
+      # -- (tpl/string) StatsD custom tags, `STATSD_CUSTOM_TAGS`
+      # @notationType -- tpl
+      # @section -- Observability settings
+      # @default -- *generated*
+      # @notationType -- plain
       customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
     # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
     serviceMonitor:
@@ -612,10 +814,9 @@ lifecycle: {}
 #    exec:
 #      command: ["/bin/sh", "-c", "sleep 180"]
 
-#
-# External PostgreSQL database chart
-# See more: https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-#
+# -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
+# @default -- *See below*
+# @notationType -- plain
 postgresql:
   enabled: false
   architecture: standalone
@@ -635,23 +836,19 @@ postgresql:
     postgresPassword: despair
     database: document-engine
 
-#
-# External MinIO chart
-# See more: https://github.com/bitnami/charts/tree/main/bitnami/minio
-#
+# -- [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)
+# @default -- *See below*
+# @notationType -- plain
 minio:
   enabled: false
   mode: standalone
   auth:
-    rootUser: documentEngineObjectStorageRootKey
-    rootPassword: documentEngineObjectStorageRootPassword
+    rootUser: deObjStorageRootKey
+    rootPassword: deObjStorageSecret
   defaultBuckets: "document-engine-assets"
   disableWebUI: true
 
-#
-# External Redis chart
-# See more: https://github.com/bitnami/charts/tree/main/bitnami/redis
-#
+# -- [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis)
 redis:
   enabled: false
   architecture: standalone
