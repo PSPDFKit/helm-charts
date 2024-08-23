@@ -53,33 +53,27 @@ apiAuth:
   secretKeyBase: ""
   # -- (object) Use an external secret for API credentials
   # @section -- 1. API authentication
-  # @default -- none
-  # @notationType -- reference
+  # @notationType -- none
   externalSecret:
     # -- External secret name
     # @section -- 1. API authentication
-    # @ignored
     name: ""
     # -- If external secret is enabled, but `apiTokenKey` is not set,
     # the token will be retrieved from the `apiAuth.apiToken` value
     # @section -- 1. API authentication
-    # @ignored
     apiTokenKey: API_AUTH_TOKEN
     # -- If external secret is enabled, but `jwtAlgorithmKey` is not set,
     # the algorithm will be retrieved from the `apiAuth.jwt.algorithm` value
     # @section -- 1. API authentication
-    # @ignored
     jwtAlgorithmKey: JWT_ALGORITHM
     # -- If external secret is enabled, but `jwtPublicKeyKey` is not set,
     # the public key will be retrieved from the `apiAuth.jwt.publicKey` value
     # @section -- 1. API authentication
-    # @ignored
     jwtPublicKeyKey: JWT_PUBLIC_KEY
     # -- If external secret is enabled, but `secretKeyBaseKey` is not set,
     # the secret key base will be retrieved from the `apiAuth.secretKeyBase` value
     # or generated automatically
     # @section -- 1. API authentication
-    # @ignored
     secretKeyBaseKey: SECRET_KEY_BASE
 
 # -- (object) General configuration, see more in [our guide](https://pspdfkit.com/guides/document-engine/configuration/overview/)
