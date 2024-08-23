@@ -185,7 +185,7 @@ database:
   enabled: true
   # -- Database engine: only `postgres` is currently supported
   # @section -- 5. Database
-  engine: postgres
+  engine: postgres # @schema enum: [postgres, null]
   # -- `DATABASE_CONNECTIONS`
   # @section -- 5. Database
   connections: 20
@@ -304,7 +304,7 @@ assetStorage:
   # -- Asset storage backend is only available if `database.enabled` is `true`
   # Sets `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
   # @section -- 7. Asset storage
-  backendType: built-in
+  backendType: built-in # @schema enum: [built-in, s3, azure, null]
   # -- (object) Asset storage fallback settings
   # @section -- 7. Asset storage
   # @notationType -- reference
@@ -472,13 +472,13 @@ documentSigningService:
   defaultSignatureLocation: "Head Quarters"
   # -- `DIGITAL_SIGNATURE_HASH_ALGORITHM`
   # @section -- 8. Digital signatures
-  hashAlgorithm: sha512
+  hashAlgorithm: sha512 # @schema enum: [md5, sha160, sha224, sha256, sha384, sha512]
   # -- `DIGITAL_SIGNATURE_CADES_LEVEL`
   # @section -- 8. Digital signatures
-  cadesLevel: "b-lt"
+  cadesLevel: "b-lt" # @schema enum: [b-lt, b-l, b-b]
   # -- `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
   # @section -- 8. Digital signatures
-  certificateCheckTime: current_time
+  certificateCheckTime: current_time # @schema enum: [current_time, signing_time]
   # -- (object) Timestamp Authority (TSA) settings
   # @section -- 8. Digital signatures
   # @notationType -- reference

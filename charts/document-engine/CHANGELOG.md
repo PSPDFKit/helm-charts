@@ -52,7 +52,7 @@
 
 ### Added
 
-* Schema
+* Schema using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json)
 
 ## 3.0.6 (2024-08-22)
 
