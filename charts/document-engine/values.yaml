@@ -82,13 +82,13 @@ apiAuth:
     # @ignored
     secretKeyBaseKey: SECRET_KEY_BASE
 
-# -- (object) General configuration, [see more](https://pspdfkit.com/guides/document-engine/configuration/overview/)
+# -- (object) General configuration, see more in [our guide](https://pspdfkit.com/guides/document-engine/configuration/overview/)
 # @section -- 3. Configuration options
 # @notationType -- none
 config:
   # -- `PSPDFKIT_WORKER_POOL_SIZE`
   # @section -- 3. Configuration options
-  workerPoolSize: 16
+  workerPoolSize: 16  # @schema minimum: 1
   # -- Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`)
   # @section -- 3. Configuration options
   requestTimeoutSeconds: 60
@@ -188,7 +188,7 @@ database:
   engine: postgres  # @schema enum: [postgres, null]
   # -- `DATABASE_CONNECTIONS`
   # @section -- 5. Database
-  connections: 20
+  connections: 20  # @schema minimum: 8
   # -- (object) PostgreSQL database settings
   # @section -- 5. Database
   # @default -- none
