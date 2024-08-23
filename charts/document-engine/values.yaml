@@ -44,7 +44,7 @@ apiAuth:
     # Supported algorithms: `RS256`, `RS512`, `ES256`, `ES512`.
     # See RFC 7518 for details about specific algorithms.
     # @section -- 1. API authentication
-    algorithm: RS256
+    algorithm: RS256  # @schema enum: [RS256, RS512, ES256, ES512]
   # -- A string used as the base key for deriving secret keys for the purposes of authentication.
   # Choose a sufficiently long random string for this option.
   # To generate a random string, use: `openssl rand -hex 256`.
