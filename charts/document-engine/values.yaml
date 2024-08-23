@@ -478,7 +478,7 @@ documentSigningService:
   cadesLevel: "b-lt"  # @schema enum: [b-lt, b-l, b-b]
   # -- `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
   # @section -- 8. Digital signatures
-  certificateCheckTime: current_time # @schema enum: [current_time, signing_time]
+  certificateCheckTime: current_time  # @schema enum: [current_time, signing_time]
   # -- (object) Timestamp Authority (TSA) settings
   # @section -- 8. Digital signatures
   # @notationType -- reference
