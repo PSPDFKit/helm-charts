@@ -89,10 +89,10 @@ Functions {
 
 ### {{ .SectionTitle }}
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
+| Key | Description | Type | Default |
+|-----|-------------|------|---------|
 {{-       range .SectionItems }}
-| [{{ .Key }}](./values.yaml#L{{ .LineNumber }}) | *{{ .Type }}* | {{  template "chart.valueDefaultColumnRender" . }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+| [{{ .Key }}](./values.yaml#L{{ .LineNumber }}) | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} | *{{ .Type }}* | {{  template "chart.valueDefaultColumnRender" . }} |
 {{-       end }}
 {{-     end }}
 {{-   end -}}
