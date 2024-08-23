@@ -941,9 +941,9 @@ priorityClassName: ""
 # -- [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/)
 # @section -- G. Scheduling
 schedulerName: ""
-# -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
+# -- (int) [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
 # @section -- G. Scheduling
-terminationGracePeriodSeconds: ""
+terminationGracePeriodSeconds:  # @schema type: [integer, null]
 
 # -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
 # @section -- Z. Chart dependencies

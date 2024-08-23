@@ -1,17 +1,19 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [3.1.1 (2024-08-23)](#311-2024-08-23)
+    - [Fixed](#fixed)
   - [3.1.0 (2024-08-22)](#310-2024-08-22)
     - [Added](#added)
   - [3.0.6 (2024-08-22)](#306-2024-08-22)
     - [Changed](#changed)
   - [3.0.5 (2024-08-21)](#305-2024-08-21)
-    - [Fixed](#fixed)
+    - [Fixed](#fixed-1)
   - [3.0.4 (2024-08-21)](#304-2024-08-21)
     - [Changed](#changed-1)
     - [Added](#added-1)
   - [2.9.3 (2024-08-16)](#293-2024-08-16)
-    - [Fixed](#fixed-1)
+    - [Fixed](#fixed-2)
   - [2.9.2 (2024-08-13)](#292-2024-08-13)
     - [Changed](#changed-2)
   - [2.9.1 (2024-08-10)](#291-2024-08-10)
@@ -20,16 +22,16 @@
   - [2.9.0 (2024-08-01)](#290-2024-08-01)
     - [Added](#added-3)
     - [Changed](#changed-4)
-    - [Fixed](#fixed-2)
+    - [Fixed](#fixed-3)
   - [2.8.0](#280)
     - [Added](#added-4)
     - [Changed](#changed-5)
-    - [Fixed](#fixed-3)
+    - [Fixed](#fixed-4)
   - [2.7.3](#273)
     - [Changed](#changed-6)
-    - [Fixed](#fixed-4)
-  - [2.7.2](#272)
     - [Fixed](#fixed-5)
+  - [2.7.2](#272)
+    - [Fixed](#fixed-6)
   - [2.7.0](#270)
     - [Changed](#changed-7)
   - [2.6.2](#262)
@@ -47,6 +49,12 @@
     - [Changed](#changed-9)
   - [2.0.0](#200)
     - [Changed](#changed-10)
+
+## 3.1.1 (2024-08-23)
+
+### Fixed
+
+* Wrong value type for `terminationGracePeriodSeconds`
 
 ## 3.1.0 (2024-08-22)
 

@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 3.1.0](https://img.shields.io/badge/Version-3.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
+![Version: 3.1.1](https://img.shields.io/badge/Version-3.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -321,7 +321,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [replicaCount](./values.yaml#L911) | *int* | `1` | Number of replicas |
 | [resources](./values.yaml#L908) | *object* | `{}` | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) |
 | [schedulerName](./values.yaml#L943) | *string* | `""` | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) |
-| [terminationGracePeriodSeconds](./values.yaml#L946) | *string* | `""` | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) |
+| [terminationGracePeriodSeconds](./values.yaml#L946) | *int* | `nil` | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) |
 | [tolerations](./values.yaml#L934) | *list* | `[]` | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) |
 | [topologySpreadConstraints](./values.yaml#L937) | *list* | `[]` | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
 | [updateStrategy](./values.yaml#L914) | *object* | `{"rollingUpdate":{},"type":"RollingUpdate"}` | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) |
