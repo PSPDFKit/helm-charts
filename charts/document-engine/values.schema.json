@@ -1100,7 +1100,10 @@
       "type": "object"
     },
     "terminationGracePeriodSeconds": {
-      "type": "string"
+      "type": [
+        "integer",
+        "null"
+      ]
     },
     "tolerations": {
       "type": "array"
