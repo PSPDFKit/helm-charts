@@ -185,7 +185,7 @@ database:
   enabled: true
   # -- Database engine: only `postgres` is currently supported
   # @section -- 5. Database
-  engine: postgres # @schema enum: [postgres, null]
+  engine: postgres  # @schema enum: [postgres, null]
   # -- `DATABASE_CONNECTIONS`
   # @section -- 5. Database
   connections: 20
