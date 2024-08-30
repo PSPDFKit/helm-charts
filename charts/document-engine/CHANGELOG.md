@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [3.2.0 (2024-08-29)](#320-2024-08-29)
+    - [Changed](#changed)
   - [3.1.2 (2024-08-23)](#312-2024-08-23)
     - [Changed](#changed)
   - [3.1.1 (2024-08-23)](#311-2024-08-23)
@@ -51,6 +53,12 @@
     - [Changed](#changed-10)
   - [2.0.0](#200)
     - [Changed](#changed-11)
+
+## 3.2.0 (2024-08-29)
+
+### Changed
+
+* [Document Engine 1.5.0](https://pspdfkit.com/changelog/document-engine/#1.5.0)
 
 ## 3.1.2 (2024-08-23)
 
