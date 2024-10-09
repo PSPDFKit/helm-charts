@@ -4,8 +4,8 @@ type: application
 description: Document Engine is a backend software for processing documents and powering automation workflows.
 home: https://pspdfkit.com/guides/document-engine/
 icon: data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwMCIgaGVpZ2h0PSIxMDAwIiB2aWV3Qm94PSIwIDAgMTAwMCAxMDAwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMzQyLjU2NyA2NTguNjEyTDMyOS40OTYgNjY1LjkxNUwzMzguNzk5IDY1NC4yODZDMzk5LjMxIDU3OS44NDIgNDMzLjAyNiA0ODcuMjExIDQzNC41MjggMzkxLjI4OEw0MzQuNzYgMzc2LjMxTDQ0MC4xMSAzOTAuMjY1QzQ3NC40MDUgNDc5LjkzMiA1MzcuODc4IDU1NS40NDggNjIwLjMxIDYwNC42NTRMNjMzLjE0OCA2MTIuMzI5TDYxOC4zNTYgNjA5Ljk1N0M1MjMuNTcxIDU5NC43NTYgNDI2LjQyOCA2MTEuODk0IDM0Mi41NjcgNjU4LjYxMloiIGZpbGw9IiMxOTBEOTQiLz4KPHBhdGggZD0iTTU1NC41MTkgNTU2LjM2N0M0NzMuMzk2IDQ0Mi4wMzMgNDg3LjMwNCAzNzYuODY1IDUwOS44NjQgMjg5Ljc4OEM1MzYuNjExIDE4Ni41MjQgNDczLjM1IDg0LjA1MDUgMzYyLjU5NyAxMTQuNDI1QzMxMy41MjMgMTI3LjkxNCAyOTYuMTczIDE2MS4zMTIgMjkwLjAzMyAxODQuNzU2QzI1OS45ODQgMjk3Ljc4OSA0MzguMjMxIDQ2Ni4xNzQgNTU0LjUxOSA1NTYuMzY3WiIgZmlsbD0iIzVFNUNFQiIvPgo8cGF0aCBkPSJNMjE3LjEwMyA2NDQuMTg2QzExNC4zMDQgNjcyLjY1NCA1Ny4xODM1IDc3OC43NTUgMTM4Ljg2NSA4NTkuNDEzQzE3NS4wNTMgODk1LjEzNyAyMTIuNjM4IDg5My40NjIgMjM2LjAzNSA4ODcuMzIyQzM0OC45MjggODU2Ljc2MiA0MDUuNjMgNjE4LjE4NCA0MjUuNjMyIDQ3Mi40MDVDMzY3LjE2MiA1OTkuNjI1IDMwMy45OTQgNjIwLjE4NCAyMTcuMTAzIDY0NC4xODZaIiBmaWxsPSIjNUU1Q0VCIi8+CjxwYXRoIGQ9Ik04NzEuNDggNTgyLjY1MUM3ODguNTQzIDUwMC4xNzkgNTUzLjU5NCA1NzAuMzI0IDQxNy4zNSA2MjUuOTFDNTU2Ljg5NiA2MTIuODM5IDYwNi4zODkgNjU3LjQ0OCA2NzAuNTMzIDcyMC41MjJDNzQ2LjU4NiA3OTUuMzE5IDg2Ni45NjggNzkxLjczNyA4OTYuMDQgNjgwLjY1OUM5MDguNjkyIDYzMS40NDUgODg4LjQ1OCA1OTkuNzIyIDg3MS40OCA1ODIuNjUxWiIgZmlsbD0iIzVFNUNFQiIvPgo8L3N2Zz4K
-version: 3.2.1
-appVersion: "1.5.1"
+version: 3.2.2
+appVersion: "1.5.2"
 
 keywords:
   - pspdfkit
@@ -18,14 +18,14 @@ maintainers:
 
 dependencies:
   - name: postgresql
-    version: 15.5.24
+    version: 16.0.1
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
   - name: minio
-    version: 14.7.1
+    version: 14.7.15
     repository: https://charts.bitnami.com/bitnami
     condition: minio.enabled
   - name: redis
-    version: 20.0.3
+    version: 20.2.0
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
