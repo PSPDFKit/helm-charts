@@ -1,6 +1,6 @@
 documentEngineLicense:
   activationKey: ""
-  externalSecret: 
+  externalSecret:
     name: ""
     key: DOCUMENT_ENGINE_ACTIVATION_KEY
 
@@ -15,22 +15,14 @@ documentSigningService:
   url: http://signing-service:6000/sign
   timeoutSeconds: 10
 
-database: 
+database:
   enabled: true
-  engine: postgres
   migrationJob:
     enabled: false
   postgres:
-    enabled: true
-    host: document-engine-postgresql
-    database: document-engine
-    tls:
-      enabled: false
-    auth: 
-      username: postgres
-      password: postgres
-      adminUsername: postgres
-      adminPassword: postgres
+    host: postgresql
+    port: 5432
+    username: postgres
 
 assetStorage:
   backendType: built-in
@@ -83,23 +75,13 @@ ingress:
 postgresql:
   enabled: true
   architecture: standalone
+  fullnameOverride: postgresql
+  nameOverride: postgresql
   primary:
     persistence:
       enabled: false
-    extendedConfiguration: |
-      log_statement = ddl
-    pgHbaConfiguration: |
-      local    all             all                                trust
-      host     all             all        127.0.0.1/32            trust
-      host     all             all        ::1/128                 trust
-      host     all             all        0.0.0.0/0               md5
-      host     all             all        ::/0                    md5
-  auth:
-    enabledPostgresUser: true
-    postgresPassword: postgres
-    database: document-engine
-  tls:
-    enabled: false
+  volumePermissions:
+    enabled: true
 
 minio:
   enabled: false
