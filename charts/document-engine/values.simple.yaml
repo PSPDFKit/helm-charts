@@ -24,13 +24,12 @@ database:
     enabled: true
     host: document-engine-postgresql
     database: document-engine
+    username: postgres
+    password: postgres
+    adminUsername: postgres
+    adminPassword: postgres
     tls:
       enabled: false
-    auth: 
-      username: postgres
-      password: postgres
-      adminUsername: postgres
-      adminPassword: postgres
 
 assetStorage:
   backendType: built-in
