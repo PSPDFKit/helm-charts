@@ -1,6 +1,6 @@
 documentEngineLicense:
   activationKey: ""
-  externalSecret: 
+  externalSecret:
     name: ""
     key: DOCUMENT_ENGINE_ACTIVATION_KEY
 
@@ -15,7 +15,7 @@ documentSigningService:
   url: http://signing-service:6000/sign
   timeoutSeconds: 10
 
-database: 
+database:
   enabled: true
   engine: postgres
   migrationJob:
