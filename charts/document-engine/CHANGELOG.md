@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [3.2.4 (2024-10-17)](#324-2024-10-17)
+    - [Fixed](#fixed)
   - [3.2.3 (2024-10-16)](#323-2024-10-16)
     - [Fixed](#fixed)
   - [3.2.2 (2024-10-09)](#322-2024-10-09)
@@ -59,6 +61,12 @@
     - [Changed](#changed-13)
   - [2.0.0](#200)
     - [Changed](#changed-14)
+
+## 3.2.4 (2024-10-17)
+
+### Fixed
+
+* `podAnnotations` use in `storage-migration-job.yaml`
 
 ## 3.2.3 (2024-10-16)
 
