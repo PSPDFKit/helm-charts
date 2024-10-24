@@ -1,10 +1,10 @@
 # Document Engine Helm chart
 
-![Version: 3.2.4](https://img.shields.io/badge/Version-3.2.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.5.2](https://img.shields.io/badge/AppVersion-1.5.2-informational?style=flat-square)
+![Version: 3.2.5](https://img.shields.io/badge/Version-3.2.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.5.2](https://img.shields.io/badge/AppVersion-1.5.2-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
-**Homepage:** <https://pspdfkit.com/guides/document-engine/>
+**Homepage:** <https://www.nutrient.io/sdk/document-engine>
 
 * [Using this chart](#using-this-chart)
 * [Values](#values)
@@ -32,14 +32,14 @@ Document Engine is a backend software for processing documents and powering auto
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| PSPDFKit | <support@pspdfkit.com> | <https://pspdfkit.com> |
+| Nutrient | <support@nutrient.io> | <https://www.nutrient.io> |
 
 ## Using this chart
 
 ### Adding the repository
 
 ```shell
-helm repo add pspdfkit https://pspdfkit.github.io/helm-charts
+helm repo add nutrient https://pspdfkit.github.io/helm-charts
 helm repo update
 ```
 
@@ -47,7 +47,7 @@ helm repo update
 
 ```shell
 helm upgrade --install -n document-engine \
-     document-engine pspdfkit/document-engine \
+     document-engine nutrient/document-engine \
      -f ./document-engine-values.yaml
 ```
 

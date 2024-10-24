@@ -127,7 +127,7 @@ Functions {
 ### Adding the repository
 
 ```shell
-helm repo add pspdfkit https://pspdfkit.github.io/helm-charts
+helm repo add nutrient https://pspdfkit.github.io/helm-charts
 helm repo update
 ```
 
@@ -135,7 +135,7 @@ helm repo update
 
 ```shell
 helm upgrade --install -n document-engine \
-     document-engine pspdfkit/document-engine \
+     document-engine nutrient/document-engine \
      -f ./document-engine-values.yaml
 ```
 
