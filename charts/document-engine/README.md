@@ -72,7 +72,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`documentEngineLicense`](./values.yaml#L5) | License information, see more in [our guide](https://pspdfkit.com/guides/document-engine/deployment/product-activation/) |  |
+| [`documentEngineLicense`](./values.yaml#L5) | License information, see more in [our guide](https://www.nutrient.io/guides/document-engine/deployment/product-activation/) |  |
 | [`documentEngineLicense.activationKey`](./values.yaml#L10) | Activation key for online activation (most common) or license key for offline activation. Results in `ACTIVATION_KEY` environment variable. | `""` |
 | [`documentEngineLicense.externalSecret`](./values.yaml#L15) | Query existing secret for the activation key | [...](./values.yaml#L15) |
 
@@ -98,7 +98,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`config`](./values.yaml#L82) | General configuration, see more in [our guide](https://pspdfkit.com/guides/document-engine/configuration/overview/) |  |
+| [`config`](./values.yaml#L82) | General configuration, see more in [our guide](https://www.nutrient.io/guides/document-engine/configuration/options/) |  |
 | [`config.allowDocumentGeneration`](./values.yaml#L115) | `ALLOW_DOCUMENT_GENERATION` | `true` |
 | [`config.allowDocumentUploads`](./values.yaml#L109) | `ALLOW_DOCUMENT_UPLOADS` | `true` |
 | [`config.allowRemoteAssetsInGeneration`](./values.yaml#L118) | `ALLOW_REMOTE_ASSETS_IN_GENERATION` | `true` |
@@ -123,7 +123,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`certificateTrust`](./values.yaml#L148) | [Certificate trust](https://pspdfkit.com/guides/document-engine/configuration/certificate-trust/) |  |
+| [`certificateTrust`](./values.yaml#L148) | [Certificate trust](https://www.nutrient.io/guides/document-engine/configuration/certificate-trust/) |  |
 | [`certificateTrust.customCertificates`](./values.yaml#L161) | ConfigMap and Secret references for trust configuration, stored in `/certificate-stores-custom` | `[]` |
 | [`certificateTrust.digitalSignatures`](./values.yaml#L152) | CAs for digital signatures (`/certificate-stores/`) from ConfigMap and Secret resources. | `[]` |
 | [`certificateTrust.downloaderTrustFileName`](./values.yaml#L171) | Override `DOWNLOADER_CERT_FILE_PATH` to set HTTP client trust. If empty, defaults to  Mozilla's CA bundle. | `""` |
