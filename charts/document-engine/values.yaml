@@ -1,5 +1,5 @@
 # -- (object) License information, see more in
-# [our guide](https://pspdfkit.com/guides/document-engine/deployment/product-activation/)
+# [our guide](https://www.nutrient.io/guides/document-engine/deployment/product-activation/)
 # @section -- 0. Document Engine License
 # @notationType -- none
 documentEngineLicense:
@@ -76,7 +76,7 @@ apiAuth:
     # @section -- 1. API authentication
     secretKeyBaseKey: SECRET_KEY_BASE
 
-# -- (object) General configuration, see more in [our guide](https://pspdfkit.com/guides/document-engine/configuration/overview/)
+# -- (object) General configuration, see more in [our guide](https://www.nutrient.io/guides/document-engine/configuration/options/)
 # @section -- 3. Configuration options
 # @notationType -- none
 config:
@@ -142,7 +142,7 @@ config:
   # @section -- 3. Configuration options
   replaceSecretsFromEnv: true
 
-# -- (object) [Certificate trust](https://pspdfkit.com/guides/document-engine/configuration/certificate-trust/)
+# -- (object) [Certificate trust](https://www.nutrient.io/guides/document-engine/configuration/certificate-trust/)
 # @section -- 4. Certificate trust
 # @notationType -- none
 certificateTrust:
