@@ -177,7 +177,7 @@
   * `pspdfkit.auth.dashboard.enabled` renamed to `dashboard.enabled`
   * The rest of the former section to `pspdfkit.dashboard.auth`
 * The remaining `pspdfkit` section renamed to `config`.
-* Aligned default values with the default [Document Engine configuration values](https://pspdfkit.com/guides/document-engine/configuration/options/), affects the following default values: 
+* Aligned default values with the default [Document Engine configuration values](https://www.nutrient.io/guides/document-engine/configuration/options/), affects the following default values: 
   * `config.workerPoolSize` changed from `8` to `16`
   * `config.maxUploadSizeMegaBytes` changed from `128` to `950`
   * `config.urlFetchTimeoutSeconds` changed from `20` to `5`
