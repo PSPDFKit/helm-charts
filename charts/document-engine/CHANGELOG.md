@@ -86,19 +86,19 @@
 
 ### Changed
 
-* [Document Engine 1.5.2](https://pspdfkit.com/changelog/document-engine/#1.5.2)
+* [Document Engine 1.5.2](https://www.nutrient.io/changelog/document-engine/#1.5.2)
 
 ## 3.2.1 (2024-09-20)
 
 ### Changed
 
-* [Document Engine 1.5.1](https://pspdfkit.com/changelog/document-engine/#1.5.1)
+* [Document Engine 1.5.1](https://www.nutrient.io/changelog/document-engine/#1.5.1)
 
 ## 3.2.0 (2024-08-29)
 
 ### Changed
 
-* [Document Engine 1.5.0](https://pspdfkit.com/changelog/document-engine/#1.5.0)
+* [Document Engine 1.5.0](https://www.nutrient.io/changelog/document-engine/#1.5.0)
 
 ## 3.1.2 (2024-08-23)
 
@@ -229,7 +229,7 @@
 
 ### Changed
 
-* [Document Engine 1.4.1](https://pspdfkit.com/changelog/document-engine/#1.4.1)
+* [Document Engine 1.4.1](https://www.nutrient.io/changelog/document-engine/#1.4.1)
 
 ### Fixed
 
@@ -252,7 +252,7 @@
 
 ### Changed
 
-* [Document Engine 1.4.0](https://pspdfkit.com/changelog/document-engine/#1.4.0)
+* [Document Engine 1.4.0](https://www.nutrient.io/changelog/document-engine/#1.4.0)
 * Changed `pspdfkit.storage.enableMigrationJobs` to `pspdfkit.storage.databaseMigrationJob.enabled`.
 * Renamed `.Values.pspdfkit.storage.redis.sentinels` to `.Values.pspdfkit.storage.redis.sentinel`.
 * Slight refinement of trust information parameters: all files from `pspdfkit.trustConfigMaps` are now mounted to `/certificate-stores-custom/` to avoid confusion with `/certificate-stores/` which services for document signature validation certificates.
@@ -281,7 +281,7 @@
 
 ### Changed
 
-* [Document Engine 1.3.0](https://pspdfkit.com/changelog/document-engine/#1.3.0)
+* [Document Engine 1.3.0](https://www.nutrient.io/changelog/document-engine/#1.3.0)
 
 ## 2.6.2
 
