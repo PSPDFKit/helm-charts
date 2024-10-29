@@ -71,7 +71,8 @@
 
 ### Added
 
-* Support for file upload timeout for asset storageby setting `assetStorage.fileUploadTimeoutSeconds`.
+* Support for file upload timeout for asset storage by setting `assetStorage.fileUploadTimeoutSeconds`.
+* Spreadhseet content size limitations as `documentConversion.spreadsheetMaxContentHeightMm` and `documentConversion.spreadsheetMaxContentWidthMm`.
 
 ### Changed
 
