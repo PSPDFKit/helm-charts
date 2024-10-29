@@ -155,8 +155,8 @@ data:
 # Document Conversion
 #
 {{- with .Values.documentConversion }}
-SPREADSHEET_MAX_CONTENT_HEIGHT_MM: {{ .spreadsheetMaxContentHeightMm | quote }}
-SPREADSHEET_MAX_CONTENT_WIDTH_MM: {{ .spreadsheetMaxContentWidthMm | quote }}
+  SPREADSHEET_MAX_CONTENT_HEIGHT_MM: {{ .spreadsheetMaxContentHeightMm | quote }}
+  SPREADSHEET_MAX_CONTENT_WIDTH_MM: {{ .spreadsheetMaxContentWidthMm | quote }}
 {{- end }}
 #
 # Observability
