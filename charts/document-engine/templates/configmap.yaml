@@ -83,6 +83,7 @@ data:
 {{- with .Values.assetStorage }}
   ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .localCacheSizeMegabytes | quote }}
   ASSET_STORAGE_BACKEND: {{ .backendType | quote }}
+  FILE_UPLOAD_TIMEOUT_MS: {{ mul 1000 .fileUploadTimeoutSeconds | quote }}
 {{-   if $.Values.database.enabled }}
 {{-     if .backendFallback.enabled }}
   ENABLE_ASSET_STORAGE_FALLBACK: "true"
@@ -149,6 +150,13 @@ data:
   TIMESTAMP_AUTHORITY_USERNAME: {{ .timestampAuthority.username | quote }}
   TIMESTAMP_AUTHORITY_PASSWORD: {{ .timestampAuthority.password | quote }}
 {{-   end }}
+{{- end }}
+#
+# Document Conversion
+#
+{{- with .Values.documentConversion }}
+  SPREADSHEET_MAX_CONTENT_HEIGHT_MM: {{ .spreadsheetMaxContentHeightMm | quote }}
+  SPREADSHEET_MAX_CONTENT_WIDTH_MM: {{ .spreadsheetMaxContentWidthMm | quote }}
 {{- end }}
 #
 # Observability

@@ -107,6 +107,9 @@
           ],
           "type": "string"
         },
+        "fileUploadTimeoutSeconds": {
+          "type": "integer"
+        },
         "localCacheSizeMegabytes": {
           "type": "integer"
         },
@@ -296,6 +299,7 @@
           "type": "integer"
         },
         "workerPoolSize": {
+          "minimum": 1,
           "type": "integer"
         },
         "workerTimeoutSeconds": {
@@ -340,6 +344,7 @@
     "database": {
       "properties": {
         "connections": {
+          "minimum": 8,
           "type": "integer"
         },
         "enabled": {
@@ -435,6 +440,17 @@
     },
     "deploymentAnnotations": {
       "properties": {},
+      "type": "object"
+    },
+    "documentConversion": {
+      "properties": {
+        "spreadsheetMaxContentHeightMm": {
+          "type": "integer"
+        },
+        "spreadsheetMaxContentWidthMm": {
+          "type": "integer"
+        }
+      },
       "type": "object"
     },
     "documentEngineLicense": {
