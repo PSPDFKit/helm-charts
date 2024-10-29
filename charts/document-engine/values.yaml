@@ -299,6 +299,9 @@ assetStorage:
   # Sets `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
   # @section -- 7. Asset storage
   backendType: built-in  # @schema enum: [built-in, s3, azure, null]
+  # -- `FILE_UPLOAD_TIMEOUT_MS` in seconds
+  # @section -- 7. Asset storage
+  fileUploadTimeoutSeconds: 30
   # -- (object) Asset storage fallback settings
   # @section -- 7. Asset storage
   # @notationType -- reference
@@ -488,6 +491,19 @@ documentSigningService:
     # @section -- 8. Digital signatures
     # @ignored
     password: ""
+
+# -- (object) Document conversion parameters
+# @section -- 9. Document conversion
+# @notationType -- none
+documentConversion:
+  # -- Maximal spreadhseet content height in millimetres (`SPREADSHEET_MAX_CONTENT_HEIGHT_MM`).
+  # Defaults to `0` for unlimited height.
+  # @section -- 9. Document conversion
+  spreadsheetMaxContentHeightMm: 0
+  # -- Maximal spreadhseet content width in millimetres (`SPREADSHEET_MAX_CONTENT_WIDTH_MM`).
+  # Defaults to `0` for unlimited width.
+  # @section -- 9. Document conversion
+  spreadsheetMaxContentWidthMm: 0
 
 # -- (object) Document Engine Dashboard settings
 # @section -- A. Dashboard
