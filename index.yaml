@@ -3,6 +3,39 @@ entries:
   document-engine:
   - apiVersion: v2
     appVersion: 1.5.3
+    created: "2024-11-15T22:32:26.658054037Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.0.1
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.bitnami.com/bitnami
+      version: 14.7.15
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.2.0
+    description: Document Engine is a backend software for processing documents and
+      powering automation workflows.
+    digest: 85f30bd370bbf888b1e40dbbf8866858c21f9c5f0b7a1eb71ab24b9f119719c3
+    home: https://www.nutrient.io/sdk/document-engine
+    icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
+    keywords:
+    - nutrient
+    - document-engine
+    maintainers:
+    - email: support@nutrient.io
+      name: Nutrient
+      url: https://www.nutrient.io
+    name: document-engine
+    type: application
+    urls:
+    - https://github.com/PSPDFKit/helm-charts/releases/download/document-engine-3.2.7/document-engine-3.2.7.tgz
+    version: 3.2.7
+  - apiVersion: v2
+    appVersion: 1.5.3
     created: "2024-10-29T17:44:21.429118645Z"
     dependencies:
     - condition: postgresql.enabled
@@ -1381,6 +1414,21 @@ entries:
   signing-service-example:
   - apiVersion: v2
     appVersion: 1.1.1
+    created: "2024-11-15T22:32:26.792123531Z"
+    description: Nutrient signing service example
+    digest: 9b4e766c6bc2aa2c6623a1f4ca41af6d27e96fad166884ef8a5b031cb25dc013
+    icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
+    maintainers:
+    - email: support@nutrient.io
+      name: Nutrient
+      url: https://www.nutrient.io
+    name: signing-service-example
+    type: application
+    urls:
+    - https://github.com/PSPDFKit/helm-charts/releases/download/signing-service-example-0.2.5/signing-service-example-0.2.5.tgz
+    version: 0.2.5
+  - apiVersion: v2
+    appVersion: 1.1.1
     created: "2024-10-25T14:00:55.984438784Z"
     description: Nutrient signing service example
     digest: 5fa9e9f4cb0672b86eb99703fc42b9592d413b759b56d59f2d9cfe50b0624035
@@ -1457,6 +1505,21 @@ entries:
   simple-resource-wrapper:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2024-11-15T22:32:26.890130274Z"
+    description: Universal wrapper for Terraform
+    digest: fc4405a31df3814472719797acca129e7d1a5cc9504cd19a82c7903dfcd18cd8
+    icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
+    maintainers:
+    - email: support@nutrient.io
+      name: Nutrient
+      url: https://www.nutrient.io
+    name: simple-resource-wrapper
+    type: application
+    urls:
+    - https://github.com/PSPDFKit/helm-charts/releases/download/simple-resource-wrapper-1.0.6/simple-resource-wrapper-1.0.6.tgz
+    version: 1.0.6
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2024-10-25T14:00:56.07885849Z"
     description: Universal wrapper for Terraform
     digest: b2fc50bdc6cb92c4ce3534ada185af8e519f36b667ec89d36d9b32458d3c8c2e
@@ -1511,4 +1574,4 @@ entries:
     urls:
     - https://github.com/PSPDFKit/helm-charts/releases/download/simple-resource-wrapper-1.0.0/simple-resource-wrapper-1.0.0.tgz
     version: 1.0.0
-generated: "2024-10-29T17:44:21.429357754Z"
+generated: "2024-11-15T22:32:26.890435735Z"
