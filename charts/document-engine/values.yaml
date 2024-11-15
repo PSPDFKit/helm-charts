@@ -891,7 +891,7 @@ lifecycle:
       command: 
         - /bin/sh
         - -c
-        - echo "Terminating container now..." && pkill -e -SIGTERM beam.smp
+        - echo "Terminating container now..." && pkill -e -SIGTERM beam.smp && sleep 10
 
 # -- (object) [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 # @section -- G. Scheduling
