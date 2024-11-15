@@ -1,7 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [3.2.8 (2024-11-15)](#328-2024-11-15)
+  - [3.2.9 (2024-11-15)](#329-2024-11-15)
     - [Changed](#changed)
   - [3.2.7 (2024-11-15)](#327-2024-11-15)
     - [Added](#added)
@@ -72,11 +72,11 @@
   - [2.0.0](#200)
     - [Changed](#changed-18)
 
-## 3.2.8 (2024-11-15)
+## 3.2.9 (2024-11-15)
 
 ### Changed
 
-* Common labels (e.g. `helm.sh/chart`) added to pods.
+* More labels (e.g. `helm.sh/chart`) added to pods.
 
 ## 3.2.7 (2024-11-15)
 
