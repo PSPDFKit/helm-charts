@@ -31,7 +31,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "document-engine.selectorLabels" . | nindent 8 }}
         {{- include "document-engine.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
