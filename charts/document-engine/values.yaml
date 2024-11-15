@@ -878,13 +878,20 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
-
-# -- [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)
+# -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
 # @section -- F. Pod lifecycle
-lifecycle: {}
-#  preStop:
-#    exec:
-#      command: ["/bin/sh", "-c", "sleep 180"]
+terminationGracePeriodSeconds: 30  # @schema type: integer
+# -- [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)
+# The defailt value will send SIGTERM to the main Document Engine process upon pod termination.
+# @section -- F. Pod lifecycle
+# @notationType -- reference
+lifecycle:
+  preStop:
+    exec:
+      command:
+        - /bin/sh
+        - -c
+        - echo "Terminating container now..." && pkill -e -SIGTERM beam.smp && sleep 10
 
 # -- (object) [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 # @section -- G. Scheduling
@@ -924,6 +931,8 @@ replicaCount: 1
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
+# -- [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
+revisionHistoryLimit: 10
 
 # -- (object) [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
 # @section -- G. Scheduling
@@ -951,9 +960,6 @@ priorityClassName: ""
 # -- [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/)
 # @section -- G. Scheduling
 schedulerName: ""
-# -- (int) [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
-# @section -- G. Scheduling
-terminationGracePeriodSeconds:  # @schema type: [integer, null]
 
 # -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
 # @section -- Z. Chart dependencies
