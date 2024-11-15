@@ -3,7 +3,7 @@ name: simple-resource-wrapper
 description: Universal wrapper for Terraform
 icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
 type: application
-version: 1.0.5
+version: 1.0.6
 appVersion: "1.0.0"
 
 maintainers:

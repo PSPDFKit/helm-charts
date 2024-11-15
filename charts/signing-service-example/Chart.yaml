@@ -3,7 +3,7 @@ name: signing-service-example
 description: Nutrient signing service example
 icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
 type: application
-version: 0.2.4
+version: 0.2.5
 appVersion: "1.1.1"
 
 maintainers:
