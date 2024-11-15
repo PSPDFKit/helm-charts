@@ -630,7 +630,24 @@
       "type": "array"
     },
     "lifecycle": {
-      "properties": {},
+      "properties": {
+        "preStop": {
+          "properties": {
+            "exec": {
+              "properties": {
+                "command": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
       "type": "object"
     },
     "livenessProbe": {
@@ -1045,6 +1062,9 @@
       "properties": {},
       "type": "object"
     },
+    "revisionHistoryLimit": {
+      "type": "integer"
+    },
     "schedulerName": {
       "type": "string"
     },
@@ -1117,8 +1137,7 @@
     },
     "terminationGracePeriodSeconds": {
       "type": [
-        "integer",
-        "null"
+        "integer"
       ]
     },
     "tolerations": {
