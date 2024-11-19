@@ -882,16 +882,9 @@ readinessProbe:
 # @section -- F. Pod lifecycle
 terminationGracePeriodSeconds: 30  # @schema type: integer
 # -- [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)
-# The defailt value will send SIGTERM to the main Document Engine process upon pod termination.
 # @section -- F. Pod lifecycle
 # @notationType -- reference
-lifecycle:
-  preStop:
-    exec:
-      command:
-        - /bin/sh
-        - -c
-        - echo "Terminating container now..." && pkill -e -SIGTERM beam.smp && sleep 10
+lifecycle: {}
 
 # -- (object) [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 # @section -- G. Scheduling
