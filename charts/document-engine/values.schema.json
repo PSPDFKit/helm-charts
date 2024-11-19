@@ -630,24 +630,7 @@
       "type": "array"
     },
     "lifecycle": {
-      "properties": {
-        "preStop": {
-          "properties": {
-            "exec": {
-              "properties": {
-                "command": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "type": "object"
-        }
-      },
+      "properties": {},
       "type": "object"
     },
     "livenessProbe": {
