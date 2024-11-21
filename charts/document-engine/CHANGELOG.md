@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [3.2.11 (2024-11-21)](#3211-2024-11-21)
+    - [Changed](#changed)
   - [3.2.10 (2024-11-18)](#3210-2024-11-18)
     - [Changed](#changed)
   - [3.2.9 (2024-11-15)](#329-2024-11-15)
@@ -73,6 +75,12 @@
     - [Changed](#changed-18)
   - [2.0.0](#200)
     - [Changed](#changed-19)
+
+## 3.2.11 (2024-11-21)
+
+### Changed
+
+* [Document Engine 1.5.4](https://www.nutrient.io/changelog/document-engine/#1.5.4)
 
 ## 3.2.10 (2024-11-18)
 

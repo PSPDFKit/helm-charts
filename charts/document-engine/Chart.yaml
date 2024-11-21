@@ -4,8 +4,8 @@ type: application
 description: Document Engine is a backend software for processing documents and powering automation workflows.
 home: https://www.nutrient.io/sdk/document-engine
 icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
-version: 3.2.10
-appVersion: "1.5.3"
+version: 3.2.11
+appVersion: "1.5.4"
 
 keywords:
   - nutrient
