@@ -453,6 +453,28 @@
       },
       "type": "object"
     },
+    "clustering": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+         "method": {
+          "enum": [
+            "kubernetes_dns"
+          ],
+          "type": "string"
+        },
+        "service": {
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
     "documentEngineLicense": {
       "properties": {
         "activationKey": {

@@ -505,6 +505,23 @@ documentConversion:
   # @section -- 9. Document conversion
   spreadsheetMaxContentWidthMm: 0
 
+# -- (object) Clustering settings
+# @section -- 10. Clustering
+clustering:
+  # -- `CLUSTERING_ENABLED`
+  # @section -- 10. Clustering
+  enabled: false
+  # -- `CLUSTERING_METHOD`
+  # @section -- 10. Clustering
+  method: kubernetes_dns  # @schema enum: [kubernetes_dns]
+  # -- (object) Clustering service settings
+  # @section -- 10. Clustering
+  service:
+    # -- `CLUSTERING_SERVICE_NAME`
+    # Also sets up the name of Service with clusterIP: None used for DNS discovery
+    # @section -- 10. Clustering
+    name: document-engine-erl-dist
+
 # -- (object) Document Engine Dashboard settings
 # @section -- A. Dashboard
 # @notationType -- none

@@ -200,6 +200,17 @@ data:
 {{-     end }}
 {{-   end }}
 {{- end }}
+
+#
+# Clustering
+#
+{{- with .Values.clustering }}
+  CLUSTERING_ENABLED: {{ .enabled | quote }}
+  CLUSTERING_METHOD: {{ .method }}
+{{-   if eq .method "kubernetes_dns" }}
+  CLUSTERING_SERVICE_NAME: {{ .service.name | quote }}
+{{-   end }}
+{{- end }}
 #
 # Can be used for hash updating
 #
