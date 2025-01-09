@@ -37,6 +37,8 @@ minio:
 redis:
   enabled: false
 
+replicaCount: 2
+
 clustering:
   enabled: true
   method: kubernetes_dns
