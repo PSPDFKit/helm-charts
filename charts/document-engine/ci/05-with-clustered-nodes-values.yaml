@@ -1,0 +1,46 @@
+database:
+  enabled: true
+  migrationJob:
+    enabled: false
+  postgres:
+    host: postgresql
+    port: 5432
+    username: postgres
+
+documentLifecycle:
+  cleanupJob:
+    enabled: true
+
+assetStorage:
+  backendType: built-in
+
+prometheusExporter:
+  enabled: true
+
+postgresql:
+  enabled: true
+  fullnameOverride: postgresql
+  nameOverride: postgresql
+  primary:
+    persistence:
+      enabled: true
+      size: 512Mi
+      storageClass: standard
+      accessModes:
+        - ReadWriteOnce
+  volumePermissions:
+    enabled: true
+
+minio:
+  enabled: false
+
+redis:
+  enabled: false
+
+replicaCount: 2
+
+clustering:
+  enabled: true
+  method: kubernetes_dns
+  service:
+    name: document-engine-erl-dist

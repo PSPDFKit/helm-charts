@@ -1,0 +1,17 @@
+{{- if and
+  .Values.clustering.enabled
+  (eq .Values.clustering.method "kubernetes_dns") }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.clustering.service.name }}
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  ports:
+    - port: 4369
+      name: epmd
+  selector:
+    {{- include "document-engine.selectorLabels" . | nindent 4 }}
+{{- end }}
