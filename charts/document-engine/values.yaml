@@ -515,9 +515,20 @@ clustering:
   # -- `CLUSTERING_METHOD`
   # @section -- 10. Clustering
   method: kubernetes_dns  # @schema enum: [kubernetes_dns]
-  # -- (object) Clustering service settings
-  # @section -- 10. Clustering
-  # @notationType -- none
+  epmd:
+    port: 4369
+  inetDist:
+    ports:
+      - 4370
+      - 4371
+      - 4372
+      - 4373
+      - 4374
+      - 4375
+      - 4376
+      - 4377
+      - 4378
+      - 4379
   service:
     # -- `CLUSTERING_SERVICE_NAME`
     # Also sets up the name of Service with clusterIP: None used for DNS discovery

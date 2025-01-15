@@ -90,6 +90,20 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
+    {{ if .Values.clustering.enabled }}
+    - ports:
+        # EPMD port
+        - protocol: TCP
+          port: {{ .Values.clustering.epmd.port }}
+        # inet_dist ports
+      {{- range $port := .Values.clustering.inetDist.ports }}
+        - protocol: TCP
+          port: {{ $port }}
+      {{- end }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "document-engine.labels" . | nindent 14 }}
+    {{- end }}
     {{- if .Values.networkPolicy.extraIngress }}
     {{- tpl (toYaml .Values.networkPolicy.extraIngress) . | nindent 4 }}
     {{- end }}
