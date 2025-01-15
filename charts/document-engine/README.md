@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 3.3.1](https://img.shields.io/badge/Version-3.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.5.5](https://img.shields.io/badge/AppVersion-1.5.5-informational?style=flat-square)
+![Version: 3.3.2](https://img.shields.io/badge/Version-3.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.5.5](https://img.shields.io/badge/AppVersion-1.5.5-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -60,9 +60,9 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | minio | 14.7.15 |
-| https://charts.bitnami.com/bitnami | postgresql | 16.0.1 |
-| https://charts.bitnami.com/bitnami | redis | 20.2.0 |
+| https://charts.bitnami.com/bitnami | minio | 14.10.3 |
+| https://charts.bitnami.com/bitnami | postgresql | 16.4.2 |
+| https://charts.bitnami.com/bitnami | redis | 20.6.2 |
 
 ### Upgrade
 
