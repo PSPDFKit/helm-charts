@@ -661,7 +661,7 @@ prometheusExporter:
   image:
     repository: prom/statsd-exporter
     pullPolicy: IfNotPresent
-    tag: "v0.27.1"
+    tag: "v0.28.0"
   # -- Prometheus metrics port
   # @section -- D. Observability
   port: 10254
