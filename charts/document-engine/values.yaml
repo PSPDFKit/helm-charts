@@ -509,31 +509,18 @@ documentConversion:
 # @section -- 10. Clustering
 # @notationType -- none
 clustering:
-  # -- `CLUSTERING_ENABLED`
+  # -- `CLUSTERING_ENABLED`, enable clustering, only works when `replicaCount` is greater than 1
   # @section -- 10. Clustering
   enabled: false
-  # -- `CLUSTERING_METHOD`
+  # -- `CLUSTERING_METHOD`, only `kubernetes_dns` is currently supported
   # @section -- 10. Clustering
   method: kubernetes_dns  # @schema enum: [kubernetes_dns]
   epmd:
     port: 4369
-  inetDist:
+  erlangInetDist:
     ports:
-      - 4370
-      - 4371
-      - 4372
-      - 4373
-      - 4374
-      - 4375
-      - 4376
-      - 4377
-      - 4378
-      - 4379
-  service:
-    # -- `CLUSTERING_SERVICE_NAME`
-    # Also sets up the name of Service with clusterIP: None used for DNS discovery
-    # @section -- 10. Clustering
-    name: document-engine-erl-dist
+      min: 4370  # @schema minimum: 4370; maximum: 4370
+      max: 4379  # @schema minimum: 4379; maximum: 4379
 
 # -- (object) Document Engine Dashboard settings
 # @section -- A. Dashboard

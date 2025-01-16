@@ -90,19 +90,23 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
-    {{ if .Values.clustering.enabled }}
+    {{- if .Values.clustering.enabled }}
+    {{-   with .Values.clustering }}
     - ports:
         # EPMD port
         - protocol: TCP
-          port: {{ .Values.clustering.epmd.port }}
-        # inet_dist ports
-      {{- range $port := .Values.clustering.inetDist.ports }}
+          port: {{ .epmd.port }}
+        # Erlang inet_dist ports
+      {{-   $portRange := split " " ( seq ( int .erlangInetDist.ports.min )
+                                         ( int .erlangInetDist.ports.max ) ) }}
+      {{-   range $port := $portRange }}
         - protocol: TCP
           port: {{ $port }}
-      {{- end }}
+      {{-   end }}
       from:
         - podSelector:
-            matchLabels: {{- include "document-engine.labels" . | nindent 14 }}
+            matchLabels: {{- include "document-engine.labels" $ | nindent 14 }}
+    {{-   end }}
     {{- end }}
     {{- if .Values.networkPolicy.extraIngress }}
     {{- tpl (toYaml .Values.networkPolicy.extraIngress) . | nindent 4 }}

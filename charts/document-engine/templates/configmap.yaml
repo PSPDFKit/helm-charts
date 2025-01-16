@@ -207,8 +207,9 @@ data:
 {{- with .Values.clustering }}
   CLUSTERING_ENABLED: {{ .enabled | quote }}
   CLUSTERING_METHOD: {{ .method }}
-{{-   if eq .method "kubernetes_dns" }}
-  CLUSTERING_SERVICE_NAME: {{ .service.name | quote }}
+  ERL_EPMD_PORT: {{ .epmd.port | quote }}
+{{-   if (eq (include "document-engine.clustering.service.enabled" $ ) "true" ) }}
+  CLUSTERING_SERVICE_NAME: {{ include "document-engine.clustering.service.name" $ | quote }}
 {{-   end }}
 {{- end }}
 #
