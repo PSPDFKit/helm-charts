@@ -98,7 +98,7 @@ spec:
           port: {{ .epmd.port }}
         # Erlang inet_dist ports
       {{-   $portRange := split " " ( seq ( int .erlangInetDist.ports.min )
-                                         ( int .erlangInetDist.ports.max ) ) }}
+                                          ( int .erlangInetDist.ports.max ) ) }}
       {{-   range $port := $portRange }}
         - protocol: TCP
           port: {{ $port }}
