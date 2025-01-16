@@ -42,5 +42,3 @@ replicaCount: 2
 clustering:
   enabled: true
   method: kubernetes_dns
-  service:
-    name: document-engine-erl-dist

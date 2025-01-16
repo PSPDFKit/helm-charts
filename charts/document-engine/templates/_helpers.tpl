@@ -173,6 +173,22 @@ API and dashboard secrets
 {{- end -}}
 
 {{/*
+Clustering
+*/}}
+{{- define "document-engine.clustering.service.enabled" -}}
+  {{- if and .Values.clustering.enabled
+             (eq .Values.clustering.method "kubernetes_dns") -}}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
+{{- end }}
+
+{{- define "document-engine.clustering.service.name" -}}
+  {{- include "document-engine.fullname" . }}-cl
+{{- end }}
+
+{{/*
 Database parameters
 */}}
 {{- define "document-engine.storage.postgres.enabled" -}}

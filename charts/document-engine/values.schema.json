@@ -237,6 +237,56 @@
       },
       "type": "object"
     },
+    "clustering": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "epmd": {
+          "properties": {
+            "port": {
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "erlangInetDist": {
+          "properties": {
+            "ports": {
+              "properties": {
+                "max": {
+                  "maximum": 4379,
+                  "minimum": 4379,
+                  "type": "integer"
+                },
+                "min": {
+                  "maximum": 4370,
+                  "minimum": 4370,
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "method": {
+          "enum": [
+            "kubernetes_dns"
+          ],
+          "type": "string"
+        },
+        "service": {
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
     "config": {
       "properties": {
         "allowDocumentGeneration": {
@@ -449,28 +499,6 @@
         },
         "spreadsheetMaxContentWidthMm": {
           "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "clustering": {
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-         "method": {
-          "enum": [
-            "kubernetes_dns"
-          ],
-          "type": "string"
-        },
-        "service": {
-          "properties": {
-            "name": {
-              "type": "string"
-            }
-          },
-          "type": "object"
         }
       },
       "type": "object"
