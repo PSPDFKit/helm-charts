@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [3.3.4 (2025-01-28)](#333-2025-01-28)
+    - [Changed](#changed)
   - [3.3.3 (2025-01-15)](#333-2025-01-15)
     - [Changed](#changed)
   - [3.3.2 (2025-01-15)](#332-2025-01-15)
@@ -83,6 +85,12 @@
     - [Changed](#changed-22)
   - [2.0.0](#200)
     - [Changed](#changed-23)
+
+## 3.3.4 (2025-01-28)
+
+### Changed
+
+* [Document Engine 1.5.6](https://www.nutrient.io/changelog/document-engine/#1.5.6)
 
 ## 3.3.3 (2024-01-15)
 
