@@ -92,7 +92,7 @@
 
 ### Changed
 
-* [Document Engine 1.6.0](https://www.nutrient.io/changelog/document-engine/#1.6.0)
+* [Document Engine 1.6.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1-6-0-11-feb-2025)
 
 ## 3.3.4 (2025-01-28)
 
