@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [3.5.0 (2025-02-14)](#350-2025-02-14)
+    - [Changed](#changed)
   - [3.4.0 (2025-02-11)](#340-2025-02-11)
     - [Changed](#changed)
   - [3.3.4 (2025-01-28)](#333-2025-01-28)
@@ -87,6 +89,12 @@
     - [Changed](#changed-22)
   - [2.0.0](#200)
     - [Changed](#changed-23)
+
+## 3.5.0 (2025-02-14)
+
+### Changed
+
+* [Document Engine 1.7.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1-7-0-14-feb-2025)
 
 ## 3.4.0 (2025-02-11)
 
