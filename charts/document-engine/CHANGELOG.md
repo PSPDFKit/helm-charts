@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [3.6.0 (2025-03-19)](#360-2025-03-19)
+    - [Changed](#changed)
   - [3.5.0 (2025-02-14)](#350-2025-02-14)
     - [Changed](#changed)
   - [3.4.0 (2025-02-11)](#340-2025-02-11)
@@ -90,17 +92,23 @@
   - [2.0.0](#200)
     - [Changed](#changed-23)
 
+## 3.6.0 (2025-03-19)
+
+### Changed
+
+* [Document Engine 1.8.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1.8.0)
+
 ## 3.5.0 (2025-02-14)
 
 ### Changed
 
-* [Document Engine 1.7.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1-7-0-14-feb-2025)
+* [Document Engine 1.7.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1.7.0)
 
 ## 3.4.0 (2025-02-11)
 
 ### Changed
 
-* [Document Engine 1.6.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1-6-0-11-feb-2025)
+* [Document Engine 1.6.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1.6.0)
 
 ## 3.3.4 (2025-01-28)
 
