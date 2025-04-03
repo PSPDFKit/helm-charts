@@ -671,7 +671,7 @@ observability:
       title: "Document Engine ({{ .Release.Namespace }}/{{ include \"document-engine.fullname\" . }})"
       # -- Dashboard tags
       # @section -- D. Observability
-      tags: 
+      tags:
         - Nutrient
         - document-engine
       # -- Whether to cover all namespaces
