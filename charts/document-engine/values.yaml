@@ -651,7 +651,7 @@ observability:
     # @section -- D. Observability
     # @notationType -- reference
     grafanaDashboard:
-      # -- Enable Grafana dashboard. 
+      # -- Enable Grafana dashboard.
       # Currently requires `prometheusExporter.enabled`
       # @section -- D. Observability
       enabled: false
