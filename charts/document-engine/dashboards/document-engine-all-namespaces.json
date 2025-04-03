@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 6847,
   "links": [],
   "panels": [
     {
@@ -2367,6 +2366,6 @@
   "timezone": "browser",
   "title": "<<<<DASHBOARD_TITLE>>>>",
   "uid": "<<<<DASHBOARD_UID>>>>",
-  "version": 109,
+  "version": 1,
   "weekStart": ""
 }
