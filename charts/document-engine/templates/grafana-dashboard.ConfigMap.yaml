@@ -1,0 +1,26 @@
+{{- if .Values.observability.metrics.grafanaDashboard.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "document-engine.fullname" . }}-dashboard
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+    {{- with .Values.observability.metrics.grafanaDashboard.configMap.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+data:
+  document-engine-dashboard.json: |-
+{{- if .Values.observability.metrics.grafanaDashboard.allNamespaces }}
+{{ .Files.Get "dashboards/document-engine-all-namespaces.json" 
+   | replace "<<<<DASHBOARD_TITLE>>>>" (tpl .Values.observability.metrics.grafanaDashboard.title $) 
+   | indent 4 }}
+{{- else }}
+{{ .Files.Get "dashboards/document-engine-single-namespace.json" 
+   | replace "<<<<DASHBOARD_TITLE>>>>" (tpl .Values.observability.metrics.grafanaDashboard.title $) 
+   | replace "<<<<NAMESPACE>>>>" .Release.Namespace
+   | indent 4 }}
+{{- end }}
+
+# Can be used for hash updating
+  HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}
+{{- end }}
