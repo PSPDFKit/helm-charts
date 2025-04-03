@@ -311,7 +311,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [`observability.metrics.grafanaDashboard.allNamespaces`](./values.yaml#L674) | Whether to cover all namespaces | `false` |
 | [`observability.metrics.grafanaDashboard.configMap`](./values.yaml#L661) | ConfigMap parameters | [...](./values.yaml#L661) |
 | [`observability.metrics.grafanaDashboard.configMap.labels`](./values.yaml#L664) | ConfigMap labels | `{"grafana_dashboard":"1"}` |
-| [`observability.metrics.grafanaDashboard.enabled`](./values.yaml#L657) | Enable Grafana dashboard.  Currently requires `prometheusExporter.enabled` | `false` |
+| [`observability.metrics.grafanaDashboard.enabled`](./values.yaml#L657) | Enable Grafana dashboard. Currently requires `prometheusExporter.enabled` | `false` |
 | [`observability.metrics.grafanaDashboard.title`](./values.yaml#L671) | Dashboard title | *generated* |
 | [`observability.metrics.prometheusRule`](./values.yaml#L645) | Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule) | [...](./values.yaml#L645) |
 | [`observability.metrics.serviceMonitor`](./values.yaml#L631) | Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor) | [...](./values.yaml#L631) |
