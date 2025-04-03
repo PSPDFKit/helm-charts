@@ -102,7 +102,10 @@
 
 ### Added
 
-* Grafana dashboard through a ConfigMap.
+* Grafana dashboard through a ConfigMap. Use: 
+  * `observability.metrics.grafanaDashboard.enabled` to enable — also requires Prometheus exporter and StatsD output
+  * `observability.metrics.grafanaDashboard.title` — to change the dashboard title
+  * `observability.metrics.grafanaDashboard.allNamespaces` — to cover all namespaces instead of the release one
 
 ## 3.7.1 (2025-03-26)
 
