@@ -9,7 +9,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 data:
-  document-engine-dashboard.json: |-
+  document-engine-{{ printf "%s-%s" .Release.Name .Release.Namespace }}.json: |-
 {{- if .Values.observability.metrics.grafanaDashboard.allNamespaces }}
 {{ .Files.Get "dashboards/document-engine-all-namespaces.json" 
    | replace "<<<<DASHBOARD_TITLE>>>>" (tpl .Values.observability.metrics.grafanaDashboard.title $) 
