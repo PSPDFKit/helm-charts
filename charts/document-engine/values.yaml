@@ -669,6 +669,11 @@ observability:
       # @default -- *generated*
       # @notationType -- plain
       title: "Document Engine ({{ .Release.Namespace }}/{{ include \"document-engine.fullname\" . }})"
+      # -- Dashboard tags
+      # @section -- D. Observability
+      tags:
+        - Nutrient
+        - document-engine
       # -- Whether to cover all namespaces
       # @section -- D. Observability
       allNamespaces: false
