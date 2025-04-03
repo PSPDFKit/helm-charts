@@ -9,18 +9,18 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 data:
-  document-engine-{{ printf "%s-%s" .Release.Name .Release.Namespace }}.json: |-
+  document-engine-{{ printf "%s-%s" .Release.Namespace .Release.Name }}.json: |-
 {{- if .Values.observability.metrics.grafanaDashboard.allNamespaces }}
 {{ .Files.Get "dashboards/document-engine-all-namespaces.json" 
    | replace "<<<<DASHBOARD_TITLE>>>>" (tpl .Values.observability.metrics.grafanaDashboard.title $) 
-   | replace "<<<<DASHBOARD_UID>>>>" (printf "%s-%s" .Release.Name .Release.Namespace | trunc 40 | trimSuffix "-")
+   | replace "<<<<DASHBOARD_UID>>>>" (printf "%s-%s" .Release.Namespace .Release.Name | trunc 40 | trimSuffix "-")
    | replace "<<<<TAGS>>>>" (join "\", \"" .Values.observability.metrics.grafanaDashboard.tags) 
    | indent 4 }}
 {{- else }}
 {{ .Files.Get "dashboards/document-engine-single-namespace.json" 
    | replace "<<<<DASHBOARD_TITLE>>>>" (tpl .Values.observability.metrics.grafanaDashboard.title $) 
    | replace "<<<<TAGS>>>>" (join "\", \"" .Values.observability.metrics.grafanaDashboard.tags) 
-   | replace "<<<<DASHBOARD_UID>>>>" (printf "%s-%s" .Release.Name .Release.Namespace | trunc 40 | trimSuffix "-")
+   | replace "<<<<DASHBOARD_UID>>>>" (printf "%s-%s" .Release.Namespace .Release.Name | trunc 40 | trimSuffix "-")
    | replace "<<<<NAMESPACE>>>>" .Release.Namespace
    | indent 4 }}
 {{- end }}
