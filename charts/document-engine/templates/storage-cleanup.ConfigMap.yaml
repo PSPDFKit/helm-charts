@@ -37,5 +37,3 @@ data:
 # Can be used for hash updating
   HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}
 {{- end }}
-
-

@@ -28,6 +28,19 @@ documentLifecycle:
 assetStorage:
   backendType: built-in
 
+observability:
+  metrics:
+    enabled: true
+    statsd:
+      enabled: true
+    serviceMonitor:
+      enabled: false
+    prometheusRule:
+      enabled: false
+    grafanaDashboard:
+      enabled: true
+      allNamespaces: false
+
 prometheusExporter:
   enabled: true
 

@@ -275,14 +275,6 @@
             "kubernetes_dns"
           ],
           "type": "string"
-        },
-        "service": {
-          "properties": {
-            "name": {
-              "type": "string"
-            }
-          },
-          "type": "object"
         }
       },
       "type": "object"
@@ -800,6 +792,33 @@
           "properties": {
             "enabled": {
               "type": "boolean"
+            },
+            "grafanaDashboard": {
+              "properties": {
+                "allNamespaces": {
+                  "type": "boolean"
+                },
+                "configMap": {
+                  "properties": {
+                    "labels": {
+                      "properties": {
+                        "grafana_dashboard": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
             },
             "prometheusRule": {
               "properties": {
