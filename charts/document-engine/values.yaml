@@ -655,9 +655,12 @@ observability:
       # Currently requires `prometheusExporter.enabled`
       # @section -- D. Observability
       enabled: false
-      # -- ConfigMap parameters
+      # -- (object) ConfigMap parameters
       # @section -- D. Observability
+      # @notationType -- reference
       configMap:
+        # -- (object) ConfigMap labels
+        # @section -- D. Observability
         labels:
           grafana_dashboard: '1'
       # -- (tpl/string) Dashboard title
