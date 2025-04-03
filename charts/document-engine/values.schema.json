@@ -814,6 +814,12 @@
                 "enabled": {
                   "type": "boolean"
                 },
+                "tags": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
                 "title": {
                   "type": "string"
                 }

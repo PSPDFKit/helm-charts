@@ -13,10 +13,12 @@ data:
 {{- if .Values.observability.metrics.grafanaDashboard.allNamespaces }}
 {{ .Files.Get "dashboards/document-engine-all-namespaces.json" 
    | replace "<<<<DASHBOARD_TITLE>>>>" (tpl .Values.observability.metrics.grafanaDashboard.title $) 
+   | replace "<<<<TAGS>>>>" (join "\", \"" .Values.observability.metrics.grafanaDashboard.tags) 
    | indent 4 }}
 {{- else }}
 {{ .Files.Get "dashboards/document-engine-single-namespace.json" 
    | replace "<<<<DASHBOARD_TITLE>>>>" (tpl .Values.observability.metrics.grafanaDashboard.title $) 
+   | replace "<<<<TAGS>>>>" (join "\", \"" .Values.observability.metrics.grafanaDashboard.tags) 
    | replace "<<<<NAMESPACE>>>>" .Release.Namespace
    | indent 4 }}
 {{- end }}

@@ -2254,7 +2254,7 @@
   ],
   "preload": false,
   "schemaVersion": 40,
-  "tags": [],
+  "tags": ["<<<<TAGS>>>>"],
   "templating": {
     "list": [
       {
