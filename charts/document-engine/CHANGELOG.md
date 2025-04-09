@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [3.8.6 (2025-04-09)](#386-2025-04-09)
+    - [Changed](#changed)
   - [3.8.5 (2025-04-03)](#385-2025-04-03)
     - [Fixed](#fixed)
   - [3.8.4 (2025-04-03)](#384-2025-04-03)
@@ -108,6 +110,12 @@
     - [Changed](#changed-29)
   - [2.0.0](#200)
     - [Changed](#changed-30)
+
+## 3.8.6 (2025-04-09)
+
+### Changed
+
+* [Document Engine 1.8.3](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1.8.3)
 
 ## 3.8.5 (2025-04-03)
 
