@@ -770,6 +770,9 @@ podAnnotations: {}
 # -- Deployment annotations
 # @section -- B. Metadata
 deploymentAnnotations: {}
+# -- Init containers
+# @section -- B. Metadata
+deploymentExtraSelectorLabels: {}
 
 # -- (object) Service
 # @section -- C. Networking

@@ -22,6 +22,9 @@ spec:
   selector:
     matchLabels:
       {{- include "document-engine.selectorLabels" . | nindent 6 }}
+      {{- with .Values.deploymentExtraSelectorLabels }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
   template:
     metadata:
       annotations:
@@ -33,6 +36,9 @@ spec:
       labels:
         {{- include "document-engine.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.deploymentExtraSelectorLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
