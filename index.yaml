@@ -3,6 +3,39 @@ entries:
   document-engine:
   - apiVersion: v2
     appVersion: 1.8.3
+    created: "2025-05-12T20:25:55.359537901Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.4.2
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.bitnami.com/bitnami
+      version: 14.10.3
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.6.2
+    description: Document Engine is a backend software for processing documents and
+      powering automation workflows.
+    digest: 93f49739b12599ee58d317d9cefd8efe32b5283f3010f389a6dc3e20dfb437b3
+    home: https://www.nutrient.io/sdk/document-engine
+    icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
+    keywords:
+    - nutrient
+    - document-engine
+    maintainers:
+    - email: support@nutrient.io
+      name: Nutrient
+      url: https://www.nutrient.io
+    name: document-engine
+    type: application
+    urls:
+    - https://github.com/PSPDFKit/helm-charts/releases/download/document-engine-3.8.7/document-engine-3.8.7.tgz
+    version: 3.8.7
+  - apiVersion: v2
+    appVersion: 1.8.3
     created: "2025-04-12T23:12:45.436692939Z"
     dependencies:
     - condition: postgresql.enabled
@@ -2267,4 +2300,4 @@ entries:
     urls:
     - https://github.com/PSPDFKit/helm-charts/releases/download/simple-resource-wrapper-1.0.0/simple-resource-wrapper-1.0.0.tgz
     version: 1.0.0
-generated: "2025-04-12T23:12:45.4370568Z"
+generated: "2025-05-12T20:25:55.359958372Z"
