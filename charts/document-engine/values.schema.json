@@ -484,6 +484,10 @@
       "properties": {},
       "type": "object"
     },
+    "deploymentExtraSelectorLabels": {
+      "properties": {},
+      "type": "object"
+    },
     "documentConversion": {
       "properties": {
         "spreadsheetMaxContentHeightMm": {
