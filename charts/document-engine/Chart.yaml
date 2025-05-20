@@ -4,7 +4,7 @@ type: application
 description: Document Engine is a backend software for processing documents and powering automation workflows.
 home: https://www.nutrient.io/sdk/document-engine
 icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
-version: 3.8.9
+version: 3.8.10
 appVersion: "1.8.3"
 
 keywords:
@@ -18,14 +18,14 @@ maintainers:
 
 dependencies:
   - name: postgresql
-    version: 16.4.2
+    version: 16.7.4
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
   - name: minio
-    version: 14.10.3
+    version: 16.0.10
     repository: https://charts.bitnami.com/bitnami
     condition: minio.enabled
   - name: redis
-    version: 20.6.2
+    version: 21.1.5
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled

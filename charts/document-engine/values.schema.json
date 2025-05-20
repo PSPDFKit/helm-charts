@@ -202,7 +202,58 @@
     "autoscaling": {
       "properties": {
         "behavior": {
-          "properties": {},
+          "properties": {
+            "scaleDown": {
+              "properties": {
+                "policies": {
+                  "items": {
+                    "properties": {
+                      "periodSeconds": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "stabilizationWindowSeconds": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "scaleUp": {
+              "properties": {
+                "policies": {
+                  "items": {
+                    "properties": {
+                      "periodSeconds": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "stabilizationWindowSeconds": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          },
           "type": "object"
         },
         "enabled": {
