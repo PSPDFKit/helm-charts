@@ -945,23 +945,19 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
-  behavior: {}
-  # scaleDown:
-  #   stabilizationWindowSeconds: 300
-  #   policies:
-  #   - type: Percent
-  #     value: 100
-  #     periodSeconds: 15
-  # scaleUp:
-  #   stabilizationWindowSeconds: 0
-  #   policies:
-  #   - type: Percent
-  #     value: 100
-  #     periodSeconds: 15
-  #   - type: Pods
-  #     value: 4
-  #     periodSeconds: 15
-  #   selectPolicy: Max
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 600
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 300
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 300
 
 # -- [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 # @section -- G. Scheduling
