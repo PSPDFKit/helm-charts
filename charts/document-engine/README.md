@@ -341,7 +341,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [`livenessProbe`](./values.yaml#L908) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L908) |
 | [`readinessProbe`](./values.yaml#L921) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L921) |
 | [`startupProbe`](./values.yaml#L895) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L895) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L934) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).  Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `30` |
+| [`terminationGracePeriodSeconds`](./values.yaml#L934) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).  Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
 
 ### Scheduling
 
