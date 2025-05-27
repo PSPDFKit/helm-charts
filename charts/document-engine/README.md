@@ -69,6 +69,56 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 > [!NOTE]
 > Please consult the [changelog](/charts/document-engine/CHANGELOG.md)
 
+## Integrations
+
+### AWS ALB integration
+
+When using an Application Load Balancer in front of Document Engine, it needs to have the pod lifecycle aligned with Document Engine.
+
+Specifically:
+
+* A pod needs to stay alive longer than [target group deregistration delay](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_TargetGroupAttribute.html). This can be achieved using `lifecycle` and `terminationGracePeriodSeconds` values.
+* As in any other case for Document Engine, all timeouts should be smaller than `terminationGracePeriodSeconds`, especially `config.requestTimeoutSeconds`.
+* As common for ALB, [load balancer idle timeout](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_LoadBalancerAttribute.html) should be greater than the target group deregistration delay.
+
+Here's an example of configuration subset to use with [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/):
+
+```yaml
+  config:
+    requestTimeoutSeconds: 180
+    urlFetchTimeoutSeconds: 120
+    generationTimeoutSeconds: 120
+    workerTimeoutSeconds: 150
+    readAnnotationBatchTimeoutSeconds: 120
+terminationGracePeriodSeconds: 330
+lifecycle:
+  preStop:
+    exec:
+      command:
+        - sleep
+        - "305"
+ingress:
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/healthcheck-path: /healthcheck
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '5'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '2'
+    alb.ingress.kubernetes.io/load-balancer-attributes: >-
+      routing.http2.enabled=true,
+      idle_timeout.timeout_seconds=600,
+      routing.http.desync_mitigation_mode=defensive
+    alb.ingress.kubernetes.io/target-group-attributes: >-
+      deregistration_delay.timeout_seconds=300,
+      load_balancing.algorithm.type=least_outstanding_requests,
+      load_balancing.algorithm.anomaly_mitigation=off
+    alb.ingress.kubernetes.io/listener-attributes.HTTPS-443: >-
+      routing.http.response.server.enabled=false,
+      routing.http.response.strict_transport_security.header_value=max-age=31536000;includeSubDomains;preload;
+```
+
 ## Values
 
 ### Document Engine License
