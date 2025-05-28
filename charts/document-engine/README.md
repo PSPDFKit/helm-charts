@@ -322,7 +322,7 @@ ingress:
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`deploymentAnnotations`](./values.yaml#L772) | Deployment annotations | `{}` |
-| [`deploymentExtraSelectorLabels`](./values.yaml#L775) | Init containers | `{}` |
+| [`deploymentExtraSelectorLabels`](./values.yaml#L775) | Additional label selector for the deployment | `{}` |
 | [`fullnameOverride`](./values.yaml#L721) | Release full name override | `""` |
 | [`nameOverride`](./values.yaml#L718) | Release name override | `""` |
 | [`podAnnotations`](./values.yaml#L769) | Pod annotations | `{}` |

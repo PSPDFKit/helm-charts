@@ -770,7 +770,7 @@ podAnnotations: {}
 # -- Deployment annotations
 # @section -- B. Metadata
 deploymentAnnotations: {}
-# -- Init containers
+# -- Additional label selector for the deployment
 # @section -- B. Metadata
 deploymentExtraSelectorLabels: {}
 
