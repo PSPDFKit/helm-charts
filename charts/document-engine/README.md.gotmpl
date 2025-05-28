@@ -112,6 +112,8 @@ Functions {
 {{ template "chart.homepageLine" . }}
 
 * [Using this chart](#using-this-chart)
+* [Integrations](#integrations)
+  * [AWS ALB](#aws-alb-integration)
 * [Values](#values)
 {{- template "chart.valuesTableOfContents" . }}
 * [Contribution](#contribution)
@@ -165,12 +167,12 @@ Specifically:
 Here's an example of configuration subset to use with [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/):
 
 ```yaml
-  config:
-    requestTimeoutSeconds: 180
-    urlFetchTimeoutSeconds: 120
-    generationTimeoutSeconds: 120
-    workerTimeoutSeconds: 150
-    readAnnotationBatchTimeoutSeconds: 120
+config:
+  requestTimeoutSeconds: 180
+  urlFetchTimeoutSeconds: 120
+  generationTimeoutSeconds: 120
+  workerTimeoutSeconds: 150
+  readAnnotationBatchTimeoutSeconds: 120
 terminationGracePeriodSeconds: 330
 lifecycle: 
   preStop:

@@ -928,7 +928,7 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
-# -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). 
+# -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).
 # Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`).
 # @section -- F. Pod lifecycle
 terminationGracePeriodSeconds: 65  # @schema type: integer

@@ -7,6 +7,8 @@ Document Engine is a backend software for processing documents and powering auto
 **Homepage:** <https://www.nutrient.io/sdk/document-engine>
 
 * [Using this chart](#using-this-chart)
+* [Integrations](#integrations)
+  * [AWS ALB](#aws-alb-integration)
 * [Values](#values)
   * [Document Engine License](#document-engine-license)
   * [API authentication](#api-authentication)
@@ -84,12 +86,12 @@ Specifically:
 Here's an example of configuration subset to use with [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/):
 
 ```yaml
-  config:
-    requestTimeoutSeconds: 180
-    urlFetchTimeoutSeconds: 120
-    generationTimeoutSeconds: 120
-    workerTimeoutSeconds: 150
-    readAnnotationBatchTimeoutSeconds: 120
+config:
+  requestTimeoutSeconds: 180
+  urlFetchTimeoutSeconds: 120
+  generationTimeoutSeconds: 120
+  workerTimeoutSeconds: 150
+  readAnnotationBatchTimeoutSeconds: 120
 terminationGracePeriodSeconds: 330
 lifecycle:
   preStop:
@@ -391,7 +393,7 @@ ingress:
 | [`livenessProbe`](./values.yaml#L908) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L908) |
 | [`readinessProbe`](./values.yaml#L921) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L921) |
 | [`startupProbe`](./values.yaml#L895) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L895) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L934) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).  Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
+| [`terminationGracePeriodSeconds`](./values.yaml#L934) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
 
 ### Scheduling
 
