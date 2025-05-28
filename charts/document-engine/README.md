@@ -135,7 +135,7 @@ ingress:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`apiAuth`](./values.yaml#L28) | Document Enging API authentication |  |
+| [`apiAuth`](./values.yaml#L28) | Document Engine API authentication |  |
 | [`apiAuth.apiToken`](./values.yaml#L32) | `API_AUTH_TOKEN`, a universal secret with full access to the API,  should be long enough | `"secret"` |
 | [`apiAuth.externalSecret`](./values.yaml#L57) | Use an external secret for API credentials |  |
 | [`apiAuth.externalSecret.apiTokenKey`](./values.yaml#L64) | If external secret is enabled, but `apiTokenKey` is not set, the token will be retrieved from the `apiAuth.apiToken` value | `"API_AUTH_TOKEN"` |

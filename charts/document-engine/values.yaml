@@ -22,7 +22,7 @@ documentEngineLicense:
     # @ignored
     key: DOCUMENT_ENGINE_ACTIVATION_KEY
 
-# -- (object) Document Enging API authentication
+# -- (object) Document Engine API authentication
 # @section -- 01. API authentication
 # @notationType -- none
 apiAuth:
