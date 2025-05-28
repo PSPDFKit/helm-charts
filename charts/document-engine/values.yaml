@@ -22,7 +22,7 @@ documentEngineLicense:
     # @ignored
     key: DOCUMENT_ENGINE_ACTIVATION_KEY
 
-# -- (object) Document Enging API authentication
+# -- (object) Document Engine API authentication
 # @section -- 01. API authentication
 # @notationType -- none
 apiAuth:
@@ -83,10 +83,10 @@ config:
   # -- `PSPDFKIT_WORKER_POOL_SIZE`
   # @section -- 03. Configuration options
   workerPoolSize: 16  # @schema minimum: 1
-  # -- Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`)
+  # -- Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`). Should be lesser than `terminationGracePeriodSeconds`.
   # @section -- 03. Configuration options
   requestTimeoutSeconds: 60
-  # -- Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`)
+  # -- Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`). Should not be greater than `config.requestTimeoutSeconds`.
   # @section -- 03. Configuration options
   workerTimeoutSeconds: 60
   # -- `PDF_GENERATION_TIMEOUT` in seconds
@@ -770,7 +770,7 @@ podAnnotations: {}
 # -- Deployment annotations
 # @section -- B. Metadata
 deploymentAnnotations: {}
-# -- Init containers
+# -- Additional label selector for the deployment
 # @section -- B. Metadata
 deploymentExtraSelectorLabels: {}
 
@@ -897,7 +897,7 @@ startupProbe:
     path: /healthcheck
     port: api
     scheme: HTTP
-  initialDelaySeconds: 5
+  initialDelaySeconds: 10
   periodSeconds: 5
   timeoutSeconds: 1
   successThreshold: 1
@@ -928,9 +928,10 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
-# -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
+# -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).
+# Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`).
 # @section -- F. Pod lifecycle
-terminationGracePeriodSeconds: 30  # @schema type: integer
+terminationGracePeriodSeconds: 65  # @schema type: integer
 # -- [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)
 # @section -- F. Pod lifecycle
 # @notationType -- reference

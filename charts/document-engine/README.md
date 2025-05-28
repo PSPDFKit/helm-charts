@@ -1,12 +1,14 @@
 # Document Engine Helm chart
 
-![Version: 3.8.10](https://img.shields.io/badge/Version-3.8.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.8.3](https://img.shields.io/badge/AppVersion-1.8.3-informational?style=flat-square)
+![Version: 3.8.11](https://img.shields.io/badge/Version-3.8.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.8.3](https://img.shields.io/badge/AppVersion-1.8.3-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
 **Homepage:** <https://www.nutrient.io/sdk/document-engine>
 
 * [Using this chart](#using-this-chart)
+* [Integrations](#integrations)
+  * [AWS ALB](#aws-alb-integration)
 * [Values](#values)
   * [Document Engine License](#document-engine-license)
   * [API authentication](#api-authentication)
@@ -69,6 +71,56 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 > [!NOTE]
 > Please consult the [changelog](/charts/document-engine/CHANGELOG.md)
 
+## Integrations
+
+### AWS ALB integration
+
+When using an Application Load Balancer in front of Document Engine, it needs to have the pod lifecycle aligned with Document Engine.
+
+Specifically:
+
+* A pod needs to stay alive longer than [target group deregistration delay](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_TargetGroupAttribute.html). This can be achieved using `lifecycle` and `terminationGracePeriodSeconds` values.
+* As in any other case for Document Engine, all timeouts should be smaller than `terminationGracePeriodSeconds`, especially `config.requestTimeoutSeconds`.
+* As common for ALB, [load balancer idle timeout](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_LoadBalancerAttribute.html) should be greater than the target group deregistration delay.
+
+Here's an example of configuration subset to use with [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/), passing platform service parameters as [ingress annotations](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/):
+
+```yaml
+config:
+  requestTimeoutSeconds: 180
+  urlFetchTimeoutSeconds: 120
+  generationTimeoutSeconds: 120
+  workerTimeoutSeconds: 150
+  readAnnotationBatchTimeoutSeconds: 120
+terminationGracePeriodSeconds: 330
+lifecycle:
+  preStop:
+    exec:
+      command:
+        - sleep
+        - "305"
+ingress:
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/healthcheck-path: /healthcheck
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '5'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '2'
+    alb.ingress.kubernetes.io/load-balancer-attributes: >-
+      routing.http2.enabled=true,
+      idle_timeout.timeout_seconds=600,
+      routing.http.desync_mitigation_mode=defensive
+    alb.ingress.kubernetes.io/target-group-attributes: >-
+      deregistration_delay.timeout_seconds=300,
+      load_balancing.algorithm.type=least_outstanding_requests,
+      load_balancing.algorithm.anomaly_mitigation=off
+    alb.ingress.kubernetes.io/listener-attributes.HTTPS-443: >-
+      routing.http.response.server.enabled=false,
+      routing.http.response.strict_transport_security.header_value=max-age=31536000;includeSubDomains;preload;
+```
+
 ## Values
 
 ### Document Engine License
@@ -83,7 +135,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`apiAuth`](./values.yaml#L28) | Document Enging API authentication |  |
+| [`apiAuth`](./values.yaml#L28) | Document Engine API authentication |  |
 | [`apiAuth.apiToken`](./values.yaml#L32) | `API_AUTH_TOKEN`, a universal secret with full access to the API,  should be long enough | `"secret"` |
 | [`apiAuth.externalSecret`](./values.yaml#L57) | Use an external secret for API credentials |  |
 | [`apiAuth.externalSecret.apiTokenKey`](./values.yaml#L64) | If external secret is enabled, but `apiTokenKey` is not set, the token will be retrieved from the `apiAuth.apiToken` value | `"API_AUTH_TOKEN"` |
@@ -116,11 +168,11 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | [`config.proxy`](./values.yaml#L133) | Proxy settings, `HTTP_PROXY` amd `HTTPS_PROXY` | `{"http":"","https":""}` |
 | [`config.readAnnotationBatchTimeoutSeconds`](./values.yaml#L100) | `READ_ANNOTATION_BATCH_TIMEOUT` in seconds | `20` |
 | [`config.replaceSecretsFromEnv`](./values.yaml#L143) | `REPLACE_SECRETS_FROM_ENV` — whether to consider environment variables, values and secrets for `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD` | `true` |
-| [`config.requestTimeoutSeconds`](./values.yaml#L88) | Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`) | `60` |
+| [`config.requestTimeoutSeconds`](./values.yaml#L88) | Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`). Should be lesser than `terminationGracePeriodSeconds`. | `60` |
 | [`config.trustedProxies`](./values.yaml#L130) | `TRUSTED_PROXIES` | `"default"` |
 | [`config.urlFetchTimeoutSeconds`](./values.yaml#L97) | `REMOTE_URL_FETCH_TIMEOUT` in seconds | `5` |
 | [`config.workerPoolSize`](./values.yaml#L85) | `PSPDFKIT_WORKER_POOL_SIZE` | `16` |
-| [`config.workerTimeoutSeconds`](./values.yaml#L91) | Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`) | `60` |
+| [`config.workerTimeoutSeconds`](./values.yaml#L91) | Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`). Should not be greater than `config.requestTimeoutSeconds`. | `60` |
 
 ### Certificate trust
 
@@ -270,7 +322,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`deploymentAnnotations`](./values.yaml#L772) | Deployment annotations | `{}` |
-| [`deploymentExtraSelectorLabels`](./values.yaml#L775) | Init containers | `{}` |
+| [`deploymentExtraSelectorLabels`](./values.yaml#L775) | Additional label selector for the deployment | `{}` |
 | [`fullnameOverride`](./values.yaml#L721) | Release full name override | `""` |
 | [`nameOverride`](./values.yaml#L718) | Release name override | `""` |
 | [`podAnnotations`](./values.yaml#L769) | Pod annotations | `{}` |
@@ -337,41 +389,41 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`lifecycle`](./values.yaml#L937) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
+| [`lifecycle`](./values.yaml#L938) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
 | [`livenessProbe`](./values.yaml#L908) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L908) |
 | [`readinessProbe`](./values.yaml#L921) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L921) |
 | [`startupProbe`](./values.yaml#L895) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L895) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L933) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) | `30` |
+| [`terminationGracePeriodSeconds`](./values.yaml#L934) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
 
 ### Scheduling
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`affinity`](./values.yaml#L989) | Node affinity | `{}` |
-| [`autoscaling`](./values.yaml#L942) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L942) |
-| [`nodeSelector`](./values.yaml#L986) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
-| [`podDisruptionBudget`](./values.yaml#L979) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L979) |
-| [`priorityClassName`](./values.yaml#L998) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
-| [`replicaCount`](./values.yaml#L967) | Number of replicas | `1` |
-| [`resources`](./values.yaml#L964) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
-| [`schedulerName`](./values.yaml#L1001) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
-| [`tolerations`](./values.yaml#L992) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
-| [`topologySpreadConstraints`](./values.yaml#L995) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
-| [`updateStrategy`](./values.yaml#L970) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
+| [`affinity`](./values.yaml#L990) | Node affinity | `{}` |
+| [`autoscaling`](./values.yaml#L943) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L943) |
+| [`nodeSelector`](./values.yaml#L987) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| [`podDisruptionBudget`](./values.yaml#L980) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L980) |
+| [`priorityClassName`](./values.yaml#L999) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
+| [`replicaCount`](./values.yaml#L968) | Number of replicas | `1` |
+| [`resources`](./values.yaml#L965) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
+| [`schedulerName`](./values.yaml#L1002) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
+| [`tolerations`](./values.yaml#L993) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
+| [`topologySpreadConstraints`](./values.yaml#L996) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
+| [`updateStrategy`](./values.yaml#L971) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
 
 ### Chart dependencies
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`minio`](./values.yaml#L1028) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) | [...](./values.yaml#L1028) |
-| [`postgresql`](./values.yaml#L1006) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) | [...](./values.yaml#L1006) |
-| [`redis`](./values.yaml#L1040) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) | [...](./values.yaml#L1040) |
+| [`minio`](./values.yaml#L1029) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) | [...](./values.yaml#L1029) |
+| [`postgresql`](./values.yaml#L1007) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) | [...](./values.yaml#L1007) |
+| [`redis`](./values.yaml#L1041) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) | [...](./values.yaml#L1041) |
 
 ### Other Values
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`revisionHistoryLimit`](./values.yaml#L974) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
+| [`revisionHistoryLimit`](./values.yaml#L975) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
 
 ## Contribution
 
