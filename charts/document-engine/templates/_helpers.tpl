@@ -100,79 +100,6 @@ License secret name
 {{- end -}}
 
 {{/*
-API and dashboard secrets
-*/}}
-{{- define "document-engine.api.secret.name" -}}
-  {{- if not .Values.apiAuth.externalSecret.name -}}
-    {{- printf "%s-api-auth" (include "document-engine.fullname" .) -}}
-  {{- else -}}
-    {{- .Values.apiAuth.externalSecret.name -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "document-engine.api.secret.key.apiToken" -}}
-  {{- if not .Values.apiAuth.externalSecret.name -}}
-    API_AUTH_TOKEN
-  {{- else -}}
-    {{- .Values.apiAuth.externalSecret.apiTokenKey -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.api.secret.key.jwtPublicKey" -}}
-  {{- if not (and .Values.apiAuth.externalSecret.name 
-                  .Values.apiAuth.externalSecret.jwtPublicKeyKey ) -}}
-    JWT_PUBLIC_KEY
-  {{- else -}}
-    {{- .Values.apiAuth.externalSecret.jwtPublicKeyKey -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.api.secret.key.jwtAlgorithm" -}}
-  {{- if not (and .Values.apiAuth.externalSecret.name 
-                  .Values.apiAuth.externalSecret.jwtAlgorithmKey ) -}}
-    JWT_ALGORITHM
-  {{- else -}}
-    {{- .Values.apiAuth.externalSecret.jwtAlgorithmKey -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.secretKeyBase.secret.name" -}}
-  {{- if not (and .Values.apiAuth.externalSecret.name
-                  .Values.apiAuth.externalSecret.secretKeyBaseKey ) -}}
-    {{- printf "%s-secretkeybase" (include "document-engine.fullname" .) -}}
-  {{- else -}}
-    {{- .Values.apiAuth.externalSecret.secretKeyBaseKey -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.secretKeyBase.secret.key" -}}
-  {{- if not (and .Values.apiAuth.externalSecret.name
-                  .Values.apiAuth.externalSecret.secretKeyBaseKey ) -}}
-    SECRET_KEY_BASE
-  {{- else -}}
-    {{- .Values.apiAuth.externalSecret.secretKeyBaseKey -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "document-engine.dashboard.secret.name" -}}
-  {{- if not .Values.dashboard.auth.externalSecret.name -}}
-    {{- printf "%s-dashboard-auth" (include "document-engine.fullname" .) -}}
-  {{- else -}}
-    {{- .Values.dashboard.auth.externalSecret.name -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.dashboard.secret.key.username" -}}
-  {{- if not .Values.dashboard.auth.externalSecret.name -}}
-    DASHBOARD_USERNAME
-  {{- else -}}
-    {{- .Values.dashboard.auth.externalSecret.usernameKey -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.dashboard.secret.key.password" -}}
-  {{- if not .Values.dashboard.auth.externalSecret.name -}}
-    DASHBOARD_PASSWORD
-  {{- else -}}
-    {{- .Values.dashboard.auth.externalSecret.passwordKey -}}
-  {{- end -}}
-{{- end -}}
-
-{{/*
 Clustering
 */}}
 {{- define "document-engine.clustering.service.enabled" -}}
@@ -200,51 +127,11 @@ Database parameters
   {{- end -}}
 {{- end -}}
 
-{{- define "document-engine.storage.postgres.secret.name" -}}
-  {{- if not .Values.database.postgres.externalSecretName -}}
-    {{- printf "%s-db-postgres" (include "document-engine.fullname" .) -}}
-  {{- else -}}
-    {{- .Values.database.postgres.externalSecretName -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.storage.postgres.createSecret" -}}
-  {{- if and (eq (include "document-engine.storage.postgres.enabled" .) "true") 
-             (not .Values.database.postgres.externalSecretName) -}}
-    {{- true -}}
-  {{- else -}}
-    {{- false -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "document-engine.storage.postgres.adminSecret.name" -}}
-  {{- if not .Values.database.postgres.externalAdminSecretName -}}
-    {{- printf "%s-db-postgres-admin" (include "document-engine.fullname" .) -}}
-  {{- else -}}
-    {{- .Values.database.postgres.externalAdminSecretName -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.storage.postgres.createAdminSecret" -}}
-  {{- if and (eq (include "document-engine.storage.postgres.enabled" .) "true") 
-             (not .Values.database.postgres.externalAdminSecretName) -}}
-    {{- true -}}
-  {{- else -}}
-    {{- false -}}
-  {{- end -}}
-{{- end -}}
-
 {{- define "document-engine.storage.redis.secret.name" -}}
   {{- if not .Values.assetStorage.redis.externalSecretName -}}
     {{- printf "%s-redis" (include "document-engine.fullname" .) -}}
   {{- else -}}
     {{- .Values.assetStorage.redis.externalSecretName -}}
-  {{- end -}}
-{{- end -}}
-{{- define "document-engine.storage.redis.createSecret" -}}
-  {{- if and .Values.assetStorage.redis.enabled 
-             (not .Values.assetStorage.redis.externalSecretName) -}}
-    {{- true -}}
-  {{- else -}}
-    {{- false -}}
   {{- end -}}
 {{- end -}}
 
