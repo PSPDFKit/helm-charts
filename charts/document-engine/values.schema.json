@@ -765,6 +765,7 @@
       "type": "object"
     },
     "minio": {
+      "additionalProperties": true,
       "properties": {
         "auth": {
           "properties": {
@@ -1011,6 +1012,7 @@
       "type": "object"
     },
     "postgresql": {
+      "additionalProperties": true,
       "properties": {
         "architecture": {
           "type": "string"
@@ -1144,6 +1146,7 @@
       "type": "object"
     },
     "redis": {
+      "additionalProperties": true,
       "properties": {
         "architecture": {
           "type": "string"
