@@ -10,9 +10,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-      - name: Run helm-docs
+      - name: Run helm-docs for Document Engine
         uses: losisin/helm-docs-github-action@v1
         with:
           chart-search-root: charts/document-engine
+          # git-push: true
+          fail-on-diff: true
+      - name: Run helm-docs for AI Assistant
+        uses: losisin/helm-docs-github-action@v1
+        with:
+          chart-search-root: charts/ai-assistant
           # git-push: true
           fail-on-diff: true
