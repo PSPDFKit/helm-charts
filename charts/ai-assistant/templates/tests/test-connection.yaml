@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "ai-assistant.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "ai-assistant.fullname" . }}:{{ .Values.service.port }}/healthcheck']
   restartPolicy: Never
