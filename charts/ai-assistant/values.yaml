@@ -613,7 +613,10 @@ priorityClassName: ""
 # @section -- G. Scheduling
 schedulerName: ""
 
-# -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
+# -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql).
+# Please note that this chart is not maintained by Nutrient
+# and that considering "unsupported" `pgvector/pgvector` image, this is a workaround.
+# We recommend using PostgreSQL management orchestratration approach for production.
 # @section -- Z. Dependencies
 # @notationType -- reference
 postgresql:  # @schema additionalProperties:true

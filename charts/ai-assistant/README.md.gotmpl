@@ -141,9 +141,12 @@ helm upgrade --install -n ai-assistant \
 
 ### Dependencies
 
-The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) chart for PostgreSQL. It is disabled by default, but can be enabled for convenience. Please consider [tests](/charts/ai-assistant/ci) as examples.
+An optional dependency is [Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine), to use when external Document Engine instance is not available.
 
-Another optional dependency is [Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine), to use when external Document Engine instance is not available.
+There is also chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) chart for PostgreSQL. 
+It is disabled by default, but can be enabled for convenience. 
+
+Please consider [tests](/charts/ai-assistant/ci) as examples.
 
 {{ template "chart.requirementsTable" . }}
 

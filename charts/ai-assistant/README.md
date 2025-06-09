@@ -51,9 +51,12 @@ helm upgrade --install -n ai-assistant \
 
 ### Dependencies
 
-The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) chart for PostgreSQL. It is disabled by default, but can be enabled for convenience. Please consider [tests](/charts/ai-assistant/ci) as examples.
+An optional dependency is [Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine), to use when external Document Engine instance is not available.
 
-Another optional dependency is [Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine), to use when external Document Engine instance is not available.
+There is also chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) chart for PostgreSQL.
+It is disabled by default, but can be enabled for convenience.
+
+Please consider [tests](/charts/ai-assistant/ci) as examples.
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -252,8 +255,8 @@ Schema is generated using [helm values schema json plugin](https://github.com/lo
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`documentEngine`](./values.yaml#L663) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L663) |
-| [`postgresql`](./values.yaml#L619) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) | [...](./values.yaml#L619) |
+| [`documentEngine`](./values.yaml#L666) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L666) |
+| [`postgresql`](./values.yaml#L622) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql). Please note that this chart is not maintained by Nutrient and that considering "unsupported" `pgvector/pgvector` image, this is a workaround. We recommend using PostgreSQL management orchestratration approach for production. | [...](./values.yaml#L622) |
 
 ### Other Values
 
