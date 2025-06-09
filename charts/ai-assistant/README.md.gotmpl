@@ -143,8 +143,12 @@ helm upgrade --install -n ai-assistant \
 
 An optional dependency is [Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine), to use when external Document Engine instance is not available.
 
-There is also chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) chart for PostgreSQL. 
+There is also chart optionally depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) chart for PostgreSQL. 
 It is disabled by default, but can be enabled for convenience. 
+
+> [!NOTE]
+> Official Bitnami PostgreSQL image does not include `pgvector` extension and the existing values rely on a workaround using `pgvector/pgvector` image instead.
+> We recommend using more mature solution in production, e.g. a managed database.
 
 Please consider [tests](/charts/ai-assistant/ci) as examples.
 
