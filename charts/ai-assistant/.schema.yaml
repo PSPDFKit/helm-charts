@@ -1,0 +1,6 @@
+input:
+  - values.yaml
+
+draft: 2020
+indent: 2
+output: values.schema.json

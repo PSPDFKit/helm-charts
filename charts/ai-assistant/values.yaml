@@ -1,0 +1,664 @@
+# -- (object) License information, see more in
+# [our guide](https://www.nutrient.io/guides/ai-assistant/deployment/product-activation/)
+# @section -- 00. AI Assistant License
+# @notationType -- none
+aiAssistantLicense:
+  # -- Activation key for online activation (most common) or
+  # license key for offline activation.
+  # Results in `ACTIVATION_KEY` environment variable.
+  # @section -- 00. AI Assistant License
+  activationKey: ""
+  # -- (object) Query existing secret for the activation key
+  # @section -- 00. AI Assistant License
+  # @default -- none
+  # @notationType -- reference
+  externalSecret:
+    # -- External secret name for license
+    # @section -- 00. AI Assistant License
+    # @ignored
+    name: ""
+    # -- The key in the secret used to retrieve the activation key
+    # @section -- 00. AI Assistant License
+    # @ignored
+    key: AIA_ACTIVATION_KEY
+
+# -- (object) AI Assistant API authentication
+# @section -- 01. API authentication
+# @notationType -- none
+apiAuth:
+  # -- `API_AUTH_TOKEN`, a universal secret with full access to the API,
+  #  should be long enough
+  # @section -- 01. API authentication
+  apiToken: secret
+  # -- (object) JSON Web Token (JWT) settings
+  # @section -- 01. API authentication
+  # @notationType -- reference
+  jwt:
+    # -- `JWT_PUBLIC_KEY`
+    # @section -- 01. API authentication
+    publicKey: none
+    # -- `JWT_ALGORITHM`
+    # Supported algorithms: `RS256`, `RS512`, `ES256`, `ES512`.
+    # See RFC 7518 for details about specific algorithms.
+    # @section -- 01. API authentication
+    algorithm: RS256  # @schema enum: [RS256, RS512, ES256, ES512]
+  # -- A string used as the base key for deriving secret keys for the purposes of authentication.
+  # Choose a sufficiently long random string for this option.
+  # To generate a random string, use: `openssl rand -hex 256`.
+  # This will set `SECRET_KEY_BASE` environment variable.
+  # @section -- 01. API authentication
+  secretKeyBase: ""
+  # -- (object) Use an external secret for API credentials
+  # @section -- 01. API authentication
+  # @default -- none
+  # @notationType -- reference
+  externalSecret:
+    # -- External secret name
+    # @section -- 01. API authentication
+    # @ignored
+    name: ""
+    # -- If external secret is enabled, but `apiTokenKey` is not set,
+    # the token will be retrieved from the `apiAuth.apiToken` value
+    # @section -- 01. API authentication
+    # @ignored
+    apiTokenKey: API_AUTH_TOKEN
+    # -- If external secret is enabled, but `jwtAlgorithmKey` is not set,
+    # the algorithm will be retrieved from the `apiAuth.jwt.algorithm` value
+    # @section -- 01. API authentication
+    # @ignored
+    jwtAlgorithmKey: JWT_ALGORITHM
+    # -- If external secret is enabled, but `jwtPublicKeyKey` is not set,
+    # the public key will be retrieved from the `apiAuth.jwt.publicKey` value
+    # @section -- 01. API authentication
+    # @ignored
+    jwtPublicKeyKey: JWT_PUBLIC_KEY
+    # -- If external secret is enabled, but `secretKeyBaseKey` is not set,
+    # the secret key base will be retrieved from the `apiAuth.secretKeyBase` value
+    # or generated automatically
+    # @section -- 01. API authentication
+    # @ignored
+    secretKeyBaseKey: SECRET_KEY_BASE
+
+# -- (object) General configuration, see more in [our guide](https://www.nutrient.io/guides/ai-assistant/service-configuration/docker-configuration/)
+# @section -- 03. Configuration options
+# @notationType -- none
+config:
+  # -- Port for the API
+  # @section -- 03. Configuration options
+  port: 4000  # @schema minimum: 4000; maximum: 4000
+  # -- `FORCE_EMBEDDING_MIGRATE`, enables database migration compatibility with the new embedding model
+  # @section -- 03. Configuration options
+  forceEmbeddingMigrate: false
+  # -- Existing ConfigMap for service configuration, overrides  `config.serviceConfiguration` value
+  # @section -- 03. Configuration options
+  # @default -- none
+  # @notationType -- reference
+  serviceConfigurationConfigMap:
+    # -- Name of the ConfigMap, non-empty value enables the use of the external ConfigMap
+    # @section -- 03. Configuration options
+    name: ""
+    # -- Key in the external ConfigMap, must contain the content of the service configuration file
+    # @section -- 03. Configuration options
+    key: service-configuration.yaml
+  # -- (object) Inline content for service configuration, used if `config.serviceConfigurationConfigMap.name` is not set.
+  # See more in [our guide](https://www.nutrient.io/guides/ai-assistant/service-configuration/ai-configuration/#service-configuration-file)
+  # @section -- 03. Configuration options
+  # @default -- none
+  # @notationType -- reference
+  serviceConfiguration:  # @schema oneOf: [{"type": "object"}, {"type": "null"}]
+    version: '1' # @schema required:true; pattern:^1$
+    aiServices: # @schema required:true; additionalProperties: false
+      chat:  # @schema required:true
+        provider:  # @schema required:true
+          name: 'azure'  # @schema pattern:^(openai|azure|bedrock|openai-compat)$
+          instanceName: 'ci-testing'
+        model: 'gpt4o-mini'
+      textEmbeddings:  # @schema required:true
+        provider:  # @schema required:true
+          name: 'azure' # @schema pattern:^(openai|azure|bedrock|openai-compat)$
+          instanceName: 'ci-testing'
+        model: 'text-embedding-3-small'
+  # -- (object) Credentials for AI service providers. 
+  # It is recommended to use extrenal secrets through `extraEnvFromSecrets` instead.
+  # @section -- 03. Configuration options
+  # @default -- none
+  # @notationType -- reference
+  aiServiceProviderCredentials:
+    # -- OpenAI
+    # @section -- 03. Configuration options
+    # @notationType -- none
+    openAI:
+      # -- `OPENAI_API_KEY`
+      # @section -- 03. Configuration options
+      apiKey: ""
+    # -- Azure OpenAI
+    # @section -- 03. Configuration options
+    # @notationType -- none
+    azureOpenAI:
+      # -- `AZURE_API_KEY`
+      # @section -- 03. Configuration options
+      apiKey: ""
+    # -- AWS Bedrock. It is recommended to not use direct credentials, but rather IRSA
+    # @section -- 03. Configuration options
+    # @notationType -- none
+    awsBedrock:
+      # -- `BEDROCK_ACCESS_KEY_ID`
+      # @section -- 03. Configuration options
+      accessKeyId: ""
+      # -- `BEDROCK_SECRET_ACCESS_KEY`
+      # @section -- 03. Configuration options
+      secretAccessKey: ""
+    # -- OpenAI compatible
+    # @section -- 03. Configuration options
+    # @notationType -- none
+    openAICompatible:
+      # -- `OPENAI_COMPAT_API_KEY`
+      # @section -- 03. Configuration options
+      apiKey: ""
+  # -- (object) Document Engine settings
+  # @section -- 03. Configuration options
+  # @default -- none
+  # @notationType -- reference
+  documentEngine:
+    # -- Enable Configuration options
+    # @section -- 03. Configuration options
+    enabled: true
+    # -- `DE_URL` — the URL of the Document Engine endpoint
+    # @section -- 03. Configuration options
+    url: document-engine
+    # -- (object) Document Engine API authentication
+    # @section -- 03. Configuration options
+    # @notationType -- none
+    auth:
+      # -- `DE_API_AUTH_TOKEN`, Document Engine API authentication token
+      # @section -- 03. Configuration options
+      apiToken: secret
+      # -- (object) Use an external secret for API credentials
+      # @section -- 03. Configuration options
+      # @default -- none
+      # @notationType -- reference
+      externalSecret:
+        # -- External secret name
+        # @section -- 03. Configuration options
+        # @ignored
+        name: ""
+        # -- If external secret is enabled, but `apiTokenKey` is not set,
+        # the token will be retrieved from the `documentEngine.auth.apiToken` value
+        # @section -- 03. Configuration options
+        # @ignored
+        apiTokenKey: DOCUMENT_ENGINE_API_AUTH_TOKEN
+
+# -- (object) [Certificate trust](https://www.nutrient.io/guides/document-engine/configuration/certificate-trust/)
+# @section -- 04. Certificate trust
+# @notationType -- none
+certificateTrust:
+  # -- CAs for digital signatures (`/certificate-stores/`)
+  # from ConfigMap and Secret resources.
+  # @section -- 04. Certificate trust
+  digitalSignatures: []
+    ## To yield `/certificate-stores/private-ca-certificates.pem`:
+    # - name: private-ca
+    #   path: private-ca-certificates.pem
+    #   configMap:
+    #     name: private-ca
+    #     key: private-ca-certificates.pem
+  # -- ConfigMap and Secret references for trust configuration, stored in `/certificate-stores-custom`
+  # @section -- 04. Certificate trust
+  customCertificates: []
+    ## To yield `/certificate-stores-custom/my-certificates.pem`:
+    # - name: my
+    #   path: my-certificates.pem
+    #   secret:
+    #     name: my-config-map
+    #     key: some-certificates.pem
+  # -- Override `DOWNLOADER_CERT_FILE_PATH` to set HTTP client trust.
+  # If empty, defaults to  Mozilla's CA bundle.
+  # @section -- 04. Certificate trust
+  downloaderTrustFileName: ""
+
+# -- (object) Database
+# @section -- 05. Database
+# @notationType -- none
+database:
+  # -- Persistent storage enabled
+  # @section -- 05. Database
+  enabled: true
+  # -- Database engine: only `postgres` is currently supported
+  # @section -- 05. Database
+  engine: postgres  # @schema enum: [postgres, null]
+  # -- `DATABASE_CONNECTIONS`
+  # @section -- 05. Database
+  connections: 20  # @schema minimum: 8
+  # -- (object) PostgreSQL database settings
+  # @section -- 05. Database
+  # @default -- none
+  # @notationType -- reference
+  postgres:
+    # -- `PGHOST`
+    # @section -- 05. Database
+    host: postgresql
+    # -- `PGPORT`
+    # @section -- 05. Database
+    port: 5432
+    # -- `PGDATABASE`
+    # @section -- 05. Database
+    database: ai-assistant
+    # -- `PGUSER`
+    # @section -- 05. Database
+    username: postgres
+    # -- `PGPASSWORD`
+    # @section -- 05. Database
+    password: despair
+    # -- Use external secret for database credentials.
+    # `PGUSER` and `PGPASSWORD` must be provided
+    # and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL`
+    # @section -- 05. Database
+    externalSecretName: ""
+    # -- External secret for administrative database credentials,
+    # used for migrations: `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD`
+    # @section -- 05. Database
+    externalAdminSecretName: ""
+    # -- (object) TLS settings
+    # @section -- 05. Database
+    # @default -- none
+    # @notationType -- reference
+    tls:
+      # -- Enable TLS (`PGSSL`)
+      # @section -- 05. Database
+      enabled: false
+      # -- Negated `PGSSL_DISABLE_VERIFY`
+      # @section -- 05. Database
+      verify: true
+      # -- Negated `PGSSL_DISABLE_HOSTNAME_VERIFY`
+      # @section -- 05. Database
+      hostVerify: true
+      # -- Common name for the certificate (`PGSSL_CERT_COMMON_NAME`),
+      # defaults to `PGHOST` value
+      # @section -- 05. Database
+      commonName: ""
+      # -- Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`,
+      # mutually exclusive with `trustFileName` and takes precedence
+      # @section -- 05. Database
+      trustBundle: ""
+      # -- Path from `certificateTrust.customCertificates`, wraps around `PGSSL_CA_CERT_PATH`
+      # @section -- 05. Database
+      trustFileName: ""
+
+# -- (object) AI Assistant Dashboard settings
+# @section -- A. Dashboard
+# @notationType -- none
+dashboard:
+  # -- Enable dashboard
+  # @section -- A. Dashboard
+  enabled: true
+  # -- (object) Dashboard authentication
+  # @section -- A. Dashboard
+  # @notationType -- reference
+  auth:
+    # -- `DASHBOARD_USERNAME`
+    # @section -- A. Dashboard
+    username: admin
+    # -- `DASHBOARD_PASSWORD` — will generate a random password if not set
+    # @section -- A. Dashboard
+    password: ""
+    # -- (object) Use an external secret for dashboard credentials
+    # @section -- A. Dashboard
+    # @notationType -- reference
+    externalSecret:
+      # -- External secret name
+      # @section -- A. Dashboard
+      name: ""
+      # -- Secret key name for the username
+      # @section -- A. Dashboard
+      usernameKey: DASHBOARD_USERNAME
+      # -- Secret key name for the password
+      # @section -- A. Dashboard
+      passwordKey: DASHBOARD_PASSWORD
+
+# -- (object) Observability settings
+# @section -- D. Observability
+# @notationType -- none
+observability:
+  # -- (object) Logs
+  # @section -- D. Observability
+  # @notationType -- reference
+  log:
+    # -- `LOG_LEVEL`
+    # @section -- D. Observability
+    level: info
+
+# -- (object) Image settings
+# @section -- B. Environment
+# @notationType -- reference
+image:
+  repository: pspdfkit/ai-assistant
+  pullPolicy: IfNotPresent
+  # Defaults to the Chart appVersion
+  tag: ""
+# -- Pull secrets
+# @section -- B. Environment
+imagePullSecrets: []
+
+# -- Release name override
+# @section -- B. Metadata
+nameOverride: ""
+# -- Release full name override
+# @section -- B. Metadata
+fullnameOverride: ""
+
+# -- (object) ServiceAccount
+# @section -- B. Environment
+# @notationType -- reference
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automount: false
+
+# -- Pod security context
+# @section -- B. Environment
+podSecurityContext: {}
+# fsGroup: 2000
+# -- Security context
+# @section -- B. Environment
+securityContext: {}
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
+
+# -- Extra environment variables
+# @section -- B. Environment
+extraEnvs: []
+# -- Extra environment variables from resources
+# @section -- B. Environment
+extraEnvFrom: []
+# -- Extra environment variables from Secrets with these names (for convenience, overlaps with broader `extraEnvFrom`).
+# Expected use is to define `OPENAI_API_KEY`, `AZURE_API_KEY`, etc.
+# @section -- B. Environment
+extraEnvFromSecrets: []
+# -- Additional volumes
+# @section -- B. Environment
+extraVolumes: []
+# -- Additional volume mounts for Document Engine container
+# @section -- B. Environment
+extraVolumeMounts: []
+# -- Additional containers
+# @section -- B. Environment
+sidecars: []
+# -- Init containers
+# @section -- B. Environment
+initContainers: []
+
+# -- Pod labels
+# @section -- B. Metadata
+podLabels: {}
+# -- Pod annotations
+# @section -- B. Metadata
+podAnnotations: {}
+# -- Deployment annotations
+# @section -- B. Metadata
+deploymentAnnotations: {}
+
+# -- (object) Service
+# @section -- C. Networking
+# @notationType -- reference
+service:
+  # -- Service type
+  # @section -- C. Networking
+  type: ClusterIP
+  # -- Service port — see also `config.port`
+  # @section -- C. Networking
+  port: 4000
+
+# -- (object) Ingress
+# @section -- C. Networking
+# @notationType -- reference
+ingress:
+  # -- Enable ingress
+  # @section -- C. Networking
+  enabled: false
+  # -- Ingress class name
+  # @section -- C. Networking
+  className: ""
+  # -- Ingress annotations
+  # @section -- C. Networking
+  annotations: {}
+  # -- Hosts
+  # @section -- C. Networking
+  hosts: []
+    # - host: chart-example.local
+    #   paths:
+    #     - path: /
+    #       pathType: ImplementationSpecific
+    #     - path: /special
+    #       pathType: Exact
+    #       backend:
+    #         service:
+    #           name: redirect-through-annotation
+    #           port:
+    #             name: use-annotation
+  # -- Ingress TLS section
+  # @section -- C. Networking
+  tls: []
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+
+
+# https://editor.networkpolicy.io/
+# -- (object) [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+# @section -- C. Networking
+# @notationType -- reference
+networkPolicy:
+  # -- Enable network policy
+  # @section -- C. Networking
+  enabled: true
+  labels: {}
+  annotations: {}
+  # -- Allow access from anywhere
+  # @section -- C. Networking
+  allowExternal: true
+  # -- Additional ingress rules
+  # @section -- C. Networking
+  extraIngress: []
+    # - ports:
+    #     - port: 5000
+    #   from:
+    #     - podSelector:
+    #         - matchLabels:
+    #             - role: frontend
+    #     - podSelector:
+    #         - matchExpressions:
+    #             - key: role
+    #               operator: In
+    #               values:
+    #                 - frontend
+  # -- Allow traffic from other namespaces
+  # @section -- C. Networking
+  ingressMatchSelectorLabels: []
+  # - namespaceSelectorLabels: {}
+  #   podSelectorLabels: {}
+
+  # -- Allow the pod to access any range of port and all destinations.
+  # @section -- C. Networking
+  allowExternalEgress: true
+  # -- Extra egress rules
+  # @section -- C. Networking
+  extraEgress: []
+    # - ports:
+    #     - port: 80
+    #   to:
+    #     - podSelector:
+    #         - matchLabels:
+    #             - role: some-storage
+    #     - podSelector:
+    #         - matchExpressions:
+    #             - key: role
+    #               operator: In
+    #               values:
+    #                 - some-storage
+
+# -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# @section -- F. Pod lifecycle
+# @notationType -- reference
+startupProbe:
+  httpGet:
+    path: /healthcheck
+    port: http
+    scheme: HTTP
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 5
+# -- (object) [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# @section -- F. Pod lifecycle
+# @notationType -- reference
+livenessProbe:
+  httpGet:
+    path: /healthcheck
+    port: http
+    scheme: HTTP
+  initialDelaySeconds: 0
+  periodSeconds: 30
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+# -- (object) [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# @section -- F. Pod lifecycle
+# @notationType -- reference
+readinessProbe:
+  httpGet:
+    path: /healthcheck
+    port: http
+    scheme: HTTP
+  initialDelaySeconds: 0
+  periodSeconds: 5
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+# -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).
+# Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`).
+# @section -- F. Pod lifecycle
+terminationGracePeriodSeconds: 65  # @schema type: integer
+# -- [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)
+# @section -- F. Pod lifecycle
+# @notationType -- reference
+lifecycle: {}
+
+# -- (object) [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+# @section -- G. Scheduling
+# @notationType -- reference
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 600
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 300
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 300
+
+# -- [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+# @section -- G. Scheduling
+resources: {}
+# -- Number of replicas
+# @section -- G. Scheduling
+replicaCount: 1
+# -- [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+# @section -- G. Scheduling
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+# -- [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
+revisionHistoryLimit: 10
+
+# -- (object) [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
+# @section -- G. Scheduling
+# @notationType -- reference
+podDisruptionBudget:
+  create: false
+  minAvailable: 1
+  maxUnavailable: ""
+
+# -- [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
+# @section -- G. Scheduling
+nodeSelector: {}
+# -- Node affinity
+# @section -- G. Scheduling
+affinity: {}
+# -- [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+# @section -- G. Scheduling
+tolerations: []
+# -- [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/)
+# @section -- G. Scheduling
+topologySpreadConstraints: []
+# -- [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/)
+# @section -- G. Scheduling
+priorityClassName: ""
+# -- [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/)
+# @section -- G. Scheduling
+schedulerName: ""
+
+# -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
+# @section -- Z. Dependencies
+# @notationType -- reference
+postgresql:  # @schema additionalProperties:true
+  enabled: false
+  architecture: standalone
+  postgresqlSharedPreloadLibraries: "pgaudit,pgvector"
+  global: 
+    security: 
+      allowInsecureImages: true
+  volumePermissions:
+    enabled: false
+  image:
+    repository: pgvector/pgvector
+    tag: 0.8.0-pg17
+    pullPolicy: IfNotPresent
+  primary:
+    persistence:
+      enabled: false
+      size: 10Gi
+      accessModes:
+        - ReadWriteOnce
+    extraVolumes:
+      - name: run
+        emptyDir: {}
+    extraVolumeMounts:
+      - name: run
+        mountPath: /var/run
+    extraEnvVars:
+      - name: POSTGRES_DB
+        value: 'ai-assistant'
+    extendedConfiguration: |
+      log_statement = none
+    pgHbaConfiguration: |
+      local    all             all                                trust
+      host     all             all        127.0.0.1/32            trust
+      host     all             all        ::1/128                 trust
+      host     all             all        0.0.0.0/0               md5
+      host     all             all        ::/0                    md5
+  auth:
+    enabledPostgresUser: true
+    postgresPassword: despair
+    database: ai-assistant
+
+# -- [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine)
+# @section -- Z. Dependencies
+# @notationType -- reference
+documentEngine:  # @schema additionalProperties:true
+  enabled: false

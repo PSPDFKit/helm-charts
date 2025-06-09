@@ -1,0 +1,181 @@
+{{/*
+Functions {
+*/}}
+{{- define "chart.valuesTableOfContents" -}}
+{{-   if .Sections.Sections -}}
+{{-     $sectionNames := list -}}
+{{-     range .Sections.Sections -}}
+{{-       $sectionNames = append $sectionNames .SectionName -}}
+{{-     end -}}
+{{-     $sections := list -}}
+{{-     range ($sectionNames | sortAlpha) -}}
+{{-       $currentSectionName := . -}}
+{{-       range $.Sections.Sections -}}
+{{-         if eq .SectionName $currentSectionName -}}
+{{-           $thisSection := dict -}}
+{{-           $title := regexReplaceAll "^[0-9A-Z]+\\.\\s+" .SectionName "" -}}
+{{-           $link := printf "./values.yaml#L%d" (first .SectionItems).LineNumber -}}
+{{-           $_ := set $thisSection "SectionName" .SectionName -}}
+{{-           $_ := set $thisSection "SectionItems" .SectionItems -}}
+{{-           $_ := set $thisSection "SectionTitle" $title -}}
+{{-           $sections = append $sections $thisSection -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-     if .Sections.DefaultSection.SectionItems -}}
+{{-       $thisSection := dict -}}
+{{-       $_ := set $thisSection "SectionName" .Sections.DefaultSection.SectionName -}}
+{{-       $_ := set $thisSection "SectionItems" .Sections.DefaultSection.SectionItems -}}
+{{-       $_ := set $thisSection "SectionTitle" .Sections.DefaultSection.SectionName -}}
+{{-       $sections = append $sections $thisSection -}}
+{{-     end -}}
+{{-     range $sections -}}
+{{-       $sectionAnchor := regexReplaceAll "\\s" .SectionTitle "-" | lower }}
+  * [{{ .SectionTitle }}](#{{ $sectionAnchor }})
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+
+{{- define "chart.valueDefaultColumnRender" -}}
+{{-   $defaultValue := (default .Default .AutoDefault) -}}
+{{-   $notationType := .NotationType -}}
+{{-   if .Default -}}
+{{-     $defaultValue = (trimAll "`" (default .Default .AutoDefault) ) -}}
+{{-     $notationType = "json" -}}
+{{-   end -}}
+{{-   if eq $notationType "none" -}}
+{{-   else if eq $notationType "reference" -}}
+[...](./values.yaml#L{{ .LineNumber }})
+{{-   else if eq $notationType "plain" -}}
+{{-     $defaultValue }}
+{{-   else if eq $notationType "tpl" -}}
+`{{ $defaultValue }}`
+{{-   else -}}
+`{{ $defaultValue }}`
+{{-   end -}}
+{{- end -}}
+
+{{- define "chart.valuesTable" -}}
+{{-   if .Sections.Sections -}}
+{{-     $sectionNames := list -}}
+{{-     range .Sections.Sections -}}
+{{-       $sectionNames = append $sectionNames .SectionName -}}
+{{-     end -}}
+{{-     $sections := list -}}
+{{-     range ($sectionNames | sortAlpha) -}}
+{{-       $currentSectionName := . -}}
+{{-       range $.Sections.Sections -}}
+{{-         if eq .SectionName $currentSectionName -}}
+{{-           $thisSection := dict -}}
+{{-           $title := regexReplaceAll "^[0-9A-Z]+\\.\\s+" .SectionName "" -}}
+{{-           $link := printf "./values.yaml#L%d" (first .SectionItems).LineNumber -}}
+{{-           $_ := set $thisSection "SectionName" .SectionName -}}
+{{-           $_ := set $thisSection "SectionItems" .SectionItems -}}
+{{-           $_ := set $thisSection "SectionTitle" $title -}}
+{{-           $_ := set $thisSection "SectionHeading" (printf "[%s](%s)" $title $link) -}}
+{{-           $sections = append $sections $thisSection -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-     if .Sections.DefaultSection.SectionItems -}}
+{{-       $thisSection := dict -}}
+{{-       $_ := set $thisSection "SectionName" .Sections.DefaultSection.SectionName -}}
+{{-       $_ := set $thisSection "SectionItems" .Sections.DefaultSection.SectionItems -}}
+{{-       $_ := set $thisSection "SectionTitle" .Sections.DefaultSection.SectionName -}}
+{{-       $_ := set $thisSection "SectionHeading" .Sections.DefaultSection.SectionName -}}
+{{-       $sections = append $sections $thisSection -}}
+{{-     end -}}
+{{-     range $sections }}
+
+### {{ .SectionTitle }}
+
+| Key | Description | Default |
+|-----|-------------|---------|
+{{-       range .SectionItems }}
+| [`{{ .Key }}`](./values.yaml#L{{ .LineNumber }}) | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} | {{  template "chart.valueDefaultColumnRender" . }} |
+{{-       end }}
+{{-     end }}
+{{-   end -}}
+{{- end -}}
+{{/*
+} End of functions
+*/ -}}
+
+# AI Assistant Helm chart
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+* [Using this chart](#using-this-chart)
+* [Values](#values)
+{{- template "chart.valuesTableOfContents" . }}
+* [Contribution](#contribution)
+* [License](#license)
+* [Support, Issues and License Questions](#support-issues-and-license-questions)
+
+## Maintainers 
+
+{{ template "chart.maintainersTable" . }}
+
+## Using this chart
+
+### Adding the repository
+
+```shell
+helm repo add nutrient https://pspdfkit.github.io/helm-charts
+helm repo update
+```
+
+### Installing AI Assistant
+
+```shell
+helm upgrade --install -n ai-assistant \
+     ai-assistant nutrient/ai-assistant \
+     -f ./ai-assistant-values.yaml
+```
+
+### Dependencies
+
+The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) chart for PostgreSQL. It is disabled by default, but can be enabled for convenience. Please consider [tests](/charts/ai-assistant/ci) as examples.
+
+Another optional dependency is [Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine), to use when external Document Engine instance is not available.
+
+{{ template "chart.requirementsTable" . }}
+
+Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
+
+`README.md` is generated with [helm-docs](https://github.com/norwoodj/helm-docs).
+
+### Upgrade
+
+> [!NOTE] 
+> Please consult the [changelog](/charts/ai-assistant/CHANGELOG.md)
+
+## Values
+
+{{ template "chart.valuesTable" . }}
+
+## Contribution
+
+The chart is validated using [ct](https://github.com/helm/chart-testing/tree/main) [lint](https://github.com/helm/chart-testing/blob/main/doc/ct_lint.md):
+
+```shell
+ct lint --target-branch "$(git rev-parse --abbrev-ref HEAD)"
+```
+
+## License
+
+This software is licensed under a [modified BSD license](LICENSE).
+
+## Support, Issues and License Questions
+
+Nutrient offers support via https://support.nutrient.io/hc/en-us/requests/new
+
+Are you [evaluating our SDK](https://www.nutrient.io/sdk/)? That's great, we're happy to help out! To make sure this is fast, please use a work email and have someone from your company fill out our sales form: https://www.nutrient.io/contact-sales/
+
+{{ template "helm-docs.versionFooter" . }}

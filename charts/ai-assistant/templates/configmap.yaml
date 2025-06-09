@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ai-assistant.fullname" . }}
+  labels:
+    {{- include "ai-assistant.labels" . | nindent 4 }}
+data:
+#
+# AI Assistant configuration
+#
+  PORT: {{ .Values.config.port | quote }}
+  FORCE_EMBEDDING_MIGRATE: {{ .Values.config.forceEmbeddingMigrate | quote }}
+#
+# Document Engine integration configuration
+#
+{{- with .Values.config.documentEngine }}
+{{-   if .enabled }}
+  DE_URL: {{ .url | quote }}
+{{-   end }}
+{{- end }}
+#
+# Observability
+#
+{{- with .Values.observability }}
+  LOG_LEVEL: {{ .log.level | quote }}
+{{- end }}
+#
+# Can be used for hash updating
+#
+  HELM_CHART_VERSION: {{ include "ai-assistant.chart" . | quote }}
