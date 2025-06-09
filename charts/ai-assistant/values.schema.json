@@ -437,6 +437,7 @@
       "type": "object"
     },
     "documentEngine": {
+      "additionalProperties": true,
       "properties": {
         "enabled": {
           "type": "boolean"
@@ -619,6 +620,7 @@
       "type": "object"
     },
     "postgresql": {
+      "additionalProperties": true,
       "properties": {
         "architecture": {
           "type": "string"

@@ -1,6 +1,6 @@
 # AI Assistant Helm chart
 
-![Version: 0.0.10](https://img.shields.io/badge/Version-0.0.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.3.0](https://img.shields.io/badge/AppVersion-1.3.0-informational?style=flat-square)
+![Version: 0.0.11](https://img.shields.io/badge/Version-0.0.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.3.0](https://img.shields.io/badge/AppVersion-1.3.0-informational?style=flat-square)
 
 AI Assistant is a thing that assists an AI
 
@@ -60,6 +60,10 @@ Another optional dependency is [Document Engine chart](https://github.com/PSPDFK
 | https://charts.bitnami.com/bitnami | postgresql | 16.7.4 |
 | https://pspdfkit.github.io/helm-charts | document-engine | 3.9.0 |
 
+Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
+
+`README.md` is generated with [helm-docs](https://github.com/norwoodj/helm-docs).
+
 ### Upgrade
 
 > [!NOTE]
@@ -92,7 +96,7 @@ Another optional dependency is [Document Engine chart](https://github.com/PSPDFK
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`config`](./values.yaml#L85) | General configuration, see more in [our guide](https://www.nutrient.io/guides/ai-assistant/service-configuration/docker-configuration/) |  |
-| [`config.aiServiceProviderCredentials`](./values.yaml#L126) | Credentials for AI service providers.  It is recommended to use extrenal secrets through `extraEnvFromSecrets` instead. | [...](./values.yaml#L126) |
+| [`config.aiServiceProviderCredentials`](./values.yaml#L126) | Credentials for AI service providers. It is recommended to use extrenal secrets through `extraEnvFromSecrets` instead. | [...](./values.yaml#L126) |
 | [`config.aiServiceProviderCredentials.awsBedrock`](./values.yaml#L144) | AWS Bedrock. It is recommended to not use direct credentials, but rather IRSA |  |
 | [`config.aiServiceProviderCredentials.awsBedrock.accessKeyId`](./values.yaml#L147) | `BEDROCK_ACCESS_KEY_ID` | `""` |
 | [`config.aiServiceProviderCredentials.awsBedrock.secretAccessKey`](./values.yaml#L150) | `BEDROCK_SECRET_ACCESS_KEY` | `""` |
