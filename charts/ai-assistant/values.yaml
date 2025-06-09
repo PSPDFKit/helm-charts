@@ -106,8 +106,8 @@ config:
   # @default -- none
   # @notationType -- reference
   serviceConfiguration:  # @schema oneOf: [{"type": "object"}, {"type": "null"}]
-    version: '1' # @schema required:true; pattern:^1$
-    aiServices: # @schema required:true; additionalProperties: false
+    version: '1'  # @schema required:true; pattern:^1$
+    aiServices:  # @schema required:true; additionalProperties: false
       chat:  # @schema required:true
         provider:  # @schema required:true
           name: 'azure'  # @schema pattern:^(openai|azure|bedrock|openai-compat)$
@@ -115,10 +115,10 @@ config:
         model: 'gpt4o-mini'
       textEmbeddings:  # @schema required:true
         provider:  # @schema required:true
-          name: 'azure' # @schema pattern:^(openai|azure|bedrock|openai-compat)$
+          name: 'azure'  # @schema pattern:^(openai|azure|bedrock|openai-compat)$
           instanceName: 'ci-testing'
         model: 'text-embedding-3-small'
-  # -- (object) Credentials for AI service providers. 
+  # -- (object) Credentials for AI service providers.
   # It is recommended to use extrenal secrets through `extraEnvFromSecrets` instead.
   # @section -- 03. Configuration options
   # @default -- none
@@ -620,8 +620,8 @@ postgresql:  # @schema additionalProperties:true
   enabled: false
   architecture: standalone
   postgresqlSharedPreloadLibraries: "pgaudit,pgvector"
-  global: 
-    security: 
+  global:
+    security:
       allowInsecureImages: true
   volumePermissions:
     enabled: false
