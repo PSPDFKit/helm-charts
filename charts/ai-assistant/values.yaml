@@ -20,7 +20,7 @@ aiAssistantLicense:
     # -- The key in the secret used to retrieve the activation key
     # @section -- 00. AI Assistant License
     # @ignored
-    key: AIA_ACTIVATION_KEY
+    key: AI_ASSISTANT_ACTIVATION_KEY
 
 # -- (object) AI Assistant API authentication
 # @section -- 01. API authentication
@@ -226,9 +226,6 @@ database:
   # -- Database engine: only `postgres` is currently supported
   # @section -- 05. Database
   engine: postgres  # @schema enum: [postgres, null]
-  # -- `DATABASE_CONNECTIONS`
-  # @section -- 05. Database
-  connections: 20  # @schema minimum: 8
   # -- (object) PostgreSQL database settings
   # @section -- 05. Database
   # @default -- none
@@ -248,16 +245,12 @@ database:
     username: postgres
     # -- `PGPASSWORD`
     # @section -- 05. Database
-    password: despair
+    password: nutrient
     # -- Use external secret for database credentials.
     # `PGUSER` and `PGPASSWORD` must be provided
     # and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL`
     # @section -- 05. Database
     externalSecretName: ""
-    # -- External secret for administrative database credentials,
-    # used for migrations: `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD`
-    # @section -- 05. Database
-    externalAdminSecretName: ""
     # -- (object) TLS settings
     # @section -- 05. Database
     # @default -- none
@@ -325,7 +318,11 @@ observability:
   log:
     # -- `LOG_LEVEL`
     # @section -- D. Observability
-    level: info
+    level: info  # @schema pattern:^(debug|info|warn|error)$
+    # -- `SOCKET_TRACE` — enables logging of socket events and data.
+    # Warning: this may expose sensitive information and should only be used for debugging purposes.
+    # @section -- D. Observability
+    socketTraces: false
 
 # -- (object) Image settings
 # @section -- B. Environment
@@ -657,7 +654,7 @@ postgresql:  # @schema additionalProperties:true
       host     all             all        ::/0                    md5
   auth:
     enabledPostgresUser: true
-    postgresPassword: despair
+    postgresPassword: nutrient
     database: ai-assistant
 
 # -- [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine)

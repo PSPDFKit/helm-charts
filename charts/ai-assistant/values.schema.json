@@ -366,10 +366,6 @@
     },
     "database": {
       "properties": {
-        "connections": {
-          "minimum": 8,
-          "type": "integer"
-        },
         "enabled": {
           "type": "boolean"
         },
@@ -383,9 +379,6 @@
         "postgres": {
           "properties": {
             "database": {
-              "type": "string"
-            },
-            "externalAdminSecretName": {
               "type": "string"
             },
             "externalSecretName": {
@@ -585,7 +578,11 @@
         "log": {
           "properties": {
             "level": {
+              "pattern": "^(debug|info|warn|error)$",
               "type": "string"
+            },
+            "socketTraces": {
+              "type": "boolean"
             }
           },
           "type": "object"

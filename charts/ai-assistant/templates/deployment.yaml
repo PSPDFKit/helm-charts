@@ -69,11 +69,6 @@ spec:
                 name: {{ include "ai-assistant.fullname" . }}-db
           {{-   end }}
           {{- end }}
-          {{- if and .Values.database.enabled 
-                     .Values.database.postgres.externalAdminSecretName  }}
-            - secretRef:
-                name: {{ .Values.database.postgres.externalAdminSecretName }}
-          {{- end }}
           {{- with .Values.assetStorage }}
             {{- if and (eq (include "ai-assistant.storage.s3.enabled" $) "true") 
                        .s3.externalSecretName }}
