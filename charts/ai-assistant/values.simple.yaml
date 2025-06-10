@@ -9,7 +9,7 @@ apiAuth:
   jwt:
     publicKey: none
     algorithm: RS256
- 
+
 config:
   serviceConfiguration:
     version: '1'
