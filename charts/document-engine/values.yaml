@@ -563,10 +563,10 @@ observability:
   log:
     # -- `LOG_LEVEL`
     # @section -- D. Observability
-    level: info
+    level: info  # @schema pattern:^(debug|info|warn|error)$
     # -- `HEALTHCHECK_LOGLEVEL` — log level for health checks
     # @section -- D. Observability
-    healthcheckLevel: debug
+    healthcheckLevel: debug  # @schema pattern:^(debug|info|warn|error)$
   # -- (object) OpenTelemetry settings
   # @section -- D. Observability
   # @notationType -- reference

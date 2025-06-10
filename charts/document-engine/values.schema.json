@@ -836,9 +836,11 @@
         "log": {
           "properties": {
             "healthcheckLevel": {
+              "pattern": "^(debug|info|warn|error)$",
               "type": "string"
             },
             "level": {
+              "pattern": "^(debug|info|warn|error)$",
               "type": "string"
             }
           },
