@@ -125,6 +125,14 @@ config:
   # -- `MIN_SEARCH_QUERY_LENGTH`
   # @section -- 03. Configuration options
   minSearchQueryLength: 3
+  # -- Optimised rendering relying on HTTP/2
+  # @default -- none
+  # @notationType -- reference
+  # @section -- 03. Configuration options
+  http2SharedRendering:
+  # -- `HTTP2_SHARED_RENDERING_PROCESS_ENABLE` — enable shared rendering processes
+  # @section -- 03. Configuration options
+    enabled: false
   # -- `TRUSTED_PROXIES`
   # @section -- 03. Configuration options
   trustedProxies: default
