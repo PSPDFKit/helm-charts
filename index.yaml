@@ -1,6 +1,68 @@
 apiVersion: v1
 entries:
+  ai-assistant:
+  - apiVersion: v2
+    appVersion: 1.3.0
+    created: "2025-06-10T18:32:51.518368858Z"
+    dependencies:
+    - condition: documentEngine.enabled
+      name: document-engine
+      repository: https://pspdfkit.github.io/helm-charts
+      version: 3.9.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.7.4
+    description: AI Assistant is a thing that assists an AI
+    digest: 153796af2b78ed167446bc66a9059dc249333960fc4c187c7f63100c3e5745bb
+    home: https://www.nutrient.io/guides/ai-assistant/
+    icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
+    keywords:
+    - nutrient
+    - ai-assistant
+    maintainers:
+    - email: support@nutrient.io
+      name: Nutrient
+      url: https://www.nutrient.io
+    name: ai-assistant
+    type: application
+    urls:
+    - https://github.com/PSPDFKit/helm-charts/releases/download/ai-assistant-0.0.11/ai-assistant-0.0.11.tgz
+    version: 0.0.11
   document-engine:
+  - apiVersion: v2
+    appVersion: 1.9.0
+    created: "2025-06-10T18:32:51.840295305Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.7.4
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.0.10
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 21.1.5
+    description: Document Engine is a backend software for processing documents and
+      powering automation workflows.
+    digest: f9f52be6ecc966e98b8cc22b64a4b05accf8050bc4f18ee0eec1ba6469a5b5a6
+    home: https://www.nutrient.io/sdk/document-engine
+    icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
+    keywords:
+    - nutrient
+    - document-engine
+    maintainers:
+    - email: support@nutrient.io
+      name: Nutrient
+      url: https://www.nutrient.io
+    name: document-engine
+    type: application
+    urls:
+    - https://github.com/PSPDFKit/helm-charts/releases/download/document-engine-3.9.1/document-engine-3.9.1.tgz
+    version: 3.9.1
   - apiVersion: v2
     appVersion: 1.9.0
     created: "2025-05-29T19:34:41.710402642Z"
@@ -2465,4 +2527,4 @@ entries:
     urls:
     - https://github.com/PSPDFKit/helm-charts/releases/download/simple-resource-wrapper-1.0.0/simple-resource-wrapper-1.0.0.tgz
     version: 1.0.0
-generated: "2025-05-29T19:34:41.710709353Z"
+generated: "2025-06-10T18:32:51.84052817Z"
