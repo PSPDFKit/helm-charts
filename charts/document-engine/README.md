@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 3.9.0](https://img.shields.io/badge/Version-3.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.9.0](https://img.shields.io/badge/AppVersion-1.9.0-informational?style=flat-square)
+![Version: 3.9.1](https://img.shields.io/badge/Version-3.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.9.0](https://img.shields.io/badge/AppVersion-1.9.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -65,6 +65,10 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | https://charts.bitnami.com/bitnami | minio | 16.0.10 |
 | https://charts.bitnami.com/bitnami | postgresql | 16.7.4 |
 | https://charts.bitnami.com/bitnami | redis | 21.1.5 |
+
+Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
+
+`README.md` is generated with [helm-docs](https://github.com/norwoodj/helm-docs).
 
 ### Upgrade
 

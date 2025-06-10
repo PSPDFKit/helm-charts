@@ -205,11 +205,13 @@ data:
 # Clustering
 #
 {{- with .Values.clustering }}
-  CLUSTERING_ENABLED: {{ .enabled | quote }}
+{{-   if .enabled }}
+  CLUSTERING_ENABLED: "true"
   CLUSTERING_METHOD: {{ .method }}
   ERL_EPMD_PORT: {{ .epmd.port | quote }}
-{{-   if (eq (include "document-engine.clustering.service.enabled" $ ) "true" ) }}
+{{-     if (eq (include "document-engine.clustering.service.enabled" $ ) "true" ) }}
   CLUSTERING_SERVICE_NAME: {{ include "document-engine.clustering.service.name" $ | quote }}
+{{-     end }}
 {{-   end }}
 {{- end }}
 #

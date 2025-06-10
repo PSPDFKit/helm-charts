@@ -17,12 +17,15 @@ documentSigningService:
 
 database:
   enabled: true
+  engine: postgres
   migrationJob:
     enabled: false
   postgres:
     host: postgresql
     port: 5432
     username: postgres
+    tls:
+      enabled: false
 
 assetStorage:
   backendType: built-in

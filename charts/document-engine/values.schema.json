@@ -765,6 +765,7 @@
       "type": "object"
     },
     "minio": {
+      "additionalProperties": true,
       "properties": {
         "auth": {
           "properties": {
@@ -835,9 +836,11 @@
         "log": {
           "properties": {
             "healthcheckLevel": {
+              "pattern": "^(debug|info|warn|error)$",
               "type": "string"
             },
             "level": {
+              "pattern": "^(debug|info|warn|error)$",
               "type": "string"
             }
           },
@@ -1011,6 +1014,7 @@
       "type": "object"
     },
     "postgresql": {
+      "additionalProperties": true,
       "properties": {
         "architecture": {
           "type": "string"
@@ -1144,6 +1148,7 @@
       "type": "object"
     },
     "redis": {
+      "additionalProperties": true,
       "properties": {
         "architecture": {
           "type": "string"

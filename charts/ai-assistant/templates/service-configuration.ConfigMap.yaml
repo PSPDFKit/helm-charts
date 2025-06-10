@@ -1,0 +1,11 @@
+{{- if not .Values.config.serviceConfigurationConfigMap.name -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ai-assistant.service-configuration.configmap.name" . }}
+  labels:
+    {{- include "ai-assistant.labels" . | nindent 4 }}
+data:
+  {{ .Values.config.serviceConfigurationConfigMap.key }}: |
+    {{- tpl (toYaml .Values.config.serviceConfiguration) . | nindent 4 }}
+{{- end }}

@@ -1,0 +1,70 @@
+# Inspired by: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/templates/primary/networkpolicy.yaml
+{{- if .Values.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "ai-assistant.fullname" . }}
+  labels:
+    {{- include "ai-assistant.labels" . | nindent 4 }}
+    {{- with .Values.networkPolicy.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.networkPolicy.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels: 
+      {{- include "ai-assistant.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    - ports:
+        - port: {{ .Values.database.postgres.port }}
+          protocol: TCP
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- tpl (toYaml .Values.networkPolicy.extraEgress) . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        # Hardcoded AIA port
+        - port: {{ .Values.config.port }}
+      {{- if not .Values.networkPolicy.allowExternal }}
+      from:
+        # Allow pods talk to each other
+        - podSelector:
+            matchLabels: {{- include "ai-assistant.selectorLabels" . | nindent 14 }}
+        {{- with .Values.networkPolicy.ingressMatchSelectorLabels }}
+        {{- range $selector := . }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .namespaceSelectorLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .podSelectorLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .podSelectorLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- tpl (toYaml .Values.networkPolicy.extraIngress) . | nindent 4 }}
+    {{- end }}
+{{- end }}

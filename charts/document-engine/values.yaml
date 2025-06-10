@@ -563,10 +563,10 @@ observability:
   log:
     # -- `LOG_LEVEL`
     # @section -- D. Observability
-    level: info
+    level: info  # @schema pattern:^(debug|info|warn|error)$
     # -- `HEALTHCHECK_LOGLEVEL` — log level for health checks
     # @section -- D. Observability
-    healthcheckLevel: debug
+    healthcheckLevel: debug  # @schema pattern:^(debug|info|warn|error)$
   # -- (object) OpenTelemetry settings
   # @section -- D. Observability
   # @notationType -- reference
@@ -1004,7 +1004,7 @@ schedulerName: ""
 # -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
 # @section -- Z. Chart dependencies
 # @notationType -- reference
-postgresql:
+postgresql:  # @schema additionalProperties:true
   enabled: false
   architecture: standalone
   primary:
@@ -1026,7 +1026,7 @@ postgresql:
 # -- [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)
 # @section -- Z. Chart dependencies
 # @notationType -- reference
-minio:
+minio:  # @schema additionalProperties:true
   enabled: false
   mode: standalone
   auth:
@@ -1038,7 +1038,7 @@ minio:
 # -- [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis)
 # @section -- Z. Chart dependencies
 # @notationType -- reference
-redis:
+redis:  # @schema additionalProperties:true
   enabled: false
   architecture: standalone
   auth:

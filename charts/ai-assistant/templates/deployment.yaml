@@ -1,0 +1,255 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ai-assistant.fullname" . }}
+  labels:
+    {{- include "ai-assistant.labels" . | nindent 4 }}
+  {{- with .Values.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- with .Values.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .}}
+  {{- end }}
+  {{- with .Values.updateStrategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ai-assistant.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/secret-db: {{ include (print $.Template.BasePath "/secret-db.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ai-assistant.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ai-assistant.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{ toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "ai-assistant.fullname" . }}
+            - secretRef:
+                name: {{ include "ai-assistant.fullname" . }}
+          {{- with .Values.extraEnvFromSecrets }}
+          {{-   range $secretName := . }}
+            - secretRef:
+                name: {{ $secretName }}
+          {{-   end }}
+          {{- end }}
+          {{- if .Values.database.enabled }}
+            - secretRef:
+          {{-   if .Values.database.postgres.externalSecretName }}
+                name: {{ .Values.database.postgres.externalSecretName }}
+          {{-   else }}
+                name: {{ include "ai-assistant.fullname" . }}-db
+          {{-   end }}
+          {{- end }}
+          {{- with .Values.assetStorage }}
+            {{- if and (eq (include "ai-assistant.storage.s3.enabled" $) "true") 
+                       .s3.externalSecretName }}
+            - secretRef:
+                name: {{ .s3.externalSecretName }}
+            {{- end }}
+            {{- if and (eq (include "ai-assistant.storage.azure.enabled" $) "true")
+                       .azure.externalSecretName }}
+            - secretRef:
+                name: {{ .azure.externalSecretName }}
+            {{- end }}
+          {{- end }}
+          {{- with .Values.extraEnvFrom }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: CONFIG_DIR
+              value: /ai-assistant/service-config
+          {{- if .Values.aiAssistantLicense.externalSecret.name }}
+            - name: ACTIVATION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.aiAssistantLicense.externalSecret.name }}
+                  key: {{ .Values.aiAssistantLicense.externalSecret.key }}
+          {{- end }}
+          {{- if .Values.apiAuth.externalSecret.name }}
+            {{- with .Values.apiAuth }}
+              {{- if .externalSecret.apiTokenKey }}
+            - name: API_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .externalSecret.name }}
+                  key: {{ .externalSecret.apiTokenKey }}
+              {{- end }}
+              {{- if .externalSecret.secretKeyBaseKey }}
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .externalSecret.name }}
+                  key: {{ .externalSecret.secretKeyBaseKey }}
+              {{- end }}
+              {{- if .externalSecret.jwtPublicKeyKey }}
+            - name: JWT_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .externalSecret.name }}
+                  key: {{ .externalSecret.jwtPublicKeyKey }}
+              {{- end }}
+              {{- if .externalSecret.jwtAlgorithmKey }}
+            - name: JWT_ALGORITHM
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .externalSecret.name }}
+                  key: {{ .externalSecret.jwtAlgorithmKey }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          {{- if and .Values.config.documentEngine.enabled 
+                     .Values.config.documentEngine.auth.externalSecret.name }}
+            {{- with .Values.config.documentEngine.auth }}
+              {{- if .externalSecret.apiTokenKey }}
+            - name: DE_API_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .externalSecret.name }}
+                  key: {{ .externalSecret.apiTokenKey }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          {{- if and .Values.dashboard.enabled 
+                     .Values.dashboard.auth.externalSecret.name}}
+            - name: DASHBOARD_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dashboard.auth.externalSecret.name }}
+                  key: {{ .Values.dashboard.auth.externalSecret.usernameKey }}
+            - name: DASHBOARD_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dashboard.auth.externalSecret.name }}
+                  key: {{ .Values.dashboard.auth.externalSecret.passwordKey }}
+          {{- end }}
+          {{- with .Values.extraEnvs }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.config.port }}
+              protocol: TCP
+          {{- if .Values.startupProbe }}
+          startupProbe: {{ toYaml .Values.startupProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe }}
+          livenessProbe: {{ toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe: {{ toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: service-configuration
+              mountPath: /ai-assistant/service-config/
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.certificateTrust.customCertificates }}
+            {{-   range $trustSource := . }}
+            - name: custom-trust-{{ $trustSource.name }}
+              mountPath: /certificate-stores-custom/{{ $trustSource.path }}
+              subPath: {{ $trustSource.path }}
+              readOnly: true
+            {{-   end }}
+            {{- end }}
+          {{- with .Values.lifecycle }}
+          lifecycle:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.sidecars }}
+        {{ toYaml .Values.sidecars | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: service-configuration
+          configMap:
+            name: {{ include "ai-assistant.service-configuration.configmap.name" . }}
+            items:
+              - key: {{ .Values.config.serviceConfigurationConfigMap.key }}
+                path: service-config.yml
+        {{- with .Values.extraVolumes }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.certificateTrust.customCertificates }}
+        {{-   range $trustSource := . }}
+        - name: custom-trust-{{ $trustSource.name }}
+        {{-     if $trustSource.configMap }}
+          configMap:
+            name: {{ $trustSource.configMap.name }}
+            items:
+              - key: {{ $trustSource.configMap.key }}
+                path: {{ $trustSource.path }}
+        {{-     else if $trustSource.secret }}
+          secret:
+            secretName: {{ $trustSource.secret.name }}
+            items:
+              - key: {{ $trustSource.secret.key }}
+                path: {{ $trustSource.path }}
+        {{-     else }}
+        {{-       fail "Expecting ConfigMap or Secret for a certificate trust" }}
+        {{-     end }}
+        {{-   end }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: 
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
