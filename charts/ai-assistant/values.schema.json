@@ -578,7 +578,7 @@
         "log": {
           "properties": {
             "level": {
-              "pattern": "^(debug|info|warn|error)$",
+              "pattern": "^(debug|verbose|http|info|warn|error)$",
               "type": "string"
             },
             "socketTraces": {

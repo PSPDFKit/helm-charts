@@ -318,7 +318,7 @@ observability:
   log:
     # -- `LOG_LEVEL`
     # @section -- D. Observability
-    level: info  # @schema pattern:^(debug|info|warn|error)$
+    level: info  # @schema pattern:^(debug|verbose|http|info|warn|error)$
     # -- `SOCKET_TRACE` — enables logging of socket events and data.
     # Warning: this may expose sensitive information and should only be used for debugging purposes.
     # @section -- D. Observability
