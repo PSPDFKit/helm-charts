@@ -26,7 +26,7 @@ config:
     enabled: true
     url: http://document-engine:5000
     auth:
-      apiToken: secret
+      apiToken: documentEngineSecret
 
 database:
   enabled: true
@@ -47,7 +47,8 @@ dashboard:
 
 observability:
   log:
-    level: debug
+    level: verbose
+    socketTraces: false
   opentelemetry:
     enabled: false
 
@@ -91,10 +92,93 @@ postgresql:
   primary:
     persistence:
       enabled: false
+    extraEnvVars:
+      - name: POSTGRES_DB
+        value: 'ai-assistant'
   volumePermissions:
     enabled: true
+  auth:
+    enabledPostgresUser: true
+    postgresPassword: nutrient
+    database: ai-assistant
 
-minio:
-  enabled: false
-redis:
-  enabled: false
+documentEngine:
+  enabled: true
+  fullnameOverride: document-engine
+  nameOverride: document-engine
+  documentEngineLicense:
+    activationKey: ""
+    externalSecret:
+      name: ""
+  apiAuth:
+    apiToken: documentEngineSecret
+  config:
+    trustedProxies: default
+  documentSigningService:
+    enabled: false
+  database:
+    enabled: true
+    engine: postgres
+    migrationJob:
+      enabled: false
+    postgres:
+      host: document-engine-postgresql
+      port: 5432
+      username: postgres
+      tls:
+        enabled: false
+  assetStorage:
+    backendType: built-in
+    backendFallback:
+      enabled: false
+  dashboard:
+    auth:
+      username: admin
+      password: admin
+  observability:
+    log:
+      level: debug
+    opentelemetry:
+      enabled: false
+  replicaCount: 1
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  resources:
+    limits:
+      cpu: "4"
+      memory: 8Gi
+    requests:
+      cpu: "1"
+      memory: 1Gi
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "180"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "180"
+      nginx.ingress.kubernetes.io/large-client-header-buffers: "4 16k"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+    hosts:
+      - paths:
+          - path: /
+            pathType: ImplementationSpecific
+  postgresql:
+    enabled: true
+    architecture: standalone
+    fullnameOverride: document-engine-postgresql
+    nameOverride: document-engine-postgresql
+    primary:
+      persistence:
+        enabled: false
+    volumePermissions:
+      enabled: true
+  minio:
+    enabled: false
+  redis:
+    enabled: false
