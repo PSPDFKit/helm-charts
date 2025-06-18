@@ -15,7 +15,7 @@ spec:
       targetPort: statsd-metrics
       protocol: TCP
       name: statsd-metrics
-    {{- with .Values.prometheusExporter }}
+    {{- with .Values.observability.prometheusEndpoint }}
     {{- if .enabled }}
     - port: {{ .port }}
       targetPort: metrics

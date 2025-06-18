@@ -140,6 +140,7 @@
 
 ### Changed
 
+* Removed `prometheusExporter`, due to the new native support of Prometheus metrics.
 * Updated dependency charts.
 
 ## 3.10.1 (2025-06-18)

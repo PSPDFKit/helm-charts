@@ -880,6 +880,20 @@
                 }
               }
             },
+            "prometheusEndpoint": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "labels": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": "integer"
+                }
+              }
+            },
             "prometheusRule": {
               "type": "object",
               "properties": {
@@ -943,20 +957,6 @@
                 },
                 "port": {
                   "type": "integer"
-                }
-              }
-            },
-            "prometheusEndpoint": {
-              "type": "object",
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                },
-                "port": {
-                  "type": "integer"
-                },
-                "labels": {
-                  "type": "string"
                 }
               }
             }
@@ -1063,58 +1063,6 @@
     },
     "priorityClassName": {
       "type": "string"
-    },
-    "prometheusExporter": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-        "image": {
-          "type": "object",
-          "properties": {
-            "pullPolicy": {
-              "type": "string"
-            },
-            "repository": {
-              "type": "string"
-            },
-            "tag": {
-              "type": "string"
-            }
-          }
-        },
-        "port": {
-          "type": "integer"
-        },
-        "resources": {
-          "type": "object",
-          "properties": {
-            "limits": {
-              "type": "object",
-              "properties": {
-                "cpu": {
-                  "type": "string"
-                },
-                "memory": {
-                  "type": "string"
-                }
-              }
-            },
-            "requests": {
-              "type": "object",
-              "properties": {
-                "cpu": {
-                  "type": "string"
-                },
-                "memory": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
     },
     "readinessProbe": {
       "type": "object",

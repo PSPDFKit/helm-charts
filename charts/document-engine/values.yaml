@@ -642,7 +642,7 @@ observability:
       enabled: false
       # -- Port for the Prometheus exporter, `PROMETHEUS_PORT`
       # @section -- D. Observability
-      port: 9091
+      port: 10254
       ## -- (tpl/string) Prometheus exporter custom tags, `PROMETHEUS_GLOBAL_LABELS`
       # @notationType -- tpl
       # @section -- D. Observability
@@ -676,7 +676,7 @@ observability:
     # @notationType -- reference
     grafanaDashboard:
       # -- Enable Grafana dashboard.
-      # Currently requires `prometheusExporter.enabled`
+      # To work, requires Prometheus metrics enabled in `observability.prometheusEndpoint.enabled`
       # @section -- D. Observability
       enabled: false
       # -- (object) ConfigMap parameters
@@ -701,29 +701,6 @@ observability:
       # -- Whether to cover all namespaces
       # @section -- D. Observability
       allNamespaces: false
-
-# -- (object) StatsD exporter for Prometheus, not recommended for production use
-# Requires `observability.metrics.enabled` and `observability.metrics.statsd.enabled`
-# @section -- D. Observability
-# @notationType -- reference
-prometheusExporter:
-  # -- Enable the Prometheus exporter
-  # @section -- D. Observability
-  enabled: false
-  image:
-    repository: prom/statsd-exporter
-    pullPolicy: IfNotPresent
-    tag: "v0.28.0"
-  # -- Prometheus metrics port
-  # @section -- D. Observability
-  port: 10254
-  resources:
-    requests:
-      memory: "32Mi"
-      cpu: "50m"
-    limits:
-      memory: "128Mi"
-      cpu: "100m"
 
 # -- (object) Image settings
 # @section -- B. Environment
