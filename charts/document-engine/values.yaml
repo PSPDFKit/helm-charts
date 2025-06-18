@@ -676,7 +676,7 @@ observability:
     # @notationType -- reference
     grafanaDashboard:
       # -- Enable Grafana dashboard.
-      # To work, requires Prometheus metrics enabled in `observability.prometheusEndpoint.enabled`
+      # To work, requires Prometheus metrics enabled in `observability.metrics.prometheusEndpoint.enabled`
       # @section -- D. Observability
       enabled: false
       # -- (object) ConfigMap parameters

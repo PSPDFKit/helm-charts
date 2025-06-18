@@ -1,4 +1,4 @@
-{{- if .Values.observability.prometheusEndpoint.enabled }}
+{{- if .Values.observability.metrics.prometheusEndpoint.enabled }}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -12,6 +12,6 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "document-engine.fullname" . }}:{{ .Values.observability.prometheusEndpoint.port }}/metrics']
+      args: ['{{ include "document-engine.fullname" . }}:{{ .Values.observability.metrics.prometheusEndpoint.port }}/metrics']
   restartPolicy: Never
 {{- end }}

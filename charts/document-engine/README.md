@@ -368,7 +368,7 @@ ingress:
 | [`observability.metrics.grafanaDashboard.allNamespaces`](./values.yaml#L703) | Whether to cover all namespaces | `false` |
 | [`observability.metrics.grafanaDashboard.configMap`](./values.yaml#L685) | ConfigMap parameters | [...](./values.yaml#L685) |
 | [`observability.metrics.grafanaDashboard.configMap.labels`](./values.yaml#L688) | ConfigMap labels | `{"grafana_dashboard":"1"}` |
-| [`observability.metrics.grafanaDashboard.enabled`](./values.yaml#L681) | Enable Grafana dashboard. To work, requires Prometheus metrics enabled in `observability.prometheusEndpoint.enabled` | `false` |
+| [`observability.metrics.grafanaDashboard.enabled`](./values.yaml#L681) | Enable Grafana dashboard. To work, requires Prometheus metrics enabled in `observability.metrics.prometheusEndpoint.enabled` | `false` |
 | [`observability.metrics.grafanaDashboard.tags`](./values.yaml#L698) | Dashboard tags | `["Nutrient","document-engine"]` |
 | [`observability.metrics.grafanaDashboard.title`](./values.yaml#L695) | Dashboard title | *generated* |
 | [`observability.metrics.prometheusEndpoint`](./values.yaml#L639) | Prometheus exporter settings | [...](./values.yaml#L639) |
