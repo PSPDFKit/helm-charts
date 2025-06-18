@@ -944,6 +944,9 @@ terminationGracePeriodSeconds: 65  # @schema type: integer
 # @section -- F. Pod lifecycle
 # @notationType -- reference
 lifecycle: {}
+  # preStop:
+  #   sleep:
+  #     seconds: 30
 
 # -- (object) [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 # @section -- G. Scheduling

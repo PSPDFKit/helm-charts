@@ -180,10 +180,8 @@ config:
 terminationGracePeriodSeconds: 330
 lifecycle: 
   preStop:
-    exec:
-      command: 
-        - sleep
-        - "305"
+    sleep:
+      seconds: 305
 ingress:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing 
