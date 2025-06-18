@@ -859,9 +859,7 @@
       }
     },
     "terminationGracePeriodSeconds": {
-      "type": [
-        "integer"
-      ]
+      "type": "integer"
     },
     "tolerations": {
       "type": "array"
