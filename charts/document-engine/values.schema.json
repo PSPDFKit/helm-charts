@@ -844,9 +844,6 @@
         "metrics": {
           "type": "object",
           "properties": {
-            "enabled": {
-              "type": "boolean"
-            },
             "grafanaDashboard": {
               "type": "object",
               "properties": {

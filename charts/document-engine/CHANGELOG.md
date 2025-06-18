@@ -141,6 +141,7 @@
 ### Changed
 
 * Removed `prometheusExporter`, due to the new native support of Prometheus metrics.
+* Removed redundant `observability.metrics.enabled`.
 * Updated dependency charts.
 
 ## 3.10.1 (2025-06-18)

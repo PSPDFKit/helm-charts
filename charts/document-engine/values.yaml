@@ -610,9 +610,6 @@ observability:
   # @section -- D. Observability
   # @notationType -- reference
   metrics:
-    # -- Enable metrics exporting
-    # @section -- D. Observability
-    enabled: false
     # -- (object) StatsD parameters
     # @section -- D. Observability
     # @notationType -- reference
@@ -649,6 +646,7 @@ observability:
       # @notationType -- plain
       labels: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
     # -- (object) Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor)
+    # Requires `observability.metrics.prometheusEndpoint.enabled` to be `true`
     # @section -- D. Observability
     # @notationType -- reference
     serviceMonitor:
@@ -663,6 +661,7 @@ observability:
       honorLabels: false
       jobLabel: ""
     # -- (object) Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule)
+    # Requires `observability.metrics.prometheusEndpoint.enabled` to be `true`
     # @section -- D. Observability
     # @notationType -- reference
     prometheusRule:
