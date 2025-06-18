@@ -633,6 +633,22 @@ observability:
       # @default -- *generated*
       # @notationType -- plain
       customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
+    # -- (object) Prometheus exporter settings
+    # @section -- D. Observability
+    # @notationType -- reference
+    prometheusEndpoint:
+      # -- Enable Prometheus exporter, `ENABLE_PROMETHEUS`
+      # @section -- D. Observability
+      enabled: false
+      # -- Port for the Prometheus exporter, `PROMETHEUS_PORT`
+      # @section -- D. Observability
+      port: 9091
+      ## -- (tpl/string) Prometheus exporter custom tags, `PROMETHEUS_GLOBAL_LABELS`
+      # @notationType -- tpl
+      # @section -- D. Observability
+      # @default -- *generated*
+      # @notationType -- plain
+      labels: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
     # -- (object) Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor)
     # @section -- D. Observability
     # @notationType -- reference

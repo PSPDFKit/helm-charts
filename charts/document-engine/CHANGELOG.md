@@ -129,6 +129,11 @@
   - [2.0.0](#200)
     - [Changed](#changed-37)
 
+## 3.11.0 (2025-06-20)
+
+### Added
+* `observability.metrics.prometheusEndpoint` to allow enabling Prometheus endpoint for scraping metrics.
+
 ## 3.10.1 (2025-06-18)
 
 ### Changed
