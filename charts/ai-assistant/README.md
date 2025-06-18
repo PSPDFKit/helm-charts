@@ -1,6 +1,6 @@
 # AI Assistant Helm chart
 
-![Version: 0.0.13](https://img.shields.io/badge/Version-0.0.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.3.0](https://img.shields.io/badge/AppVersion-1.3.0-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.4.0](https://img.shields.io/badge/AppVersion-1.4.0-informational?style=flat-square)
 
 AI Assistant is a thing that assists an AI
 
@@ -65,7 +65,7 @@ Please consider [tests](/charts/ai-assistant/ci) as examples.
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | postgresql | 16.7.4 |
-| https://pspdfkit.github.io/helm-charts | document-engine | 3.10.0 |
+| https://pspdfkit.github.io/helm-charts | document-engine | 3.10.1 |
 
 Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
 
