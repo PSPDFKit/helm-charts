@@ -51,17 +51,18 @@ spec:
         - port: 443
           protocol: TCP
     {{- end }}
+    {{- if .Values.observability.metrics.statsd.enabled }}
+    - ports:
+        - port: {{ .Values.observability.metrics.statsd.port }}
+          protocol: TCP
+    {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
     {{- tpl (toYaml .Values.networkPolicy.extraEgress) . | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
     - ports:
-        # Hardcoded DE port
         - port: {{ .Values.config.port }}
-        # Hardcoded DE metrics port
-        - port: {{ .Values.observability.metrics.statsd.port }}
-        # Prometheus exporter port
         {{- if .Values.observability.metrics.prometheusEndpoint.enabled }}
         - port: {{ .Values.observability.metrics.prometheusEndpoint.port }}
         {{- end }}

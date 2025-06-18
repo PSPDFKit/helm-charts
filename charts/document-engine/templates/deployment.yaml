@@ -164,11 +164,6 @@ spec:
               containerPort: {{ .Values.observability.metrics.prometheusEndpoint.port }}
               protocol: TCP
             {{- end }}
-            {{- if .Values.observability.metrics.statsd.enabled }}
-            - name: statsd-metrics
-              containerPort: {{ .Values.observability.metrics.statsd.port }}
-              protocol: TCP
-            {{- end }}
           {{- if .Values.startupProbe }}
           startupProbe: {{ toYaml .Values.startupProbe | nindent 12 }}
           {{- end }}

@@ -617,11 +617,10 @@ observability:
     # @section -- D. Observability
     # @notationType -- reference
     statsd:
-      #  -- Enable StatsD exporting, required for Prometheus exporter
+      #  -- Enable StatsD exporting
       # @section -- D. Observability
       enabled: false
       #  -- StatsD host, `STATSD_HOST`
-      # Set to `localhost` if using the Prometheus exporter
       # @section -- D. Observability
       host: localhost
       # -- StatsD port, `STATSD_PORT`
@@ -633,17 +632,17 @@ observability:
       # @default -- *generated*
       # @notationType -- plain
       customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
-    # -- (object) Prometheus exporter settings
+    # -- (object) Prometheus metrics endpoint settings
     # @section -- D. Observability
     # @notationType -- reference
     prometheusEndpoint:
-      # -- Enable Prometheus exporter, `ENABLE_PROMETHEUS`
+      # -- Enable Prometheus metrics endpoint, `ENABLE_PROMETHEUS`
       # @section -- D. Observability
       enabled: false
-      # -- Port for the Prometheus exporter, `PROMETHEUS_PORT`
+      # -- Port for the Prometheus metrics endpoint, `PROMETHEUS_PORT`
       # @section -- D. Observability
       port: 10254
-      ## -- (tpl/string) Prometheus exporter custom tags, `PROMETHEUS_GLOBAL_LABELS`
+      ## -- (tpl/string) Prometheus metrics custom tags, `PROMETHEUS_GLOBAL_LABELS`
       # @notationType -- tpl
       # @section -- D. Observability
       # @default -- *generated*
