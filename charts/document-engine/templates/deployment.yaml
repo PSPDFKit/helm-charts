@@ -159,9 +159,11 @@ spec:
             - name: api
               containerPort: {{ .Values.config.port }}
               protocol: TCP
-            - name: statsd-metrics
-              containerPort: {{ .Values.observability.metrics.statsd.port }}
+            {{- if .Values.observability.metrics.prometheusEndpoint.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.observability.metrics.prometheusEndpoint.port }}
               protocol: TCP
+            {{- end }}
           {{- if .Values.startupProbe }}
           startupProbe: {{ toYaml .Values.startupProbe | nindent 12 }}
           {{- end }}
@@ -201,24 +203,6 @@ spec:
           lifecycle:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-        {{- with .Values.prometheusExporter }}
-        {{- if and .enabled 
-                   $.Values.observability.metrics.statsd.enabled }}
-        - name: statsd-exporter
-          image: "{{ .image.repository }}:{{ .image.tag }}"
-          imagePullPolicy: {{ .image.pullPolicy }}
-          args:
-            - --statsd.listen-udp=:{{ $.Values.observability.metrics.statsd.port }}
-            - --statsd.listen-tcp=:{{ $.Values.observability.metrics.statsd.port }}
-            - --web.listen-address=:{{ .port }}
-          ports:
-            - name: metrics
-              containerPort: {{ .port }}
-              protocol: TCP
-          resources:
-            {{- toYaml .resources | nindent 12 }}
-        {{- end }}
-        {{- end }}
       {{- if .Values.sidecars }}
         {{ toYaml .Values.sidecars | nindent 8 }}
       {{- end }}

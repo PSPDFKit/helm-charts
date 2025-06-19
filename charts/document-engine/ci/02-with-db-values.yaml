@@ -40,9 +40,8 @@ observability:
     grafanaDashboard:
       enabled: true
       allNamespaces: false
-
-prometheusExporter:
-  enabled: true
+    prometheusEndpoint:
+      enabled: true
 
 postgresql:
   enabled: true

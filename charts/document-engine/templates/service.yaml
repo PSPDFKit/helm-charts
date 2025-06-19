@@ -11,11 +11,7 @@ spec:
       targetPort: api
       protocol: TCP
       name: api
-    - port: 9125
-      targetPort: statsd-metrics
-      protocol: TCP
-      name: statsd-metrics
-    {{- with .Values.prometheusExporter }}
+    {{- with .Values.observability.metrics.prometheusEndpoint }}
     {{- if .enabled }}
     - port: {{ .port }}
       targetPort: metrics

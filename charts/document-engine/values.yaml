@@ -610,18 +610,14 @@ observability:
   # @section -- D. Observability
   # @notationType -- reference
   metrics:
-    # -- Enable metrics exporting
-    # @section -- D. Observability
-    enabled: false
     # -- (object) StatsD parameters
     # @section -- D. Observability
     # @notationType -- reference
     statsd:
-      #  -- Enable StatsD exporting, required for Prometheus exporter
+      #  -- Enable StatsD exporting
       # @section -- D. Observability
       enabled: false
       #  -- StatsD host, `STATSD_HOST`
-      # Set to `localhost` if using the Prometheus exporter
       # @section -- D. Observability
       host: localhost
       # -- StatsD port, `STATSD_PORT`
@@ -633,23 +629,24 @@ observability:
       # @default -- *generated*
       # @notationType -- plain
       customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
-    # -- (object) Prometheus exporter settings
+    # -- (object) Prometheus metrics endpoint settings
     # @section -- D. Observability
     # @notationType -- reference
     prometheusEndpoint:
-      # -- Enable Prometheus exporter, `ENABLE_PROMETHEUS`
+      # -- Enable Prometheus metrics endpoint, `ENABLE_PROMETHEUS`
       # @section -- D. Observability
       enabled: false
-      # -- Port for the Prometheus exporter, `PROMETHEUS_PORT`
+      # -- Port for the Prometheus metrics endpoint, `PROMETHEUS_PORT`
       # @section -- D. Observability
-      port: 9091
-      ## -- (tpl/string) Prometheus exporter custom tags, `PROMETHEUS_GLOBAL_LABELS`
+      port: 10254
+      ## -- (tpl/string) Prometheus metrics custom tags, `PROMETHEUS_GLOBAL_LABELS`
       # @notationType -- tpl
       # @section -- D. Observability
       # @default -- *generated*
       # @notationType -- plain
       labels: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
     # -- (object) Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor)
+    # Requires `observability.metrics.prometheusEndpoint.enabled` to be `true`
     # @section -- D. Observability
     # @notationType -- reference
     serviceMonitor:
@@ -664,6 +661,7 @@ observability:
       honorLabels: false
       jobLabel: ""
     # -- (object) Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule)
+    # Requires `observability.metrics.prometheusEndpoint.enabled` to be `true`
     # @section -- D. Observability
     # @notationType -- reference
     prometheusRule:
@@ -676,7 +674,7 @@ observability:
     # @notationType -- reference
     grafanaDashboard:
       # -- Enable Grafana dashboard.
-      # Currently requires `prometheusExporter.enabled`
+      # To work, requires Prometheus metrics enabled in `observability.metrics.prometheusEndpoint.enabled`
       # @section -- D. Observability
       enabled: false
       # -- (object) ConfigMap parameters
@@ -701,29 +699,6 @@ observability:
       # -- Whether to cover all namespaces
       # @section -- D. Observability
       allNamespaces: false
-
-# -- (object) StatsD exporter for Prometheus, not recommended for production use
-# Requires `observability.metrics.enabled` and `observability.metrics.statsd.enabled`
-# @section -- D. Observability
-# @notationType -- reference
-prometheusExporter:
-  # -- Enable the Prometheus exporter
-  # @section -- D. Observability
-  enabled: false
-  image:
-    repository: prom/statsd-exporter
-    pullPolicy: IfNotPresent
-    tag: "v0.28.0"
-  # -- Prometheus metrics port
-  # @section -- D. Observability
-  port: 10254
-  resources:
-    requests:
-      memory: "32Mi"
-      cpu: "50m"
-    limits:
-      memory: "128Mi"
-      cpu: "100m"
 
 # -- (object) Image settings
 # @section -- B. Environment

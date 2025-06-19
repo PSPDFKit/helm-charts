@@ -165,8 +165,7 @@ data:
 # Observability
 #
 {{- with .Values.observability }}
-
-{{-   if and .metrics.enabled .metrics.statsd.enabled }}
+{{-   if .metrics.statsd.enabled }}
 {{-     with .metrics.statsd }}
   STATSD_HOST: {{ .host | quote }}
   STATSD_PORT: {{ .port | quote }}
@@ -174,14 +173,13 @@ data:
 {{-     end }}
 {{-   end }}
 
-{{-   if and .metrics.enabled .metrics.prometheusEndpoint.enabled }}
+{{-   if .metrics.prometheusEndpoint.enabled }}
 {{      with .metrics.prometheusEndpoint }}
   ENABLE_PROMETHEUS: "true"
   PROMETHEUS_PORT: {{ .port | quote }}
   PROMETHEUS_GLOBAL_LABELS: {{ tpl .labels $ | quote }}
 {{-     end }}
 {{-   end }}
-
   LOG_LEVEL: {{ .log.level | quote }}
   HEALTHCHECK_LOGLEVEL: {{ .log.healthcheckLevel | quote }}
 {{-   with .opentelemetry }}
@@ -213,7 +211,6 @@ data:
 {{-     end }}
 {{-   end }}
 {{- end }}
-
 #
 # Clustering
 #
