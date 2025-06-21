@@ -137,6 +137,7 @@
 ### Added
 
 * `observability.metrics.prometheusEndpoint` to allow enabling Prometheus endpoint for scraping metrics.
+* `observability.metrics.customTags` to set custom tags for all exporters.
 
 ### Changed
 

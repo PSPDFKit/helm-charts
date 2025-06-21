@@ -844,6 +844,9 @@
         "metrics": {
           "type": "object",
           "properties": {
+            "customTags": {
+              "type": "string"
+            },
             "grafanaDashboard": {
               "type": "object",
               "properties": {

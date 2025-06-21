@@ -610,28 +610,15 @@ observability:
   # @section -- D. Observability
   # @notationType -- reference
   metrics:
-    # -- (object) StatsD parameters
+    # -- Global metrics tags for all exporters: `METRICS_CUSTOM_TAGS`
     # @section -- D. Observability
-    # @notationType -- reference
-    statsd:
-      #  -- Enable StatsD exporting
-      # @section -- D. Observability
-      enabled: false
-      #  -- StatsD host, `STATSD_HOST`
-      # @section -- D. Observability
-      host: localhost
-      # -- StatsD port, `STATSD_PORT`
-      # @section -- D. Observability
-      port: 9125
-      # -- (tpl/string) StatsD custom tags, `STATSD_CUSTOM_TAGS`
-      # @notationType -- tpl
-      # @section -- D. Observability
-      # @default -- *generated*
-      # @notationType -- plain
-      customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
+    # @notationType -- tpl
+    # @default -- *generated*
+    # @notationType -- plain
     # -- (object) Prometheus metrics endpoint settings
     # @section -- D. Observability
     # @notationType -- reference
+    customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
     prometheusEndpoint:
       # -- Enable Prometheus metrics endpoint, `ENABLE_PROMETHEUS`
       # @section -- D. Observability
@@ -642,9 +629,7 @@ observability:
       ## -- (tpl/string) Prometheus metrics custom tags, `PROMETHEUS_GLOBAL_LABELS`
       # @notationType -- tpl
       # @section -- D. Observability
-      # @default -- *generated*
-      # @notationType -- plain
-      labels: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
+      labels: ""
     # -- (object) Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor)
     # Requires `observability.metrics.prometheusEndpoint.enabled` to be `true`
     # @section -- D. Observability
@@ -699,7 +684,24 @@ observability:
       # -- Whether to cover all namespaces
       # @section -- D. Observability
       allNamespaces: false
-
+    # -- (object) StatsD parameters
+    # @section -- D. Observability
+    # @notationType -- reference
+    statsd:
+      #  -- Enable StatsD exporting
+      # @section -- D. Observability
+      enabled: false
+      #  -- StatsD host, `STATSD_HOST`
+      # @section -- D. Observability
+      host: localhost
+      # -- StatsD port, `STATSD_PORT`
+      # @section -- D. Observability
+      port: 9125
+      # -- (tpl/string) StatsD custom tags, `STATSD_CUSTOM_TAGS`
+      # @notationType -- tpl
+      # @section -- D. Observability
+      customTags: ""
+      
 # -- (object) Image settings
 # @section -- B. Environment
 # @notationType -- reference
