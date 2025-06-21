@@ -137,7 +137,7 @@
 ### Added
 
 * `observability.metrics.prometheusEndpoint` to allow enabling Prometheus endpoint for scraping metrics.
-* New cleanup job way through the dedicated API instead of the direct database query workaround.
+* New cleanup job way through the dedicated API instead of the direct database query workaround. Important limitation: document id filtering does not currently work, only the retention time (`documentLifecycle.cleanupJob.keepHours`).
 
 ### Changed
 
