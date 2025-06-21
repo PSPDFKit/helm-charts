@@ -1,0 +1,17 @@
+{{- if .Values.observability.metrics.prometheusEndpoint.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "document-engine.fullname" . }}-test-metrics"
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "document-engine.fullname" . }}:{{ .Values.observability.metrics.prometheusEndpoint.port }}/metrics']
+  restartPolicy: Never
+{{- end }}

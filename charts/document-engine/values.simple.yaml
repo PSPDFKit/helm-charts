@@ -42,6 +42,9 @@ observability:
     level: debug
   opentelemetry:
     enabled: false
+  metrics:
+    prometheusEndpoint:
+      enabled: true
 
 replicaCount: 1
 

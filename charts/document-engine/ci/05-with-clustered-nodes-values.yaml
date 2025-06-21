@@ -14,8 +14,11 @@ documentLifecycle:
 assetStorage:
   backendType: built-in
 
-prometheusExporter:
-  enabled: true
+observability:
+  metrics:
+    enabled: true
+    prometheusEndpoint:
+      enabled: true
 
 postgresql:
   enabled: true
