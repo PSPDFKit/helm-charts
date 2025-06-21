@@ -165,16 +165,15 @@ data:
 # Observability
 #
 {{- with .Values.observability }}
-{{-   if .metrics.statsd.enabled }}
-{{-     with .metrics.statsd }}
+{{-   with .metrics.statsd }}
+{{-     if .enabled }}
   STATSD_HOST: {{ .host | quote }}
   STATSD_PORT: {{ .port | quote }}
   STATSD_CUSTOM_TAGS: {{ tpl .customTags $ | quote }}
 {{-     end }}
 {{-   end }}
-
-{{-   if .metrics.prometheusEndpoint.enabled }}
-{{      with .metrics.prometheusEndpoint }}
+{{    with .metrics.prometheusEndpoint }}
+{{-     if .enabled }}
   ENABLE_PROMETHEUS: "true"
   PROMETHEUS_PORT: {{ .port | quote }}
   PROMETHEUS_GLOBAL_LABELS: {{ tpl .labels $ | quote }}
