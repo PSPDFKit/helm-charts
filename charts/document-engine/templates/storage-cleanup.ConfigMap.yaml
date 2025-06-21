@@ -13,7 +13,7 @@ data:
     #!/bin/sh
     set -e
     curl --request DELETE \
-      --header "Authorization: Token token=${API_AUTH_TOKEN}"' \
+      --header "Authorization: Token token=${API_AUTH_TOKEN}" \
       --url {{ $url }}?end_date={{ $preservationDate }}
   {{- end }}
 # Can be used for hash updating
