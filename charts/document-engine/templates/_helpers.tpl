@@ -192,19 +192,3 @@ Object storage parameters
     {{- .Values.assetStorage.azure.externalSecretName -}}
   {{- end -}}
 {{- end -}}
-
-{{/*
-Jobs
-*/}}
-{{- define "document-engine.storage.cleanupJob.enabled" -}}
-  {{- if and .Values.database.enabled 
-             .Values.documentLifecycle.cleanupJob.enabled -}}
-    {{- if (eq .Values.assetStorage.backendType "built-in") -}}
-      {{- true -}}
-    {{- else -}}
-      {{- fail "Can only do cleanup jobs with 'built-in' asset storage backend" }}
-    {{- end -}}
-  {{- else -}}
-    {{- false -}}
-  {{- end -}}
-{{- end -}}

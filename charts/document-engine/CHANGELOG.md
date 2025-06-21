@@ -137,6 +137,7 @@
 ### Added
 
 * `observability.metrics.prometheusEndpoint` to allow enabling Prometheus endpoint for scraping metrics.
+* New cleanup job way through the dedicated API instead of the direct database query workaround.
 
 ### Changed
 
