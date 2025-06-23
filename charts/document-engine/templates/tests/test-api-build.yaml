@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
     - name: poke-api
-      image: alpine/k8s
+      image: curlimages/curl
       envFrom:
         - secretRef:
             name: {{ include "document-engine.fullname" . }}
@@ -32,17 +32,16 @@ spec:
         - |
           export URL="{{ include "document-engine.fullname" . }}:{{ .Values.service.port }}"
           export AUTH_HEADER="Authorization: Token token=${API_AUTH_TOKEN}"
-          curl -X POST -H "${AUTH_HEADER}" \
+          curl -v -X POST -H "${AUTH_HEADER}" \
                ${URL}/api/build \
               -H "accept: application/pdf" \
               -H "Content-Type: application/json" \
+              -o /dev/null \
               -d '{
                     "parts": [
-                    {
-                      "html": {
-                        "url": "https://status.w3.org/"
+                      {
+                        "html": { "url": "https://status.w3.org/"}
                       }
-                    }
-                  ]
-                }'
+                    ]
+                  }'
   restartPolicy: Never

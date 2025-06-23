@@ -175,7 +175,6 @@ Object storage parameters
   {{- end -}}
 {{- end -}}
 
-
 {{- define "document-engine.storage.azure.createSecret" -}}
   {{- if and (eq (include "document-engine.storage.azure.enabled" .) "true") 
              (not .Values.assetStorage.azure.externalSecretName) -}}
