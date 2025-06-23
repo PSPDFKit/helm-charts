@@ -25,14 +25,14 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
-      command: 
-        - 'sh 
+      command:
+        - 'sh' 
         - '-c'
       args: 
         - |
           export URL="{{ include "document-engine.fullname" . }}:{{ .Values.service.port }}"
           export AUTH_HEADER="Authorization: Token token=${API_AUTH_TOKEN}"
-          curl -X POST -H ${AUTH_HEADER} \
+          curl -X POST -H "${AUTH_HEADER}" \
                ${URL}/api/build \
               -H "accept: application/pdf" \
               -H "Content-Type: application/json" \
