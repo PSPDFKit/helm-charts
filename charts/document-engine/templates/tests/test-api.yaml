@@ -13,10 +13,10 @@ spec:
       envFrom:
         - secretRef:
             name: {{ include "document-engine.fullname" . }}
-      env:
       {{- if .Values.apiAuth.externalSecret.name }}
         {{- with .Values.apiAuth.externalSecret }}
           {{- if .apiTokenKey }}
+      env:
         - name: API_AUTH_TOKEN
           valueFrom:
             secretKeyRef:
