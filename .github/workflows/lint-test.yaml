@@ -53,5 +53,5 @@ jobs:
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo add nutrient https://pspdfkit.github.io/helm-charts
           ct install --target-branch ${{ github.event.repository.default_branch }} \
-             --helm-extra-args "--timeout 240s" \
-             --chart-dirs charts/document-engine
+                     --helm-extra-args "--timeout 240s"
+                     --helm-extra-set-args "--set=image.tag=nightly"
