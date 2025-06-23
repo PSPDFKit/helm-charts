@@ -701,7 +701,7 @@ observability:
       # @notationType -- tpl
       # @section -- D. Observability
       customTags: ""
-      
+
 # -- (object) Image settings
 # @section -- B. Environment
 # @notationType -- reference
