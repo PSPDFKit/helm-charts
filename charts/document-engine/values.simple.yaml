@@ -39,7 +39,7 @@ dashboard:
 
 observability:
   log:
-    level: debug
+    level: info
   opentelemetry:
     enabled: false
 
