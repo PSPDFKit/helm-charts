@@ -63,7 +63,7 @@ The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bit
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | minio | 17.0.5 |
-| https://charts.bitnami.com/bitnami | postgresql | 16.7.12 |
+| https://charts.bitnami.com/bitnami | postgresql | 16.7.13 |
 | https://charts.bitnami.com/bitnami | redis | 21.2.5 |
 
 Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
