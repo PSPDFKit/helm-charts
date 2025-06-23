@@ -1,8 +1,5 @@
 documentEngineLicense:
   activationKey: ""
-  externalSecret:
-    name: ""
-    key: DOCUMENT_ENGINE_ACTIVATION_KEY
 
 apiAuth:
   apiToken: secret
@@ -11,7 +8,7 @@ config:
   trustedProxies: default
 
 documentSigningService:
-  enabled: true
+  enabled: false
   url: http://signing-service:6000/sign
   timeoutSeconds: 10
 
