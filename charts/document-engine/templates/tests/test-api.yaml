@@ -32,8 +32,8 @@ spec:
         - '{{ include "document-engine.fullname" . }}:{{ .Values.service.port }}/api/build'
         - '-H' 
         - 'accept: application/pdf'
-        - '-H' 
-        - 'Authorization: Token token=${API_AUTH_TOKEN}"'
+        - '-H' å
+        - 'Authorization: Token token=${API_AUTH_TOKEN}'
         - '-H' 
         - 'Content-Type: application/json'
         - '-d' 
