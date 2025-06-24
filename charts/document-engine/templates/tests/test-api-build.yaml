@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "document-engine.fullname" . }}-test-api-build"
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: poke-api
+      image: curlimages/curl
+      envFrom:
+        - secretRef:
+            name: {{ include "document-engine.fullname" . }}
+      {{- if .Values.apiAuth.externalSecret.name }}
+        {{- with .Values.apiAuth.externalSecret }}
+          {{- if .apiTokenKey }}
+      env:
+        - name: API_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ .name }}
+              key: {{ .apiTokenKey }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      command:
+        - '/bin/sh' 
+        - '-c'
+      args: 
+        - |
+          export URL="{{ include "document-engine.fullname" . }}:{{ .Values.service.port }}"
+          export AUTH_HEADER="Authorization: Token token=${API_AUTH_TOKEN}"
+          curl -v --request POST \
+               --url ${URL}/api/build \
+               --header "${AUTH_HEADER}" \
+               --header "accept: application/pdf" \
+               --header "Content-Type: application/json" \
+               --output /dev/null \
+               --data '{
+                         "parts": [
+                           {
+                             "html": { "url": "https://status.w3.org/"}
+                           }
+                         ]
+                       }'
+  restartPolicy: Never

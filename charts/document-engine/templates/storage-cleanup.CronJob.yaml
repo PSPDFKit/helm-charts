@@ -1,4 +1,5 @@
-{{- if (eq (include "document-engine.storage.cleanupJob.enabled" . ) "true" ) }}
+{{- if and .Values.database.enabled 
+           .Values.documentLifecycle.cleanupJob.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -7,22 +8,19 @@ metadata:
     {{- include "document-engine.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.documentLifecycle.cleanupJob.schedule }}
-  startingDeadlineSeconds: 600
+  startingDeadlineSeconds: {{ .Values.documentLifecycle.cleanupJob.startingDeadlineSeconds }}
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       backoffLimit: 1
-      activeDeadlineSeconds: 1800
-      ttlSecondsAfterFinished: 300
+      activeDeadlineSeconds: {{ .Values.documentLifecycle.cleanupJob.activeDeadlineSeconds }}
+      ttlSecondsAfterFinished: {{ .Values.documentLifecycle.cleanupJob.ttlSecondsAfterFinished }}
       template:
         metadata:
-          annotations:
-          {{- with .Values.podAnnotations }}
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
           {{- with .Values.documentLifecycle.cleanupJob.podAnnotations }}
+          annotations:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           labels:
@@ -36,40 +34,30 @@ spec:
           imagePullSecrets:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          serviceAccountName: {{ include "document-engine.serviceAccountName" . }}
-          securityContext:
-            {{- toYaml .Values.podSecurityContext | nindent 12 }}
-          {{- if .Values.initContainers }}
-          initContainers:
-            {{ toYaml .Values.initContainers | nindent 12 }}
+          {{- with .Values.documentLifecycle.cleanupJob.serviceAccountName }}
+          serviceAccountName: {{ . }}
           {{- end }}
           containers:
             - name: {{ .Chart.Name }}
-              envFrom:
-                - configMapRef:
-                    name: {{ include "document-engine.fullname" . }}
-                - secretRef:
-                    name: {{ include "document-engine.fullname" . }}
-              {{- if .Values.database.postgres.externalSecretName  }}
-                - secretRef:
-                    name: {{ .Values.database.postgres.externalSecretName }}
-              {{- end }}
-              {{- if and .Values.database.migrationJob.enabled
-                         .Values.database.postgres.externalAdminSecretName  }}
-                - secretRef:
-                    name: {{ .Values.database.postgres.externalAdminSecretName }}
-              {{- end }}
-              {{- with .Values.extraEnvFrom }}
-                {{- toYaml . | nindent 16 }}
-              {{- end }}
-              {{- with .Values.extraEnvs }}
               env:
+                - name: API_AUTH_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                    {{- if and .Values.apiAuth.externalSecret.name
+                              .Values.apiAuth.externalSecret.apiTokenKey }}
+                      name: {{ .Values.apiAuth.externalSecret.name }}
+                      key: {{ .Values.apiAuth.externalSecret.apiTokenKey }}
+                    {{- else }}
+                      name: {{ include "document-engine.fullname" . }}
+                      key: API_AUTH_TOKEN
+                    {{- end }}
+              {{- with .Values.documentLifecycle.cleanupJob.extraEnvs }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
-              securityContext:
-                {{- toYaml .Values.securityContext | nindent 16 }}
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              {{- with .Values.documentLifecycle.cleanupJob.image }}
+              image: "{{ .repository }}:{{ .tag }}"
+              imagePullPolicy: {{ .pullPolicy }}
+              {{- end }}
               command:
                 - /document-engine-cleanup/run.sh
               resources:
@@ -77,20 +65,11 @@ spec:
               volumeMounts:
                 - name: cleanup-assets
                   mountPath: /document-engine-cleanup
-              {{- if .Values.extraVolumeMounts }}
-                {{- toYaml .Values.extraVolumeMounts | nindent 16 }}
-              {{- end }}
-          {{- if .Values.sidecars }}
-            {{ toYaml .Values.sidecars | nindent 12 }}
-          {{- end }}
           volumes:
             - name: cleanup-assets
               configMap:
                 name: {{ include "document-engine.fullname" . }}-db-cleanup
                 defaultMode: 0755
-          {{- with .Values.extraVolumes }}
-            {{ toYaml . | nindent 12 }}
-          {{- end }}
           {{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}

@@ -175,7 +175,6 @@ Object storage parameters
   {{- end -}}
 {{- end -}}
 
-
 {{- define "document-engine.storage.azure.createSecret" -}}
   {{- if and (eq (include "document-engine.storage.azure.enabled" .) "true") 
              (not .Values.assetStorage.azure.externalSecretName) -}}
@@ -190,21 +189,5 @@ Object storage parameters
     {{- printf "%s-s3" (include "document-engine.fullname" .) -}}
   {{- else -}}
     {{- .Values.assetStorage.azure.externalSecretName -}}
-  {{- end -}}
-{{- end -}}
-
-{{/*
-Jobs
-*/}}
-{{- define "document-engine.storage.cleanupJob.enabled" -}}
-  {{- if and .Values.database.enabled 
-             .Values.documentLifecycle.cleanupJob.enabled -}}
-    {{- if (eq .Values.assetStorage.backendType "built-in") -}}
-      {{- true -}}
-    {{- else -}}
-      {{- fail "Can only do cleanup jobs with 'built-in' asset storage backend" }}
-    {{- end -}}
-  {{- else -}}
-    {{- false -}}
   {{- end -}}
 {{- end -}}
