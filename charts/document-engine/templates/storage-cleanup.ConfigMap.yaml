@@ -9,13 +9,13 @@ metadata:
 data:
   {{- with .Values.documentLifecycle.cleanupJob }}
   {{- $url := printf "http://%s:%s/api/documents" ( include "document-engine.fullname" $ ) ( toString $.Values.service.port ) }}
-  {{- $preservationDate :=  dateInZone "2006-01-02T15:04:05Z" ( now | mustDateModify ( printf "-%sh" (toString .keepHours) ) ) "UTC" }}
   run.sh: |
     #!/bin/sh
     set -e
+    export PRESERVATION_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ" -d @$(($(date -u +"%s") - {{ .keepHours }} * 3600)))
     curl --request DELETE \
          --header "Authorization: Token token=${API_AUTH_TOKEN}" \
-         --url {{ $url }}?end_date={{ $preservationDate }}
+         --url {{ $url }}?end_date=${PRESERVATION_DATE}
   {{- end }}
 # Can be used for hash updating
   HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}
