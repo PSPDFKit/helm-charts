@@ -4,7 +4,7 @@
   - [5.0.0 (2025-06-27)](#500-2025-06-27)
     - [Added](#added)
     - [Changed](#changed)
-  - [4.0.0 (2025-06-20)](#400-2025-06-20)
+  - [4.0.0 (2025-06-24)](#400-2025-06-24)
     - [Added](#added-1)
     - [Changed](#changed-1)
   - [3.10.1 (2025-06-18)](#3101-2025-06-18)
@@ -147,17 +147,15 @@
 * Removed `prometheusExporter`, due to the new native support of Prometheus metrics.
 * Removed redundant `observability.metrics.enabled`.
 
-## 4.0.0 (2025-06-20)
+## 4.0.0 (2025-06-24)
 
 ### Added
 
-* `observability.metrics.prometheusEndpoint` to allow enabling Prometheus endpoint for scraping metrics.
-* `observability.metrics.customTags` to set custom tags for all exporters.
+* New cleanup job way through the dedicated API instead of the direct database query workaround. Important limitation: document id filtering does not currently work, only the retention time (`documentLifecycle.cleanupJob.keepHours`).
 
 ### Changed
 
-* Removed `prometheusExporter`, due to the new native support of Prometheus metrics.
-* Removed redundant `observability.metrics.enabled`.
+* Improved the tests.
 * Updated dependency charts.
 
 ## 3.10.1 (2025-06-18)
