@@ -1,4 +1,5 @@
-{{- if .Values.documentLifecycle.cleanupJob.enabled }}
+{{- if and .Values.database.enabled 
+           .Values.documentLifecycle.cleanupJob.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
