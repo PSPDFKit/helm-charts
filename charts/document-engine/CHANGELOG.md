@@ -138,7 +138,7 @@
 
 ### Fixed
 
-* A very stupid mistake with dates.
+* A very stupid mistake with dates in the cleanup jobs.
 
 ## 4.0.0 (2025-06-24)
 
