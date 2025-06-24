@@ -14,8 +14,8 @@ data:
     #!/bin/sh
     set -e
     curl --request DELETE \
-      --header "Authorization: Token token=${API_AUTH_TOKEN}" \
-      --url {{ $url }}?end_date={{ $preservationDate }}
+         --header "Authorization: Token token=${API_AUTH_TOKEN}" \
+         --url {{ $url }}?end_date={{ $preservationDate }}
   {{- end }}
 # Can be used for hash updating
   HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}

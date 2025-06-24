@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "document-engine.fullname" . }}-test-api"
+  name: "{{ include "document-engine.fullname" . }}-test-api-build"
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
   annotations:
@@ -26,22 +26,23 @@ spec:
         {{- end }}
       {{- end }}
       command:
-        - 'sh' 
+        - '/bin/sh' 
         - '-c'
       args: 
         - |
           export URL="{{ include "document-engine.fullname" . }}:{{ .Values.service.port }}"
           export AUTH_HEADER="Authorization: Token token=${API_AUTH_TOKEN}"
-          curl -v -X POST -H "${AUTH_HEADER}" \
-               ${URL}/api/build \
-              -H "accept: application/pdf" \
-              -H "Content-Type: application/json" \
-              -o /dev/null \
-              -d '{
-                    "parts": [
-                      {
-                        "html": { "url": "https://status.w3.org/"}
-                      }
-                    ]
-                  }'
+          curl -v --request POST \
+               --url ${URL}/api/build \
+               --header "${AUTH_HEADER}" \
+               --header "accept: application/pdf" \
+               --header "Content-Type: application/json" \
+               --output /dev/null \
+               --data '{
+                         "parts": [
+                           {
+                             "html": { "url": "https://status.w3.org/"}
+                           }
+                         ]
+                       }'
   restartPolicy: Never

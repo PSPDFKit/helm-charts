@@ -1,0 +1,99 @@
+{{- if .Values.database.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "document-engine.fullname" . }}-test-api-documents
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+data:
+  run.sh: |
+    #!/bin/sh
+    set -e
+    export URL="{{ include "document-engine.fullname" . }}:{{ .Values.service.port }}"
+    export AUTH_HEADER="Authorization: Token token=${API_AUTH_TOKEN}"
+
+    echo -e "\nCreating a test document..."
+    curl --silent \
+          --request POST \
+          --url ${URL}/api/documents \
+          --header "${AUTH_HEADER}" \
+          --header "Content-Type: application/json" \
+          --data '{
+                    "document_id": "test-document-id-13",
+                    "title": "Test Document",
+                    "overwrite_existing_document": false,
+                    "instructions": {
+                      "parts": [
+                        {
+                          "html": { "url": "https://example.com/"}
+                        }
+                      ]
+                    }
+                  }'
+
+    echo -e "\nChecking if the document was created..."
+    curl --silent \
+          --request GET \
+          --url ${URL}/api/documents \
+          --header "${AUTH_HEADER}" \
+    | grep '"document_count":1'
+
+    echo -e "\nDeleting the test document..."
+    curl --silent \
+          --request DELETE \
+          --url ${URL}/api/documents?document_id=test \
+          --header "${AUTH_HEADER}"
+          
+    echo -e "\nChecking if the document was deleted..."
+    curl --silent \
+          --request GET \
+          --url ${URL}/api/documents \
+          --header "${AUTH_HEADER}" \
+    | grep '"document_count":0'
+
+    echo -e "\nAll done..."
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "document-engine.fullname" . }}-test-api-documents
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  volumes:
+    - name: script
+      configMap:
+        name: {{ include "document-engine.fullname" . }}-test-api-documents
+        defaultMode: 0755
+  containers:
+    - name: poke-api
+      image: curlimages/curl
+      envFrom:
+        - secretRef:
+            name: {{ include "document-engine.fullname" . }}
+      {{- if .Values.apiAuth.externalSecret.name }}
+        {{- with .Values.apiAuth.externalSecret }}
+          {{- if .apiTokenKey }}
+      env:
+        - name: API_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ .name }}
+              key: {{ .apiTokenKey }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      command:
+        - /script/run.sh
+      volumeMounts:
+        - name: script
+          mountPath: /script
+  restartPolicy: Never
+{{- end }}
