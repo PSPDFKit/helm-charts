@@ -272,7 +272,6 @@ database:
 # @notationType -- none
 documentLifecycle:
   # -- (object) Regular job to remove documents from the database.
-  # Note: currently only works with the `built-in` storage backend.
   # @section -- 06. Document lifecycle
   # @notationType -- reference
   cleanupJob:
@@ -286,6 +285,7 @@ documentLifecycle:
     # @section -- 06. Document lifecycle
     keepHours: 24
     # -- Keep documents with IDs beginning with `persistent` indefinitely
+    # WARNING: does not currently work
     # @section -- 06. Document lifecycle
     persistentLike: "persistent%"
     # @ignored
@@ -294,6 +294,23 @@ documentLifecycle:
     podAnnotations: {}
     # @ignored
     podLabels: {}
+    # @ignored
+    extraEnvs: []
+    # -- Image used for running the cleanup job API calls
+    # @section -- 06. Document lifecycle
+    image:
+      repository: curlimages/curl
+      pullPolicy: IfNotPresent
+      tag: "8.14.1"
+    # -- Service account name to specify for the cleanup jobs
+    # @section -- 06. Document lifecycle
+    serviceAccountName: ""
+    # @ignored
+    ttlSecondsAfterFinished: 300
+    # @ignored
+    activeDeadlineSeconds: 1800
+    # @ignored
+    startingDeadlineSeconds: 600
 
 # -- (object) Everything about storing and caching assets
 # @section -- 07. Asset storage

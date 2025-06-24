@@ -578,8 +578,28 @@
         "cleanupJob": {
           "type": "object",
           "properties": {
+            "activeDeadlineSeconds": {
+              "type": "integer"
+            },
             "enabled": {
               "type": "boolean"
+            },
+            "extraEnvs": {
+              "type": "array"
+            },
+            "image": {
+              "type": "object",
+              "properties": {
+                "pullPolicy": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "tag": {
+                  "type": "string"
+                }
+              }
             },
             "keepHours": {
               "type": "integer"
@@ -598,6 +618,15 @@
             },
             "schedule": {
               "type": "string"
+            },
+            "serviceAccountName": {
+              "type": "string"
+            },
+            "startingDeadlineSeconds": {
+              "type": "integer"
+            },
+            "ttlSecondsAfterFinished": {
+              "type": "integer"
             }
           }
         }
