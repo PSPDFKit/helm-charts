@@ -133,7 +133,8 @@ config:
   # -- `HTTP2_SHARED_RENDERING_PROCESS_ENABLE` — enable shared rendering processes
   # @section -- 03. Configuration options
     enabled: false
-  # -- `TRUSTED_PROXIES`
+  # -- `TRUSTED_PROXIES` — comma-separated list of IP addresses or IP address ranges of trusted proxies.
+  # Setting to `default` will use the default will use private IP ranges.
   # @section -- 03. Configuration options
   trustedProxies: default
   # -- Proxy settings, `HTTP_PROXY` amd `HTTPS_PROXY`
@@ -283,7 +284,7 @@ documentLifecycle:
     schedule: "13 * * * *"
     # -- Documents TTL in hours
     # @section -- 06. Document lifecycle
-    keepHours: 24
+    keepHours: 24  # @schema type: integer; minimum: 1
     # -- Keep documents with IDs beginning with `persistent` indefinitely
     # WARNING: does not currently work
     # @section -- 06. Document lifecycle
