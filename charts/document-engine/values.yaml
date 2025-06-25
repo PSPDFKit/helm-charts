@@ -254,7 +254,7 @@ database:
       trustFileName: ""
   # -- (object) Database migration jobs.
   # @section -- 05. Database
-  # @notationType -- reference  
+  # @notationType -- reference
   migrationJob:
     # -- It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container
     # @section -- 05. Database
