@@ -59,8 +59,6 @@ spec:
     - ports:
         # Hardcoded DE port
         - port: {{ .Values.config.port }}
-        # Hardcoded DE metrics port
-        - port: {{ .Values.observability.metrics.statsd.port }}
         # Prometheus exporter port
         {{- if .Values.prometheusExporter.enabled }}
         - port: {{ .Values.prometheusExporter.port }}

@@ -159,9 +159,6 @@ spec:
             - name: api
               containerPort: {{ .Values.config.port }}
               protocol: TCP
-            - name: statsd-metrics
-              containerPort: {{ .Values.observability.metrics.statsd.port }}
-              protocol: TCP
           {{- if .Values.startupProbe }}
           startupProbe: {{ toYaml .Values.startupProbe | nindent 12 }}
           {{- end }}

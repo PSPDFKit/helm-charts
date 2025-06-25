@@ -195,7 +195,7 @@ ingress:
 | [`database.connections`](./values.yaml#L194) | `DATABASE_CONNECTIONS` | `20` |
 | [`database.enabled`](./values.yaml#L188) | Persistent storage enabled | `true` |
 | [`database.engine`](./values.yaml#L191) | Database engine: only `postgres` is currently supported | `"postgres"` |
-| [`database.migrationJob`](./values.yaml#L258) | Database migration jobs. | `` |
+| [`database.migrationJob`](./values.yaml#L258) | Database migration jobs. | [...](./values.yaml#L258) |
 | [`database.migrationJob.enabled`](./values.yaml#L261) | It `true`, results in `ENABLE_DATABASE_MIGRATIONS=false` in the main Document Engine container | `false` |
 | [`database.postgres`](./values.yaml#L199) | PostgreSQL database settings | [...](./values.yaml#L199) |
 | [`database.postgres.adminPassword`](./values.yaml#L220) | `PG_ADMIN_PASSWORD` | `"despair"` |

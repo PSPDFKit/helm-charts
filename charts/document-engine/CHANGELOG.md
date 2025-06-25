@@ -139,6 +139,7 @@
 ### Fixed
 
 * A very stupid mistake with dates in the cleanup jobs.
+* Removed unnecessary port exposure.
 
 ## 4.0.0 (2025-06-24)
 
