@@ -40,8 +40,10 @@ assetStorage:
         - redis://redis-node-2:26379
       group: despair
 
-prometheusExporter:
-  enabled: true
+observability:
+  metrics:
+    prometheusEndpoint:
+      enabled: true
 
 postgresql:
   enabled: true

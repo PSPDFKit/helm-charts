@@ -4,12 +4,3 @@ apiAuth:
 
 database:
   enabled: false
-
-postgresql:
-  enabled: false
-
-minio:
-  enabled: false
-
-redis:
-  enabled: false
