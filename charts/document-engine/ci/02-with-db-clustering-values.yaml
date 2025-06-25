@@ -34,13 +34,11 @@ assetStorage:
 
 observability:
   metrics:
-    serviceMonitor:
+    prometheusEndpoint:
       enabled: true
     grafanaDashboard:
       enabled: true
       allNamespaces: false
-    prometheusEndpoint:
-      enabled: true
 
 postgresql:
   enabled: true

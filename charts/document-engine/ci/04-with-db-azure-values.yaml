@@ -35,11 +35,11 @@ sidecars:
     image: prom/statsd-exporter
     imagePullPolicy: IfNotPresent
     args:
-      - --statsd.listen-udp=9125
-      - --statsd.listen-tcp=9125
-      - --web.listen-address=11254
+      - --statsd.listen-udp=:9125
+      - --statsd.listen-tcp=:9125
+      - --web.listen-address=:11254
     ports:
-      - name: metrics
+      - name: statsd-digested
         containerPort: 11254
         protocol: TCP
 
