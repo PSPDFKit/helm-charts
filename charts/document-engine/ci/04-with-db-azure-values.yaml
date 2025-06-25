@@ -29,8 +29,8 @@ sidecars:
       - containerPort: 10000
         name: blob
         protocol: TCP
-  # We are using statsd-exporter to expose metrics in Prometheus format, just 
-  # to have a receiving endpoint.
+  # We are using statsd-exporter to expose metrics in Prometheus format, just
+  # to have a receiving endpoint
   - name: statsd-exporter
     image: prom/statsd-exporter
     imagePullPolicy: IfNotPresent
