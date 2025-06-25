@@ -34,13 +34,10 @@ assetStorage:
 
 observability:
   metrics:
-    enabled: true
-    statsd:
-      enabled: true
     serviceMonitor:
       enabled: true
     prometheusRule:
-      enabled: false
+      enabled: true
     grafanaDashboard:
       enabled: true
       allNamespaces: false

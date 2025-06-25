@@ -42,7 +42,6 @@ assetStorage:
 
 observability:
   metrics:
-    enabled: true
     prometheusEndpoint:
       enabled: true
 

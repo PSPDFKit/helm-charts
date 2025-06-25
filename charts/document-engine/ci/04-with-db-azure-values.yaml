@@ -24,11 +24,31 @@ assetStorage:
 sidecars:
   - name: azurite
     image: mcr.microsoft.com/azure-storage/azurite:latest
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     ports:
       - containerPort: 10000
         name: blob
         protocol: TCP
+  # We are using statsd-exporter to expose metrics in Prometheus format, just 
+  # to have a receiving endpoint.
+  - name: statsd-exporter
+    image: prom/statsd-exporter
+    imagePullPolicy: IfNotPresent
+    args:
+      - --statsd.listen-udp=9125
+      - --statsd.listen-tcp=9125
+      - --web.listen-address=11254
+    ports:
+      - name: metrics
+        containerPort: 11254
+        protocol: TCP
+
+observability:
+  metrics:
+    statsd:
+      enabled: true
+      port: 9125
+      host: localhost
 
 postgresql:
   enabled: true
