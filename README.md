@@ -11,7 +11,7 @@ helm repo add nutrient https://pspdfkit.github.io/helm-charts
 helm repo update
 ```
 
-## Installing PDPDFKit tools
+## Installing Nutrient products
 
 ### Document Engine
 
