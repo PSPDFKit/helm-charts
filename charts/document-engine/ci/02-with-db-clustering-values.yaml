@@ -36,8 +36,6 @@ observability:
   metrics:
     serviceMonitor:
       enabled: true
-    prometheusRule:
-      enabled: true
     grafanaDashboard:
       enabled: true
       allNamespaces: false
