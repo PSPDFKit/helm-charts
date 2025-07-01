@@ -146,6 +146,7 @@
 
 ### Changed
 
+* [Document Engine 1.10.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1.10.0).
 * Removed `prometheusExporter`, due to the new native support of Prometheus metrics.
 * Removed redundant `observability.metrics.enabled`.
 
