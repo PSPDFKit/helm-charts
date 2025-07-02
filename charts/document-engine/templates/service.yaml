@@ -11,7 +11,7 @@ spec:
       targetPort: api
       protocol: TCP
       name: api
-    {{- with .Values.prometheusExporter }}
+    {{- with .Values.observability.metrics.prometheusEndpoint }}
     {{- if .enabled }}
     - port: {{ .port }}
       targetPort: metrics

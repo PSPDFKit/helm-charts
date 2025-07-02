@@ -21,6 +21,10 @@ database:
     port: 5432
     username: postgres
 
+clustering:
+  enabled: true
+  method: kubernetes_dns
+
 documentLifecycle:
   cleanupJob:
     enabled: true
@@ -30,19 +34,11 @@ assetStorage:
 
 observability:
   metrics:
-    enabled: true
-    statsd:
+    prometheusEndpoint:
       enabled: true
-    serviceMonitor:
-      enabled: false
-    prometheusRule:
-      enabled: false
     grafanaDashboard:
       enabled: true
       allNamespaces: false
-
-prometheusExporter:
-  enabled: true
 
 postgresql:
   enabled: true

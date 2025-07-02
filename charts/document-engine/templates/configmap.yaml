@@ -165,11 +165,16 @@ data:
 # Observability
 #
 {{- with .Values.observability }}
-{{-   if and .metrics.enabled .metrics.statsd.enabled }}
-{{-     with .metrics.statsd }}
-  STATSD_HOST: {{ .host | quote }}
-  STATSD_PORT: {{ .port | quote }}
-  STATSD_CUSTOM_TAGS: {{ tpl .customTags $ | quote }}
+{{    with .metrics.customTags }}
+  METRICS_CUSTOM_TAGS: {{ tpl . $ | quote }}
+{{-   end }}
+{{    with .metrics.prometheusEndpoint }}
+{{-     if .enabled }}
+  ENABLE_PROMETHEUS: "true"
+  PROMETHEUS_PORT: {{ .port | quote }}
+{{        with .labels }}
+  PROMETHEUS_GLOBAL_LABELS: {{ tpl . $ | quote }}
+{{-       end }}
 {{-     end }}
 {{-   end }}
   LOG_LEVEL: {{ .log.level | quote }}
@@ -202,8 +207,16 @@ data:
   ENABLE_OPENTELEMETRY: "false"
 {{-     end }}
 {{-   end }}
+{{-   with .metrics.statsd }}
+{{-     if .enabled }}
+  STATSD_HOST: {{ .host | quote }}
+  STATSD_PORT: {{ .port | quote }}
+{{        with .customTags }}
+  STATSD_CUSTOM_TAGS: {{ tpl . $ | quote }}
+{{-       end }}
+{{-     end }}
+{{-   end }}
 {{- end }}
-
 #
 # Clustering
 #
