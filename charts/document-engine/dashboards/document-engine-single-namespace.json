@@ -2683,19 +2683,19 @@
       {
         "allowCustomValue": false,
         "current": {
-          "text": "mde-planhub-production",
-          "value": "mde-planhub-production"
+          "text": "<<<<NAMESPACE>>>>",
+          "value": "<<<<NAMESPACE>>>>"
         },
         "label": "Namespace",
         "name": "namespace",
         "options": [
           {
             "selected": true,
-            "text": "mde-planhub-production",
-            "value": "mde-planhub-production"
+            "text": "<<<<NAMESPACE>>>>",
+            "value": "<<<<NAMESPACE>>>>"
           }
         ],
-        "query": "mde-planhub-production",
+        "query": "<<<<NAMESPACE>>>>",
         "type": "custom"
       },
       {
