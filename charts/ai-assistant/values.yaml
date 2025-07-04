@@ -231,9 +231,10 @@ database:
   # @default -- none
   # @notationType -- reference
   postgres:
-    # -- `PGHOST`
+    # -- (tpl/string) `PGHOST` 
+    # @notationType -- tpl
     # @section -- 05. Database
-    host: postgresql
+    host: "{{ .Release.Name }}-postgresql"
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432

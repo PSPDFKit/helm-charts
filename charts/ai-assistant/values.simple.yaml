@@ -44,8 +44,6 @@ database:
   enabled: true
   engine: postgres
   postgres:
-    host: postgresql
-    port: 5432
     username: postgres
     password: nutrient
     database: ai-assistant
@@ -99,16 +97,12 @@ ingress:
 postgresql:
   enabled: true
   architecture: standalone
-  fullnameOverride: postgresql
-  nameOverride: postgresql
   primary:
     persistence:
       enabled: false
     extraEnvVars:
       - name: POSTGRES_DB
         value: 'ai-assistant'
-  volumePermissions:
-    enabled: true
   auth:
     enabledPostgresUser: true
     postgresPassword: nutrient
