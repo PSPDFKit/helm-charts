@@ -33,7 +33,7 @@ assetStorage:
     ttlSeconds: 3600
     useTtl: true
     sentinel:
-      enabled: true
+      enabled: false
       urls:
         - "redis://{{ .Release.Name }}-redis-node-0:26379"
         - "redis://{{ .Release.Name }}-redis-node-1:26379"
