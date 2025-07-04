@@ -231,7 +231,7 @@ database:
   # @default -- none
   # @notationType -- reference
   postgres:
-    # -- (tpl/string) `PGHOST` 
+    # -- (tpl/string) `PGHOST`
     # @notationType -- tpl
     # @section -- 05. Database
     host: "{{ .Release.Name }}-postgresql"
