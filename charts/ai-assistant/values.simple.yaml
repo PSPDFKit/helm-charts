@@ -10,6 +10,15 @@ apiAuth:
     publicKey: none
     algorithm: RS256
 
+# This is only necessary until `openai-mock` supports text embeddings
+sidecars:
+  - name: openai-mocker
+    image: zerob13/mock-openai-api:latest
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: PORT
+        value: "33000"
+
 config:
   serviceConfiguration:
     version: '1'
@@ -22,7 +31,8 @@ config:
       textEmbeddings:
         provider:
           name: 'openai-compat'
-          baseUrl: 'https://api.openai-mock.com'
+          # `openai-mock` does not yet support text embeddings
+          baseUrl: 'http://localhost:33000'
         model: 'text-embedding-3-small'
   documentEngine:
     enabled: true
