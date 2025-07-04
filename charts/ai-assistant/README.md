@@ -65,7 +65,7 @@ Please consider [tests](/charts/ai-assistant/ci) as examples.
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | postgresql | 16.7.4 |
-| https://pspdfkit.github.io/helm-charts | document-engine | 3.10.1 |
+| https://pspdfkit.github.io/helm-charts | document-engine | 5.0.1 |
 
 Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
 
