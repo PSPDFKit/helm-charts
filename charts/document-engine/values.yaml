@@ -197,9 +197,9 @@ database:
   # @default -- none
   # @notationType -- reference
   postgres:
-    # -- `PGHOST`
+    # -- (tpl/string) `PGHOST`
     # @section -- 05. Database
-    host: postgresql
+    host: "{{ .Release.Name }}-postgresql"
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
@@ -352,19 +352,20 @@ assetStorage:
     # @section -- 07. Asset storage
     # @ignored
     accessKeyId: ""
-    # --`ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
+    # -- `ASSET_STORAGE_S3_SECRET_ACCESS_KEY`
     # @section -- 07. Asset storage
     # @ignored
     secretAccessKey: ""
-    # --`ASSET_STORAGE_S3_BUCKET`
+    # -- `ASSET_STORAGE_S3_BUCKET`
     # @section -- 07. Asset storage
     bucket: "document-engine-assets"
-    # --`ASSET_STORAGE_S3_REGION`
+    # -- `ASSET_STORAGE_S3_REGION`
     # @section -- 07. Asset storage
     region: "us-east-1"
-    # --`ASSET_STORAGE_S3_HOST`
+    # -- (tpl/string) `ASSET_STORAGE_S3_HOST`
     # @section -- 07. Asset storage
     # @ignored
+    # host: "{{ .Release.Name }}-minio"
     host: ""
     # -- `ASSET_STORAGE_S3_PORT`
     # @section -- 07. Asset storage
@@ -422,9 +423,9 @@ assetStorage:
     # -- `USE_REDIS_TTL_FOR_PRERENDERING`
     # @section -- 07. Asset storage
     useTtl: true
-    # -- `REDIS_HOST`
+    # -- (tpl/string) `REDIS_HOST`
     # @section -- 07. Asset storage
-    host: redis
+    host: "{{ .Release.Name }}-redis"
     # -- `REDIS_PORT`
     # @section -- 07. Asset storage
     port: 6379
