@@ -10,6 +10,55 @@ apiAuth:
     publicKey: none
     algorithm: RS256
 
+# This is only necessary until `openai-mock` supports text embeddings
+sidecars:
+  - name: openai-mocker
+    image: python:3.11-alpine
+    imagePullPolicy: IfNotPresent
+    command:
+      - /bin/sh
+      - -ce
+      - |-
+        cat > /tmp/embeddings-mock.py << 'EOF'
+        import uvicorn
+        from fastapi import FastAPI
+        from pydantic import BaseModel
+        from typing import List, Union
+        import random
+
+        app = FastAPI()
+
+        class EmbeddingRequest(BaseModel):
+            input: Union[str, List[str]]
+            model: str = "text-embedding-3-small"
+
+        @app.post("/v1/embeddings")
+        async def create_embeddings(request: EmbeddingRequest):
+            inputs = request.input if isinstance(request.input, list) else [request.input]
+            embeddings = []
+            for i, text in enumerate(inputs):
+                embedding = [random.uniform(-1, 1) for _ in range(1536)]
+                embeddings.append({
+                    "object": "embedding",
+                    "index": i,
+                    "embedding": embedding
+                })
+            return {
+                "object": "list",
+                "data": embeddings,
+                "model": request.model,
+                "usage": {
+                    "prompt_tokens": sum(len(text.split()) for text in inputs),
+                    "total_tokens": sum(len(text.split()) for text in inputs)
+                }
+            }
+
+        if __name__ == "__main__":
+            uvicorn.run(app, host="0.0.0.0", port=8080)
+        EOF
+
+        pip install fastapi uvicorn && python /tmp/embeddings-mock.py
+
 config:
   serviceConfiguration:
     version: '1'
@@ -22,7 +71,8 @@ config:
       textEmbeddings:
         provider:
           name: 'openai-compat'
-          baseUrl: 'https://api.openai-mock.com'
+          # `openai-mock` does not yet support text embeddings
+          baseUrl: 'http://localhost:8080/v1'
         model: 'text-embedding-3-small'
   documentEngine:
     enabled: true
@@ -34,8 +84,6 @@ database:
   enabled: true
   engine: postgres
   postgres:
-    host: postgresql
-    port: 5432
     username: postgres
     password: nutrient
     database: ai-assistant
@@ -49,7 +97,7 @@ dashboard:
 
 observability:
   log:
-    level: verbose
+    level: info
     socketTraces: false
   opentelemetry:
     enabled: false
@@ -89,22 +137,18 @@ ingress:
 postgresql:
   enabled: true
   architecture: standalone
-  fullnameOverride: postgresql
-  nameOverride: postgresql
   primary:
     persistence:
       enabled: false
     extraEnvVars:
       - name: POSTGRES_DB
         value: 'ai-assistant'
-  volumePermissions:
-    enabled: true
   auth:
     enabledPostgresUser: true
     postgresPassword: nutrient
     database: ai-assistant
 
-documentEngine:
+document-engine:
   enabled: true
   fullnameOverride: document-engine
   nameOverride: document-engine
@@ -139,7 +183,7 @@ documentEngine:
       password: admin
   observability:
     log:
-      level: debug
+      level: info
     opentelemetry:
       enabled: false
   replicaCount: 1

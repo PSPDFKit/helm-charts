@@ -17,7 +17,7 @@ data:
 {{- if .enabled }}
 {{-   with .postgres }}
 {{-     with .host }}
-  PGHOST: {{ . | quote }}
+  PGHOST: {{ tpl . $ | quote }}
 {{-     end }}
 {{-     with .port }}
   PGPORT: {{ . | quote }}
