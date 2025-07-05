@@ -425,7 +425,7 @@ assetStorage:
     useTtl: true
     # -- (tpl/string) `REDIS_HOST`
     # @section -- 07. Asset storage
-    host: "{{ .Release.Name }}-redis"
+    host: "{{ .Release.Name }}-redis-master"
     # -- `REDIS_PORT`
     # @section -- 07. Asset storage
     port: 6379

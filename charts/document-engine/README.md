@@ -247,7 +247,7 @@ ingress:
 | [`assetStorage.redis.database`](./values.yaml#L434) | `REDIS_DATABASE` | `""` |
 | [`assetStorage.redis.enabled`](./values.yaml#L419) | `USE_REDIS_CACHE` | `false` |
 | [`assetStorage.redis.externalSecretName`](./values.yaml#L471) | External secret name. Must contain `REDIS_USERNAME` and `REDIS_PASSWORD` if they are needed, and _may_ set other values | `""` |
-| [`assetStorage.redis.host`](./values.yaml#L428) | `REDIS_HOST` | `"{{ .Release.Name }}-redis"` |
+| [`assetStorage.redis.host`](./values.yaml#L428) | `REDIS_HOST` | `"{{ .Release.Name }}-redis-master"` |
 | [`assetStorage.redis.password`](./values.yaml#L460) | `REDIS_PASSWORD` | `""` |
 | [`assetStorage.redis.port`](./values.yaml#L431) | `REDIS_PORT` | `6379` |
 | [`assetStorage.redis.sentinel`](./values.yaml#L439) | Redis Sentinel | [...](./values.yaml#L439) |
