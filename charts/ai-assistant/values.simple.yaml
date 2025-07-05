@@ -48,7 +48,7 @@ sidecars:
 
         app.listen(8080, () => console.log('Embeddings mock server running on port 8080'));
         EOF
-        
+
         npm init -y && npm install express && node /tmp/embeddings-mock.js
 
 config:
