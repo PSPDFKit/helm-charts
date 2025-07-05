@@ -1,7 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [5.0.2 (2025-07-05)](#502-2025-07-05)
+  - [5.1.0 (2025-07-05)](#510-2025-07-05)
     - [Changed](#changed)
   - [5.0.1 (2025-06-27)](#501-2025-06-27)
     - [Fixed](#fixed)
@@ -141,11 +141,11 @@
   - [2.0.0](#200)
     - [Changed](#changed-40)
 
-## 5.0.2 (2025-07-05)
+## 5.1.0 (2025-07-05)
 
 ### Changed
 
-* Better dependency hostname handling.
+* Better dependency hostname handling (default templated hostnames).
 
 ## 5.0.1 (2025-06-27)
 
