@@ -97,7 +97,7 @@ dashboard:
 
 observability:
   log:
-    level: verbose
+    level: info
     socketTraces: false
   opentelemetry:
     enabled: false
@@ -183,7 +183,7 @@ document-engine:
       password: admin
   observability:
     log:
-      level: debug
+      level: info
     opentelemetry:
       enabled: false
   replicaCount: 1

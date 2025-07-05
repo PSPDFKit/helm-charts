@@ -234,7 +234,7 @@ database:
     # -- (tpl/string) `PGHOST`
     # @notationType -- tpl
     # @section -- 05. Database
-    host: "{{ include \"ai-assistant.name\" $ }}-postgresql"
+    host: "{{ .Release.Name }}-postgresql"
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
