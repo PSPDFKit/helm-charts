@@ -13,11 +13,11 @@ apiAuth:
 # This is only necessary until `openai-mock` supports text embeddings
 sidecars:
   - name: openai-mocker
-    image: zerob13/mock-openai-api:latest
+    image: zmuonsoft/openapi-mock
     imagePullPolicy: IfNotPresent
     env:
-      - name: PORT
-        value: "33000"
+      - name: OPENAPI_MOCK_SPECIFICATION_URL
+        value: "https://app.stainless.com/api/spec/documented/openai/openapi.documented.yml"
 
 config:
   serviceConfiguration:
@@ -32,7 +32,7 @@ config:
         provider:
           name: 'openai-compat'
           # `openai-mock` does not yet support text embeddings
-          baseUrl: 'http://localhost:33000/v1'
+          baseUrl: 'http://localhost:8080'
         model: 'text-embedding-3-small'
   documentEngine:
     enabled: true
