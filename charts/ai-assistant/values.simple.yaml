@@ -38,7 +38,7 @@ config:
         provider:
           name: 'openai-compat'
           # `openai-mock` does not yet support text embeddings
-          baseUrl: 'http://localhost:8080'
+          baseUrl: 'http://localhost:8080/v1'
         model: 'text-embedding-3-small'
   documentEngine:
     enabled: true
