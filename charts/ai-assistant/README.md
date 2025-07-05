@@ -65,7 +65,7 @@ Please consider [tests](/charts/ai-assistant/ci) as examples.
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | postgresql | 16.7.13 |
-| https://pspdfkit.github.io/helm-charts | document-engine | 5.1.0 |
+| https://pspdfkit.github.io/helm-charts | document-engine | ~5 |
 
 Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
 
@@ -145,7 +145,7 @@ Schema is generated using [helm values schema json plugin](https://github.com/lo
 | [`database.postgres`](./values.yaml#L233) | PostgreSQL database settings | [...](./values.yaml#L233) |
 | [`database.postgres.database`](./values.yaml#L243) | `PGDATABASE` | `"ai-assistant"` |
 | [`database.postgres.externalSecretName`](./values.yaml#L254) | Use external secret for database credentials. `PGUSER` and `PGPASSWORD` must be provided and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL` | `""` |
-| [`database.postgres.host`](./values.yaml#L237) | `PGHOST` | `{{ .Release.Name }}-postgresql` |
+| [`database.postgres.host`](./values.yaml#L237) | `PGHOST` | `{{ include "ai-assistant.name" $ }}-postgresql` |
 | [`database.postgres.password`](./values.yaml#L249) | `PGPASSWORD` | `"nutrient"` |
 | [`database.postgres.port`](./values.yaml#L240) | `PGPORT` | `5432` |
 | [`database.postgres.tls`](./values.yaml#L259) | TLS settings | [...](./values.yaml#L259) |
@@ -258,7 +258,7 @@ Schema is generated using [helm values schema json plugin](https://github.com/lo
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`documentEngine`](./values.yaml#L664) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L664) |
+| [`document-engine`](./values.yaml#L664) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L664) |
 | [`postgresql`](./values.yaml#L620) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql). Please note that this chart is not maintained by Nutrient and that considering "unsupported" `pgvector/pgvector` image, this is a workaround. We recommend using PostgreSQL management orchestratration approach for production. | [...](./values.yaml#L620) |
 
 ### Other Values
