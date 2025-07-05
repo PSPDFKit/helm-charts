@@ -150,6 +150,8 @@ postgresql:
 
 document-engine:
   enabled: true
+  fullnameOverride: document-engine
+  nameOverride: document-engine
   documentEngineLicense:
     activationKey: ""
     externalSecret:
@@ -166,6 +168,7 @@ document-engine:
     migrationJob:
       enabled: false
     postgres:
+      host: document-engine-postgresql
       port: 5432
       username: postgres
       tls:
@@ -214,6 +217,8 @@ document-engine:
   postgresql:
     enabled: true
     architecture: standalone
+    fullnameOverride: document-engine-postgresql
+    nameOverride: document-engine-postgresql
     primary:
       persistence:
         enabled: false
