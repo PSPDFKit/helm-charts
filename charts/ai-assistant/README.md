@@ -145,7 +145,7 @@ Schema is generated using [helm values schema json plugin](https://github.com/lo
 | [`database.postgres`](./values.yaml#L233) | PostgreSQL database settings | [...](./values.yaml#L233) |
 | [`database.postgres.database`](./values.yaml#L243) | `PGDATABASE` | `"ai-assistant"` |
 | [`database.postgres.externalSecretName`](./values.yaml#L254) | Use external secret for database credentials. `PGUSER` and `PGPASSWORD` must be provided and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL` | `""` |
-| [`database.postgres.host`](./values.yaml#L237) | `PGHOST`  | `{{ .Release.Name }}-postgresql` |
+| [`database.postgres.host`](./values.yaml#L237) | `PGHOST` | `{{ .Release.Name }}-postgresql` |
 | [`database.postgres.password`](./values.yaml#L249) | `PGPASSWORD` | `"nutrient"` |
 | [`database.postgres.port`](./values.yaml#L240) | `PGPORT` | `5432` |
 | [`database.postgres.tls`](./values.yaml#L259) | TLS settings | [...](./values.yaml#L259) |
