@@ -13,11 +13,17 @@ apiAuth:
 # This is only necessary until `openai-mock` supports text embeddings
 sidecars:
   - name: openai-mocker
-    image: zmuonsoft/openapi-mock
+    image: node:20-alpine
     imagePullPolicy: IfNotPresent
-    env:
-      - name: OPENAPI_MOCK_SPECIFICATION_URL
-        value: "https://app.stainless.com/api/spec/documented/openai/openapi.documented.yml"
+    command:
+      - /bin/sh
+      - -ce
+      - |-
+        apk add --no-cache git && \
+        git clone https://github.com/freakynit/mock-openai-server && \
+        cd mock-openai-server && \
+        npm install --only=production && \
+        npm run server
 
 config:
   serviceConfiguration:
