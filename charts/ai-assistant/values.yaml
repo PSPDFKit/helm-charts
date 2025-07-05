@@ -234,7 +234,7 @@ database:
     # -- (tpl/string) `PGHOST`
     # @notationType -- tpl
     # @section -- 05. Database
-    host: "{{ .Release.Name }}-postgresql"
+    host: "{{ include \"ai-assistant.name\" $ }}-postgresql"
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
@@ -661,5 +661,5 @@ postgresql:  # @schema additionalProperties:true
 # -- [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine)
 # @section -- Z. Dependencies
 # @notationType -- reference
-documentEngine:  # @schema additionalProperties:true
+document-engine:  # @schema additionalProperties:true
   enabled: false
