@@ -19,11 +19,37 @@ sidecars:
       - /bin/sh
       - -ce
       - |-
-        apk add --no-cache git && \
-        git clone https://github.com/freakynit/mock-openai-server && \
-        cd mock-openai-server && \
-        npm install --only=production && \
-        npm run server
+        cat > /tmp/embeddings-mock.js << 'EOF'
+        const express = require('express');
+        const app = express();
+        
+        app.use(express.json());
+        
+        app.post('/v1/embeddings', (req, res) => {
+          const { input, model = 'text-embedding-3-small' } = req.body;
+          const inputs = Array.isArray(input) ? input : [input];
+          
+          const embeddings = inputs.map((text, index) => ({
+            object: 'embedding',
+            index,
+            embedding: Array.from({length: 1536}, () => Math.random() * 2 - 1)
+          }));
+          
+          res.json({
+            object: 'list',
+            data: embeddings,
+            model,
+            usage: {
+              prompt_tokens: inputs.join(' ').split(' ').length,
+              total_tokens: inputs.join(' ').split(' ').length
+            }
+          });
+        });
+        
+        app.listen(8080, () => console.log('Embeddings mock server running on port 8080'));
+        EOF
+        
+        npm init -y && npm install express && node /tmp/embeddings-mock.js
 
 config:
   serviceConfiguration:
