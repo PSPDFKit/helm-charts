@@ -13,43 +13,53 @@ apiAuth:
 # This is only necessary until `openai-mock` supports text embeddings
 sidecars:
   - name: openai-mocker
-    image: node:20-alpine
+    image: python:3.11-alpine
     imagePullPolicy: IfNotPresent
     command:
       - /bin/sh
       - -ce
       - |-
-        cat > /tmp/embeddings-mock.js << 'EOF'
-        const express = require('express');
-        const app = express();
+        cat > /tmp/embeddings-mock.py << 'EOF'
+        import uvicorn
+        from fastapi import FastAPI
+        from pydantic import BaseModel
+        from typing import List, Union
+        import random
 
-        app.use(express.json());
+        app = FastAPI()
 
-        app.post('/v1/embeddings', (req, res) => {
-          const { input, model = 'text-embedding-3-small' } = req.body;
-          const inputs = Array.isArray(input) ? input : [input];
+        class EmbeddingRequest(BaseModel):
+            input: Union[str, List[str]]
+            model: str = "text-embedding-3-small"
 
-          const embeddings = inputs.map((text, index) => ({
-            object: 'embedding',
-            index,
-            embedding: Array.from({length: 1536}, () => Math.random() * 2 - 1)
-          }));
-
-          res.json({
-            object: 'list',
-            data: embeddings,
-            model,
-            usage: {
-              prompt_tokens: inputs.join(' ').split(' ').length,
-              total_tokens: inputs.join(' ').split(' ').length
+        @app.post("/v1/embeddings")
+        async def create_embeddings(request: EmbeddingRequest):
+            inputs = request.input if isinstance(request.input, list) else [request.input]
+            
+            embeddings = []
+            for i, text in enumerate(inputs):
+                embedding = [random.uniform(-1, 1) for _ in range(1536)]
+                embeddings.append({
+                    "object": "embedding",
+                    "index": i,
+                    "embedding": embedding
+                })
+            
+            return {
+                "object": "list",
+                "data": embeddings,
+                "model": request.model,
+                "usage": {
+                    "prompt_tokens": sum(len(text.split()) for text in inputs),
+                    "total_tokens": sum(len(text.split()) for text in inputs)
+                }
             }
-          });
-        });
 
-        app.listen(8080, () => console.log('Embeddings mock server running on port 8080'));
+        if __name__ == "__main__":
+            uvicorn.run(app, host="0.0.0.0", port=8080)
         EOF
 
-        npm init -y && npm install express && node /tmp/embeddings-mock.js
+        pip install fastapi uvicorn && python /tmp/embeddings-mock.py
 
 config:
   serviceConfiguration:
