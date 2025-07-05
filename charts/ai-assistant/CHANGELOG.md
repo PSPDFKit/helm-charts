@@ -1,6 +1,7 @@
 # Changelog
 - [Changelog](#changelog)
   - [0.2.0 (2025-07-04)](#020-2025-07-04)
+    - [Added](#added)
     - [Changed](#changed)
   - [0.1.0 (2025-06-17)](#010-2025-06-17)
     - [Changed](#changed-1)
@@ -11,9 +12,13 @@
   - [0.0.10 (2025-06-9)](#0010-2025-06-9)
     - [Changed](#changed-4)
   - [0.0.1 (2025-05-28)](#001-2025-05-28)
-    - [Added](#added)
+    - [Added](#added-1)
 
 ## 0.2.0 (2025-07-04)
+
+### Added
+
+* Minimal CI testing
 
 ### Changed
 
@@ -49,4 +54,4 @@
 
 ### Added
 
-* Initial state.
+* Initial state
