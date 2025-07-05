@@ -35,7 +35,6 @@ sidecars:
         @app.post("/v1/embeddings")
         async def create_embeddings(request: EmbeddingRequest):
             inputs = request.input if isinstance(request.input, list) else [request.input]
-            
             embeddings = []
             for i, text in enumerate(inputs):
                 embedding = [random.uniform(-1, 1) for _ in range(1536)]
@@ -44,7 +43,6 @@ sidecars:
                     "index": i,
                     "embedding": embedding
                 })
-            
             return {
                 "object": "list",
                 "data": embeddings,
