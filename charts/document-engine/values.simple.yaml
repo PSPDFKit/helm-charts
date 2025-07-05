@@ -18,7 +18,6 @@ database:
   migrationJob:
     enabled: false
   postgres:
-    host: postgresql
     port: 5432
     username: postgres
     tls:
@@ -78,8 +77,6 @@ ingress:
 postgresql:
   enabled: true
   architecture: standalone
-  fullnameOverride: postgresql
-  nameOverride: postgresql
   primary:
     persistence:
       enabled: false

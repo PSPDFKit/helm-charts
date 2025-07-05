@@ -7,7 +7,6 @@ database:
     podLabels:
       do: "that"
   postgres:
-    host: postgresql
     port: 5432
     username: postgres
 
@@ -21,12 +20,12 @@ assetStorage:
     secretAccessKey: "documentEngineObjectStorageRootPassword"
     bucket: "document-engine-assets"
     region: "us-east-1"
-    host: "minio"
+    host: "{{ .Release.Name }}-minio"
     port: 9000
     scheme: "http://"
   redis:
     enabled: true
-    host: redis-master
+    host: "{{ .Release.Name }}-redis-master"
     database: ""
     username: ""
     password: ""
@@ -35,9 +34,9 @@ assetStorage:
     sentinel:
       enabled: false
       urls:
-        - redis://redis-node-0:26379
-        - redis://redis-node-1:26379
-        - redis://redis-node-2:26379
+        - "redis://{{ .Release.Name }}-redis-node-0:26379"
+        - "redis://{{ .Release.Name }}-redis-node-1:26379"
+        - "redis://{{ .Release.Name }}-redis-node-2:26379"
       group: despair
 
 observability:
@@ -47,8 +46,6 @@ observability:
 
 postgresql:
   enabled: true
-  fullnameOverride: postgresql
-  nameOverride: postgresql
   primary:
     persistence:
       enabled: true
@@ -61,8 +58,6 @@ postgresql:
 
 minio:
   enabled: true
-  fullnameOverride: minio
-  nameOverride: minio
   auth:
     rootUser: documentEngineObjectStorageRootKey
     rootPassword: documentEngineObjectStorageRootPassword
@@ -70,8 +65,6 @@ minio:
 
 redis:
   enabled: true
-  nameOverride: redis
-  fullnameOverride: redis
   architecture: standalone
   auth:
     enabled: false
