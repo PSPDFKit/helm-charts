@@ -54,7 +54,7 @@ data:
 {{-   end }}
 {{-   with .postgres }}
 {{-     with .host }}
-  PGHOST: {{ . | quote }}
+  PGHOST: {{ tpl . $ | quote }}
 {{-     end }}
 {{-     with .port }}
   PGPORT: {{ . | quote }}
@@ -103,7 +103,7 @@ data:
   ASSET_STORAGE_S3_BUCKET: {{ .s3.bucket | quote }}
   ASSET_STORAGE_S3_REGION: {{ .s3.region | quote }}
 {{-       if .s3.host }}
-  ASSET_STORAGE_S3_HOST: {{ .s3.host | quote }}
+  ASSET_STORAGE_S3_HOST: {{ tpl .s3.host $ | quote }}
   ASSET_STORAGE_S3_PORT: {{ .s3.port | quote }}
   ASSET_STORAGE_S3_SCHEME: {{ .s3.scheme | quote }}
 {{-       end }}
@@ -120,10 +120,10 @@ data:
   USE_REDIS_TTL_FOR_PRERENDERING: {{ .useTtl | quote }}
   REDIS_TTL: {{ .ttlSeconds | int | quote }}
 {{-         if .sentinel.enabled }}
-  REDIS_SENTINELS: {{ .sentinel.urls | join ";" | quote }}
+  REDIS_SENTINELS: {{ tpl  ( join ";" .sentinel.urls ) $ | quote }}
   REDIS_SENTINELS_GROUP: {{ .sentinel.group | quote }}
 {{-         else }}
-  REDIS_HOST: {{ .host | quote }}
+  REDIS_HOST: {{ tpl .host $ | quote }}
   REDIS_SSL: {{ .tls.enabled | toString | quote }}
 {{-         end }}
   REDIS_PORT: {{ .port | toString | quote }}

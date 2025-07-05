@@ -3,7 +3,6 @@ database:
   migrationJob:
     enabled: false
   postgres:
-    host: postgresql
     port: 5432
     username: postgres
 
@@ -52,8 +51,6 @@ observability:
 
 postgresql:
   enabled: true
-  fullnameOverride: postgresql
-  nameOverride: postgresql
   primary:
     persistence:
       enabled: true
