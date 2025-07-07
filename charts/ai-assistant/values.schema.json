@@ -428,7 +428,7 @@
     "deploymentAnnotations": {
       "type": "object"
     },
-    "documentEngine": {
+    "document-engine": {
       "type": "object",
       "properties": {
         "enabled": {
