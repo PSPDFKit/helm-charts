@@ -130,9 +130,15 @@ config:
   # @notationType -- reference
   # @section -- 03. Configuration options
   http2SharedRendering:
-  # -- `HTTP2_SHARED_RENDERING_PROCESS_ENABLE` — enable shared rendering processes
-  # @section -- 03. Configuration options
+    # -- `HTTP2_SHARED_RENDERING_PROCESS_ENABLE` — enable shared rendering processes
+    # @section -- 03. Configuration options
     enabled: false
+    # -- `HTTP2_SHARED_RENDERING_PROCESS_CHECKIN_TIMEOUT` — document processing daemon checkin timeout.
+    # Do not change unless explicitly recommended by Nutrient support.
+    checkinTimeoutMilliseconds: 0
+    # -- `HTTP2_SHARED_RENDERING_PROCESS_CHECKOUT_TIMEOUT` — document processing daemon checkout timeout.
+    # Do not change unless explicitly recommended by Nutrient support.
+    checkoutTimeoutMilliseconds: 5000
   # -- `TRUSTED_PROXIES` — comma-separated list of IP addresses or IP address ranges of trusted proxies.
   # Setting to `default` will use the default will use private IP ranges.
   # @section -- 03. Configuration options

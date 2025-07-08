@@ -26,6 +26,8 @@ data:
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
 {{- with .Values.config.http2SharedRendering }}
   HTTP2_SHARED_RENDERING_PROCESS_ENABLE: {{ .enabled | quote }}
+  HTTP2_SHARED_RENDERING_PROCESS_CHECKIN_TIMEOUT: {{ .checkinTimeoutMilliseconds | quote }}
+  HTTP2_SHARED_RENDERING_PROCESS_CHECKOUT_TIMEOUT: {{ .checkoutTimeoutMilliseconds | quote }}
 {{- end }}
 {{- with .Values.config.proxy.http }}
   HTTP_PROXY: {{ . | quote }}

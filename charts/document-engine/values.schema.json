@@ -357,6 +357,12 @@
         "http2SharedRendering": {
           "type": "object",
           "properties": {
+            "checkinTimeoutMilliseconds": {
+              "type": "integer"
+            },
+            "checkoutTimeoutMilliseconds": {
+              "type": "integer"
+            },
             "enabled": {
               "type": "boolean"
             }
