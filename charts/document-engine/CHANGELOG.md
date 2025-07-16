@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [5.1.2 (2025-07-16)](#512-2025-07-16)
+    - [Changed](#changed)
   - [5.1.1 (2025-07-08)](#511-2025-07-08)
     - [Changed](#changed)
   - [5.1.0 (2025-07-05)](#510-2025-07-05)
@@ -142,6 +144,12 @@
     - [Changed](#changed-40)
   - [2.0.0](#200)
     - [Changed](#changed-41)
+
+## 5.1.2 (2025-07-16)
+
+### Added
+
+* `assetStorage.localCacheTimeoutSeconds` to set asset storage cache fetch timeout.
 
 ## 5.1.1 (2025-07-08)
 
