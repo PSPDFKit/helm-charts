@@ -114,6 +114,9 @@
         "localCacheSizeMegabytes": {
           "type": "integer"
         },
+        "localCacheTimeoutSeconds": {
+          "type": "integer"
+        },
         "redis": {
           "type": "object",
           "properties": {
