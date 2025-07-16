@@ -87,6 +87,7 @@ data:
 #
 {{- with .Values.assetStorage }}
   ASSET_STORAGE_CACHE_SIZE: {{ mul 1048576 .localCacheSizeMegabytes | quote }}
+  ASSET_STORAGE_CACHE_TIMEOUT: {{ mul 1000 .localCacheTimeoutSeconds | quote }}
   ASSET_STORAGE_BACKEND: {{ .backendType | quote }}
   FILE_UPLOAD_TIMEOUT_MS: {{ mul 1000 .fileUploadTimeoutSeconds | quote }}
 {{-   if $.Values.database.enabled }}
