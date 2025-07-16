@@ -327,6 +327,10 @@ assetStorage:
   # Results in `ASSET_STORAGE_CACHE_SIZE` (in bytes)
   # @section -- 07. Asset storage
   localCacheSizeMegabytes: 2000
+  # -- Sets local asset storage cache timeout in seconds
+  # Results in `ASSET_STORAGE_CACHE_TIMEOUT` (in milliseconds)
+  # @section -- 07. Asset storage
+  localCacheTimeoutSeconds: 5
   # -- Asset storage backend is only available if `database.enabled` is `true`
   # Sets `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure`
   # @section -- 07. Asset storage
