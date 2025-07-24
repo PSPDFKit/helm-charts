@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [5.1.3 (2025-07-24)](#513-2025-07-24)
+    - [Changed](#changed)
   - [5.1.2 (2025-07-16)](#512-2025-07-16)
     - [Changed](#changed)
   - [5.1.1 (2025-07-08)](#511-2025-07-08)
@@ -145,6 +147,12 @@
   - [2.0.0](#200)
     - [Changed](#changed-41)
 
+## 5.1.3 (2025-07-24)
+
+### Changed
+
+* [Document Engine 1.10.1](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1.10.1)
+
 ## 5.1.2 (2025-07-16)
 
 ### Added
@@ -256,7 +264,7 @@
 
 ### Added
 
-* Additional selectors for the pod template in Deployment: `deploymentExtraSelectorLabels`. Can be used to separate pods for debugging and testing purposes. 
+* Additional selectors for the pod template in Deployment: `deploymentExtraSelectorLabels`. Can be used to separate pods for debugging and testing purposes.
 
 ## 3.8.6 (2025-04-09)
 
@@ -302,7 +310,7 @@
 
 ### Added
 
-* Grafana dashboard through a ConfigMap. Use: 
+* Grafana dashboard through a ConfigMap. Use:
   * `observability.metrics.grafanaDashboard.enabled` to enable — also requires Prometheus exporter and StatsD output
   * `observability.metrics.grafanaDashboard.title` — to change the dashboard title
   * `observability.metrics.grafanaDashboard.allNamespaces` — to cover all namespaces instead of the release one
@@ -410,7 +418,7 @@
 
 ### Changed
 
-* Documentation changes following the company rebrand: we are now Nutrient. 
+* Documentation changes following the company rebrand: we are now Nutrient.
 
 ## 3.2.4 (2024-10-17)
 
@@ -446,7 +454,7 @@
 
 ### Changed
 
-* Polishing schema based on the available usage scenarios. 
+* Polishing schema based on the available usage scenarios.
 * Dependency charts versions update.
 * Documentation layout change.
 
@@ -477,7 +485,7 @@
 ## 3.0.4 (2024-08-21)
 
 > [!WARNING]
-> Breaking changes. 
+> Breaking changes.
 > We hope that `values.yaml` will now be much more readable and usable.
 
 ### Changed
@@ -519,7 +527,7 @@
   * `pspdfkit.auth.dashboard.enabled` renamed to `dashboard.enabled`
   * The rest of the former section to `pspdfkit.dashboard.auth`
 * The remaining `pspdfkit` section renamed to `config`.
-* Aligned default values with the default [Document Engine configuration values](https://www.nutrient.io/guides/document-engine/configuration/options/), affects the following default values: 
+* Aligned default values with the default [Document Engine configuration values](https://www.nutrient.io/guides/document-engine/configuration/options/), affects the following default values:
   * `config.workerPoolSize` changed from `8` to `16`
   * `config.maxUploadSizeMegaBytes` changed from `128` to `950`
   * `config.urlFetchTimeoutSeconds` changed from `20` to `5`
@@ -581,8 +589,8 @@
 
 ### Added
 
-* Support for OpenTelemetry traces, enabled by setting `pspdfkit.observability.opentelemetry.enabled` to `true`. 
-  * Unless the collector is placed as a sidecar and receives by grpc at port `4317`, other parameters are also necessary. 
+* Support for OpenTelemetry traces, enabled by setting `pspdfkit.observability.opentelemetry.enabled` to `true`.
+  * Unless the collector is placed as a sidecar and receives by grpc at port `4317`, other parameters are also necessary.
   * Please note: standard OpenTelemetry environment variables are used, and the following values are just convenience wrappers, therefore other configuration approaches (e.g. setting variables through mutations or post build patches) will also work.
   * Wrapped parameters (see `values.yaml` for more details):
     * `pspdfkit.observability.opentelemetry.otlpExporterEndpoint` (`OTEL_EXPORTER_OTLP_ENDPOINT`)
