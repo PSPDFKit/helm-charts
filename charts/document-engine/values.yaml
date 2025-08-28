@@ -601,6 +601,9 @@ observability:
     # -- `LOG_LEVEL`
     # @section -- D. Observability
     level: info  # @schema pattern:^(debug|info|warn|error)$
+    # -- `LOG_STRUCTURED` — enable structured logging in JSON format
+    # @section -- D. Observability
+    structured: false
     # -- `HEALTHCHECK_LOGLEVEL` — log level for health checks
     # @section -- D. Observability
     healthcheckLevel: debug  # @schema pattern:^(debug|info|warn|error)$
