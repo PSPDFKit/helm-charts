@@ -877,6 +877,9 @@
             "level": {
               "type": "string",
               "pattern": "^(debug|info|warn|error)$"
+            },
+            "structured": {
+              "type": "boolean"
             }
           }
         },

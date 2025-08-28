@@ -181,6 +181,7 @@ data:
 {{-     end }}
 {{-   end }}
   LOG_LEVEL: {{ .log.level | quote }}
+  LOG_STRUCTURED: {{ .log.structured | quote }}
   HEALTHCHECK_LOGLEVEL: {{ .log.healthcheckLevel | quote }}
 {{-   with .opentelemetry }}
 {{-     if .enabled }}
