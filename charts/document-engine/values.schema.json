@@ -1181,6 +1181,17 @@
     "service": {
       "type": "object",
       "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "internalTrafficPolicy": {
+          "type": "string",
+          "enum": [
+            "Cluster",
+            "Local",
+            null
+          ]
+        },
         "port": {
           "type": "integer"
         },
