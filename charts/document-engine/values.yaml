@@ -814,6 +814,12 @@ service:
   # -- Service port — see also `config.port`
   # @section -- C. Networking
   port: 5000
+  # -- Service annotations
+  # @section -- C. Networking
+  annotations: {}
+  # -- Service internal traffic policy
+  # @section -- C. Networking
+  internalTrafficPolicy: Cluster  # @schema enum: [Cluster, Local, null]
 
 # -- (object) Ingress
 # @section -- C. Networking
