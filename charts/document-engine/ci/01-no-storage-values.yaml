@@ -3,8 +3,8 @@ apiAuth:
   secretKeyBase: verySecretStringToNeverBeUsedInProduction
 
 service:
-  annotations: 
-     service.kubernetes.io/topology-aware-hints: "auto"
+  annotations:
+    service.kubernetes.io/topology-aware-hints: "auto"
 
 database:
   enabled: false
