@@ -710,9 +710,6 @@ observability:
       tags:
         - Nutrient
         - document-engine
-      # -- Whether to cover all namespaces
-      # @section -- D. Observability
-      allNamespaces: false
     # -- (object) StatsD parameters
     # @section -- D. Observability
     # @notationType -- reference

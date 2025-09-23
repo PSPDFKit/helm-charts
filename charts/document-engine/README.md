@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 5.3.0](https://img.shields.io/badge/Version-5.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.0](https://img.shields.io/badge/AppVersion-1.11.0-informational?style=flat-square)
+![Version: 5.4.0](https://img.shields.io/badge/Version-5.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.0](https://img.shields.io/badge/AppVersion-1.11.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -312,52 +312,52 @@ ingress:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`extraEnvFrom`](./values.yaml#L780) | Extra environment variables from resources | `[]` |
-| [`extraEnvs`](./values.yaml#L777) | Extra environment variables | `[]` |
-| [`extraVolumeMounts`](./values.yaml#L786) | Additional volume mounts for Document Engine container | `[]` |
-| [`extraVolumes`](./values.yaml#L783) | Additional volumes | `[]` |
-| [`image`](./values.yaml#L737) | Image settings | [...](./values.yaml#L737) |
-| [`imagePullSecrets`](./values.yaml#L744) | Pull secrets | `[]` |
-| [`initContainers`](./values.yaml#L792) | Init containers | `[]` |
-| [`podSecurityContext`](./values.yaml#L763) | Pod security context | `{}` |
-| [`securityContext`](./values.yaml#L767) | Security context | `{}` |
-| [`serviceAccount`](./values.yaml#L756) | ServiceAccount | [...](./values.yaml#L756) |
-| [`sidecars`](./values.yaml#L789) | Additional containers | `[]` |
+| [`extraEnvFrom`](./values.yaml#L777) | Extra environment variables from resources | `[]` |
+| [`extraEnvs`](./values.yaml#L774) | Extra environment variables | `[]` |
+| [`extraVolumeMounts`](./values.yaml#L783) | Additional volume mounts for Document Engine container | `[]` |
+| [`extraVolumes`](./values.yaml#L780) | Additional volumes | `[]` |
+| [`image`](./values.yaml#L734) | Image settings | [...](./values.yaml#L734) |
+| [`imagePullSecrets`](./values.yaml#L741) | Pull secrets | `[]` |
+| [`initContainers`](./values.yaml#L789) | Init containers | `[]` |
+| [`podSecurityContext`](./values.yaml#L760) | Pod security context | `{}` |
+| [`securityContext`](./values.yaml#L764) | Security context | `{}` |
+| [`serviceAccount`](./values.yaml#L753) | ServiceAccount | [...](./values.yaml#L753) |
+| [`sidecars`](./values.yaml#L786) | Additional containers | `[]` |
 
 ### Metadata
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`deploymentAnnotations`](./values.yaml#L802) | Deployment annotations | `{}` |
-| [`deploymentExtraSelectorLabels`](./values.yaml#L805) | Additional label selector for the deployment | `{}` |
-| [`fullnameOverride`](./values.yaml#L751) | Release full name override | `""` |
-| [`nameOverride`](./values.yaml#L748) | Release name override | `""` |
-| [`podAnnotations`](./values.yaml#L799) | Pod annotations | `{}` |
-| [`podLabels`](./values.yaml#L796) | Pod labels | `{}` |
+| [`deploymentAnnotations`](./values.yaml#L799) | Deployment annotations | `{}` |
+| [`deploymentExtraSelectorLabels`](./values.yaml#L802) | Additional label selector for the deployment | `{}` |
+| [`fullnameOverride`](./values.yaml#L748) | Release full name override | `""` |
+| [`nameOverride`](./values.yaml#L745) | Release name override | `""` |
+| [`podAnnotations`](./values.yaml#L796) | Pod annotations | `{}` |
+| [`podLabels`](./values.yaml#L793) | Pod labels | `{}` |
 
 ### Networking
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`extraIngresses`](./values.yaml#L862) | Additional ingresses, e.g. for the dashboard | [...](./values.yaml#L862) |
-| [`ingress`](./values.yaml#L827) | Ingress | [...](./values.yaml#L827) |
-| [`ingress.annotations`](./values.yaml#L836) | Ingress annotations | `{}` |
-| [`ingress.className`](./values.yaml#L833) | Ingress class name | `""` |
-| [`ingress.enabled`](./values.yaml#L830) | Enable ingress | `false` |
-| [`ingress.hosts`](./values.yaml#L839) | Hosts | `[]` |
-| [`ingress.tls`](./values.yaml#L853) | Ingress TLS section | `[]` |
-| [`networkPolicy`](./values.yaml#L879) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L879) |
-| [`networkPolicy.allowExternal`](./values.yaml#L887) | Allow access from anywhere | `true` |
-| [`networkPolicy.allowExternalEgress`](./values.yaml#L911) | Allow the pod to access any range of port and all destinations. | `true` |
-| [`networkPolicy.enabled`](./values.yaml#L882) | Enable network policy | `true` |
-| [`networkPolicy.extraEgress`](./values.yaml#L914) | Extra egress rules | `[]` |
-| [`networkPolicy.extraIngress`](./values.yaml#L890) | Additional ingress rules | `[]` |
-| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L905) | Allow traffic from other namespaces | `[]` |
-| [`service`](./values.yaml#L810) | Service | [...](./values.yaml#L810) |
-| [`service.annotations`](./values.yaml#L819) | Service annotations | `{}` |
-| [`service.internalTrafficPolicy`](./values.yaml#L822) | Service internal traffic policy | `"Cluster"` |
-| [`service.port`](./values.yaml#L816) | Service port — see also `config.port` | `5000` |
-| [`service.type`](./values.yaml#L813) | Service type | `"ClusterIP"` |
+| [`extraIngresses`](./values.yaml#L859) | Additional ingresses, e.g. for the dashboard | [...](./values.yaml#L859) |
+| [`ingress`](./values.yaml#L824) | Ingress | [...](./values.yaml#L824) |
+| [`ingress.annotations`](./values.yaml#L833) | Ingress annotations | `{}` |
+| [`ingress.className`](./values.yaml#L830) | Ingress class name | `""` |
+| [`ingress.enabled`](./values.yaml#L827) | Enable ingress | `false` |
+| [`ingress.hosts`](./values.yaml#L836) | Hosts | `[]` |
+| [`ingress.tls`](./values.yaml#L850) | Ingress TLS section | `[]` |
+| [`networkPolicy`](./values.yaml#L876) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L876) |
+| [`networkPolicy.allowExternal`](./values.yaml#L884) | Allow access from anywhere | `true` |
+| [`networkPolicy.allowExternalEgress`](./values.yaml#L908) | Allow the pod to access any range of port and all destinations. | `true` |
+| [`networkPolicy.enabled`](./values.yaml#L879) | Enable network policy | `true` |
+| [`networkPolicy.extraEgress`](./values.yaml#L911) | Extra egress rules | `[]` |
+| [`networkPolicy.extraIngress`](./values.yaml#L887) | Additional ingress rules | `[]` |
+| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L902) | Allow traffic from other namespaces | `[]` |
+| [`service`](./values.yaml#L807) | Service | [...](./values.yaml#L807) |
+| [`service.annotations`](./values.yaml#L816) | Service annotations | `{}` |
+| [`service.internalTrafficPolicy`](./values.yaml#L819) | Service internal traffic policy | `"Cluster"` |
+| [`service.port`](./values.yaml#L813) | Service port — see also `config.port` | `5000` |
+| [`service.type`](./values.yaml#L810) | Service type | `"ClusterIP"` |
 
 ### Observability
 
@@ -370,7 +370,6 @@ ingress:
 | [`observability.metrics`](./values.yaml#L641) | Metrics configuration | [...](./values.yaml#L641) |
 | [`observability.metrics.customTags`](./values.yaml#L650) | Prometheus metrics endpoint settings | `namespace={{ .Release.Namespace }},app={{ include "document-engine.fullname" . }}` |
 | [`observability.metrics.grafanaDashboard`](./values.yaml#L689) | Grafana dashboard | [...](./values.yaml#L689) |
-| [`observability.metrics.grafanaDashboard.allNamespaces`](./values.yaml#L715) | Whether to cover all namespaces | `false` |
 | [`observability.metrics.grafanaDashboard.configMap`](./values.yaml#L697) | ConfigMap parameters | [...](./values.yaml#L697) |
 | [`observability.metrics.grafanaDashboard.configMap.labels`](./values.yaml#L700) | ConfigMap labels | `{"grafana_dashboard":"1"}` |
 | [`observability.metrics.grafanaDashboard.enabled`](./values.yaml#L693) | Enable Grafana dashboard. To work, requires Prometheus metrics enabled in `observability.metrics.prometheusEndpoint.enabled` | `false` |
@@ -380,9 +379,9 @@ ingress:
 | [`observability.metrics.prometheusEndpoint.port`](./values.yaml#L657) | Port for the Prometheus metrics endpoint, `PROMETHEUS_PORT` | `10254` |
 | [`observability.metrics.prometheusRule`](./values.yaml#L681) | Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule) Requires `observability.metrics.prometheusEndpoint.enabled` to be `true` | [...](./values.yaml#L681) |
 | [`observability.metrics.serviceMonitor`](./values.yaml#L666) | Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor) Requires `observability.metrics.prometheusEndpoint.enabled` to be `true` | [...](./values.yaml#L666) |
-| [`observability.metrics.statsd`](./values.yaml#L719) | StatsD parameters | [...](./values.yaml#L719) |
-| [`observability.metrics.statsd.customTags`](./values.yaml#L732) | StatsD custom tags, `STATSD_CUSTOM_TAGS` | `` |
-| [`observability.metrics.statsd.port`](./values.yaml#L728) | StatsD port, `STATSD_PORT` | `9125` |
+| [`observability.metrics.statsd`](./values.yaml#L716) | StatsD parameters | [...](./values.yaml#L716) |
+| [`observability.metrics.statsd.customTags`](./values.yaml#L729) | StatsD custom tags, `STATSD_CUSTOM_TAGS` | `` |
+| [`observability.metrics.statsd.port`](./values.yaml#L725) | StatsD port, `STATSD_PORT` | `9125` |
 | [`observability.opentelemetry`](./values.yaml#L610) | OpenTelemetry settings | [...](./values.yaml#L610) |
 | [`observability.opentelemetry.enabled`](./values.yaml#L613) | Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported | `false` |
 | [`observability.opentelemetry.otelPropagators`](./values.yaml#L629) | `OTEL_PROPAGATORS`, propagators | `""` |
@@ -397,35 +396,35 @@ ingress:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`lifecycle`](./values.yaml#L974) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
-| [`livenessProbe`](./values.yaml#L944) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L944) |
-| [`readinessProbe`](./values.yaml#L957) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L957) |
-| [`startupProbe`](./values.yaml#L931) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L931) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L970) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
+| [`lifecycle`](./values.yaml#L971) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
+| [`livenessProbe`](./values.yaml#L941) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L941) |
+| [`readinessProbe`](./values.yaml#L954) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L954) |
+| [`startupProbe`](./values.yaml#L928) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L928) |
+| [`terminationGracePeriodSeconds`](./values.yaml#L967) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
 
 ### Scheduling
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`affinity`](./values.yaml#L1029) | Node affinity | `{}` |
-| [`autoscaling`](./values.yaml#L982) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L982) |
-| [`nodeSelector`](./values.yaml#L1026) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
-| [`podDisruptionBudget`](./values.yaml#L1019) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1019) |
-| [`priorityClassName`](./values.yaml#L1038) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
-| [`replicaCount`](./values.yaml#L1007) | Number of replicas | `1` |
-| [`resources`](./values.yaml#L1004) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
-| [`schedulerName`](./values.yaml#L1041) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
-| [`tolerations`](./values.yaml#L1032) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
-| [`topologySpreadConstraints`](./values.yaml#L1035) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
-| [`updateStrategy`](./values.yaml#L1010) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
+| [`affinity`](./values.yaml#L1026) | Node affinity | `{}` |
+| [`autoscaling`](./values.yaml#L979) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L979) |
+| [`nodeSelector`](./values.yaml#L1023) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| [`podDisruptionBudget`](./values.yaml#L1016) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1016) |
+| [`priorityClassName`](./values.yaml#L1035) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
+| [`replicaCount`](./values.yaml#L1004) | Number of replicas | `1` |
+| [`resources`](./values.yaml#L1001) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
+| [`schedulerName`](./values.yaml#L1038) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
+| [`tolerations`](./values.yaml#L1029) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
+| [`topologySpreadConstraints`](./values.yaml#L1032) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
+| [`updateStrategy`](./values.yaml#L1007) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
 
 ### Chart dependencies
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`minio`](./values.yaml#L1068) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) | [...](./values.yaml#L1068) |
-| [`postgresql`](./values.yaml#L1046) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) | [...](./values.yaml#L1046) |
-| [`redis`](./values.yaml#L1080) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) | [...](./values.yaml#L1080) |
+| [`minio`](./values.yaml#L1065) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) | [...](./values.yaml#L1065) |
+| [`postgresql`](./values.yaml#L1043) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) | [...](./values.yaml#L1043) |
+| [`redis`](./values.yaml#L1077) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) | [...](./values.yaml#L1077) |
 
 ### Other Values
 
@@ -433,7 +432,7 @@ ingress:
 |-----|-------------|---------|
 | [`config.http2SharedRendering.checkinTimeoutMilliseconds`](./values.yaml#L138) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKIN_TIMEOUT` — document processing daemon checkin timeout. Do not change unless explicitly recommended by Nutrient support. | `0` |
 | [`config.http2SharedRendering.checkoutTimeoutMilliseconds`](./values.yaml#L141) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKOUT_TIMEOUT` — document processing daemon checkout timeout. Do not change unless explicitly recommended by Nutrient support. | `5000` |
-| [`revisionHistoryLimit`](./values.yaml#L1014) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
+| [`revisionHistoryLimit`](./values.yaml#L1011) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
 
 ## Contribution
 

@@ -37,7 +37,6 @@ observability:
       enabled: true
     grafanaDashboard:
       enabled: true
-      allNamespaces: false
 
 postgresql:
   enabled: true

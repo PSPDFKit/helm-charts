@@ -889,9 +889,6 @@
             "grafanaDashboard": {
               "type": "object",
               "properties": {
-                "allNamespaces": {
-                  "type": "boolean"
-                },
                 "configMap": {
                   "type": "object",
                   "properties": {
