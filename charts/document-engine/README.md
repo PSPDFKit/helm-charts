@@ -58,12 +58,16 @@ helm upgrade --install -n document-engine \
 
 ### Dependencies
 
-The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) charts for PostgreSQL, [MinIO](https://min.io/) and [Redis](https://redis.io/). They are disabled by default, but can be enabled for convenience. Please consider [tests](/charts/document-engine/ci) as examples.
+The chart does not provide means to install PostgreSQL database, object storage or Redis for rendering cache.
+Instead, we recommend to manage these resoursces externally, e.g., on the cloud provider level.
+
+However, the chart suggests generation of resources for:
+
+* [CloudNativePG](https://cloudnative-pg.io/) PostgreSQL database cluster
 
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | minio | 17.0.5 |
-| https://charts.bitnami.com/bitnami | postgresql | 16.7.13 |
 | https://charts.bitnami.com/bitnami | redis | 21.2.5 |
 
 Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
@@ -203,7 +207,7 @@ ingress:
 | [`database.postgres.database`](./values.yaml#L214) | `PGDATABASE` | `"document-engine"` |
 | [`database.postgres.externalAdminSecretName`](./values.yaml#L235) | External secret for administrative database credentials, used for migrations: `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD` | `""` |
 | [`database.postgres.externalSecretName`](./values.yaml#L231) | Use external secret for database credentials. `PGUSER` and `PGPASSWORD` must be provided and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL` | `""` |
-| [`database.postgres.host`](./values.yaml#L208) | `PGHOST` | `"{{ .Release.Name }}-postgresql"` |
+| [`database.postgres.host`](./values.yaml#L208) | `PGHOST` | `"{{ .Release.Name }}-postgres-rw"` |
 | [`database.postgres.password`](./values.yaml#L220) | `PGPASSWORD` | `"despair"` |
 | [`database.postgres.port`](./values.yaml#L211) | `PGPORT` | `5432` |
 | [`database.postgres.tls`](./values.yaml#L240) | TLS settings | [...](./values.yaml#L240) |
@@ -213,7 +217,7 @@ ingress:
 | [`database.postgres.tls.trustBundle`](./values.yaml#L257) | Trust bundle for PostgreSQL, sets `PGSSL_CA_CERTS`, mutually exclusive with `trustFileName` and takes precedence | `""` |
 | [`database.postgres.tls.trustFileName`](./values.yaml#L260) | Path from `certificateTrust.customCertificates`, wraps around `PGSSL_CA_CERT_PATH` | `""` |
 | [`database.postgres.tls.verify`](./values.yaml#L246) | Negated `PGSSL_DISABLE_VERIFY` | `true` |
-| [`database.postgres.username`](./values.yaml#L217) | `PGUSER` | `"de-user"` |
+| [`database.postgres.username`](./values.yaml#L217) | `PGUSER` | `"postgres"` |
 
 ### Document lifecycle
 
@@ -423,9 +427,17 @@ ingress:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`minio`](./values.yaml#L1068) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) | [...](./values.yaml#L1068) |
-| [`postgresql`](./values.yaml#L1046) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) | [...](./values.yaml#L1046) |
-| [`redis`](./values.yaml#L1080) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) | [...](./values.yaml#L1080) |
+| [`cloudNativePG`](./values.yaml#L1046) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1046) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1077) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L1074) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L1059) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1059) |
+| [`cloudNativePG.enabled`](./values.yaml#L1049) | Enable CloudNativePG resources | `false` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L1086) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.operatorNamespace`](./values.yaml#L1052) | CloudNativePG operator namespace | `"cnpg-system"` |
+| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1055) | CloudNativePG operator release name | `"cloudnative-pg"` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L1080) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
+| [`minio`](./values.yaml#L1092) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) | [...](./values.yaml#L1092) |
+| [`redis`](./values.yaml#L1104) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) | [...](./values.yaml#L1104) |
 
 ### Other Values
 

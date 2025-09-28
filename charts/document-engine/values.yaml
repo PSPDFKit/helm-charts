@@ -205,7 +205,7 @@ database:
   postgres:
     # -- (tpl/string) `PGHOST`
     # @section -- 05. Database
-    host: "{{ .Release.Name }}-postgresql"
+    host: "{{ .Release.Name }}-postgres-rw"
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
@@ -214,7 +214,7 @@ database:
     database: document-engine
     # -- `PGUSER`
     # @section -- 05. Database
-    username: de-user
+    username: postgres
     # -- `PGPASSWORD`
     # @section -- 05. Database
     password: despair
@@ -1040,27 +1040,51 @@ priorityClassName: ""
 # @section -- G. Scheduling
 schedulerName: ""
 
-# -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
+# -- [CloudNativePG](https://cloudnative-pg.io/) resources
 # @section -- Z. Chart dependencies
 # @notationType -- reference
-postgresql:  # @schema additionalProperties:true
+cloudNativePG:
+  # -- Enable CloudNativePG resources
+  # @section -- Z. Chart dependencies
   enabled: false
-  architecture: standalone
-  primary:
-    persistence:
-      enabled: false
-    extendedConfiguration: |
-      log_statement = none
-    pgHbaConfiguration: |
-      local    all             all                                trust
-      host     all             all        127.0.0.1/32            trust
-      host     all             all        ::1/128                 trust
-      host     all             all        0.0.0.0/0               md5
-      host     all             all        ::/0                    md5
-  auth:
-    enabledPostgresUser: true
-    postgresPassword: despair
-    database: document-engine
+  # -- CloudNativePG operator namespace
+  # @section -- Z. Chart dependencies
+  operatorNamespace: cnpg-system
+  # -- CloudNativePG operator release name
+  # @section -- Z. Chart dependencies
+  operatorReleaseName: cloudnative-pg
+  # -- CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec)
+  # @section -- Z. Chart dependencies
+  # @notationType -- reference
+  clusterSpec:  # @schema additionalProperties:true
+    instances: 1
+    storage:
+      size: 512Mi
+      storageClass: standard
+    enableSuperuserAccess: true
+    bootstrap:
+      initdb:
+        database: nutrient
+        owner: whatever
+    logLevel: warning
+    monitoring:
+      enablePodMonitor: false
+  # -- Cluster labels
+  # @section -- Z. Chart dependencies
+  clusterLabels: {}
+  # -- Cluster annotations
+  # @section -- Z. Chart dependencies
+  clusterAnnotations: {}
+  # -- Superuser secret to use with the cluster
+  # @section -- Z. Chart dependencies
+  superuserSecret:
+    create: true
+    username: postgres
+    password: despair
+  # -- Network policy to allow access to the cluster
+  # @section -- Z. Chart dependencies
+  networkPolicy:
+    enabled: true
 
 # -- [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)
 # @section -- Z. Chart dependencies

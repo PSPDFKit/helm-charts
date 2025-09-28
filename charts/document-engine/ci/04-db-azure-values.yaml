@@ -49,17 +49,8 @@ observability:
       port: 9125
       host: localhost
 
-postgresql:
+cloudNativePG:
   enabled: true
-  primary:
-    persistence:
-      enabled: true
-      size: 512Mi
-      storageClass: standard
-      accessModes:
-        - ReadWriteOnce
-  volumePermissions:
-    enabled: true
 
 minio:
   enabled: false

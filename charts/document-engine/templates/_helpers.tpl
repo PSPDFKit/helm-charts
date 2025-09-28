@@ -191,3 +191,14 @@ Object storage parameters
     {{- .Values.assetStorage.azure.externalSecretName -}}
   {{- end -}}
 {{- end -}}
+
+{{/*
+CloudNativePG
+*/}}
+{{- define "document-engine.storage.cloudNativePG.cluster.name" -}}
+{{- include "document-engine.fullname" . }}-postgres
+{{- end -}}
+
+{{- define "document-engine.storage.cloudNativePG.superuser-secret.name" -}}
+{{- include "document-engine.storage.cloudNativePG.cluster.name" . }}-superuser
+{{- end -}}

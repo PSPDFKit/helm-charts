@@ -143,7 +143,12 @@ helm upgrade --install -n document-engine \
 
 ### Dependencies
 
-The chart depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) charts for PostgreSQL, [MinIO](https://min.io/) and [Redis](https://redis.io/). They are disabled by default, but can be enabled for convenience. Please consider [tests](/charts/document-engine/ci) as examples.
+The chart does not provide means to install PostgreSQL database, object storage or Redis for rendering cache.
+Instead, we recommend to manage these resoursces externally, e.g., on the cloud provider level. 
+
+However, the chart suggests generation of resources for:
+
+* [CloudNativePG](https://cloudnative-pg.io/) PostgreSQL database cluster
 
 {{ template "chart.requirementsTable" . }}
 

@@ -17,10 +17,6 @@ maintainers:
     url: https://www.nutrient.io
 
 dependencies:
-  - name: postgresql
-    version: 16.7.13
-    repository: https://charts.bitnami.com/bitnami
-    condition: postgresql.enabled
   - name: minio
     version: 17.0.5
     repository: https://charts.bitnami.com/bitnami

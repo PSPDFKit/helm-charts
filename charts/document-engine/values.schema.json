@@ -291,6 +291,98 @@
         }
       }
     },
+    "cloudNativePG": {
+      "type": "object",
+      "properties": {
+        "clusterAnnotations": {
+          "type": "object"
+        },
+        "clusterLabels": {
+          "type": "object"
+        },
+        "clusterSpec": {
+          "type": "object",
+          "properties": {
+            "bootstrap": {
+              "type": "object",
+              "properties": {
+                "initdb": {
+                  "type": "object",
+                  "properties": {
+                    "database": {
+                      "type": "string"
+                    },
+                    "owner": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "enableSuperuserAccess": {
+              "type": "boolean"
+            },
+            "instances": {
+              "type": "integer"
+            },
+            "logLevel": {
+              "type": "string"
+            },
+            "monitoring": {
+              "type": "object",
+              "properties": {
+                "enablePodMonitor": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "storage": {
+              "type": "object",
+              "properties": {
+                "size": {
+                  "type": "string"
+                },
+                "storageClass": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "networkPolicy": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "operatorNamespace": {
+          "type": "string"
+        },
+        "operatorReleaseName": {
+          "type": "string"
+        },
+        "superuserSecret": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type": "boolean"
+            },
+            "password": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "clustering": {
       "type": "object",
       "properties": {
@@ -1051,51 +1143,6 @@
     },
     "podSecurityContext": {
       "type": "object"
-    },
-    "postgresql": {
-      "type": "object",
-      "properties": {
-        "architecture": {
-          "type": "string"
-        },
-        "auth": {
-          "type": "object",
-          "properties": {
-            "database": {
-              "type": "string"
-            },
-            "enabledPostgresUser": {
-              "type": "boolean"
-            },
-            "postgresPassword": {
-              "type": "string"
-            }
-          }
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "primary": {
-          "type": "object",
-          "properties": {
-            "extendedConfiguration": {
-              "type": "string"
-            },
-            "persistence": {
-              "type": "object",
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                }
-              }
-            },
-            "pgHbaConfiguration": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "additionalProperties": true
     },
     "priorityClassName": {
       "type": "string"
