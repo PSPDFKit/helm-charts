@@ -13,6 +13,9 @@ spec:
   {{- with .Values.service.internalTrafficPolicy }}
   internalTrafficPolicy: {{ . }}
   {{- end }}
+  {{- with .Values.service.trafficDistribution }}
+  trafficDistribution: {{ . }}
+  {{- end }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: api
