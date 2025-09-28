@@ -816,7 +816,10 @@ service:
   annotations: {}
   # -- Service internal traffic policy
   # @section -- C. Networking
-  internalTrafficPolicy: Cluster  # @schema enum: [Cluster, Local, null]
+  internalTrafficPolicy: Cluster  # @schema type: string, null; enum: [Cluster, Local, null]
+  # -- Service [traffic distribution policy](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution)
+  # @section -- C. Networking
+  trafficDistribution: null  # @schema type: string, null; enum: [PreferClose, PreferSameZone, PreferSameNode, null]
 
 # -- (object) Ingress
 # @section -- C. Networking
