@@ -146,11 +146,7 @@ helm upgrade --install -n document-engine \
 The chart does not provide means to install PostgreSQL database, object storage or Redis for rendering cache.
 Instead, we recommend to manage these resoursces externally, e.g., on the cloud provider level. 
 
-However, the chart suggests generation of resources for:
-
-* [CloudNativePG](https://cloudnative-pg.io/) PostgreSQL database cluster
-
-{{ template "chart.requirementsTable" . }}
+However, the chart suggests generation of PostgreSQL Cluster custom resource provided by [CloudNativePG](https://cloudnative-pg.io/) operator.
 
 Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
 

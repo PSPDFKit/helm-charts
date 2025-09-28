@@ -1085,26 +1085,3 @@ cloudNativePG:
   # @section -- Z. Chart dependencies
   networkPolicy:
     enabled: true
-
-# -- [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)
-# @section -- Z. Chart dependencies
-# @notationType -- reference
-minio:  # @schema additionalProperties:true
-  enabled: false
-  mode: standalone
-  auth:
-    rootUser: deObjStorageRootKey
-    rootPassword: deObjStorageSecret
-  defaultBuckets: "document-engine-assets"
-  disableWebUI: true
-
-# -- [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis)
-# @section -- Z. Chart dependencies
-# @notationType -- reference
-redis:  # @schema additionalProperties:true
-  enabled: false
-  architecture: standalone
-  auth:
-    enabled: true
-    sentinel: false
-    password: ""

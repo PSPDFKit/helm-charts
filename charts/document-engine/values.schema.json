@@ -892,35 +892,6 @@
         }
       }
     },
-    "minio": {
-      "type": "object",
-      "properties": {
-        "auth": {
-          "type": "object",
-          "properties": {
-            "rootPassword": {
-              "type": "string"
-            },
-            "rootUser": {
-              "type": "string"
-            }
-          }
-        },
-        "defaultBuckets": {
-          "type": "string"
-        },
-        "disableWebUI": {
-          "type": "boolean"
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "mode": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": true
-    },
     "nameOverride": {
       "type": "string"
     },
@@ -1180,32 +1151,6 @@
           "type": "integer"
         }
       }
-    },
-    "redis": {
-      "type": "object",
-      "properties": {
-        "architecture": {
-          "type": "string"
-        },
-        "auth": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            },
-            "password": {
-              "type": "string"
-            },
-            "sentinel": {
-              "type": "boolean"
-            }
-          }
-        },
-        "enabled": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": true
     },
     "replicaCount": {
       "type": "integer"

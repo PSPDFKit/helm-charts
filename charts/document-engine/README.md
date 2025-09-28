@@ -61,14 +61,7 @@ helm upgrade --install -n document-engine \
 The chart does not provide means to install PostgreSQL database, object storage or Redis for rendering cache.
 Instead, we recommend to manage these resoursces externally, e.g., on the cloud provider level.
 
-However, the chart suggests generation of resources for:
-
-* [CloudNativePG](https://cloudnative-pg.io/) PostgreSQL database cluster
-
-| Repository | Name | Version |
-|------------|------|---------|
-| https://charts.bitnami.com/bitnami | minio | 17.0.5 |
-| https://charts.bitnami.com/bitnami | redis | 21.2.5 |
+However, the chart suggests generation of PostgreSQL Cluster custom resource provided by [CloudNativePG](https://cloudnative-pg.io/) operator.
 
 Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
 
@@ -436,8 +429,6 @@ ingress:
 | [`cloudNativePG.operatorNamespace`](./values.yaml#L1052) | CloudNativePG operator namespace | `"cnpg-system"` |
 | [`cloudNativePG.operatorReleaseName`](./values.yaml#L1055) | CloudNativePG operator release name | `"cloudnative-pg"` |
 | [`cloudNativePG.superuserSecret`](./values.yaml#L1080) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
-| [`minio`](./values.yaml#L1092) | [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio) | [...](./values.yaml#L1092) |
-| [`redis`](./values.yaml#L1104) | [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis) | [...](./values.yaml#L1104) |
 
 ### Other Values
 

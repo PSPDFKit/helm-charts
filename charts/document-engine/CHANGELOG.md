@@ -167,7 +167,7 @@
 
 ### Changed
 
-* Removed `postgresql` Bitnami chart dependency, and the corresponding section in the values file.
+* Removed `postgresql`, `minio` and `redis` Bitnami chart dependencies, and the corresponding sections in the values file.
 
 ## 5.4.1 (2025-09-28)
 

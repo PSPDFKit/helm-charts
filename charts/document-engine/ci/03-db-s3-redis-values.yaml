@@ -16,28 +16,31 @@ assetStorage:
     enabled: true
     enabledPostgres: true
   s3:
-    accessKeyId: "documentEngineObjectStorageRootKey"
-    secretAccessKey: "documentEngineObjectStorageRootPassword"
-    bucket: "document-engine-assets"
-    region: "us-east-1"
-    host: "{{ .Release.Name }}-minio"
-    port: 9000
+    accessKeyId: nutrient
+    secretAccessKey: despairIsUnbearable87
+    bucket: whatever
+    region: us-east-1
+    host: minio.whatever.svc.cluster.local
+    port: 80
     scheme: "http://"
   redis:
     enabled: true
-    host: "{{ .Release.Name }}-redis-master"
+    host: "127.0.0.1"
+    port: 6379
     database: ""
     username: ""
     password: ""
     ttlSeconds: 3600
     useTtl: true
-    sentinel:
-      enabled: false
-      urls:
-        - "redis://{{ .Release.Name }}-redis-node-0:26379"
-        - "redis://{{ .Release.Name }}-redis-node-1:26379"
-        - "redis://{{ .Release.Name }}-redis-node-2:26379"
-      group: despair
+
+sidecars:
+  - name: redis
+    image: redis:8.2.1-alpine
+    imagePullPolicy: IfNotPresent
+    ports:
+      - containerPort: 6379
+        name: redis
+        protocol: TCP
 
 observability:
   metrics:
@@ -46,41 +49,3 @@ observability:
 
 cloudNativePG:
   enabled: true
-
-minio:
-  enabled: true
-  auth:
-    rootUser: documentEngineObjectStorageRootKey
-    rootPassword: documentEngineObjectStorageRootPassword
-  defaultBuckets: "document-engine-assets"
-
-redis:
-  enabled: true
-  architecture: standalone
-  auth:
-    enabled: false
-  master:
-    count: 1
-    revisionHistoryLimit: 1
-    persistence:
-      enabled: false
-    persistentVolumeClaimRetentionPolicy:
-      enabled: false
-      whenDeleted: Delete
-  # replica:
-  #   replicaCount: 2
-  #   revisionHistoryLimit: 1
-  #   persistence:
-  #     enabled: false
-  #   persistentVolumeClaimRetentionPolicy:
-  #     enabled: false
-  #     whenDeleted: Delete
-  # sentinel:
-  #   enabled: true
-  #   quorum: 3
-  #   masterSet: despair
-  #   getMasterTimeout: 90
-  #   automateClusterRecovery: true
-  #   redisShutdownWaitFailover: true
-  #   persistence:
-  #     enabled: false

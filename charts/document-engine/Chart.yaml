@@ -15,13 +15,3 @@ maintainers:
   - name: Nutrient
     email: support@nutrient.io
     url: https://www.nutrient.io
-
-dependencies:
-  - name: minio
-    version: 17.0.5
-    repository: https://charts.bitnami.com/bitnami
-    condition: minio.enabled
-  - name: redis
-    version: 21.2.5
-    repository: https://charts.bitnami.com/bitnami
-    condition: redis.enabled
