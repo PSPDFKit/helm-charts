@@ -1182,7 +1182,10 @@
           "type": "object"
         },
         "internalTrafficPolicy": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "enum": [
             "Cluster",
             "Local",
@@ -1193,7 +1196,10 @@
           "type": "integer"
         },
         "trafficDistribution": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "enum": [
             "PreferClose",
             "PreferSameZone",
