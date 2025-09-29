@@ -27,7 +27,7 @@ Document Engine is a backend software for processing documents and powering auto
   * [Observability](#observability)
   * [Pod lifecycle](#pod-lifecycle)
   * [Scheduling](#scheduling)
-  * [Chart dependencies](#chart-dependencies)
+  * [Storage resource definitions](#storage-resource-definitions)
   * [Other Values](#other-values)
 * [Contribution](#contribution)
 * [License](#license)
@@ -416,7 +416,7 @@ ingress:
 | [`topologySpreadConstraints`](./values.yaml#L1035) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
 | [`updateStrategy`](./values.yaml#L1010) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
 
-### Chart dependencies
+### Storage resource definitions
 
 | Key | Description | Default |
 |-----|-------------|---------|

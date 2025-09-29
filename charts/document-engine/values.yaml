@@ -1041,20 +1041,20 @@ priorityClassName: ""
 schedulerName: ""
 
 # -- [CloudNativePG](https://cloudnative-pg.io/) resources
-# @section -- Z. Chart dependencies
+# @section -- Z. Storage resource definitions
 # @notationType -- reference
 cloudNativePG:
   # -- Enable CloudNativePG resources
-  # @section -- Z. Chart dependencies
+  # @section -- Z. Storage resource definitions
   enabled: false
   # -- CloudNativePG operator namespace
-  # @section -- Z. Chart dependencies
+  # @section -- Z. Storage resource definitions
   operatorNamespace: cnpg-system
   # -- CloudNativePG operator release name
-  # @section -- Z. Chart dependencies
+  # @section -- Z. Storage resource definitions
   operatorReleaseName: cloudnative-pg
   # -- CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec)
-  # @section -- Z. Chart dependencies
+  # @section -- Z. Storage resource definitions
   # @notationType -- reference
   clusterSpec:  # @schema additionalProperties:true
     instances: 1
@@ -1070,18 +1070,18 @@ cloudNativePG:
     monitoring:
       enablePodMonitor: false
   # -- Cluster labels
-  # @section -- Z. Chart dependencies
+  # @section -- Z. Storage resource definitions
   clusterLabels: {}
   # -- Cluster annotations
-  # @section -- Z. Chart dependencies
+  # @section -- Z. Storage resource definitions
   clusterAnnotations: {}
   # -- Superuser secret to use with the cluster
-  # @section -- Z. Chart dependencies
+  # @section -- Z. Storage resource definitions
   superuserSecret:
     create: true
     username: postgres
     password: despair
   # -- Network policy to allow access to the cluster
-  # @section -- Z. Chart dependencies
+  # @section -- Z. Storage resource definitions
   networkPolicy:
     enabled: true
