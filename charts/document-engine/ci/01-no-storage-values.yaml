@@ -3,8 +3,7 @@ apiAuth:
   secretKeyBase: verySecretStringToNeverBeUsedInProduction
 
 service:
-  annotations:
-    service.kubernetes.io/topology-aware-hints: "auto"
+  trafficDistribution: PreferClose
 
 database:
   enabled: false
