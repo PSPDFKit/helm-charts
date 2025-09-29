@@ -24,6 +24,11 @@ data:
   IGNORE_INVALID_ANNOTATIONS: {{ .Values.config.ignoreInvalidAnnotations | quote }}
   AUTOMATIC_LINK_EXTRACTION: {{ .Values.config.automaticLinkExtraction | quote }}
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
+{{- with .Values.config.hoard }}
+  HOARD_MAX_SIZE: {{ mul 1000000 .maxSizeMegaBytes | quote }}
+  HOARD_BINARY_COPY_ENABLED: {{ .binaryCopyEnabled | quote }}
+  HOARD_BINARY_COPY_THRESHOLD: {{ .binaryCopyThreshold | quote }}
+{{- end }}
 {{- with .Values.config.http2SharedRendering }}
   HTTP2_SHARED_RENDERING_PROCESS_ENABLE: {{ .enabled | quote }}
   HTTP2_SHARED_RENDERING_PROCESS_CHECKIN_TIMEOUT: {{ .checkinTimeoutMilliseconds | quote }}

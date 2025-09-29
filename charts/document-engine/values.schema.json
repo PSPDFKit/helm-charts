@@ -449,6 +449,20 @@
         "generationTimeoutSeconds": {
           "type": "integer"
         },
+        "hoard": {
+          "type": "object",
+          "properties": {
+            "binaryCopyEnabled": {
+              "type": "boolean"
+            },
+            "binaryCopyThreshold": {
+              "type": "integer"
+            },
+            "maxSizeMegaBytes": {
+              "type": "integer"
+            }
+          }
+        },
         "http2SharedRendering": {
           "type": "object",
           "properties": {

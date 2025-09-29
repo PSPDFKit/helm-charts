@@ -165,6 +165,7 @@
 
 * `cloudNativePG` section, including `cloudNativePG.cluster` to create PostgreSQL database clusters using [CloudNativePG](https://cloudnative-pg.io/) operator.
 * `observability.log.structured` to enable structured logs in JSON format
+* Added `config.hoard` map to cover internal caching engine parameters.
 
 ### Changed
 
