@@ -117,7 +117,7 @@
             {
               "disableTextWrap": false,
               "editorMode": "builder",
-              "expr": "vm_memory_total{pod=~\"$pod\", namespace=~\"$namespace\"}",
+              "expr": "vm_memory_total{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}",
               "fullMetaSearch": false,
               "includeNullMetadata": false,
               "legendFormat": "{{__name__}} {pod = {{pod}} }",
@@ -217,7 +217,7 @@
             {
               "disableTextWrap": false,
               "editorMode": "builder",
-              "expr": "$erlang_memory_detail_metrics{pod=~\"$pod\", namespace=~\"$namespace\"}",
+              "expr": "$erlang_memory_detail_metrics{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}",
               "fullMetaSearch": false,
               "includeNullMetadata": false,
               "legendFormat": "{{__name__}} {pod: {{pod}}}",
@@ -316,7 +316,7 @@
             {
               "disableTextWrap": false,
               "editorMode": "builder",
-              "expr": "vm_messages_in_queues{pod=~\"$pod\", namespace=~\"$namespace\"}",
+              "expr": "vm_messages_in_queues{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}",
               "fullMetaSearch": false,
               "includeNullMetadata": false,
               "legendFormat": "{{__name__}} {pod: {{pod}}}",
@@ -433,7 +433,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum by(status) (rate(http_server_req_end_count{group=\"standard\", pod=~\"$pod\", namespace=~\"$namespace\"}[1m]))",
+          "expr": "sum by(status) (rate(http_server_request_duration_microseconds_count{group=\"standard\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}[1m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
@@ -442,7 +442,7 @@
           "useBackend": false
         }
       ],
-      "title": "standard HTTP requests/1sec (pod = $pod)",
+      "title": "Standard HTTP requests per second (pod = $pod)",
       "type": "timeseries"
     },
     {
@@ -533,7 +533,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum by(request) (rate(pspdfkitd_exec_count{pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval]))",
+          "expr": "sum by(request) (rate(pspdfkitd_exec_duration_milliseconds_count{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
@@ -542,7 +542,7 @@
           "useBackend": false
         }
       ],
-      "title": "PSPDFKit worker requests/1sec by type (pod = $pod)",
+      "title": "PSPDFKit worker requests per second by type (pod = $pod)",
       "type": "timeseries"
     },
     {
@@ -633,7 +633,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum by(status) (rate(http_server_req_end_count{group=\"long_poll\", pod=~\"$pod\", namespace=~\"$namespace\"}[1m]))",
+          "expr": "sum by(status) (rate(http_server_request_duration_microseconds_count{group=\"long_poll\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}[1m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
@@ -729,7 +729,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum by(request) (delta(pspdfkitd_exec_sum{pod=~\"$pod\", namespace=~\"$namespace\", request!=\"checkout\"}[5m]))",
+          "expr": "sum by(request) (delta(pspdfkitd_exec_duration_milliseconds_sum{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\", request!=\"checkout\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "{{label_name}}",
@@ -827,7 +827,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum(delta(pspdfkitd_exec_count{pod=~\"$pod\", namespace=~\"$namespace\", request!=\"checkout\", request=~\"search_in_document\"}[5m]))",
+          "expr": "sum(delta(pspdfkitd_exec_duration_milliseconds_count{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\", request!=\"checkout\", request=~\"search_in_document\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "{{label_name}}",
@@ -925,7 +925,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum(delta(pspdfkitd_exec_count{pod=~\"$pod\", namespace=~\"$namespace\", request!=\"checkout\", request=~\"render_annotation\"}[5m]))",
+          "expr": "sum(delta(pspdfkitd_exec_duration_milliseconds_count{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\", request!=\"checkout\", request=~\"render_annotation\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "{{label_name}}",
@@ -1023,7 +1023,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum(delta(pspdfkitd_exec_count{pod=~\"$pod\", namespace=~\"$namespace\", request!=\"checkout\", request=~\"render_tile\"}[5m]))",
+          "expr": "sum(delta(pspdfkitd_exec_duration_milliseconds_count{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\", request!=\"checkout\", request=~\"render_tile\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "{{label_name}}",
@@ -1121,7 +1121,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum(delta(pspdfkitd_exec_count{pod=~\"$pod\", namespace=~\"$namespace\", request!=\"checkout\"}[5m]))",
+          "expr": "sum(delta(pspdfkitd_exec_duration_milliseconds_count{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\", request!=\"checkout\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "{{label_name}}",
@@ -1192,7 +1192,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -1224,7 +1224,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "max(layer_sync_total{quantile=\"${quantiles:raw}\", result=\"success\", pod=~\"$pod\", namespace=~\"$namespace\"})",
+          "expr": "max(layer_sync_duration_milliseconds{quantile=\"${quantiles:raw}\", result=\"success\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "instant": false,
@@ -1235,7 +1235,7 @@
           "useBackend": false
         }
       ],
-      "title": "quantile $quantiles max layer sync time (pod = $pod)",
+      "title": "Quantile $quantiles max layer sync time (pod = $pod)",
       "type": "timeseries"
     },
     {
@@ -1297,7 +1297,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "µs"
         },
         "overrides": []
       },
@@ -1328,7 +1328,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max by(status) (http_server_req_end{quantile=\"${quantiles:raw}\", group=\"standard\", status!~\"5..\", pod=~\"$pod\", namespace=~\"$namespace\"})",
+          "expr": "max by(status) (http_server_request_duration_microseconds{quantile=\"${quantiles:raw}\", group=\"standard\", status!~\"5..\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
@@ -1430,7 +1430,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max by(status) (http_server_req_end{quantile=\"${quantiles:raw}\", group=\"standard\", status=~\"5..\", pod=~\"$pod\", namespace=~\"$namespace\"})",
+          "expr": "max by(status) (http_server_request_duration_microseconds{quantile=\"${quantiles:raw}\", group=\"standard\", status=~\"5..\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
@@ -1501,7 +1501,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "µs"
         },
         "overrides": []
       },
@@ -1532,7 +1532,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max by(status) (http_server_req_end{quantile=\"${quantiles:raw}\", group=\"standard\", status=~\"5..\"})",
+          "expr": "max by(status) (http_server_request_duration_microseconds{quantile=\"${quantiles:raw}\", group=\"standard\", status=~\"5..\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
@@ -1634,7 +1634,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max by(status) (http_server_req_end{quantile=\"${quantiles:raw}\", group=\"standard\", status=~\"5..\"})",
+          "expr": "max by(status) (http_server_req_end{quantile=\"${quantiles:raw}\", group=\"standard\", status=~\"5..\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
@@ -1716,7 +1716,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -1748,7 +1748,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max by(request) (pspdfkitd_exec{app=\"de\", quantile=\"${quantiles:raw}\", pod=\"$pod\"})",
+          "expr": "max by(request) (pspdfkitd_exec_duration_milliseconds{app=\"de\", quantile=\"${quantiles:raw}\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1757,7 +1757,7 @@
           "useBackend": false
         }
       ],
-      "title": "quantile $quantiles max processing time per request (pod = $pod)",
+      "title": "Quantile $quantiles max processing time per request (pod = $pod)",
       "type": "timeseries"
     },
     {
@@ -1817,7 +1817,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -1845,7 +1845,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max(pspdfkitd_queue{quantile=\"${quantiles:raw}\", pod=~\"$pod\", namespace=~\"$namespace\"})",
+          "expr": "max(pspdfkitd_queue_duration_milliseconds{quantile=\"${quantiles:raw}\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1957,7 +1957,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max(assets_fetch_asset{app=\"de\", quantile=\"${quantiles:raw}\", pod=~\"$pod\", namespace=~\"$namespace\"})",
+          "expr": "max(assets_fetch_asset{app=\"de\", quantile=\"${quantiles:raw}\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -2056,7 +2056,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "max(assets_store_asset{app=\"de\", quantile=\"${quantiles:raw}\", pod=~\"$pod\", namespace=~\"$namespace\"})",
+          "expr": "max(assets_store_asset{app=\"de\", quantile=\"${quantiles:raw}\", host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -2151,7 +2151,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum(rate(assets_fetch_asset_count{result=\"success\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval]))",
+          "expr": "sum(rate(assets_fetch_asset_count{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": false,
@@ -2159,26 +2159,9 @@
           "range": true,
           "refId": "A",
           "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "exemplar": true,
-          "expr": "rate(assets_fetch_asset_count{result=\"error\"}[$__rate_interval])",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "B",
-          "useBackend": false
         }
       ],
-      "title": "Fetches/1second (pod = $pod)",
+      "title": "Fetches per second (pod = $pod)",
       "type": "timeseries"
     },
     {
@@ -2264,7 +2247,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum(rate(assets_store_asset_count{result=\"success\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval]))",
+          "expr": "sum(rate(assets_store_asset_count{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": false,
@@ -2272,26 +2255,9 @@
           "range": true,
           "refId": "A",
           "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "exemplar": true,
-          "expr": "sum(rate(assets_store_asset_count{result=\"error\"}[$__rate_interval]))",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "B",
-          "useBackend": false
         }
       ],
-      "title": "Stores/1second (pod = $pod)",
+      "title": "Stores per second (pod = $pod)",
       "type": "timeseries"
     },
     {
@@ -2394,7 +2360,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "cache_fs_hit{pod=~\"$pod\", namespace=~\"$namespace\"}",
+          "expr": "cache_fs_hit{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "{{__name__}} { pod=\"{{pod}}\"}",
@@ -2409,7 +2375,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "cache_fs_miss{pod=~\"$pod\", namespace=~\"$namespace\"}",
+          "expr": "cache_fs_miss{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -2512,7 +2478,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "cache_fs_miss{pod=~\"$pod\", namespace=~\"$namespace\"} / cache_fs_hit{pod=~\"$pod\", namespace=~\"$namespace\"}",
+          "expr": "cache_fs_miss{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"} / cache_fs_hit{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -2614,7 +2580,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "cache_fs_size{pod=~\"$pod\", namespace=~\"$namespace\"}",
+          "expr": "cache_fs_size{host=~\"$pod\", namespace=~\"$namespace\", app=~\"de\", family=~\"pspdfkit-document-engine\"}",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -2644,14 +2610,14 @@
             "0.99"
           ]
         },
-        "definition": "label_values(pspdfkitd_exec{app=\"de\"},quantile)",
+        "definition": "label_values(pspdfkitd_exec_duration_milliseconds{app=\"de\"},quantile)",
         "label": "Quantiles",
         "multi": true,
         "name": "quantiles",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(pspdfkitd_exec{app=\"de\"},quantile)",
+          "query": "label_values(pspdfkitd_exec_duration_milliseconds{app=\"de\"},quantile)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -2709,14 +2675,14 @@
             "vm_memory_procs_used"
           ]
         },
-        "definition": "metrics(vm_memory)",
+        "definition": "metrics(vm_memory.*)",
         "label": "Erlang VM memory detail metrics",
         "multi": true,
         "name": "erlang_memory_detail_metrics",
         "options": [],
         "query": {
           "qryType": 2,
-          "query": "metrics(vm_memory)",
+          "query": "metrics(vm_memory.*)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,

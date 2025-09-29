@@ -205,7 +205,7 @@ database:
   postgres:
     # -- (tpl/string) `PGHOST`
     # @section -- 05. Database
-    host: "{{ .Release.Name }}-postgresql"
+    host: "{{ .Release.Name }}-postgres-rw"
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
@@ -214,7 +214,7 @@ database:
     database: document-engine
     # -- `PGUSER`
     # @section -- 05. Database
-    username: de-user
+    username: postgres
     # -- `PGPASSWORD`
     # @section -- 05. Database
     password: despair
@@ -713,9 +713,6 @@ observability:
       tags:
         - Nutrient
         - document-engine
-      # -- Whether to cover all namespaces
-      # @section -- D. Observability
-      allNamespaces: false
     # -- (object) StatsD parameters
     # @section -- D. Observability
     # @notationType -- reference
@@ -817,6 +814,15 @@ service:
   # -- Service port — see also `config.port`
   # @section -- C. Networking
   port: 5000
+  # -- Service annotations
+  # @section -- C. Networking
+  annotations: {}
+  # -- Service internal traffic policy
+  # @section -- C. Networking
+  internalTrafficPolicy: Cluster  # @schema type: string, null; enum: [Cluster, Local, null]
+  # -- Service [traffic distribution policy](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution)
+  # @section -- C. Networking
+  trafficDistribution: null  # @schema type: string, null; enum: [PreferClose, PreferSameZone, PreferSameNode, null]
 
 # -- (object) Ingress
 # @section -- C. Networking
@@ -1037,47 +1043,48 @@ priorityClassName: ""
 # @section -- G. Scheduling
 schedulerName: ""
 
-# -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
-# @section -- Z. Chart dependencies
+# -- [CloudNativePG](https://cloudnative-pg.io/) resources
+# @section -- Z. Storage resource definitions
 # @notationType -- reference
-postgresql:  # @schema additionalProperties:true
+cloudNativePG:
+  # -- Enable CloudNativePG resources
+  # @section -- Z. Storage resource definitions
   enabled: false
-  architecture: standalone
-  primary:
-    persistence:
-      enabled: false
-    extendedConfiguration: |
-      log_statement = none
-    pgHbaConfiguration: |
-      local    all             all                                trust
-      host     all             all        127.0.0.1/32            trust
-      host     all             all        ::1/128                 trust
-      host     all             all        0.0.0.0/0               md5
-      host     all             all        ::/0                    md5
-  auth:
-    enabledPostgresUser: true
-    postgresPassword: despair
-    database: document-engine
-
-# -- [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)
-# @section -- Z. Chart dependencies
-# @notationType -- reference
-minio:  # @schema additionalProperties:true
-  enabled: false
-  mode: standalone
-  auth:
-    rootUser: deObjStorageRootKey
-    rootPassword: deObjStorageSecret
-  defaultBuckets: "document-engine-assets"
-  disableWebUI: true
-
-# -- [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis)
-# @section -- Z. Chart dependencies
-# @notationType -- reference
-redis:  # @schema additionalProperties:true
-  enabled: false
-  architecture: standalone
-  auth:
+  # -- CloudNativePG operator namespace
+  # @section -- Z. Storage resource definitions
+  operatorNamespace: cnpg-system
+  # -- CloudNativePG operator release name
+  # @section -- Z. Storage resource definitions
+  operatorReleaseName: cloudnative-pg
+  # -- CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec)
+  # @section -- Z. Storage resource definitions
+  # @notationType -- reference
+  clusterSpec:  # @schema additionalProperties:true
+    instances: 1
+    storage:
+      size: 512Mi
+      storageClass: standard
+    enableSuperuserAccess: true
+    bootstrap:
+      initdb:
+        database: nutrient
+        owner: whatever
+    logLevel: warning
+    monitoring:
+      enablePodMonitor: false
+  # -- Cluster labels
+  # @section -- Z. Storage resource definitions
+  clusterLabels: {}
+  # -- Cluster annotations
+  # @section -- Z. Storage resource definitions
+  clusterAnnotations: {}
+  # -- Superuser secret to use with the cluster
+  # @section -- Z. Storage resource definitions
+  superuserSecret:
+    create: true
+    username: postgres
+    password: despair
+  # -- Network policy to allow access to the cluster
+  # @section -- Z. Storage resource definitions
+  networkPolicy:
     enabled: true
-    sentinel: false
-    password: ""

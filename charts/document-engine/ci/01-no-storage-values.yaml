@@ -2,5 +2,8 @@ apiAuth:
   apiToken: secret
   secretKeyBase: verySecretStringToNeverBeUsedInProduction
 
+service:
+  trafficDistribution: PreferClose
+
 database:
   enabled: false

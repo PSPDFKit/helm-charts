@@ -37,22 +37,6 @@ observability:
       enabled: true
     grafanaDashboard:
       enabled: true
-      allNamespaces: false
 
-postgresql:
+cloudNativePG:
   enabled: true
-  primary:
-    persistence:
-      enabled: true
-      size: 512Mi
-      storageClass: standard
-      accessModes:
-        - ReadWriteOnce
-  volumePermissions:
-    enabled: true
-
-minio:
-  enabled: false
-
-redis:
-  enabled: false

@@ -58,6 +58,9 @@ resources:
     cpu: "1"
     memory: 1Gi
 
+service:
+  internalTrafficPolicy: Local
+
 ingress:
   enabled: true
   className: nginx
@@ -74,16 +77,5 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
 
-postgresql:
+cloudNativePG:
   enabled: true
-  architecture: standalone
-  primary:
-    persistence:
-      enabled: false
-  volumePermissions:
-    enabled: true
-
-minio:
-  enabled: false
-redis:
-  enabled: false
