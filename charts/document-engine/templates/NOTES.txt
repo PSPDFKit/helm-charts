@@ -72,7 +72,7 @@
 {{- if .Values.cloudNativePG.enabled }}
    • Using CloudNativePG cluster
 {{- end }}
-   • PostgreSQL host: {{ .Values.database.postgres.host }}:{{ .Values.database.postgres.port }}
+   • PostgreSQL host: {{ tpl .Values.database.postgres.host . }}:{{ .Values.database.postgres.port }}
 {{- else }}
    • Database disabled (in-memory mode)
 {{- end }}
@@ -94,7 +94,7 @@
 
 📖 NEXT STEPS:
    1. Test the API health: curl http://your-url/healthcheck
-   2. Upload a document: curl -X POST -F "file=@document.pdf" http://your-url/documents
+   2. Upload a document: curl -X POST -F "file=@document.pdf" http://your-url/api/documents
    3. Visit the documentation: https://www.nutrient.io/guides/document-engine/
 
 💡 TROUBLESHOOTING:
