@@ -58,11 +58,6 @@ helm upgrade --install -n document-engine \
 
 ### Dependencies
 
-The chart does not provide means to install PostgreSQL database, object storage or Redis for rendering cache.
-Instead, we recommend to manage these resoursces externally, e.g., on the cloud provider level.
-
-However, the chart suggests generation of PostgreSQL Cluster custom resource provided by [CloudNativePG](https://cloudnative-pg.io/) operator.
-
 Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
 
 `README.md` is generated with [helm-docs](https://github.com/norwoodj/helm-docs).
@@ -71,6 +66,19 @@ Schema is generated using [helm values schema json plugin](https://github.com/lo
 
 > [!NOTE]
 > Please consult the [changelog](/charts/document-engine/CHANGELOG.md)
+
+## Database and asset storage
+
+### PostgreSQL
+
+In order to have full Document Engine API supported, be able to integrate with Nutrient Web SDK, a database is necessary.
+
+The chart does not provide means to install PostgreSQL database, object storage or Redis for rendering cache.
+
+Instead, we recommend to manage these resoursces externally, e.g., on the cloud provider level.
+
+However, the chart suggests generation of PostgreSQL Cluster custom resource provided by [CloudNativePG](https://cloudnative-pg.io/) operator.
+CloudNativePG is not the only possible solution, and we recommend to also consider [StackGres](https://stackgres.io/), [Zalando Postgres Operator](https://github.com/zalando/postgres-operator).
 
 ## Integrations
 
