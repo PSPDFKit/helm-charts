@@ -136,7 +136,7 @@ config:
     # -- `HOARD_BINARY_COPY_ENABLED` — internal parameter, do not change unless explicitly recommended by Nutrient support.
     binaryCopyEnabled: true
     # -- `HOARD_BINARY_COPY_THRESHOLD` — internal parameter, do not change unless explicitly recommended by Nutrient support.
-    binaryCopyThreshold: 2
+    binaryCopyThreshold: 2  # @schema minimum: 1
   # -- Optimised rendering relying on HTTP/2
   # @default -- none
   # @notationType -- reference

@@ -9,6 +9,8 @@ Document Engine is a backend software for processing documents and powering auto
 * [Using this chart](#using-this-chart)
 * [Database and asset storage](#database-and-asset-storage)
   * [PostgreSQL](#postgresql)
+  * [Object storage](#object-storage)
+  * [Rendering cache](#rendering-cache)
 * [Integrations](#integrations)
   * [AWS ALB](#aws-alb-integration)
   * [CloudNativePG operator](#cloudnativepg-operator)
@@ -79,11 +81,29 @@ In order to have full Document Engine API supported, be able to integrate with N
 
 The chart does not provide means to install PostgreSQL database, object storage or Redis for rendering cache.
 
-Instead, we recommend to manage these resoursces externally, e.g., on the cloud provider level.
+Instead, we recommend to manage these resources externally, e.g., on the cloud provider level.
 
 However, the chart suggests generation of PostgreSQL Cluster custom resource provided by [CloudNativePG](https://cloudnative-pg.io/) operator.
 
 CloudNativePG is not the only possible solution, and we recommend to also consider [StackGres](https://stackgres.io/), [Zalando Postgres Operator](https://github.com/zalando/postgres-operator).
+
+## Object storage
+
+To offload the bulk of binary storage from the database,
+Document Engine can [utilise](https://www.nutrient.io/guides/document-engine/configuration/asset-storage/) S3-compatible object storage or Azure Blob Storage.
+
+In addition to the managed services (Amazon S3, Google Cloud Storage, many others), there are also options for self-hosting, including, but not limited to [Ceph](https://ceph.io/en/), [MinIO](https://www.min.io/).
+
+The latter is a popular way to implement S3-compatible buckets in a vendor-agnostic way.
+However, due to very limited Custom Resource Definitions ecosystem in MinIO, this chart is not attempting to provide a plug-in support for it.
+
+## Rendering cache
+
+Rendering of frequently accessed files can be optimised using [Redis cache](https://www.nutrient.io/guides/document-engine/configuration/cache/).
+
+Public cloud vendors offer managed services (e.g., Amazon ElastiCache),
+but there are also well known open source alternatives for Redis clusters operations,
+e.g., [Redis operator](https://ot-container-kit.github.io/redis-operator/guide/).
 
 ## Integrations
 

@@ -456,7 +456,8 @@
               "type": "boolean"
             },
             "binaryCopyThreshold": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             },
             "maxSizeMegaBytes": {
               "type": "integer"
