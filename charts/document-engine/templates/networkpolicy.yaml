@@ -73,7 +73,7 @@ spec:
             matchLabels: {{- include "document-engine.selectorLabels" . | nindent 14 }}
         # Allow cleanup job direct access
         - podSelector:
-            matchLabels: {{- include "document-engine.cleanupSelectorLabels" . | nindent 14 }}
+            matchLabels: {{- include "document-engine.expirationSelectorLabels" . | nindent 14 }}
         {{- with .Values.networkPolicy.ingressMatchSelectorLabels }}
         {{- range $selector := . }}
         - namespaceSelector:

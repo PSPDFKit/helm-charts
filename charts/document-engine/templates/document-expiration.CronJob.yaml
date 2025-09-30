@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "document-engine.fullname" . }}-db-cleanup
+  name: {{ include "document-engine.fullname" . }}-expire
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
 spec:
@@ -24,7 +24,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           labels:
-          {{- include "document-engine.cleanupSelectorLabels" . | nindent 12 }}
+          {{- include "document-engine.expirationSelectorLabels" . | nindent 12 }}
           {{- with .Values.documentLifecycle.cleanupJob.podLabels }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -59,16 +59,16 @@ spec:
               imagePullPolicy: {{ .pullPolicy }}
               {{- end }}
               command:
-                - /document-engine-cleanup/run.sh
+                - /documents-expiration/run.sh
               resources:
                 {{- toYaml .Values.documentLifecycle.cleanupJob.resources | nindent 16 }}
               volumeMounts:
                 - name: cleanup-assets
-                  mountPath: /document-engine-cleanup
+                  mountPath: /documents-expiration
           volumes:
             - name: cleanup-assets
               configMap:
-                name: {{ include "document-engine.fullname" . }}-db-cleanup
+                name: {{ include "document-engine.fullname" . }}-expire
                 defaultMode: 0755
           {{- with .Values.nodeSelector }}
           nodeSelector:
