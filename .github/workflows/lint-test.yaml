@@ -51,19 +51,27 @@ jobs:
         if: steps.list-changed.outputs.changed == 'true'
         run: |
           helm repo add cnpg https://cloudnative-pg.github.io/charts
-          helm install cnpg \
+          helm upgrade --install cnpg \
             --namespace cnpg-system --create-namespace \
             cnpg/cloudnative-pg
 
-      - name: Install Minio
+      # - name: Install StackGres
+      #   if: steps.list-changed.outputs.changed == 'true'
+      #   run: |
+      #     helm repo add stackgres-charts https://stackgres.io/downloads/stackgres-k8s/stackgres/helm/
+      #     helm upgrade --install stackgres-operator \
+      #       --namespace stackgres --create-namespace \
+      #       stackgres-charts/stackgres-operator
+
+      - name: Install MinIO
         if: steps.list-changed.outputs.changed == 'true'
         run: |
           helm repo add minio https://operator.min.io/
           # Install operator with minimal resources
-          helm install \
+          helm upgrade --install \
             --namespace minio-operator --create-namespace \
             minio-operator minio/operator
-          helm install \
+          helm upgrade --install \
             --namespace whatever --create-namespace \
             --set tenant.name=s3thing \
             --set tenant.pools[0].name=pool-0 \
