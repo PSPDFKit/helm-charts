@@ -16,6 +16,5 @@
 * `04-cnpg-azure-values.yaml`
   * PostgreSQL
   * Azurite to test Azure Blob storage
-  * Exporting metrics in StatsD format, using Prometheus exporter sidecar as a receiver
 * `10-env-variables-values.yaml`
   * Very blunt environment variables setting, an easy migration from Docker compose
