@@ -691,7 +691,7 @@
     "documentLifecycle": {
       "type": "object",
       "properties": {
-        "cleanupJob": {
+        "expirationJob": {
           "type": "object",
           "properties": {
             "activeDeadlineSeconds": {

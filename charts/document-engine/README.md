@@ -302,13 +302,13 @@ Note:
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`documentLifecycle`](./values.yaml#L292) | Document lifecycle management |  |
-| [`documentLifecycle.cleanupJob`](./values.yaml#L296) | Regular job to remove documents from the database. | [...](./values.yaml#L296) |
-| [`documentLifecycle.cleanupJob.enabled`](./values.yaml#L299) | Enable the cleanup job | `false` |
-| [`documentLifecycle.cleanupJob.image`](./values.yaml#L320) | Image used for running the cleanup job API calls | `{"pullPolicy":"IfNotPresent","repository":"curlimages/curl","tag":"8.14.1"}` |
-| [`documentLifecycle.cleanupJob.keepHours`](./values.yaml#L305) | Documents TTL in hours | `24` |
-| [`documentLifecycle.cleanupJob.persistentLike`](./values.yaml#L309) | Keep documents with IDs beginning with `persistent` indefinitely WARNING: does not currently work | `"persistent%"` |
-| [`documentLifecycle.cleanupJob.schedule`](./values.yaml#L302) | Cleanup job schedule in cron format | `"13 * * * *"` |
-| [`documentLifecycle.cleanupJob.serviceAccountName`](./values.yaml#L326) | Service account name to specify for the cleanup jobs | `""` |
+| [`documentLifecycle.expirationJob`](./values.yaml#L296) | Regular job to remove documents from the database | [...](./values.yaml#L296) |
+| [`documentLifecycle.expirationJob.enabled`](./values.yaml#L299) | Enable the document expiration job | `false` |
+| [`documentLifecycle.expirationJob.image`](./values.yaml#L320) | Image used for running the expiration job API calls | `{"pullPolicy":"IfNotPresent","repository":"curlimages/curl","tag":"8.14.1"}` |
+| [`documentLifecycle.expirationJob.keepHours`](./values.yaml#L305) | Documents TTL in hours | `24` |
+| [`documentLifecycle.expirationJob.persistentLike`](./values.yaml#L309) | Keep documents with IDs beginning with `persistent` indefinitely WARNING: does not currently work | `"persistent%"` |
+| [`documentLifecycle.expirationJob.schedule`](./values.yaml#L302) | Expiration job schedule in cron format | `"13 * * * *"` |
+| [`documentLifecycle.expirationJob.serviceAccountName`](./values.yaml#L326) | Service account name to specify for the expiration jobs | `""` |
 
 ### Asset storage
 

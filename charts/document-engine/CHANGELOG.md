@@ -170,6 +170,7 @@
 ### Changed
 
 * Removed `postgresql`, `minio` and `redis` Bitnami chart dependencies, and the corresponding sections in the values file.
+* Renamed `documentLifecycle.cleanupJob` to `documentLifecycle.expirationJob` for better understanding.
 
 ## 5.4.1 (2025-09-28)
 

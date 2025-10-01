@@ -290,14 +290,14 @@ database:
 # @section -- 06. Document lifecycle
 # @notationType -- none
 documentLifecycle:
-  # -- (object) Regular job to remove documents from the database.
+  # -- (object) Regular job to remove documents from the database
   # @section -- 06. Document lifecycle
   # @notationType -- reference
-  cleanupJob:
-    # -- Enable the cleanup job
+  expirationJob:
+    # -- Enable the document expiration job
     # @section -- 06. Document lifecycle
     enabled: false
-    # -- Cleanup job schedule in cron format
+    # -- Expiration job schedule in cron format
     # @section -- 06. Document lifecycle
     schedule: "13 * * * *"
     # -- Documents TTL in hours
@@ -315,13 +315,13 @@ documentLifecycle:
     podLabels: {}
     # @ignored
     extraEnvs: []
-    # -- Image used for running the cleanup job API calls
+    # -- Image used for running the expiration job API calls
     # @section -- 06. Document lifecycle
     image:
       repository: curlimages/curl
       pullPolicy: IfNotPresent
       tag: "8.14.1"
-    # -- Service account name to specify for the cleanup jobs
+    # -- Service account name to specify for the expiration jobs
     # @section -- 06. Document lifecycle
     serviceAccountName: ""
     # @ignored

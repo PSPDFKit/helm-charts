@@ -1,13 +1,13 @@
 {{- if and .Values.database.enabled 
-           .Values.documentLifecycle.cleanupJob.enabled }}
+           .Values.documentLifecycle.expirationJob.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "document-engine.fullname" . }}-db-cleanup
+  name: {{ include "document-engine.fullname" . }}-expire
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
 data:
-  {{- with .Values.documentLifecycle.cleanupJob }}
+  {{- with .Values.documentLifecycle.expirationJob }}
   {{- $url := printf "http://%s:%s/api/documents" ( include "document-engine.fullname" $ ) ( toString $.Values.service.port ) }}
   run.sh: |
     #!/bin/sh

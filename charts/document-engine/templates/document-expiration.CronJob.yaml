@@ -1,31 +1,31 @@
 {{- if and .Values.database.enabled 
-           .Values.documentLifecycle.cleanupJob.enabled }}
+           .Values.documentLifecycle.expirationJob.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "document-engine.fullname" . }}-db-cleanup
+  name: {{ include "document-engine.fullname" . }}-expire
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
 spec:
-  schedule: {{ .Values.documentLifecycle.cleanupJob.schedule }}
-  startingDeadlineSeconds: {{ .Values.documentLifecycle.cleanupJob.startingDeadlineSeconds }}
+  schedule: {{ .Values.documentLifecycle.expirationJob.schedule }}
+  startingDeadlineSeconds: {{ .Values.documentLifecycle.expirationJob.startingDeadlineSeconds }}
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       backoffLimit: 1
-      activeDeadlineSeconds: {{ .Values.documentLifecycle.cleanupJob.activeDeadlineSeconds }}
-      ttlSecondsAfterFinished: {{ .Values.documentLifecycle.cleanupJob.ttlSecondsAfterFinished }}
+      activeDeadlineSeconds: {{ .Values.documentLifecycle.expirationJob.activeDeadlineSeconds }}
+      ttlSecondsAfterFinished: {{ .Values.documentLifecycle.expirationJob.ttlSecondsAfterFinished }}
       template:
         metadata:
-          {{- with .Values.documentLifecycle.cleanupJob.podAnnotations }}
+          {{- with .Values.documentLifecycle.expirationJob.podAnnotations }}
           annotations:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           labels:
-          {{- include "document-engine.cleanupSelectorLabels" . | nindent 12 }}
-          {{- with .Values.documentLifecycle.cleanupJob.podLabels }}
+          {{- include "document-engine.expirationSelectorLabels" . | nindent 12 }}
+          {{- with .Values.documentLifecycle.expirationJob.podLabels }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
         spec:
@@ -34,7 +34,7 @@ spec:
           imagePullSecrets:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.documentLifecycle.cleanupJob.serviceAccountName }}
+          {{- with .Values.documentLifecycle.expirationJob.serviceAccountName }}
           serviceAccountName: {{ . }}
           {{- end }}
           containers:
@@ -51,24 +51,24 @@ spec:
                       name: {{ include "document-engine.fullname" . }}
                       key: API_AUTH_TOKEN
                     {{- end }}
-              {{- with .Values.documentLifecycle.cleanupJob.extraEnvs }}
+              {{- with .Values.documentLifecycle.expirationJob.extraEnvs }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
-              {{- with .Values.documentLifecycle.cleanupJob.image }}
+              {{- with .Values.documentLifecycle.expirationJob.image }}
               image: "{{ .repository }}:{{ .tag }}"
               imagePullPolicy: {{ .pullPolicy }}
               {{- end }}
               command:
-                - /document-engine-cleanup/run.sh
+                - /documents-expiration/run.sh
               resources:
-                {{- toYaml .Values.documentLifecycle.cleanupJob.resources | nindent 16 }}
+                {{- toYaml .Values.documentLifecycle.expirationJob.resources | nindent 16 }}
               volumeMounts:
                 - name: cleanup-assets
-                  mountPath: /document-engine-cleanup
+                  mountPath: /documents-expiration
           volumes:
             - name: cleanup-assets
               configMap:
-                name: {{ include "document-engine.fullname" . }}-db-cleanup
+                name: {{ include "document-engine.fullname" . }}-expire
                 defaultMode: 0755
           {{- with .Values.nodeSelector }}
           nodeSelector:
