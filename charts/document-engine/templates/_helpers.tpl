@@ -50,7 +50,7 @@ app.kubernetes.io/name: {{ include "document-engine.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{- define "document-engine.expirationSelectorLabels" -}}
+{{- define "document-engine.cleanupSelectorLabels" -}}
 document-engine.something/job: cleanup
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
