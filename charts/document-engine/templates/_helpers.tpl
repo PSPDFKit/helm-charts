@@ -50,7 +50,7 @@ app.kubernetes.io/name: {{ include "document-engine.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{- define "document-engine.cleanupSelectorLabels" -}}
+{{- define "document-engine.expirationSelectorLabels" -}}
 document-engine.something/job: cleanup
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
@@ -190,4 +190,15 @@ Object storage parameters
   {{- else -}}
     {{- .Values.assetStorage.azure.externalSecretName -}}
   {{- end -}}
+{{- end -}}
+
+{{/*
+CloudNativePG
+*/}}
+{{- define "document-engine.storage.cloudNativePG.cluster.name" -}}
+{{- include "document-engine.fullname" . }}-postgres
+{{- end -}}
+
+{{- define "document-engine.storage.cloudNativePG.superuser-secret.name" -}}
+{{- include "document-engine.storage.cloudNativePG.cluster.name" . }}-superuser
 {{- end -}}

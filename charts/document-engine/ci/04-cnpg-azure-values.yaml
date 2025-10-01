@@ -28,19 +28,6 @@ sidecars:
       - containerPort: 10000
         name: blob
         protocol: TCP
-  # We are using statsd-exporter to expose metrics in Prometheus format, just
-  # to have a receiving endpoint
-  - name: statsd-exporter
-    image: prom/statsd-exporter
-    imagePullPolicy: IfNotPresent
-    args:
-      - --statsd.listen-udp=:9125
-      - --statsd.listen-tcp=:9125
-      - --web.listen-address=:11254
-    ports:
-      - name: statsd-digested
-        containerPort: 11254
-        protocol: TCP
 
 observability:
   metrics:
@@ -49,20 +36,5 @@ observability:
       port: 9125
       host: localhost
 
-postgresql:
+cloudNativePG:
   enabled: true
-  primary:
-    persistence:
-      enabled: true
-      size: 512Mi
-      storageClass: standard
-      accessModes:
-        - ReadWriteOnce
-  volumePermissions:
-    enabled: true
-
-minio:
-  enabled: false
-
-redis:
-  enabled: false

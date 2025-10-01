@@ -77,16 +77,5 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
 
-postgresql:
+cloudNativePG:
   enabled: true
-  architecture: standalone
-  primary:
-    persistence:
-      enabled: false
-  volumePermissions:
-    enabled: true
-
-minio:
-  enabled: false
-redis:
-  enabled: false

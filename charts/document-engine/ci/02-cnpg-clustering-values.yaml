@@ -25,7 +25,7 @@ clustering:
   method: kubernetes_dns
 
 documentLifecycle:
-  cleanupJob:
+  expirationJob:
     enabled: true
 
 assetStorage:
@@ -38,20 +38,5 @@ observability:
     grafanaDashboard:
       enabled: true
 
-postgresql:
+cloudNativePG:
   enabled: true
-  primary:
-    persistence:
-      enabled: true
-      size: 512Mi
-      storageClass: standard
-      accessModes:
-        - ReadWriteOnce
-  volumePermissions:
-    enabled: true
-
-minio:
-  enabled: false
-
-redis:
-  enabled: false

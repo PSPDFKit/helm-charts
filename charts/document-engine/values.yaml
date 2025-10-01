@@ -125,6 +125,18 @@ config:
   # -- `MIN_SEARCH_QUERY_LENGTH`
   # @section -- 03. Configuration options
   minSearchQueryLength: 3
+  # -- Hoard — internal caching service parameters
+  # @default -- none
+  # @notationType -- reference
+  # @section -- 03. Configuration options
+  hoard:
+    # -- `HOARD_MAX_SIZE` — maximum size in millions of bytes
+    # @section -- 03. Configuration options
+    maxSizeMegaBytes: 100
+    # -- `HOARD_BINARY_COPY_ENABLED` — internal parameter, do not change unless explicitly recommended by Nutrient support.
+    binaryCopyEnabled: true
+    # -- `HOARD_BINARY_COPY_THRESHOLD` — internal parameter, do not change unless explicitly recommended by Nutrient support.
+    binaryCopyThreshold: 2  # @schema minimum: 1
   # -- Optimised rendering relying on HTTP/2
   # @default -- none
   # @notationType -- reference
@@ -205,7 +217,7 @@ database:
   postgres:
     # -- (tpl/string) `PGHOST`
     # @section -- 05. Database
-    host: "{{ .Release.Name }}-postgresql"
+    host: "{{ .Release.Name }}-postgres-rw"
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
@@ -214,7 +226,7 @@ database:
     database: document-engine
     # -- `PGUSER`
     # @section -- 05. Database
-    username: de-user
+    username: postgres
     # -- `PGPASSWORD`
     # @section -- 05. Database
     password: despair
@@ -278,14 +290,14 @@ database:
 # @section -- 06. Document lifecycle
 # @notationType -- none
 documentLifecycle:
-  # -- (object) Regular job to remove documents from the database.
+  # -- (object) Regular job to remove documents from the database
   # @section -- 06. Document lifecycle
   # @notationType -- reference
-  cleanupJob:
-    # -- Enable the cleanup job
+  expirationJob:
+    # -- Enable the document expiration job
     # @section -- 06. Document lifecycle
     enabled: false
-    # -- Cleanup job schedule in cron format
+    # -- Expiration job schedule in cron format
     # @section -- 06. Document lifecycle
     schedule: "13 * * * *"
     # -- Documents TTL in hours
@@ -303,13 +315,13 @@ documentLifecycle:
     podLabels: {}
     # @ignored
     extraEnvs: []
-    # -- Image used for running the cleanup job API calls
+    # -- Image used for running the expiration job API calls
     # @section -- 06. Document lifecycle
     image:
       repository: curlimages/curl
       pullPolicy: IfNotPresent
       tag: "8.14.1"
-    # -- Service account name to specify for the cleanup jobs
+    # -- Service account name to specify for the expiration jobs
     # @section -- 06. Document lifecycle
     serviceAccountName: ""
     # @ignored
@@ -601,6 +613,9 @@ observability:
     # -- `LOG_LEVEL`
     # @section -- D. Observability
     level: info  # @schema pattern:^(debug|info|warn|error)$
+    # -- `LOG_STRUCTURED` — enable structured logging in JSON format
+    # @section -- D. Observability
+    structured: false
     # -- `HEALTHCHECK_LOGLEVEL` — log level for health checks
     # @section -- D. Observability
     healthcheckLevel: debug  # @schema pattern:^(debug|info|warn|error)$
@@ -1040,47 +1055,48 @@ priorityClassName: ""
 # @section -- G. Scheduling
 schedulerName: ""
 
-# -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
-# @section -- Z. Chart dependencies
+# -- [CloudNativePG](https://cloudnative-pg.io/) resources
+# @section -- Z. Storage resource definitions
 # @notationType -- reference
-postgresql:  # @schema additionalProperties:true
+cloudNativePG:
+  # -- Enable CloudNativePG resources
+  # @section -- Z. Storage resource definitions
   enabled: false
-  architecture: standalone
-  primary:
-    persistence:
-      enabled: false
-    extendedConfiguration: |
-      log_statement = none
-    pgHbaConfiguration: |
-      local    all             all                                trust
-      host     all             all        127.0.0.1/32            trust
-      host     all             all        ::1/128                 trust
-      host     all             all        0.0.0.0/0               md5
-      host     all             all        ::/0                    md5
-  auth:
-    enabledPostgresUser: true
-    postgresPassword: despair
-    database: document-engine
-
-# -- [External MinIO chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)
-# @section -- Z. Chart dependencies
-# @notationType -- reference
-minio:  # @schema additionalProperties:true
-  enabled: false
-  mode: standalone
-  auth:
-    rootUser: deObjStorageRootKey
-    rootPassword: deObjStorageSecret
-  defaultBuckets: "document-engine-assets"
-  disableWebUI: true
-
-# -- [External Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis)
-# @section -- Z. Chart dependencies
-# @notationType -- reference
-redis:  # @schema additionalProperties:true
-  enabled: false
-  architecture: standalone
-  auth:
+  # -- CloudNativePG operator namespace
+  # @section -- Z. Storage resource definitions
+  operatorNamespace: cnpg-system
+  # -- CloudNativePG operator release name
+  # @section -- Z. Storage resource definitions
+  operatorReleaseName: cloudnative-pg
+  # -- CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec)
+  # @section -- Z. Storage resource definitions
+  # @notationType -- reference
+  clusterSpec:  # @schema additionalProperties:true
+    instances: 1
+    storage:
+      size: 512Mi
+      storageClass: standard
+    enableSuperuserAccess: true
+    bootstrap:
+      initdb:
+        database: nutrient
+        owner: whatever
+    logLevel: warning
+    monitoring:
+      enablePodMonitor: false
+  # -- Cluster labels
+  # @section -- Z. Storage resource definitions
+  clusterLabels: {}
+  # -- Cluster annotations
+  # @section -- Z. Storage resource definitions
+  clusterAnnotations: {}
+  # -- Superuser secret to use with the cluster
+  # @section -- Z. Storage resource definitions
+  superuserSecret:
+    create: true
+    username: postgres
+    password: despair
+  # -- Network policy to allow access to the cluster
+  # @section -- Z. Storage resource definitions
+  networkPolicy:
     enabled: true
-    sentinel: false
-    password: ""

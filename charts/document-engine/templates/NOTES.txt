@@ -1,22 +1,103 @@
-1. Get the application URL by running these commands:
+🚀 Document Engine has been deployed successfully!
+
+📋 DEPLOYMENT INFORMATION:
+   Release name: {{ .Release.Name }}
+   Namespace: {{ .Release.Namespace }}
+   Chart version: {{ .Chart.Version }}
+   App version: {{ .Chart.AppVersion }}
+
+🌐 ACCESS YOUR APPLICATION:
 {{- if .Values.ingress.enabled }}
 {{- range $host := .Values.ingress.hosts }}
   {{- range .paths }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+   • API: http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
   {{- end }}
 {{- end }}
-{{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "document-engine.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "document-engine.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "document-engine.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
-{{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "document-engine.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+{{- if .Values.dashboard.enabled }}
+   • Dashboard: enabled
 {{- end }}
+
+{{- else if contains "NodePort" .Values.service.type }}
+   Run these commands to get the service URL:
+
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "document-engine.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "API: http://$NODE_IP:$NODE_PORT"
+{{- if .Values.dashboard.enabled }}
+   echo "Dashboard: http://$NODE_IP:$NODE_PORT/dashboard"
+{{- end }}
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+   📝 NOTE: LoadBalancer IP allocation may take a few minutes.
+
+   Watch the status: kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "document-engine.fullname" . }}
+
+   Once ready, get the URL:
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "document-engine.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   echo "API: http://$SERVICE_IP:{{ .Values.service.port }}"
+{{- if .Values.dashboard.enabled }}
+   echo "Dashboard: http://$SERVICE_IP:{{ .Values.service.port }}/dashboard"
+{{- end }}
+
+{{- else if contains "ClusterIP" .Values.service.type }}
+   Use port-forward to access the application:
+
+   kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "document-engine.fullname" . }} 8080:{{ .Values.service.port }}
+
+   Then visit:
+   • API: http://127.0.0.1:8080
+{{- if .Values.dashboard.enabled }}
+   • Dashboard: http://127.0.0.1:8080/dashboard
+{{- end }}
+{{- end }}
+
+{{- if .Values.dashboard.enabled }}
+🔐 DASHBOARD CREDENTIALS:
+{{- if .Values.dashboard.auth.externalSecret.name }}
+   Username/Password: Retrieved from secret "{{ .Values.dashboard.auth.externalSecret.name }}"
+{{- else }}
+   Username: {{ .Values.dashboard.auth.username }}
+{{- if .Values.dashboard.auth.password }}
+   Password: {{ .Values.dashboard.auth.password }}
+{{- else }}
+   Password: Check the generated secret:
+   kubectl get secret --namespace {{ .Release.Namespace }} {{ include "document-engine.fullname" . }}-dashboard -o jsonpath="{.data.password}" | base64 --decode && echo
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if or .Values.database.enabled .Values.cloudNativePG.enabled }}
+🗄️  DATABASE:
+{{- if .Values.database.enabled }}
+{{- if .Values.cloudNativePG.enabled }}
+   • Using CloudNativePG cluster
+{{- end }}
+   • PostgreSQL host: {{ tpl .Values.database.postgres.host . }}:{{ .Values.database.postgres.port }}
+{{- else }}
+   • Database disabled (in-memory mode)
+{{- end }}
+{{- end }}
+
+{{- if eq .Values.assetStorage.backendType "s3" }}
+📦 S3 STORAGE:
+   • Bucket: {{ .Values.assetStorage.s3.bucket }}
+   • Region: {{ .Values.assetStorage.s3.region }}
+{{- if .Values.assetStorage.s3.host }}
+   • Custom endpoint: {{ .Values.assetStorage.s3.scheme }}{{ .Values.assetStorage.s3.host }}:{{ .Values.assetStorage.s3.port }}
+{{- end }}
+{{- else if eq .Values.assetStorage.backendType "azure" }}
+📦 AZURE STORAGE:
+   • Container: {{ .Values.assetStorage.azure.container }}
+{{- else }}
+📦 STORAGE: Built-in (database)
+{{- end }}
+
+📖 NEXT STEPS:
+   1. Test the API health: curl http://your-url/healthcheck
+   2. Upload a document: curl -X POST -F "file=@document.pdf" http://your-url/api/documents
+   3. Visit the documentation: https://www.nutrient.io/guides/document-engine/
+
+💡 TROUBLESHOOTING:
+   • Check pod status: kubectl get pods --namespace {{ .Release.Namespace }}
+   • View logs: kubectl logs --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "document-engine.name" . }}
+   • Get events: kubectl get events --namespace {{ .Release.Namespace }} --sort-by='.lastTimestamp'

@@ -291,6 +291,98 @@
         }
       }
     },
+    "cloudNativePG": {
+      "type": "object",
+      "properties": {
+        "clusterAnnotations": {
+          "type": "object"
+        },
+        "clusterLabels": {
+          "type": "object"
+        },
+        "clusterSpec": {
+          "type": "object",
+          "properties": {
+            "bootstrap": {
+              "type": "object",
+              "properties": {
+                "initdb": {
+                  "type": "object",
+                  "properties": {
+                    "database": {
+                      "type": "string"
+                    },
+                    "owner": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "enableSuperuserAccess": {
+              "type": "boolean"
+            },
+            "instances": {
+              "type": "integer"
+            },
+            "logLevel": {
+              "type": "string"
+            },
+            "monitoring": {
+              "type": "object",
+              "properties": {
+                "enablePodMonitor": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "storage": {
+              "type": "object",
+              "properties": {
+                "size": {
+                  "type": "string"
+                },
+                "storageClass": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "networkPolicy": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "operatorNamespace": {
+          "type": "string"
+        },
+        "operatorReleaseName": {
+          "type": "string"
+        },
+        "superuserSecret": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type": "boolean"
+            },
+            "password": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "clustering": {
       "type": "object",
       "properties": {
@@ -356,6 +448,21 @@
         },
         "generationTimeoutSeconds": {
           "type": "integer"
+        },
+        "hoard": {
+          "type": "object",
+          "properties": {
+            "binaryCopyEnabled": {
+              "type": "boolean"
+            },
+            "binaryCopyThreshold": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxSizeMegaBytes": {
+              "type": "integer"
+            }
+          }
         },
         "http2SharedRendering": {
           "type": "object",
@@ -584,7 +691,7 @@
     "documentLifecycle": {
       "type": "object",
       "properties": {
-        "cleanupJob": {
+        "expirationJob": {
           "type": "object",
           "properties": {
             "activeDeadlineSeconds": {
@@ -800,35 +907,6 @@
         }
       }
     },
-    "minio": {
-      "type": "object",
-      "properties": {
-        "auth": {
-          "type": "object",
-          "properties": {
-            "rootPassword": {
-              "type": "string"
-            },
-            "rootUser": {
-              "type": "string"
-            }
-          }
-        },
-        "defaultBuckets": {
-          "type": "string"
-        },
-        "disableWebUI": {
-          "type": "boolean"
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "mode": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": true
-    },
     "nameOverride": {
       "type": "string"
     },
@@ -877,6 +955,9 @@
             "level": {
               "type": "string",
               "pattern": "^(debug|info|warn|error)$"
+            },
+            "structured": {
+              "type": "boolean"
             }
           }
         },
@@ -1052,51 +1133,6 @@
     "podSecurityContext": {
       "type": "object"
     },
-    "postgresql": {
-      "type": "object",
-      "properties": {
-        "architecture": {
-          "type": "string"
-        },
-        "auth": {
-          "type": "object",
-          "properties": {
-            "database": {
-              "type": "string"
-            },
-            "enabledPostgresUser": {
-              "type": "boolean"
-            },
-            "postgresPassword": {
-              "type": "string"
-            }
-          }
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "primary": {
-          "type": "object",
-          "properties": {
-            "extendedConfiguration": {
-              "type": "string"
-            },
-            "persistence": {
-              "type": "object",
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                }
-              }
-            },
-            "pgHbaConfiguration": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "additionalProperties": true
-    },
     "priorityClassName": {
       "type": "string"
     },
@@ -1133,32 +1169,6 @@
           "type": "integer"
         }
       }
-    },
-    "redis": {
-      "type": "object",
-      "properties": {
-        "architecture": {
-          "type": "string"
-        },
-        "auth": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            },
-            "password": {
-              "type": "string"
-            },
-            "sentinel": {
-              "type": "boolean"
-            }
-          }
-        },
-        "enabled": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": true
     },
     "replicaCount": {
       "type": "integer"
