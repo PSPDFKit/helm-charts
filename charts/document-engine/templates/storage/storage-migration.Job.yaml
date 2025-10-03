@@ -51,13 +51,13 @@ spec:
                 name: {{ .Values.database.postgres.externalAdminSecretName }}
           {{- end }}
 
-          {{- if .Values.assetStorage.redis.enabled }}
+          {{- if and .Values.assetStorage.redis.enabled .Values.assetStorage.redis.externalSecretName }}
             - secretRef:
-                name: {{ include "document-engine.storage.redis.secret.name" . }}
+                name: {{ .Values.assetStorage.redis.externalSecretName }}
           {{- end }}
-          {{- if eq (include "document-engine.storage.s3.enabled" .) "true" }}
+          {{- if and (eq (include "document-engine.storage.s3.enabled" .) "true") .Values.assetStorage.s3.externalSecretName }}
             - secretRef:
-                name: {{ include "document-engine.storage.s3.secret.name" . }}
+                name: {{ .Values.assetStorage.s3.externalSecretName }}
           {{- end }}
           {{- with .Values.extraEnvFrom }}
             {{- toYaml . | nindent 12 }}
