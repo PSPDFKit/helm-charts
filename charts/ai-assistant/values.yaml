@@ -240,7 +240,7 @@ database:
     port: 5432
     # -- `PGDATABASE`
     # @section -- 05. Database
-    database: ai-assistant
+    database: ai_assistant
     # -- `PGUSER`
     # @section -- 05. Database
     username: postgres
@@ -635,7 +635,7 @@ cloudNativePG:
     enableSuperuserAccess: true
     bootstrap:
       initdb:
-        database: ai-assistant
+        database: ai_assistant
         owner: whatever
     logLevel: warning
     monitoring:
