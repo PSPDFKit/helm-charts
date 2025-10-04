@@ -1,0 +1,17 @@
+{{- if and .Values.cloudNativePG.enabled
+           .Values.cloudNativePG.clusterSpec }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: {{ include "ai-assistant.storage.cloudNativePG.cluster.name" . }}
+  labels:
+    {{- include "ai-assistant.labels" . | nindent 4 }}
+spec:
+  cluster:
+    name: {{ include "ai-assistant.storage.cloudNativePG.cluster.name" . }}
+{{- with .Values.database.postgres }}
+  name: {{ .database }}
+{{- end }}
+  extensions:
+    - name: vector
+{{- end }}
