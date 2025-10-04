@@ -196,7 +196,7 @@ cloudNativePG:
 | [`database.enabled`](./values.yaml#L225) | Persistent storage enabled | `true` |
 | [`database.engine`](./values.yaml#L228) | Database engine: only `postgres` is currently supported | `"postgres"` |
 | [`database.postgres`](./values.yaml#L233) | PostgreSQL database settings | [...](./values.yaml#L233) |
-| [`database.postgres.database`](./values.yaml#L243) | `PGDATABASE` | `"ai-assistant"` |
+| [`database.postgres.database`](./values.yaml#L243) | `PGDATABASE` | `"ai_assistant"` |
 | [`database.postgres.externalSecretName`](./values.yaml#L254) | Use external secret for database credentials. `PGUSER` and `PGPASSWORD` must be provided and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL` | `""` |
 | [`database.postgres.host`](./values.yaml#L237) | `PGHOST` | `{{ .Release.Name }}-postgres-rw` |
 | [`database.postgres.password`](./values.yaml#L249) | `PGPASSWORD` | `"nutrientArtificialIntelligenceAssistant"` |
