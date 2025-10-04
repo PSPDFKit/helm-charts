@@ -85,8 +85,6 @@ database:
   engine: postgres
   postgres:
     username: postgres
-    password: nutrient
-    database: ai-assistant
     tls:
       enabled: false
 
