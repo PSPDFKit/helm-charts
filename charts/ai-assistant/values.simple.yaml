@@ -153,6 +153,7 @@ document-engine:
     enabled: false
   database:
     enabled: true
+    host: document-engine-postgres-rw
     engine: postgres
     migrationJob:
       enabled: false
