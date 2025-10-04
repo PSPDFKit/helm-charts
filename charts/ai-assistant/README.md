@@ -311,21 +311,21 @@ cloudNativePG:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`document-engine`](./values.yaml#L663) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L663) |
+| [`document-engine`](./values.yaml#L659) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L659) |
 
 ### Storage resource definitions
 
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`cloudNativePG`](./values.yaml#L617) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L617) |
-| [`cloudNativePG.clusterAnnotations`](./values.yaml#L648) | Cluster annotations | `{}` |
-| [`cloudNativePG.clusterLabels`](./values.yaml#L645) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L644) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L641) | Cluster labels | `{}` |
 | [`cloudNativePG.clusterSpec`](./values.yaml#L630) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L630) |
 | [`cloudNativePG.enabled`](./values.yaml#L620) | Enable CloudNativePG resources | `false` |
-| [`cloudNativePG.networkPolicy`](./values.yaml#L657) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L653) | Network policy to allow access to the cluster | `{"enabled":true}` |
 | [`cloudNativePG.operatorNamespace`](./values.yaml#L623) | CloudNativePG operator namespace | `"cnpg-system"` |
 | [`cloudNativePG.operatorReleaseName`](./values.yaml#L626) | CloudNativePG operator release name | `"cloudnative-pg"` |
-| [`cloudNativePG.superuserSecret`](./values.yaml#L651) | Superuser secret to use with the cluster | `{"create":true,"password":"nutrientArtificialIntelligenceAssistant","username":"postgres"}` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L647) | Superuser secret to use with the cluster | `{"create":true,"password":"nutrientArtificialIntelligenceAssistant","username":"postgres"}` |
 
 ### Other Values
 

@@ -9,9 +9,9 @@ metadata:
 spec:
   cluster:
     name: {{ include "ai-assistant.storage.cloudNativePG.cluster.name" . }}
-{{- with .Values.cloudNativePG.clusterSpec.bootstrap.initdb }}
+{{- with .Values.database.postgres }}
   name: {{ .database }}
-  owner: {{ .owner }}
+  owner: whatever
 {{- end }}
   extensions:
     - name: vector

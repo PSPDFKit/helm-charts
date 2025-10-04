@@ -633,10 +633,6 @@ cloudNativePG:
       size: 512Mi
       storageClass: standard
     enableSuperuserAccess: true
-    bootstrap:
-      initdb:
-        database: ai_assistant
-        owner: whatever
     logLevel: warning
     monitoring:
       enablePodMonitor: false

@@ -173,22 +173,6 @@
         "clusterSpec": {
           "type": "object",
           "properties": {
-            "bootstrap": {
-              "type": "object",
-              "properties": {
-                "initdb": {
-                  "type": "object",
-                  "properties": {
-                    "database": {
-                      "type": "string"
-                    },
-                    "owner": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
             "enableSuperuserAccess": {
               "type": "boolean"
             },
