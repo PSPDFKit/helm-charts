@@ -231,16 +231,16 @@ database:
   # @default -- none
   # @notationType -- reference
   postgres:
-    # -- (tpl/string) `PGHOST`
+    # -- (tpl/string) `PGHOST`, if not set, relies on CloudNativePG cluster name
     # @notationType -- tpl
     # @section -- 05. Database
-    host: "{{ .Release.Name }}-postgres-rw"
+    host: ""
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
     # -- `PGDATABASE`
     # @section -- 05. Database
-    database: ai-assistant
+    database: ai_assistant
     # -- `PGUSER`
     # @section -- 05. Database
     username: postgres
@@ -633,10 +633,6 @@ cloudNativePG:
       size: 512Mi
       storageClass: standard
     enableSuperuserAccess: true
-    bootstrap:
-      initdb:
-        database: ai-assistant
-        owner: whatever
     logLevel: warning
     monitoring:
       enablePodMonitor: false

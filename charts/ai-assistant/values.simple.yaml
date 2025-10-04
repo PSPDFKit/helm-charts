@@ -85,8 +85,6 @@ database:
   engine: postgres
   postgres:
     username: postgres
-    password: nutrient
-    database: ai-assistant
     tls:
       enabled: false
 
@@ -111,12 +109,12 @@ updateStrategy:
     maxSurge: 0
 
 resources:
-  limits:
-    cpu: "4"
-    memory: 8Gi
   requests:
-    cpu: "1"
-    memory: 1Gi
+    cpu: "100m"
+    memory: 256Mi
+  limits:
+    cpu: "2"
+    memory: 4Gi
 
 ingress:
   enabled: true
@@ -157,6 +155,7 @@ document-engine:
     migrationJob:
       enabled: false
     postgres:
+      host: document-engine-postgres-rw
       username: postgres
       tls:
         enabled: false
@@ -180,12 +179,12 @@ document-engine:
       maxUnavailable: 1
       maxSurge: 0
   resources:
-    limits:
-      cpu: "4"
-      memory: 8Gi
     requests:
-      cpu: "1"
-      memory: 1Gi
+      cpu: "100m"
+      memory: 256Mi
+    limits:
+      cpu: "2"
+      memory: 4Gi
   ingress:
     enabled: true
     className: nginx

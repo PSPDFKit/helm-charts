@@ -16,8 +16,10 @@ data:
 {{- with .Values.database }}
 {{- if .enabled }}
 {{-   with .postgres }}
-{{-     with .host }}
-  PGHOST: {{ tpl . $ | quote }}
+{{-     if .host }}
+  PGHOST: {{ tpl .host $ | quote }}
+{{-     else if $.Values.cloudNativePG.enabled }}
+  PGHOST: {{ include "ai-assistant.storage.cloudNativePG.cluster.name" $ }}-rw
 {{-     end }}
 {{-     with .port }}
   PGPORT: {{ . | quote }}
