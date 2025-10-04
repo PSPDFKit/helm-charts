@@ -10,7 +10,7 @@ spec:
   cluster:
     name: {{ include "ai-assistant.storage.cloudNativePG.cluster.name" . }}
 {{- with .Values.cloudNativePG.clusterSpec.bootstrap.initdb }}
-  name: {{ .name }}
+  name: {{ .database }}
   owner: {{ .owner }}
 {{- end }}
   extensions:
