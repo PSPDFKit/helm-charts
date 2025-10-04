@@ -198,7 +198,7 @@ cloudNativePG:
 | [`database.postgres`](./values.yaml#L233) | PostgreSQL database settings | [...](./values.yaml#L233) |
 | [`database.postgres.database`](./values.yaml#L243) | `PGDATABASE` | `"ai_assistant"` |
 | [`database.postgres.externalSecretName`](./values.yaml#L254) | Use external secret for database credentials. `PGUSER` and `PGPASSWORD` must be provided and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL` | `""` |
-| [`database.postgres.host`](./values.yaml#L237) | `PGHOST` | `{{ .Release.Name }}-postgres-rw` |
+| [`database.postgres.host`](./values.yaml#L237) | `PGHOST`, if not set, relies on CloudNativePG cluster name | `` |
 | [`database.postgres.password`](./values.yaml#L249) | `PGPASSWORD` | `"nutrientArtificialIntelligenceAssistant"` |
 | [`database.postgres.port`](./values.yaml#L240) | `PGPORT` | `5432` |
 | [`database.postgres.tls`](./values.yaml#L259) | TLS settings | [...](./values.yaml#L259) |
@@ -311,21 +311,23 @@ cloudNativePG:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`document-engine`](./values.yaml#L659) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L659) |
+| [`document-engine`](./values.yaml#L667) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L667) |
 
 ### Storage resource definitions
 
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`cloudNativePG`](./values.yaml#L617) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L617) |
-| [`cloudNativePG.clusterAnnotations`](./values.yaml#L644) | Cluster annotations | `{}` |
-| [`cloudNativePG.clusterLabels`](./values.yaml#L641) | Cluster labels | `{}` |
-| [`cloudNativePG.clusterSpec`](./values.yaml#L630) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L630) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L647) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L644) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterName`](./values.yaml#L629) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L633) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L633) |
+| [`cloudNativePG.documentEngineDatabase`](./values.yaml#L660) | Additional database for Document Engine | `{"enabled":false,"name":"document_engine"}` |
 | [`cloudNativePG.enabled`](./values.yaml#L620) | Enable CloudNativePG resources | `false` |
-| [`cloudNativePG.networkPolicy`](./values.yaml#L653) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L656) | Network policy to allow access to the cluster | `{"enabled":true}` |
 | [`cloudNativePG.operatorNamespace`](./values.yaml#L623) | CloudNativePG operator namespace | `"cnpg-system"` |
 | [`cloudNativePG.operatorReleaseName`](./values.yaml#L626) | CloudNativePG operator release name | `"cloudnative-pg"` |
-| [`cloudNativePG.superuserSecret`](./values.yaml#L647) | Superuser secret to use with the cluster | `{"create":true,"password":"nutrientArtificialIntelligenceAssistant","username":"postgres"}` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L650) | Superuser secret to use with the cluster | `{"create":true,"password":"nutrientArtificialIntelligenceAssistant","username":"postgres"}` |
 
 ### Other Values
 

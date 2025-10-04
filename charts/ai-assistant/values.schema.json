@@ -170,6 +170,9 @@
         "clusterLabels": {
           "type": "object"
         },
+        "clusterName": {
+          "type": "string"
+        },
         "clusterSpec": {
           "type": "object",
           "properties": {
@@ -203,6 +206,17 @@
             }
           },
           "additionalProperties": true
+        },
+        "documentEngineDatabase": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
         },
         "enabled": {
           "type": "boolean"

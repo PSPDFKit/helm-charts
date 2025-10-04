@@ -76,7 +76,11 @@ Nutrient stuff
 CloudNativePG
 */}}
 {{- define "ai-assistant.storage.cloudNativePG.cluster.name" -}}
-{{- include "ai-assistant.fullname" . }}-postgres
+  {{- if .Values.cloudNativePG.clusterName -}}
+    {{- tpl .Values.cloudNativePG.clusterName $ -}}
+  {{- else -}}
+    {{- .Release.Name }}-postgres
+  {{- end -}}
 {{- end -}}
 
 {{- define "ai-assistant.storage.cloudNativePG.superuser-secret.name" -}}

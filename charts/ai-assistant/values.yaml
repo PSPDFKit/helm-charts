@@ -624,6 +624,9 @@ cloudNativePG:
   # -- CloudNativePG operator release name
   # @section -- Z. Storage resource definitions
   operatorReleaseName: cloudnative-pg
+  # -- CloudNativePG custom Cluster name
+  # @section -- Z. Storage resource definitions
+  clusterName: "{{ .Release.Name }}-postgres"
   # -- CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec)
   # @section -- Z. Storage resource definitions
   # @notationType -- reference
@@ -652,6 +655,11 @@ cloudNativePG:
   # @section -- Z. Storage resource definitions
   networkPolicy:
     enabled: true
+  # -- Additional database for Document Engine
+  # @section -- Z. Storage resource definitions
+  documentEngineDatabase: 
+    enabled: false
+    name: document_engine
 
 # -- [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine)
 # @section -- Z. Dependencies

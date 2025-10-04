@@ -86,4 +86,5 @@ jobs:
           helm repo add nutrient https://pspdfkit.github.io/helm-charts
           ct install --target-branch ${{ github.event.repository.default_branch }} \
                      --helm-extra-args "--timeout 300s" \
-                     --helm-extra-set-args "--set=image.tag=nightly"
+                     --helm-extra-set-args "--set=image.tag=nightly" \
+                     --helm-extra-set-args "--set=image.pullPolicy=Always"
