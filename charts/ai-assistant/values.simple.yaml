@@ -134,19 +134,8 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
 
-postgresql:
+cloudNativePG:
   enabled: true
-  architecture: standalone
-  primary:
-    persistence:
-      enabled: false
-    extraEnvVars:
-      - name: POSTGRES_DB
-        value: 'ai-assistant'
-  auth:
-    enabledPostgresUser: true
-    postgresPassword: nutrient
-    database: ai-assistant
 
 document-engine:
   enabled: true
@@ -168,8 +157,6 @@ document-engine:
     migrationJob:
       enabled: false
     postgres:
-      host: document-engine-postgresql
-      port: 5432
       username: postgres
       tls:
         enabled: false
@@ -214,17 +201,5 @@ document-engine:
       - paths:
           - path: /
             pathType: ImplementationSpecific
-  postgresql:
+  cloudNativePG:
     enabled: true
-    architecture: standalone
-    fullnameOverride: document-engine-postgresql
-    nameOverride: document-engine-postgresql
-    primary:
-      persistence:
-        enabled: false
-    volumePermissions:
-      enabled: true
-  minio:
-    enabled: false
-  redis:
-    enabled: false

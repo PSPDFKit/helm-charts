@@ -234,7 +234,7 @@ database:
     # -- (tpl/string) `PGHOST`
     # @notationType -- tpl
     # @section -- 05. Database
-    host: "{{ .Release.Name }}-postgresql"
+    host: "{{ .Release.Name }}-postgres-rw"
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
@@ -246,7 +246,7 @@ database:
     username: postgres
     # -- `PGPASSWORD`
     # @section -- 05. Database
-    password: nutrient
+    password: nutrientArtificialIntelligenceAssistant
     # -- Use external secret for database credentials.
     # `PGUSER` and `PGPASSWORD` must be provided
     # and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL`
@@ -611,52 +611,51 @@ priorityClassName: ""
 # @section -- G. Scheduling
 schedulerName: ""
 
-# -- [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql).
-# Please note that this chart is not maintained by Nutrient
-# and that considering "unsupported" `pgvector/pgvector` image, this is a workaround.
-# We recommend using PostgreSQL management orchestratration approach for production.
-# @section -- Z. Dependencies
+# -- [CloudNativePG](https://cloudnative-pg.io/) resources
+# @section -- Z. Storage resource definitions
 # @notationType -- reference
-postgresql:  # @schema additionalProperties:true
+cloudNativePG:
+  # -- Enable CloudNativePG resources
+  # @section -- Z. Storage resource definitions
   enabled: false
-  architecture: standalone
-  postgresqlSharedPreloadLibraries: "pgaudit,pgvector"
-  global:
-    security:
-      allowInsecureImages: true
-  volumePermissions:
-    enabled: false
-  image:
-    repository: pgvector/pgvector
-    tag: 0.8.0-pg17
-    pullPolicy: IfNotPresent
-  primary:
-    persistence:
-      enabled: false
-      size: 10Gi
-      accessModes:
-        - ReadWriteOnce
-    extraVolumes:
-      - name: run
-        emptyDir: {}
-    extraVolumeMounts:
-      - name: run
-        mountPath: /var/run
-    extraEnvVars:
-      - name: POSTGRES_DB
-        value: 'ai-assistant'
-    extendedConfiguration: |
-      log_statement = none
-    pgHbaConfiguration: |
-      local    all             all                                trust
-      host     all             all        127.0.0.1/32            trust
-      host     all             all        ::1/128                 trust
-      host     all             all        0.0.0.0/0               md5
-      host     all             all        ::/0                    md5
-  auth:
-    enabledPostgresUser: true
-    postgresPassword: nutrient
-    database: ai-assistant
+  # -- CloudNativePG operator namespace
+  # @section -- Z. Storage resource definitions
+  operatorNamespace: cnpg-system
+  # -- CloudNativePG operator release name
+  # @section -- Z. Storage resource definitions
+  operatorReleaseName: cloudnative-pg
+  # -- CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec)
+  # @section -- Z. Storage resource definitions
+  # @notationType -- reference
+  clusterSpec:  # @schema additionalProperties:true
+    instances: 1
+    storage:
+      size: 512Mi
+      storageClass: standard
+    enableSuperuserAccess: true
+    bootstrap:
+      initdb:
+        database: ai-assistant
+        owner: whatever
+    logLevel: warning
+    monitoring:
+      enablePodMonitor: false
+  # -- Cluster labels
+  # @section -- Z. Storage resource definitions
+  clusterLabels: {}
+  # -- Cluster annotations
+  # @section -- Z. Storage resource definitions
+  clusterAnnotations: {}
+  # -- Superuser secret to use with the cluster
+  # @section -- Z. Storage resource definitions
+  superuserSecret:
+    create: true
+    username: postgres
+    password: nutrientArtificialIntelligenceAssistant
+  # -- Network policy to allow access to the cluster
+  # @section -- Z. Storage resource definitions
+  networkPolicy:
+    enabled: true
 
 # -- [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine)
 # @section -- Z. Dependencies
