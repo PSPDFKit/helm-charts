@@ -657,7 +657,7 @@ cloudNativePG:
     enabled: true
   # -- Additional database for Document Engine
   # @section -- Z. Storage resource definitions
-  documentEngineDatabase: 
+  documentEngineDatabase:
     enabled: false
     name: document_engine
 
