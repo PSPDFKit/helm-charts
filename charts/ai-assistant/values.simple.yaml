@@ -136,7 +136,7 @@ ingress:
 cloudNativePG:
   enabled: true
   clusterName: "{{ .Release.Name }}-postgres"
-  documentEngineDatabase: 
+  documentEngineDatabase:
     enabled: true
     name: document_engine
 
