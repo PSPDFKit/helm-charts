@@ -63,7 +63,7 @@ data:
 {{-     if .host }}
   PGHOST: {{ tpl .host $ | quote }}
 {{-     else if $.Values.cloudNativePG.enabled }}
-  PGHOST: {{ include "ai-assistant.storage.cloudNativePG.cluster.name" $ }}-rw
+  PGHOST: {{ include "document-engine.storage.cloudNativePG.cluster.name" $ }}-rw
 {{-     end }}
 {{-     with .port }}
   PGPORT: {{ . | quote }}
