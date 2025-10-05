@@ -215,9 +215,9 @@ database:
   # @default -- none
   # @notationType -- reference
   postgres:
-    # -- (tpl/string) `PGHOST`
+    # -- (tpl/string) `PGHOST`, if not set, and `cloudNativePG.enabled`, will rely on the Cluster
     # @section -- 05. Database
-    host: "{{ .Release.Name }}-postgres-rw"
+    host: ""
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
