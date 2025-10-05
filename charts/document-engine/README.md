@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 6.0.0](https://img.shields.io/badge/Version-6.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.0](https://img.shields.io/badge/AppVersion-1.11.0-informational?style=flat-square)
+![Version: 6.1.0](https://img.shields.io/badge/Version-6.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.0](https://img.shields.io/badge/AppVersion-1.11.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -285,7 +285,7 @@ Note:
 | [`database.postgres.database`](./values.yaml#L226) | `PGDATABASE` | `"document-engine"` |
 | [`database.postgres.externalAdminSecretName`](./values.yaml#L247) | External secret for administrative database credentials, used for migrations: `PG_ADMIN_USER` and `PG_ADMIN_PASSWORD` | `""` |
 | [`database.postgres.externalSecretName`](./values.yaml#L243) | Use external secret for database credentials. `PGUSER` and `PGPASSWORD` must be provided and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL` | `""` |
-| [`database.postgres.host`](./values.yaml#L220) | `PGHOST` | `"{{ .Release.Name }}-postgres-rw"` |
+| [`database.postgres.host`](./values.yaml#L220) | `PGHOST`, if not set, and `cloudNativePG.enabled`, will rely on the Cluster | `""` |
 | [`database.postgres.password`](./values.yaml#L232) | `PGPASSWORD` | `"despair"` |
 | [`database.postgres.port`](./values.yaml#L223) | `PGPORT` | `5432` |
 | [`database.postgres.tls`](./values.yaml#L252) | TLS settings | [...](./values.yaml#L252) |
