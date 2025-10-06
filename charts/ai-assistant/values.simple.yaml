@@ -136,6 +136,8 @@ ingress:
 cloudNativePG:
   enabled: true
   clusterName: "{{ .Release.Name }}-postgres"
+  clusterSpec:
+    logLevel: info
   documentEngineDatabase:
     enabled: true
     name: document_engine
@@ -160,12 +162,12 @@ document-engine:
     migrationJob:
       enabled: false
     postgres:
-      host: "{{ .Release.Name }}-postgres-rw"
+      host: "{{ .Release.Name }}-de-postgres-rw"
       database: document_engine
-      username: postgres
-      password: nutrientArtificialIntelligenceAssistant
-      adminUsername: postgres
-      adminPassword: nutrientArtificialIntelligenceAssistant
+      # username: postgres
+      # password: nutrientArtificialIntelligenceAssistant
+      # adminUsername: postgres
+      # adminPassword: nutrientArtificialIntelligenceAssistant
       tls:
         enabled: false
   assetStorage:
@@ -211,5 +213,9 @@ document-engine:
             pathType: ImplementationSpecific
   startupProbe:
     initialDelaySeconds: 30
+    failureThreshold: 10
   cloudNativePG:
-    enabled: false
+    enabled: true
+    clusterName: "{{ .Release.Name }}-de-postgres"
+    clusterSpec:
+      logLevel: info
