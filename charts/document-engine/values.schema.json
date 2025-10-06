@@ -300,6 +300,9 @@
         "clusterLabels": {
           "type": "object"
         },
+        "clusterName": {
+          "type": "string"
+        },
         "clusterSpec": {
           "type": "object",
           "properties": {

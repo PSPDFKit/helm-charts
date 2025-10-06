@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 6.1.0](https://img.shields.io/badge/Version-6.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.0](https://img.shields.io/badge/AppVersion-1.11.0-informational?style=flat-square)
+![Version: 6.2.0](https://img.shields.io/badge/Version-6.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.11.0](https://img.shields.io/badge/AppVersion-1.11.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -507,14 +507,15 @@ Note:
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`cloudNativePG`](./values.yaml#L1061) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1061) |
-| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1092) | Cluster annotations | `{}` |
-| [`cloudNativePG.clusterLabels`](./values.yaml#L1089) | Cluster labels | `{}` |
-| [`cloudNativePG.clusterSpec`](./values.yaml#L1074) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1074) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1095) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L1092) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterName`](./values.yaml#L1073) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L1077) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1077) |
 | [`cloudNativePG.enabled`](./values.yaml#L1064) | Enable CloudNativePG resources | `false` |
-| [`cloudNativePG.networkPolicy`](./values.yaml#L1101) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L1104) | Network policy to allow access to the cluster | `{"enabled":true}` |
 | [`cloudNativePG.operatorNamespace`](./values.yaml#L1067) | CloudNativePG operator namespace | `"cnpg-system"` |
 | [`cloudNativePG.operatorReleaseName`](./values.yaml#L1070) | CloudNativePG operator release name | `"cloudnative-pg"` |
-| [`cloudNativePG.superuserSecret`](./values.yaml#L1095) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L1098) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
 
 ### Other Values
 
