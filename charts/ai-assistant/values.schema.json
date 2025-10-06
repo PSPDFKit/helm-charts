@@ -161,6 +161,96 @@
         }
       }
     },
+    "cloudNativePG": {
+      "type": "object",
+      "properties": {
+        "clusterAnnotations": {
+          "type": "object"
+        },
+        "clusterLabels": {
+          "type": "object"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "clusterSpec": {
+          "type": "object",
+          "properties": {
+            "enableSuperuserAccess": {
+              "type": "boolean"
+            },
+            "instances": {
+              "type": "integer"
+            },
+            "logLevel": {
+              "type": "string"
+            },
+            "monitoring": {
+              "type": "object",
+              "properties": {
+                "enablePodMonitor": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "storage": {
+              "type": "object",
+              "properties": {
+                "size": {
+                  "type": "string"
+                },
+                "storageClass": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "documentEngineDatabase": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "networkPolicy": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "operatorNamespace": {
+          "type": "string"
+        },
+        "operatorReleaseName": {
+          "type": "string"
+        },
+        "superuserSecret": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type": "boolean"
+            },
+            "password": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "config": {
       "type": "object",
       "properties": {
@@ -606,140 +696,6 @@
     },
     "podSecurityContext": {
       "type": "object"
-    },
-    "postgresql": {
-      "type": "object",
-      "properties": {
-        "architecture": {
-          "type": "string"
-        },
-        "auth": {
-          "type": "object",
-          "properties": {
-            "database": {
-              "type": "string"
-            },
-            "enabledPostgresUser": {
-              "type": "boolean"
-            },
-            "postgresPassword": {
-              "type": "string"
-            }
-          }
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "global": {
-          "type": "object",
-          "properties": {
-            "security": {
-              "type": "object",
-              "properties": {
-                "allowInsecureImages": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        },
-        "image": {
-          "type": "object",
-          "properties": {
-            "pullPolicy": {
-              "type": "string"
-            },
-            "repository": {
-              "type": "string"
-            },
-            "tag": {
-              "type": "string"
-            }
-          }
-        },
-        "postgresqlSharedPreloadLibraries": {
-          "type": "string"
-        },
-        "primary": {
-          "type": "object",
-          "properties": {
-            "extendedConfiguration": {
-              "type": "string"
-            },
-            "extraEnvVars": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "extraVolumeMounts": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "mountPath": {
-                    "type": "string"
-                  },
-                  "name": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "extraVolumes": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "emptyDir": {
-                    "type": "object"
-                  },
-                  "name": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "persistence": {
-              "type": "object",
-              "properties": {
-                "accessModes": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "enabled": {
-                  "type": "boolean"
-                },
-                "size": {
-                  "type": "string"
-                }
-              }
-            },
-            "pgHbaConfiguration": {
-              "type": "string"
-            }
-          }
-        },
-        "volumePermissions": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          }
-        }
-      },
-      "additionalProperties": true
     },
     "priorityClassName": {
       "type": "string"

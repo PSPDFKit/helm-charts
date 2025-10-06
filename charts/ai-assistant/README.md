@@ -1,12 +1,16 @@
 # AI Assistant Helm chart
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.5.0](https://img.shields.io/badge/AppVersion-1.5.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.5.0](https://img.shields.io/badge/AppVersion-1.5.0-informational?style=flat-square)
 
 AI Assistant is a thing that assists an AI
 
 **Homepage:** <https://www.nutrient.io/guides/ai-assistant/>
 
 * [Using this chart](#using-this-chart)
+* [Database](#database)
+  * [PostgreSQL](#postgresql)
+* [Integrations](#integrations)
+  * [CloudNativePG operator](#cloudnativepg-operator)
 * [Values](#values)
   * [AI Assistant License](#ai-assistant-license)
   * [API authentication](#api-authentication)
@@ -21,6 +25,7 @@ AI Assistant is a thing that assists an AI
   * [Pod lifecycle](#pod-lifecycle)
   * [Scheduling](#scheduling)
   * [Dependencies](#dependencies)
+  * [Storage resource definitions](#storage-resource-definitions)
   * [Other Values](#other-values)
 * [Contribution](#contribution)
 * [License](#license)
@@ -53,19 +58,7 @@ helm upgrade --install -n ai-assistant \
 
 An optional dependency is [Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine), to use when external Document Engine instance is not available.
 
-There is also chart optionally depends upon [Bitnami](https://github.com/bitnami/charts/tree/main/bitnami) chart for PostgreSQL.
-It is disabled by default, but can be enabled for convenience.
-
-> [!NOTE]
-> Official Bitnami PostgreSQL image does not include `pgvector` extension and the existing values rely on a workaround using `pgvector/pgvector` image instead.
-> We recommend using more mature solution in production, e.g. a managed database.
-
 Please consider [tests](/charts/ai-assistant/ci) as examples.
-
-| Repository | Name | Version |
-|------------|------|---------|
-| https://charts.bitnami.com/bitnami | postgresql | 16.7.13 |
-| https://pspdfkit.github.io/helm-charts | document-engine | ~5 |
 
 Schema is generated using [helm values schema json plugin](https://github.com/losisin/helm-values-schema-json).
 
@@ -75,6 +68,66 @@ Schema is generated using [helm values schema json plugin](https://github.com/lo
 
 > [!NOTE]
 > Please consult the [changelog](/charts/ai-assistant/CHANGELOG.md)
+
+## Database and asset storage
+
+### PostgreSQL
+
+In order to operate, AI Assistant requires a PostgreSQL database with `pg_vector` extenstion.
+
+The chart does not provide means to install PostgreSQL database, object storage or Redis for rendering cache.
+
+Instead, we recommend to manage these resources externally, e.g., on the cloud provider level.
+
+However, the chart suggests generation of PostgreSQL Cluster custom resource provided by [CloudNativePG](https://cloudnative-pg.io/) operator.
+
+CloudNativePG is not the only possible solution, and we recommend to also consider [StackGres](https://stackgres.io/), [Zalando Postgres Operator](https://github.com/zalando/postgres-operator).
+
+## Integrations
+
+### CloudNativePG operator
+
+A prerequisite is a running operator, which can be installed into namespace `cnpg-system` in a Kubernetes cluster like this:
+
+```shell
+helm repo add cnpg https://cloudnative-pg.github.io/charts
+helm upgrade --install cnpg \
+  --namespace cnpg-system --create-namespace \
+  cnpg/cloudnative-pg
+```
+
+Then, a configuration subset to create a single node PostgreSQL database with hardcoded credentials and connect it to Document Engine:
+
+```yaml
+database:
+  enabled: true
+  postgres:
+    host: "{{ .Release.Name }}-postgres-rw"
+    database: ai-assistant
+    username: postgres
+    password: nutrientArtificialIntelligenceAssistant
+cloudNativePG:
+  enabled: true
+  operatorNamespace: cnpg-system
+  operatorReleaseName: cloudnative-pg
+  clusterSpec:
+    instances: 1
+    storage:
+      size: 512Mi
+      storageClass: standard
+    enableSuperuserAccess: true
+    bootstrap:
+      initdb:
+        database: ai-assistant
+        owner: whatever
+    logLevel: warning
+  superuserSecret:
+    create: true
+    username: postgres
+    password: nutrientArtificialIntelligenceAssistant
+  networkPolicy:
+    enabled: true
+```
 
 ## Values
 
@@ -143,10 +196,10 @@ Schema is generated using [helm values schema json plugin](https://github.com/lo
 | [`database.enabled`](./values.yaml#L225) | Persistent storage enabled | `true` |
 | [`database.engine`](./values.yaml#L228) | Database engine: only `postgres` is currently supported | `"postgres"` |
 | [`database.postgres`](./values.yaml#L233) | PostgreSQL database settings | [...](./values.yaml#L233) |
-| [`database.postgres.database`](./values.yaml#L243) | `PGDATABASE` | `"ai-assistant"` |
+| [`database.postgres.database`](./values.yaml#L243) | `PGDATABASE` | `"ai_assistant"` |
 | [`database.postgres.externalSecretName`](./values.yaml#L254) | Use external secret for database credentials. `PGUSER` and `PGPASSWORD` must be provided and, if not defined: `PGDATABASE`, `PGHOST`, `PGPORT`, `PGSSL` | `""` |
-| [`database.postgres.host`](./values.yaml#L237) | `PGHOST` | `{{ .Release.Name }}-postgresql` |
-| [`database.postgres.password`](./values.yaml#L249) | `PGPASSWORD` | `"nutrient"` |
+| [`database.postgres.host`](./values.yaml#L237) | `PGHOST`, if not set, relies on CloudNativePG cluster name | `` |
+| [`database.postgres.password`](./values.yaml#L249) | `PGPASSWORD` | `"nutrientArtificialIntelligenceAssistant"` |
 | [`database.postgres.port`](./values.yaml#L240) | `PGPORT` | `5432` |
 | [`database.postgres.tls`](./values.yaml#L259) | TLS settings | [...](./values.yaml#L259) |
 | [`database.postgres.tls.commonName`](./values.yaml#L272) | Common name for the certificate (`PGSSL_CERT_COMMON_NAME`), defaults to `PGHOST` value | `""` |
@@ -258,8 +311,23 @@ Schema is generated using [helm values schema json plugin](https://github.com/lo
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`document-engine`](./values.yaml#L664) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L664) |
-| [`postgresql`](./values.yaml#L620) | [External PostgreSQL database chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql). Please note that this chart is not maintained by Nutrient and that considering "unsupported" `pgvector/pgvector` image, this is a workaround. We recommend using PostgreSQL management orchestratration approach for production. | [...](./values.yaml#L620) |
+| [`document-engine`](./values.yaml#L667) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L667) |
+
+### Storage resource definitions
+
+| Key | Description | Default |
+|-----|-------------|---------|
+| [`cloudNativePG`](./values.yaml#L617) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L617) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L647) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L644) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterName`](./values.yaml#L629) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L633) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L633) |
+| [`cloudNativePG.documentEngineDatabase`](./values.yaml#L660) | Additional database for Document Engine | `{"enabled":false,"name":"document_engine"}` |
+| [`cloudNativePG.enabled`](./values.yaml#L620) | Enable CloudNativePG resources | `false` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L656) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.operatorNamespace`](./values.yaml#L623) | CloudNativePG operator namespace | `"cnpg-system"` |
+| [`cloudNativePG.operatorReleaseName`](./values.yaml#L626) | CloudNativePG operator release name | `"cloudnative-pg"` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L650) | Superuser secret to use with the cluster | `{"create":true,"password":"nutrientArtificialIntelligenceAssistant","username":"postgres"}` |
 
 ### Other Values
 
