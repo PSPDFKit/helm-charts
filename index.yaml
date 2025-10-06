@@ -3,6 +3,30 @@ entries:
   ai-assistant:
   - apiVersion: v2
     appVersion: 1.5.0
+    created: "2025-10-06T22:59:04.100167329Z"
+    dependencies:
+    - condition: document-engine.enabled
+      name: document-engine
+      repository: https://pspdfkit.github.io/helm-charts
+      version: ~6
+    description: AI Assistant is a thing that assists an AI
+    digest: d44c9591ab74aba7d85c205659047b890623588bcfb188003454e2a121d10f7f
+    home: https://www.nutrient.io/guides/ai-assistant/
+    icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
+    keywords:
+    - nutrient
+    - ai-assistant
+    maintainers:
+    - email: support@nutrient.io
+      name: Nutrient
+      url: https://www.nutrient.io
+    name: ai-assistant
+    type: application
+    urls:
+    - https://github.com/PSPDFKit/helm-charts/releases/download/ai-assistant-0.3.0/ai-assistant-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 1.5.0
     created: "2025-07-07T11:03:32.695176536Z"
     dependencies:
     - condition: document-engine.enabled
@@ -3161,4 +3185,4 @@ entries:
     urls:
     - https://github.com/PSPDFKit/helm-charts/releases/download/simple-resource-wrapper-1.0.0/simple-resource-wrapper-1.0.0.tgz
     version: 1.0.0
-generated: "2025-10-06T22:44:27.33975843Z"
+generated: "2025-10-06T22:59:04.100440778Z"
