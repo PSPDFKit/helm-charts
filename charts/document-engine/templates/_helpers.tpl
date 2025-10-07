@@ -186,7 +186,7 @@ Object storage parameters
 
 {{- define "document-engine.storage.azure.secret.name" -}}
   {{- if (eq (include "document-engine.storage.azure.createSecret" .) "true") -}}
-    {{- printf "%s-s3" (include "document-engine.fullname" .) -}}
+    {{- printf "%s-azure" (include "document-engine.fullname" .) -}}
   {{- else -}}
     {{- .Values.assetStorage.azure.externalSecretName -}}
   {{- end -}}
