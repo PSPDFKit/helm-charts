@@ -167,6 +167,26 @@ entries:
     version: 0.0.11
   document-engine:
   - apiVersion: v2
+    appVersion: 1.12.1
+    created: "2025-10-08T22:54:03.890495598Z"
+    description: Document Engine is a backend software for processing documents and
+      powering automation workflows.
+    digest: e70eac49f795c3fed6b0017c90de0d0cc774817b917c1778b2b0b779ab0fefda
+    home: https://www.nutrient.io/sdk/document-engine
+    icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
+    keywords:
+    - nutrient
+    - document-engine
+    maintainers:
+    - email: support@nutrient.io
+      name: Nutrient
+      url: https://www.nutrient.io
+    name: document-engine
+    type: application
+    urls:
+    - https://github.com/PSPDFKit/helm-charts/releases/download/document-engine-6.3.1/document-engine-6.3.1.tgz
+    version: 6.3.1
+  - apiVersion: v2
     appVersion: 1.12.0
     created: "2025-10-07T19:29:18.106851594Z"
     description: Document Engine is a backend software for processing documents and
@@ -3205,4 +3225,4 @@ entries:
     urls:
     - https://github.com/PSPDFKit/helm-charts/releases/download/simple-resource-wrapper-1.0.0/simple-resource-wrapper-1.0.0.tgz
     version: 1.0.0
-generated: "2025-10-07T19:29:18.107405479Z"
+generated: "2025-10-08T22:54:03.891277627Z"
