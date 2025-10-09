@@ -165,6 +165,12 @@ data:
 {{-   end }}
 {{- end }}
 #
+# Lifecycle
+{{- with .Values.documentLifecycle }}
+  ENABLE_BULK_DOCUMENT_DELETION: {{ .bulkDocumentDeletionEnabled | quote }}
+{{- end }}
+#
+#
 # Document Conversion
 #
 {{- with .Values.documentConversion }}

@@ -290,7 +290,10 @@ database:
 # @section -- 06. Document lifecycle
 # @notationType -- none
 documentLifecycle:
-  # -- (object) Regular job to remove documents from the database
+  # -- `ENABLE_BULK_DOCUMENT_DELETION`: enable `/api/async/delete_documents` API endpoint
+    # @section -- 06. Document lifecycle
+  bulkDocumentDeletionEnabled: false
+  # -- (object) Regular job to remove documents from the database, requires `documentLifecycle.bulkDocumentDeletionEnabled` to be `true`
   # @section -- 06. Document lifecycle
   # @notationType -- reference
   expirationJob:
