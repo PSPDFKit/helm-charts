@@ -179,6 +179,7 @@
 ### Changed
 
 * Expiration job (`documentLifecycle.expirationJob`) now requires `documentLifecycle.bulkDocumentDeletionEnabled` to be `true`.
+* Changed the expiration job to use the new `/api/async/delete_documents` endpoint.
 
 ## 6.3.1 (2025-10-08)
 

@@ -9,14 +9,14 @@ metadata:
     {{- include "document-engine.labels" . | nindent 4 }}
 data:
   {{- with .Values.documentLifecycle.expirationJob }}
-  {{- $url := printf "http://%s:%s/api/documents" ( include "document-engine.fullname" $ ) ( toString $.Values.service.port ) }}
+  {{- $url := printf "http://%s:%s/api/async/delete_documents" ( include "document-engine.fullname" $ ) ( toString $.Values.service.port ) }}
   run.sh: |
     #!/bin/sh
     set -e
     export PRESERVATION_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ" -d @$(($(date -u +"%s") - {{ .keepHours }} * 3600)))
-    curl --request DELETE \
+    curl --request POST \
          --header "Authorization: Token token=${API_AUTH_TOKEN}" \
-         --url {{ $url }}?end_date=${PRESERVATION_DATE}
+         --url {{ $url }}?created_before=${PRESERVATION_DATE}
   {{- end }}
 # Can be used for hash updating
   HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}
