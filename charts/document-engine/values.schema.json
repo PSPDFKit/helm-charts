@@ -694,6 +694,9 @@
     "documentLifecycle": {
       "type": "object",
       "properties": {
+        "bulkDocumentDeletionEnabled": {
+          "type": "boolean"
+        },
         "expirationJob": {
           "type": "object",
           "properties": {
