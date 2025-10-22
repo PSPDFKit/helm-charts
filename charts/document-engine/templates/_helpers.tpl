@@ -196,7 +196,11 @@ Object storage parameters
 CloudNativePG
 */}}
 {{- define "document-engine.storage.cloudNativePG.cluster.name" -}}
-{{- include "document-engine.fullname" . }}-postgres
+  {{- if .Values.cloudNativePG.clusterName -}}
+    {{- tpl .Values.cloudNativePG.clusterName $ -}}
+  {{- else -}}
+    {{- .Release.Name }}-postgres
+  {{- end -}}
 {{- end -}}
 
 {{- define "document-engine.storage.cloudNativePG.superuser-secret.name" -}}

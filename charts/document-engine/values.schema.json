@@ -300,6 +300,9 @@
         "clusterLabels": {
           "type": "object"
         },
+        "clusterName": {
+          "type": "string"
+        },
         "clusterSpec": {
           "type": "object",
           "properties": {
@@ -691,6 +694,9 @@
     "documentLifecycle": {
       "type": "object",
       "properties": {
+        "bulkDocumentDeletionEnabled": {
+          "type": "boolean"
+        },
         "expirationJob": {
           "type": "object",
           "properties": {

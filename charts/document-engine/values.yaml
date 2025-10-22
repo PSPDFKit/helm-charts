@@ -215,9 +215,9 @@ database:
   # @default -- none
   # @notationType -- reference
   postgres:
-    # -- (tpl/string) `PGHOST`
+    # -- (tpl/string) `PGHOST`, if not set, and `cloudNativePG.enabled`, will rely on the Cluster
     # @section -- 05. Database
-    host: "{{ .Release.Name }}-postgres-rw"
+    host: ""
     # -- `PGPORT`
     # @section -- 05. Database
     port: 5432
@@ -290,7 +290,10 @@ database:
 # @section -- 06. Document lifecycle
 # @notationType -- none
 documentLifecycle:
-  # -- (object) Regular job to remove documents from the database
+  # -- `ENABLE_BULK_DOCUMENT_DELETION`: enable `/api/async/delete_documents` API endpoint
+    # @section -- 06. Document lifecycle
+  bulkDocumentDeletionEnabled: false
+  # -- (object) Regular job to remove documents from the database, requires `documentLifecycle.bulkDocumentDeletionEnabled` to be `true`
   # @section -- 06. Document lifecycle
   # @notationType -- reference
   expirationJob:
@@ -1068,6 +1071,9 @@ cloudNativePG:
   # -- CloudNativePG operator release name
   # @section -- Z. Storage resource definitions
   operatorReleaseName: cloudnative-pg
+  # -- CloudNativePG custom Cluster name
+  # @section -- Z. Storage resource definitions
+  clusterName: "{{ .Release.Name }}-postgres"
   # -- CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec)
   # @section -- Z. Storage resource definitions
   # @notationType -- reference

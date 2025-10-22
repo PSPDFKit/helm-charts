@@ -85,8 +85,7 @@ database:
   engine: postgres
   postgres:
     username: postgres
-    password: nutrient
-    database: ai-assistant
+    password: nutrientArtificialIntelligenceAssistant
     tls:
       enabled: false
 
@@ -111,12 +110,12 @@ updateStrategy:
     maxSurge: 0
 
 resources:
-  limits:
-    cpu: "4"
-    memory: 8Gi
   requests:
-    cpu: "1"
-    memory: 1Gi
+    cpu: "100m"
+    memory: 256Mi
+  limits:
+    cpu: "2"
+    memory: 4Gi
 
 ingress:
   enabled: true
@@ -134,19 +133,14 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
 
-postgresql:
+cloudNativePG:
   enabled: true
-  architecture: standalone
-  primary:
-    persistence:
-      enabled: false
-    extraEnvVars:
-      - name: POSTGRES_DB
-        value: 'ai-assistant'
-  auth:
-    enabledPostgresUser: true
-    postgresPassword: nutrient
-    database: ai-assistant
+  clusterName: "{{ .Release.Name }}-postgres"
+  clusterSpec:
+    logLevel: info
+  documentEngineDatabase:
+    enabled: true
+    name: document_engine
 
 document-engine:
   enabled: true
@@ -168,9 +162,12 @@ document-engine:
     migrationJob:
       enabled: false
     postgres:
-      host: document-engine-postgresql
-      port: 5432
-      username: postgres
+      host: "{{ .Release.Name }}-de-postgres-rw"
+      database: document_engine
+      # username: postgres
+      # password: nutrientArtificialIntelligenceAssistant
+      # adminUsername: postgres
+      # adminPassword: nutrientArtificialIntelligenceAssistant
       tls:
         enabled: false
   assetStorage:
@@ -193,12 +190,12 @@ document-engine:
       maxUnavailable: 1
       maxSurge: 0
   resources:
-    limits:
-      cpu: "4"
-      memory: 8Gi
     requests:
-      cpu: "1"
-      memory: 1Gi
+      cpu: "100m"
+      memory: 256Mi
+    limits:
+      cpu: "2"
+      memory: 4Gi
   ingress:
     enabled: true
     className: nginx
@@ -214,17 +211,11 @@ document-engine:
       - paths:
           - path: /
             pathType: ImplementationSpecific
-  postgresql:
+  startupProbe:
+    initialDelaySeconds: 30
+    failureThreshold: 10
+  cloudNativePG:
     enabled: true
-    architecture: standalone
-    fullnameOverride: document-engine-postgresql
-    nameOverride: document-engine-postgresql
-    primary:
-      persistence:
-        enabled: false
-    volumePermissions:
-      enabled: true
-  minio:
-    enabled: false
-  redis:
-    enabled: false
+    clusterName: "{{ .Release.Name }}-de-postgres"
+    clusterSpec:
+      logLevel: info

@@ -71,3 +71,18 @@ Nutrient stuff
     {{- .Values.config.serviceConfigurationConfigMap.name -}}
   {{- end -}}
 {{- end -}}
+
+{{/*
+CloudNativePG
+*/}}
+{{- define "ai-assistant.storage.cloudNativePG.cluster.name" -}}
+  {{- if .Values.cloudNativePG.clusterName -}}
+    {{- tpl .Values.cloudNativePG.clusterName $ -}}
+  {{- else -}}
+    {{- .Release.Name }}-postgres
+  {{- end -}}
+{{- end -}}
+
+{{- define "ai-assistant.storage.cloudNativePG.superuser-secret.name" -}}
+{{- include "ai-assistant.storage.cloudNativePG.cluster.name" . }}-superuser
+{{- end -}}
