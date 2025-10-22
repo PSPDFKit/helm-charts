@@ -337,8 +337,8 @@ Note:
 | [`assetStorage.redis.sentinel`](./values.yaml#L464) | Redis Sentinel | [...](./values.yaml#L464) |
 | [`assetStorage.redis.tls`](./values.yaml#L489) | TLS settings |  |
 | [`assetStorage.redis.tls.enabled`](./values.yaml#L492) | Enable TLS (`REDIS_SSL`) | `false` |
-| [`assetStorage.redis.ttlSeconds`](./values.yaml#L447) | `REDIS_TTL` Time to live in seconds | `86400000` |
-| [`assetStorage.redis.useTtl`](./values.yaml#L450) | `USE_REDIS_TTL_FOR_PRERENDERING` | `true` |
+| [`assetStorage.redis.ttlSeconds`](./values.yaml#L450) | `REDIS_TTL` Time to live in seconds | `86400` |
+| [`assetStorage.redis.useTtl`](./values.yaml#L447) | `USE_REDIS_TTL_FOR_PRERENDERING` | `true` |
 | [`assetStorage.redis.username`](./values.yaml#L482) | `REDIS_USERNAME` | `""` |
 | [`assetStorage.s3`](./values.yaml#L375) | S3 backend storage settings, in case `assetStorage.backendType` is set to `s3 | [...](./values.yaml#L375) |
 | [`assetStorage.s3.bucket`](./values.yaml#L386) | `ASSET_STORAGE_S3_BUCKET` | `"document-engine-assets"` |
