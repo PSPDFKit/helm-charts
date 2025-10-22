@@ -180,10 +180,10 @@
 
 ### Fixed
 
-* ([masterkain](https://github.com/masterkain)) Wrong Redis TTL units
-* ([masterkain](https://github.com/masterkain)) inline S3 credentials (when `assetStorage.s3.externalSecretName` is not set)
-* ([masterkain](https://github.com/masterkain)) inline Redis credentials (when `assetStorage.redis.externalSecretName` is not set)
-* ([masterkain](https://github.com/masterkain)) Azure Blob Storage secret name
+* @masterkain Wrong Redis TTL units
+* @masterkain Inline S3 credentials (when `assetStorage.s3.externalSecretName` is not set)
+* @masterkain Inline Redis credentials (when `assetStorage.redis.externalSecretName` is not set)
+* @masterkain Azure Blob Storage secret name
 
 ## 7.1.0 (2025-10-22)
 
@@ -764,8 +764,8 @@
 
 ### Added
 
-* Added `deploymentAnnotations` (courtesy of [k11h.de](https://github.com/k11h-de)).
-* Added `pspdfkit.storage.cleanupJob.podAnnotations`.
+* @k11h.de Added `deploymentAnnotations`
+* Added `pspdfkit.storage.cleanupJob.podAnnotations`
 
 ### Changed
 
