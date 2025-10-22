@@ -442,12 +442,12 @@ assetStorage:
     # -- `USE_REDIS_CACHE`
     # @section -- 07. Asset storage
     enabled: false
-    # -- `REDIS_TTL`
-    # @section -- 07. Asset storage
-    ttlSeconds: 86400000
     # -- `USE_REDIS_TTL_FOR_PRERENDERING`
     # @section -- 07. Asset storage
     useTtl: true
+    # -- `REDIS_TTL` Time to live in seconds
+    # @section -- 07. Asset storage
+    ttlSeconds: 86400
     # -- (tpl/string) `REDIS_HOST`
     # @section -- 07. Asset storage
     host: "{{ .Release.Name }}-redis-master"

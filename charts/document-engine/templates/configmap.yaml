@@ -128,7 +128,7 @@ data:
   USE_REDIS_CACHE: "true"
 {{-       with .redis }}
   USE_REDIS_TTL_FOR_PRERENDERING: {{ .useTtl | quote }}
-  REDIS_TTL: {{ .ttlSeconds | int | quote }}
+  REDIS_TTL: {{  mul 1000 .ttlSeconds | int | quote }}
 {{-         if .sentinel.enabled }}
   REDIS_SENTINELS: {{ tpl  ( join ";" .sentinel.urls ) $ | quote }}
   REDIS_SENTINELS_GROUP: {{ .sentinel.group | quote }}

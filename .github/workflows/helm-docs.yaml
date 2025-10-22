@@ -7,15 +7,17 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
       - name: Run helm-docs for Document Engine
         uses: losisin/helm-docs-github-action@v1
         with:
           chart-search-root: charts/document-engine
           # git-push: true
           fail-on-diff: true
+
       - name: Run helm-docs for AI Assistant
         uses: losisin/helm-docs-github-action@v1
         with:

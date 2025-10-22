@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 7.1.0](https://img.shields.io/badge/Version-7.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.12.2](https://img.shields.io/badge/AppVersion-1.12.2-informational?style=flat-square)
+![Version: 7.1.1](https://img.shields.io/badge/Version-7.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.12.2](https://img.shields.io/badge/AppVersion-1.12.2-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -337,8 +337,8 @@ Note:
 | [`assetStorage.redis.sentinel`](./values.yaml#L464) | Redis Sentinel | [...](./values.yaml#L464) |
 | [`assetStorage.redis.tls`](./values.yaml#L489) | TLS settings |  |
 | [`assetStorage.redis.tls.enabled`](./values.yaml#L492) | Enable TLS (`REDIS_SSL`) | `false` |
-| [`assetStorage.redis.ttlSeconds`](./values.yaml#L447) | `REDIS_TTL` | `86400000` |
-| [`assetStorage.redis.useTtl`](./values.yaml#L450) | `USE_REDIS_TTL_FOR_PRERENDERING` | `true` |
+| [`assetStorage.redis.ttlSeconds`](./values.yaml#L450) | `REDIS_TTL` Time to live in seconds | `86400` |
+| [`assetStorage.redis.useTtl`](./values.yaml#L447) | `USE_REDIS_TTL_FOR_PRERENDERING` | `true` |
 | [`assetStorage.redis.username`](./values.yaml#L482) | `REDIS_USERNAME` | `""` |
 | [`assetStorage.s3`](./values.yaml#L375) | S3 backend storage settings, in case `assetStorage.backendType` is set to `s3 | [...](./values.yaml#L375) |
 | [`assetStorage.s3.bucket`](./values.yaml#L386) | `ASSET_STORAGE_S3_BUCKET` | `"document-engine-assets"` |
