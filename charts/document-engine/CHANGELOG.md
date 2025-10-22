@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [7.1.2 (2025-10-22)](#712-2025-10-22)
+    - [Fix](#fix)
   - [7.1.1 (2025-10-22)](#711-2025-10-22)
     - [Fixed](#fixed)
   - [7.1.0 (2025-10-22)](#710-2025-10-22)
@@ -176,6 +178,12 @@
   - [2.0.0](#200)
     - [Changed](#changed-51)
 
+## 7.1.2 (2025-10-22)
+
+### Fix
+
+* Fix timeline in Grafana dashboard
+
 ## 7.1.1 (2025-10-22)
 
 ### Fixed
@@ -189,7 +197,7 @@
 
 ### Changed
 
-* Massive upgrade of the Grafana dashboard.
+* Massive upgrade of the Grafana dashboard
 
 ## 7.0.1 (2025-10-13)
 
