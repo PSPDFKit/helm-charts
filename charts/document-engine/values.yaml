@@ -442,7 +442,7 @@ assetStorage:
     # -- `USE_REDIS_CACHE`
     # @section -- 07. Asset storage
     enabled: false
-    # -- `REDIS_TTL` (seconds)
+    # -- `REDIS_TTL` Time to live in seconds
     # @section -- 07. Asset storage
     ttlSeconds: 86400000
     # -- `USE_REDIS_TTL_FOR_PRERENDERING`
