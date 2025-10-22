@@ -5158,7 +5158,7 @@
           "query": "label_values({namespace=~\"$namespace\", app=~\"$app\"},pod)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "type": "query"
       },
