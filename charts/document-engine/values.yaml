@@ -1087,6 +1087,7 @@ cloudNativePG:
       initdb:
         database: nutrient
         owner: whatever
+        dataChecksums: true
     logLevel: warning
     monitoring:
       enablePodMonitor: false

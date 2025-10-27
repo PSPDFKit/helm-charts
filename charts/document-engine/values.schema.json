@@ -312,6 +312,9 @@
                 "initdb": {
                   "type": "object",
                   "properties": {
+                    "dataChecksums": {
+                      "type": "boolean"
+                    },
                     "database": {
                       "type": "string"
                     },
