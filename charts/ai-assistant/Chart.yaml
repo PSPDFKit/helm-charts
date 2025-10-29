@@ -18,6 +18,6 @@ maintainers:
 
 dependencies:
   - name: document-engine
-    version: ~6
+    version: ~7
     repository: https://pspdfkit.github.io/helm-charts
     condition: document-engine.enabled
