@@ -203,13 +203,34 @@ spec:
           lifecycle:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+      {{- if .Values.nginxSidecar.enabled }}
+        - name: nginx-sidecar
+          image: {{ .Values.nginxSidecar.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: nginx
+              containerPort: {{ .Values.nginxSidecar.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.nginxSidecar.resources | nindent 12 }}
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+      {{- end }}
       {{- if .Values.sidecars }}
         {{ toYaml .Values.sidecars | nindent 8 }}
       {{- end }}
       {{- if or .Values.extraVolumeMounts
-                .Values.certificateTrust.digitalSignatures 
-                .Values.certificateTrust.customCertificates }}
+                .Values.certificateTrust.digitalSignatures
+                .Values.certificateTrust.customCertificates
+                .Values.nginxSidecar.enabled }}
       volumes:
+        {{- if .Values.nginxSidecar.enabled }}
+        - name: nginx-config
+          configMap:
+            name: {{ include "document-engine.fullname" . }}-nginx-sidecar
+        {{- end }}
         {{- with .Values.extraVolumes }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
