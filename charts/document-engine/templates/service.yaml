@@ -18,7 +18,11 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.service.port }}
+      {{- if .Values.envoySidecar.enabled }}
+      targetPort: envoy
+      {{- else }}
       targetPort: api
+      {{- end }}
       protocol: TCP
       name: api
     {{- with .Values.observability.metrics.prometheusEndpoint }}

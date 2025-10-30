@@ -1,0 +1,109 @@
+{{- if .Values.envoySidecar.enabled -}}
+{{- $fullName := include "document-engine.fullname" . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}-envoy-sidecar
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+data:
+  envoy.yaml: |
+    admin:
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: {{ .Values.envoySidecar.adminPort }}
+
+    static_resources:
+      listeners:
+      - name: listener_0
+        address:
+          socket_address:
+            address: 0.0.0.0
+            port_value: {{ .Values.envoySidecar.port }}
+        filter_chains:
+        - filters:
+          - name: envoy.filters.network.http_connection_manager
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+              stat_prefix: ingress_http
+              access_log:
+              - name: envoy.access_loggers.stdout
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+              route_config:
+                name: local_route
+                virtual_hosts:
+                - name: backend
+                  domains: ["*"]
+                  response_headers_to_add:
+                  - header:
+                      key: "x-hash-by"
+                      value: "%REQ(X-Hash-By)%"
+                  - header:
+                      key: "x-envoy-upstream-remote-address"
+                      value: "%UPSTREAM_REMOTE_ADDRESS%"
+                  routes:
+                  - match:
+                      prefix: "/"
+                    route:
+                      cluster: document_engine_cluster
+                      hash_policy:
+                      - header:
+                          header_name: "X-Hash-By"
+              http_filters:
+              # Extract document ID from URI and set as header
+              - name: envoy.filters.http.lua
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+                  inline_code: |
+                    function envoy_on_request(request_handle)
+                      local path = request_handle:headers():get(":path")
+                      local document_id = nil
+
+                      -- Try different URI patterns
+                      document_id = string.match(path, "^/api/documents/([a-zA-Z0-9._~-]+)")
+                      if not document_id then
+                        document_id = string.match(path, "^/i/d/([a-zA-Z0-9._~-]+)")
+                      end
+                      if not document_id then
+                        document_id = string.match(path, "^/documents/([a-zA-Z0-9._~-]+)")
+                      end
+                      if not document_id then
+                        document_id = string.match(path, "^/dashboard/api/document/([a-zA-Z0-9._~-]+)")
+                      end
+
+                      -- Only set header if document_id found, otherwise use round-robin
+                      if document_id then
+                        request_handle:headers():add("X-Hash-By", document_id)
+                      end
+                    end
+              - name: envoy.filters.http.router
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+      clusters:
+      - name: document_engine_cluster
+        connect_timeout: 5s
+        type: STRICT_DNS
+        dns_lookup_family: V4_ONLY
+        lb_policy: RING_HASH
+        ring_hash_lb_config:
+          minimum_ring_size: 1024
+        load_assignment:
+          cluster_name: document_engine_cluster
+          endpoints:
+          - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: {{ $fullName }}-headless.{{ .Release.Namespace }}.svc.cluster.local
+                    port_value: {{ .Values.service.port }}
+        health_checks:
+        - timeout: 1s
+          interval: 10s
+          unhealthy_threshold: 2
+          healthy_threshold: 2
+          http_health_check:
+            path: /health
+{{- end }}

@@ -890,6 +890,32 @@ extraIngresses: {}
   #           pathType: Prefix
   #   tls: []
 
+# -- (object) Envoy sidecar for consistent hashing by document ID
+# @section -- C. Networking
+# @notationType -- reference
+envoySidecar:
+  # -- Enable Envoy sidecar for consistent hashing
+  # @section -- C. Networking
+  enabled: false
+  # -- Envoy sidecar image
+  # @section -- C. Networking
+  image: envoyproxy/envoy:v1.31-latest
+  # -- Port where Envoy sidecar listens
+  # @section -- C. Networking
+  port: 8080
+  # -- Admin port for Envoy
+  # @section -- C. Networking
+  adminPort: 9901
+  # -- Resource limits for Envoy sidecar
+  # @section -- C. Networking
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
 # https://editor.networkpolicy.io/
 # -- (object) [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
 # @section -- C. Networking
