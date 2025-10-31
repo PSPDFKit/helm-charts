@@ -33,5 +33,11 @@ spec:
       name: metrics
     {{- end }}
     {{- end }}
+    {{- if .Values.envoySidecar.enabled }}
+    - port: {{ .Values.envoySidecar.adminPort }}
+      targetPort: envoy-admin
+      protocol: TCP
+      name: envoy-admin
+    {{- end }}
   selector:
     {{- include "document-engine.selectorLabels" . | nindent 4 }}
