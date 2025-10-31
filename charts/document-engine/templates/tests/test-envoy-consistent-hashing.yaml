@@ -1,0 +1,93 @@
+{{- if .Values.envoySidecar.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "document-engine.fullname" . }}-test-envoy-hashing"
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: test
+      image: busybox:latest
+      command:
+        - /bin/sh
+        - -c
+        - |
+          set -e
+
+          SERVICE="{{ include "document-engine.fullname" . }}:{{ .Values.service.port }}"
+
+          echo "Testing Envoy consistent hashing..."
+          echo "Service: $SERVICE"
+          echo ""
+
+          # Test 1: Check service is reachable
+          echo "Test 1: Service reachability"
+          if wget -q -O - "http://$SERVICE/healthcheck" > /dev/null; then
+            echo "✓ Service is reachable"
+          else
+            echo "✗ Service is not reachable"
+            exit 1
+          fi
+          echo ""
+
+          # Test 2: Check Envoy headers are present
+          echo "Test 2: Envoy headers present"
+          if wget -S -O /dev/null "http://$SERVICE/healthcheck" 2>&1 | grep -i "x-envoy-upstream-remote-address" > /dev/null; then
+            echo "✓ Envoy headers present"
+          else
+            echo "✗ Envoy headers missing (sidecar may not be working)"
+            exit 1
+          fi
+          echo ""
+
+          # Test 3: Consistent hashing - same document ID goes to same backend
+          echo "Test 3: Consistent hashing for doc-test-1"
+          FIRST_BACKEND=""
+          for i in $(seq 1 5); do
+            BACKEND=$(wget -S -O /dev/null "http://$SERVICE/api/documents/doc-test-1" 2>&1 | grep -i "x-envoy-upstream-remote-address" | sed 's/.*: //' | tr -d '\r')
+            echo "  Request $i backend: $BACKEND"
+
+            if [ -z "$FIRST_BACKEND" ]; then
+              FIRST_BACKEND="$BACKEND"
+            elif [ "$BACKEND" != "$FIRST_BACKEND" ]; then
+              echo "✗ Inconsistent routing for same document ID"
+              exit 1
+            fi
+            sleep 0.5
+          done
+
+          echo "✓ Same document ID routed to same backend (5/5 requests)"
+          echo ""
+
+          # Test 4: Different document IDs (test distribution if multiple replicas)
+          {{- if gt (int .Values.replicaCount) 1 }}
+          echo "Test 4: Distribution across backends ({{ .Values.replicaCount }} replicas)"
+
+          # Collect backends for multiple document IDs
+          BACKENDS=""
+          for i in $(seq 1 20); do
+            BACKEND=$(wget -S -O /dev/null "http://$SERVICE/api/documents/doc-test-$i" 2>&1 | grep -i "x-envoy-upstream-remote-address" | sed 's/.*: //' | tr -d '\r')
+            BACKENDS="$BACKENDS $BACKEND"
+          done
+
+          # Count unique backends
+          UNIQUE=$(echo "$BACKENDS" | tr ' ' '\n' | sort -u | grep -v '^$' | wc -l)
+
+          echo "  Unique backends used: $UNIQUE"
+
+          if [ "$UNIQUE" -gt 1 ]; then
+            echo "✓ Requests distributed across multiple backends"
+          else
+            echo "⚠ All requests went to single backend (may be expected with few document IDs)"
+          fi
+          {{- else }}
+          echo "Test 4: Skipped (single replica)"
+          {{- end }}
+          echo ""
+
+          echo "All tests passed! ✓"
+  restartPolicy: Never
+{{- end }}

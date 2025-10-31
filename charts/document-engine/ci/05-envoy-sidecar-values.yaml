@@ -1,0 +1,16 @@
+# Minimal test for Envoy sidecar consistent hashing
+envoySidecar:
+  enabled: true
+
+replicaCount: 2
+
+database:
+  enabled: true
+  migrationJob:
+    enabled: false
+
+assetStorage:
+  backendType: built-in
+
+cloudNativePG:
+  enabled: true
