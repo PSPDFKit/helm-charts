@@ -507,11 +507,11 @@ startupProbe:
     path: /healthcheck
     port: http
     scheme: HTTP
-  initialDelaySeconds: 30
+  initialDelaySeconds: 10
   periodSeconds: 5
   timeoutSeconds: 1
   successThreshold: 1
-  failureThreshold: 10
+  failureThreshold: 5
 # -- (object) [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
 # @section -- F. Pod lifecycle
 # @notationType -- reference
