@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 7.1.4](https://img.shields.io/badge/Version-7.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.12.2](https://img.shields.io/badge/AppVersion-1.12.2-informational?style=flat-square)
+![Version: 7.2.0](https://img.shields.io/badge/Version-7.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.12.2](https://img.shields.io/badge/AppVersion-1.12.2-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -422,6 +422,20 @@ Note:
 
 | Key | Description | Default |
 |-----|-------------|---------|
+| [`envoySidecar`](./values.yaml#L896) | Envoy sidecar for consistent hashing by document ID | [...](./values.yaml#L896) |
+| [`envoySidecar.adminPort`](./values.yaml#L918) | Admin port for Envoy | `9901` |
+| [`envoySidecar.enabled`](./values.yaml#L899) | Enable Envoy sidecar for consistent hashing | `false` |
+| [`envoySidecar.healthCheck`](./values.yaml#L922) | Health check configuration for upstream cluster | [...](./values.yaml#L922) |
+| [`envoySidecar.healthCheck.healthyThreshold`](./values.yaml#L934) | Healthy threshold | `2` |
+| [`envoySidecar.healthCheck.interval`](./values.yaml#L928) | Health check interval | `"10s"` |
+| [`envoySidecar.healthCheck.timeout`](./values.yaml#L925) | Health check timeout | `"5s"` |
+| [`envoySidecar.healthCheck.unhealthyThreshold`](./values.yaml#L931) | Unhealthy threshold | `2` |
+| [`envoySidecar.image`](./values.yaml#L903) | Envoy sidecar image configuration | [...](./values.yaml#L903) |
+| [`envoySidecar.image.pullPolicy`](./values.yaml#L912) | Envoy sidecar image pull policy | `"IfNotPresent"` |
+| [`envoySidecar.image.repository`](./values.yaml#L906) | Envoy sidecar image repository | `"envoyproxy/envoy"` |
+| [`envoySidecar.image.tag`](./values.yaml#L909) | Envoy sidecar image tag | `"v1.31-latest"` |
+| [`envoySidecar.port`](./values.yaml#L915) | Port where Envoy sidecar listens | `8080` |
+| [`envoySidecar.resources`](./values.yaml#L937) | Resource limits for Envoy sidecar | `{"limits":{"cpu":"200m","memory":"256Mi"},"requests":{"cpu":"100m","memory":"128Mi"}}` |
 | [`extraIngresses`](./values.yaml#L880) | Additional ingresses, e.g. for the dashboard | [...](./values.yaml#L880) |
 | [`ingress`](./values.yaml#L845) | Ingress | [...](./values.yaml#L845) |
 | [`ingress.annotations`](./values.yaml#L854) | Ingress annotations | `{}` |
@@ -429,13 +443,13 @@ Note:
 | [`ingress.enabled`](./values.yaml#L848) | Enable ingress | `false` |
 | [`ingress.hosts`](./values.yaml#L857) | Hosts | `[]` |
 | [`ingress.tls`](./values.yaml#L871) | Ingress TLS section | `[]` |
-| [`networkPolicy`](./values.yaml#L897) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L897) |
-| [`networkPolicy.allowExternal`](./values.yaml#L905) | Allow access from anywhere | `true` |
-| [`networkPolicy.allowExternalEgress`](./values.yaml#L929) | Allow the pod to access any range of port and all destinations. | `true` |
-| [`networkPolicy.enabled`](./values.yaml#L900) | Enable network policy | `true` |
-| [`networkPolicy.extraEgress`](./values.yaml#L932) | Extra egress rules | `[]` |
-| [`networkPolicy.extraIngress`](./values.yaml#L908) | Additional ingress rules | `[]` |
-| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L923) | Allow traffic from other namespaces | `[]` |
+| [`networkPolicy`](./values.yaml#L949) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L949) |
+| [`networkPolicy.allowExternal`](./values.yaml#L957) | Allow access from anywhere | `true` |
+| [`networkPolicy.allowExternalEgress`](./values.yaml#L981) | Allow the pod to access any range of port and all destinations. | `true` |
+| [`networkPolicy.enabled`](./values.yaml#L952) | Enable network policy | `true` |
+| [`networkPolicy.extraEgress`](./values.yaml#L984) | Extra egress rules | `[]` |
+| [`networkPolicy.extraIngress`](./values.yaml#L960) | Additional ingress rules | `[]` |
+| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L975) | Allow traffic from other namespaces | `[]` |
 | [`service`](./values.yaml#L825) | Service | [...](./values.yaml#L825) |
 | [`service.annotations`](./values.yaml#L834) | Service annotations | `{}` |
 | [`service.internalTrafficPolicy`](./values.yaml#L837) | Service internal traffic policy | `"Cluster"` |
@@ -481,42 +495,42 @@ Note:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`lifecycle`](./values.yaml#L992) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
-| [`livenessProbe`](./values.yaml#L962) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L962) |
-| [`readinessProbe`](./values.yaml#L975) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L975) |
-| [`startupProbe`](./values.yaml#L949) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L949) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L988) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
+| [`lifecycle`](./values.yaml#L1044) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
+| [`livenessProbe`](./values.yaml#L1014) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1014) |
+| [`readinessProbe`](./values.yaml#L1027) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1027) |
+| [`startupProbe`](./values.yaml#L1001) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1001) |
+| [`terminationGracePeriodSeconds`](./values.yaml#L1040) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
 
 ### Scheduling
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`affinity`](./values.yaml#L1047) | Node affinity | `{}` |
-| [`autoscaling`](./values.yaml#L1000) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L1000) |
-| [`nodeSelector`](./values.yaml#L1044) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
-| [`podDisruptionBudget`](./values.yaml#L1037) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1037) |
-| [`priorityClassName`](./values.yaml#L1056) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
-| [`replicaCount`](./values.yaml#L1025) | Number of replicas | `1` |
-| [`resources`](./values.yaml#L1022) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
-| [`schedulerName`](./values.yaml#L1059) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
-| [`tolerations`](./values.yaml#L1050) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
-| [`topologySpreadConstraints`](./values.yaml#L1053) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
-| [`updateStrategy`](./values.yaml#L1028) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
+| [`affinity`](./values.yaml#L1099) | Node affinity | `{}` |
+| [`autoscaling`](./values.yaml#L1052) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L1052) |
+| [`nodeSelector`](./values.yaml#L1096) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| [`podDisruptionBudget`](./values.yaml#L1089) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1089) |
+| [`priorityClassName`](./values.yaml#L1108) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
+| [`replicaCount`](./values.yaml#L1077) | Number of replicas | `1` |
+| [`resources`](./values.yaml#L1074) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
+| [`schedulerName`](./values.yaml#L1111) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
+| [`tolerations`](./values.yaml#L1102) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
+| [`topologySpreadConstraints`](./values.yaml#L1105) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
+| [`updateStrategy`](./values.yaml#L1080) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
 
 ### Storage resource definitions
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`cloudNativePG`](./values.yaml#L1064) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1064) |
-| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1099) | Cluster annotations | `{}` |
-| [`cloudNativePG.clusterLabels`](./values.yaml#L1096) | Cluster labels | `{}` |
-| [`cloudNativePG.clusterName`](./values.yaml#L1076) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
-| [`cloudNativePG.clusterSpec`](./values.yaml#L1080) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1080) |
-| [`cloudNativePG.enabled`](./values.yaml#L1067) | Enable CloudNativePG resources | `false` |
-| [`cloudNativePG.networkPolicy`](./values.yaml#L1108) | Network policy to allow access to the cluster | `{"enabled":true}` |
-| [`cloudNativePG.operatorNamespace`](./values.yaml#L1070) | CloudNativePG operator namespace | `"cnpg-system"` |
-| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1073) | CloudNativePG operator release name | `"cloudnative-pg"` |
-| [`cloudNativePG.superuserSecret`](./values.yaml#L1102) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
+| [`cloudNativePG`](./values.yaml#L1116) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1116) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1151) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L1148) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterName`](./values.yaml#L1128) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L1132) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1132) |
+| [`cloudNativePG.enabled`](./values.yaml#L1119) | Enable CloudNativePG resources | `false` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L1160) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.operatorNamespace`](./values.yaml#L1122) | CloudNativePG operator namespace | `"cnpg-system"` |
+| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1125) | CloudNativePG operator release name | `"cloudnative-pg"` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L1154) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
 
 ### Other Values
 
@@ -526,7 +540,7 @@ Note:
 | [`config.hoard.binaryCopyThreshold`](./values.yaml#L139) | `HOARD_BINARY_COPY_THRESHOLD` — internal parameter, do not change unless explicitly recommended by Nutrient support. | `2` |
 | [`config.http2SharedRendering.checkinTimeoutMilliseconds`](./values.yaml#L150) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKIN_TIMEOUT` — document processing daemon checkin timeout. Do not change unless explicitly recommended by Nutrient support. | `0` |
 | [`config.http2SharedRendering.checkoutTimeoutMilliseconds`](./values.yaml#L153) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKOUT_TIMEOUT` — document processing daemon checkout timeout. Do not change unless explicitly recommended by Nutrient support. | `5000` |
-| [`revisionHistoryLimit`](./values.yaml#L1032) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
+| [`revisionHistoryLimit`](./values.yaml#L1084) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
 
 ## Contribution
 

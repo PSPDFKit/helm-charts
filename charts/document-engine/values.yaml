@@ -897,15 +897,41 @@ envoySidecar:
   # -- Enable Envoy sidecar for consistent hashing
   # @section -- C. Networking
   enabled: false
-  # -- Envoy sidecar image
+  # -- (object) Envoy sidecar image configuration
   # @section -- C. Networking
-  image: envoyproxy/envoy:v1.31-latest
+  # @notationType -- reference
+  image:
+    # -- Envoy sidecar image repository
+    # @section -- C. Networking
+    repository: envoyproxy/envoy
+    # -- Envoy sidecar image tag
+    # @section -- C. Networking
+    tag: v1.31-latest
+    # -- Envoy sidecar image pull policy
+    # @section -- C. Networking
+    pullPolicy: IfNotPresent
   # -- Port where Envoy sidecar listens
   # @section -- C. Networking
   port: 8080
   # -- Admin port for Envoy
   # @section -- C. Networking
   adminPort: 9901
+  # -- (object) Health check configuration for upstream cluster
+  # @section -- C. Networking
+  # @notationType -- reference
+  healthCheck:
+    # -- Health check timeout
+    # @section -- C. Networking
+    timeout: 5s
+    # -- Health check interval
+    # @section -- C. Networking
+    interval: 10s
+    # -- Unhealthy threshold
+    # @section -- C. Networking
+    unhealthyThreshold: 2
+    # -- Healthy threshold
+    # @section -- C. Networking
+    healthyThreshold: 2
   # -- Resource limits for Envoy sidecar
   # @section -- C. Networking
   resources:

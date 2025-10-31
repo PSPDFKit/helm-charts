@@ -205,8 +205,8 @@ spec:
           {{- end }}
       {{- if .Values.envoySidecar.enabled }}
         - name: envoy-sidecar
-          image: {{ .Values.envoySidecar.image }}
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.envoySidecar.image.repository }}:{{ .Values.envoySidecar.image.tag }}"
+          imagePullPolicy: {{ .Values.envoySidecar.image.pullPolicy }}
           ports:
             - name: envoy
               containerPort: {{ .Values.envoySidecar.port }}

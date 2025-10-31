@@ -100,10 +100,10 @@ data:
                     address: {{ $fullName }}-headless.{{ .Release.Namespace }}.svc.cluster.local
                     port_value: {{ .Values.service.port }}
         health_checks:
-        - timeout: 1s
-          interval: 10s
-          unhealthy_threshold: 2
-          healthy_threshold: 2
+        - timeout: {{ .Values.envoySidecar.healthCheck.timeout }}
+          interval: {{ .Values.envoySidecar.healthCheck.interval }}
+          unhealthy_threshold: {{ .Values.envoySidecar.healthCheck.unhealthyThreshold }}
+          healthy_threshold: {{ .Values.envoySidecar.healthCheck.healthyThreshold }}
           http_health_check:
             path: /healthcheck
 {{- end }}
