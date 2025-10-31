@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
     - name: test
-      image: busybox:latest
+      image: curlimages/curl:latest
       command:
         - /bin/sh
         - -c
@@ -25,7 +25,7 @@ spec:
 
           # Test 1: Check service is reachable
           echo "Test 1: Service reachability"
-          if wget -q -O - "http://$SERVICE/healthcheck" > /dev/null; then
+          if curl -s -o /dev/null -w "%{http_code}" "http://$SERVICE/healthcheck" | grep -q "200"; then
             echo "✓ Service is reachable"
           else
             echo "✗ Service is not reachable"
@@ -35,7 +35,7 @@ spec:
 
           # Test 2: Check Envoy headers are present
           echo "Test 2: Envoy headers present"
-          if wget -S -O /dev/null "http://$SERVICE/healthcheck" 2>&1 | grep -i "x-envoy-upstream-remote-address" > /dev/null; then
+          if curl -s -I "http://$SERVICE/healthcheck" | grep -i "x-envoy-upstream-remote-address" > /dev/null; then
             echo "✓ Envoy headers present"
           else
             echo "✗ Envoy headers missing (sidecar may not be working)"
@@ -47,7 +47,7 @@ spec:
           echo "Test 3: Consistent hashing for doc-test-1"
           FIRST_BACKEND=""
           for i in $(seq 1 5); do
-            BACKEND=$(wget -S -O /dev/null "http://$SERVICE/api/documents/doc-test-1" 2>&1 | grep -i "x-envoy-upstream-remote-address" | sed 's/.*: //' | tr -d '\r')
+            BACKEND=$(curl -s -I "http://$SERVICE/api/documents/doc-test-1" | grep -i "x-envoy-upstream-remote-address" | awk '{print $2}' | tr -d '\r')
             echo "  Request $i backend: $BACKEND"
 
             if [ -z "$FIRST_BACKEND" ]; then
@@ -69,7 +69,7 @@ spec:
           # Collect backends for multiple document IDs
           BACKENDS=""
           for i in $(seq 1 20); do
-            BACKEND=$(wget -S -O /dev/null "http://$SERVICE/api/documents/doc-test-$i" 2>&1 | grep -i "x-envoy-upstream-remote-address" | sed 's/.*: //' | tr -d '\r')
+            BACKEND=$(curl -s -I "http://$SERVICE/api/documents/doc-test-$i" | grep -i "x-envoy-upstream-remote-address" | awk '{print $2}' | tr -d '\r')
             BACKENDS="$BACKENDS $BACKEND"
           done
 
