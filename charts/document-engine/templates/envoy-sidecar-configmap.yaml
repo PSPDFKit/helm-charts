@@ -70,7 +70,7 @@ data:
                         document_id = string.match(path, "^/documents/([a-zA-Z0-9._~-]+)")
                       end
                       if not document_id then
-                        document_id = string.match(path, "^/dashboard/api/document/([a-zA-Z0-9._~-]+)")
+                        document_id = string.match(path, "^/dashboard/api/documents/([a-zA-Z0-9._~-]+)")
                       end
 
                       -- Only set header if document_id found, otherwise use round-robin
