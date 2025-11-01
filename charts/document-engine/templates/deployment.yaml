@@ -203,7 +203,7 @@ spec:
           lifecycle:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      {{- if .Values.envoySidecar.enabled }}
+      {{- if (eq (include "document-engine.envoySidecar.enabled" . ) "true" ) }}
         - name: envoy-sidecar
           image: "{{ .Values.envoySidecar.image.repository }}:{{ .Values.envoySidecar.image.tag }}"
           imagePullPolicy: {{ .Values.envoySidecar.image.pullPolicy }}
@@ -233,7 +233,7 @@ spec:
                 .Values.certificateTrust.customCertificates
                 .Values.envoySidecar.enabled }}
       volumes:
-        {{- if .Values.envoySidecar.enabled }}
+        {{- if (eq (include "document-engine.envoySidecar.enabled" . ) "true" ) }}
         - name: envoy-config
           configMap:
             name: {{ include "document-engine.fullname" . }}-envoy-sidecar

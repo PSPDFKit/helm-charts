@@ -63,7 +63,7 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.config.port }}
-        {{- if .Values.envoySidecar.enabled }}
+        {{- if (eq (include "document-engine.envoySidecar.enabled" . ) "true" ) }}
         # Envoy sidecar ports for consistent hashing
         - port: {{ .Values.envoySidecar.port }}
         - port: {{ .Values.envoySidecar.adminPort }}
