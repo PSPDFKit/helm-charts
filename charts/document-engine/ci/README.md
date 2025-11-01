@@ -16,5 +16,11 @@
 * `04-cnpg-azure-values.yaml`
   * PostgreSQL
   * Azurite to test Azure Blob storage
+* `05-envoy-sidecar-values.yaml`
+  * Envoy sidecar for consistent hashing by document ID
+  * Multiple replicas (2) to test hash distribution
+  * Envoy admin endpoint exposed for metrics
+  * Network policy enabled to test Envoy port access
+  * Headless service for pod discovery
 * `10-env-variables-values.yaml`
   * Very blunt environment variables setting, an easy migration from Docker compose

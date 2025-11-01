@@ -1,0 +1,17 @@
+{{- if .Values.envoySidecar.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "document-engine.fullname" . }}-headless
+  labels:
+    {{- include "document-engine.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  selector:
+    {{- include "document-engine.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: api
+      protocol: TCP
+      name: api
+{{- end }}

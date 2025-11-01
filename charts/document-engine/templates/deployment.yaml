@@ -203,13 +203,41 @@ spec:
           lifecycle:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+      {{- if .Values.envoySidecar.enabled }}
+        - name: envoy-sidecar
+          image: "{{ .Values.envoySidecar.image.repository }}:{{ .Values.envoySidecar.image.tag }}"
+          imagePullPolicy: {{ .Values.envoySidecar.image.pullPolicy }}
+          ports:
+            - name: envoy
+              containerPort: {{ .Values.envoySidecar.port }}
+              protocol: TCP
+            - name: envoy-admin
+              containerPort: {{ .Values.envoySidecar.adminPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.envoySidecar.resources | nindent 12 }}
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+              readOnly: true
+          command:
+            - envoy
+            - -c
+            - /etc/envoy/envoy.yaml
+      {{- end }}
       {{- if .Values.sidecars }}
         {{ toYaml .Values.sidecars | nindent 8 }}
       {{- end }}
       {{- if or .Values.extraVolumeMounts
-                .Values.certificateTrust.digitalSignatures 
-                .Values.certificateTrust.customCertificates }}
+                .Values.certificateTrust.digitalSignatures
+                .Values.certificateTrust.customCertificates
+                .Values.envoySidecar.enabled }}
       volumes:
+        {{- if .Values.envoySidecar.enabled }}
+        - name: envoy-config
+          configMap:
+            name: {{ include "document-engine.fullname" . }}-envoy-sidecar
+        {{- end }}
         {{- with .Values.extraVolumes }}
         {{ toYaml . | nindent 8 }}
         {{- end }}

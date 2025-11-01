@@ -38,6 +38,16 @@ spec:
       {{- with .Values.observability.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ . }}
       {{- end }}
+    {{- if $.Values.envoySidecar.enabled }}
+    - port: envoy-admin
+      path: /stats/prometheus
+      {{- with .Values.observability.metrics.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.observability.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+    {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace | quote }}
