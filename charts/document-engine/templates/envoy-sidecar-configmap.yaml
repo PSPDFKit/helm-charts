@@ -1,4 +1,4 @@
-{{- if .Values.envoySidecar.enabled -}}
+{{- if (eq (include "document-engine.envoySidecar.enabled" . ) "true" ) -}}
 {{- $fullName := include "document-engine.fullname" . -}}
 apiVersion: v1
 kind: ConfigMap

@@ -100,7 +100,7 @@ License secret name
 {{- end -}}
 
 {{/*
-Clustering
+Clustering and networking
 */}}
 {{- define "document-engine.clustering.service.enabled" -}}
   {{- if and .Values.clustering.enabled
@@ -113,6 +113,17 @@ Clustering
 
 {{- define "document-engine.clustering.service.name" -}}
   {{- include "document-engine.fullname" . }}-cl
+{{- end }}
+
+{{- define "document-engine.envoySidecar.enabled" -}}
+  {{- if and .Values.envoySidecar.enabled
+             (or .Values.autoscaling.enabled
+                 (and .Values.replicaCount 
+                      (gt (.Values.replicaCount | int) 1))) -}}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
 {{- end }}
 
 {{/*
