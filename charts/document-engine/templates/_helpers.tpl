@@ -117,7 +117,9 @@ Clustering and networking
 
 {{- define "document-engine.envoySidecar.enabled" -}}
   {{- if and .Values.envoySidecar.enabled
-             (gt .Values.replicaCount 1) -}}
+             (or .Values.autoscaling.enabled
+                 (and .Values.replicaCount 
+                      (gt (.Values.replicaCount | int) 1))) -}}
     {{- true -}}
   {{- else -}}
     {{- false -}}
