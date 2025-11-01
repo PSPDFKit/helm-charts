@@ -901,14 +901,8 @@ envoySidecar:
   # @section -- C. Networking
   # @notationType -- reference
   image:
-    # -- Envoy sidecar image repository
-    # @section -- C. Networking
     repository: envoyproxy/envoy
-    # -- Envoy sidecar image tag
-    # @section -- C. Networking
-    tag: v1.31-latest
-    # -- Envoy sidecar image pull policy
-    # @section -- C. Networking
+    tag: v1.36-latest
     pullPolicy: IfNotPresent
   # -- Port where Envoy sidecar listens
   # @section -- C. Networking
@@ -934,13 +928,14 @@ envoySidecar:
     healthyThreshold: 2
   # -- Resource limits for Envoy sidecar
   # @section -- C. Networking
+  # @notationType -- reference
   resources:
-    limits:
-      cpu: 200m
-      memory: 256Mi
     requests:
       cpu: 100m
       memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 # https://editor.networkpolicy.io/
 # -- (object) [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)

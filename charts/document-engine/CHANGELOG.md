@@ -190,7 +190,6 @@
 
 * Added Envoy as an optional sidecar for better load distrubution using consistent hashing.
 
-
 ## 7.1.4 (2025-10-27)
 
 ### Changed
