@@ -821,6 +821,78 @@
         }
       }
     },
+    "envoySidecar": {
+      "type": "object",
+      "properties": {
+        "adminPort": {
+          "type": "integer"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "healthCheck": {
+          "type": "object",
+          "properties": {
+            "healthyThreshold": {
+              "type": "integer"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "timeout": {
+              "type": "string"
+            },
+            "unhealthyThreshold": {
+              "type": "integer"
+            }
+          }
+        },
+        "image": {
+          "type": "object",
+          "properties": {
+            "pullPolicy": {
+              "type": "string"
+            },
+            "repository": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        },
+        "port": {
+          "type": "integer"
+        },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "properties": {
+                "cpu": {
+                  "type": "string"
+                },
+                "memory": {
+                  "type": "string"
+                }
+              }
+            },
+            "requests": {
+              "type": "object",
+              "properties": {
+                "cpu": {
+                  "type": "string"
+                },
+                "memory": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "extraEnvFrom": {
       "type": "array"
     },

@@ -63,6 +63,11 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.config.port }}
+        {{- if .Values.envoySidecar.enabled }}
+        # Envoy sidecar ports for consistent hashing
+        - port: {{ .Values.envoySidecar.port }}
+        - port: {{ .Values.envoySidecar.adminPort }}
+        {{- end }}
         {{- if .Values.observability.metrics.prometheusEndpoint.enabled }}
         - port: {{ .Values.observability.metrics.prometheusEndpoint.port }}
         {{- end }}
