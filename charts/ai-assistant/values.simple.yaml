@@ -10,81 +10,6 @@ apiAuth:
     publicKey: none
     algorithm: RS256
 
-sidecars:
-  - name: openai-mocker
-    image: python:3.11-alpine
-    imagePullPolicy: IfNotPresent
-    command:
-      - /bin/sh
-      - -ce
-      - |-
-        cat > /tmp/openai-compat-mock.py << 'EOF'
-        import time, random
-        import uvicorn
-        from fastapi import FastAPI
-        from pydantic import BaseModel
-        from typing import List, Union, Optional
-
-        app = FastAPI()
-
-        # Embeddings (OpenAI-compatible)
-        class EmbeddingRequest(BaseModel):
-            input: Union[str, List[str]]
-            model: Optional[str] = "text-embedding-3-small"
-
-        @app.post("/v1/embeddings")
-        async def create_embeddings(request: EmbeddingRequest):
-            inputs = request.input if isinstance(request.input, list) else [request.input]
-            embeddings = []
-            for i, text in enumerate(inputs):
-                embedding = [random.uniform(-1, 1) for _ in range(1536)]
-                embeddings.append({
-                    "object": "embedding",
-                    "index": i,
-                    "embedding": embedding
-                })
-            total_tokens = sum(len((text or "").split()) for text in inputs)
-            return {
-                "object": "list",
-                "data": embeddings,
-                "model": request.model,
-                "usage": {
-                    "prompt_tokens": total_tokens,
-                    "total_tokens": total_tokens
-                }
-            }
-
-        # Chat Completions (OpenAI-compatible)
-        class ChatMessage(BaseModel):
-            role: str
-            content: Union[str, List[dict]]
-
-        class ChatRequest(BaseModel):
-            model: Optional[str] = "gpt-4o-mini"
-            messages: List[ChatMessage]
-
-        @app.post("/v1/chat/completions")
-        async def chat_completions(req: ChatRequest):
-            now = int(time.time())
-            reply = "Hello from the local mock chat model."
-            return {
-                "id": f"chatcmpl-{now}",
-                "object": "chat.completion",
-                "created": now,
-                "model": req.model,
-                "choices": [{
-                    "index": 0,
-                    "message": {"role": "assistant", "content": reply},
-                    "finish_reason": "stop"
-                }],
-                "usage": {"prompt_tokens": 1, "completion_tokens": 3, "total_tokens": 4}
-            }
-
-        if __name__ == "__main__":
-            uvicorn.run(app, host="0.0.0.0", port=8080)
-        EOF
-
-        pip install fastapi uvicorn && python /tmp/openai-compat-mock.py
 
 config:
   serviceConfiguration:
@@ -92,17 +17,17 @@ config:
     aiServices:
       chat:
         provider:
-          name: "openai-compat"
-          baseUrl: "http://localhost:8080/v1"
-        model: "gpt-4"
+          name: "mock"
+          fakeResponses:
+            - "Hello! This is a mock response for testing."
+            - "Mock provider is working correctly."
+            - "Test response from AIA mock provider."
+        model: "mock-chat-model"
       textEmbeddings:
         provider:
-          name: "openai-compat"
-          baseUrl: "http://localhost:8080/v1"
-        model: "text-embedding-3-small"
-  aiServiceProviderCredentials:
-    openAICompatible:
-      apiKey: "dummy-token"
+          name: "mock"
+          fakeResponses: []
+        model: "mock-embedding-model"
   documentEngine:
     enabled: true
     url: http://document-engine:5000
