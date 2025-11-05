@@ -370,7 +370,7 @@
                         },
                         "name": {
                           "type": "string",
-                          "pattern": "^(openai|azure|bedrock|openai-compat)$"
+                          "pattern": "^(openai|azure|bedrock|openai-compat|mock)$"
                         }
                       }
                     }
@@ -393,7 +393,7 @@
                         },
                         "name": {
                           "type": "string",
-                          "pattern": "^(openai|azure|bedrock|openai-compat)$"
+                          "pattern": "^(openai|azure|bedrock|openai-compat|mock)$"
                         }
                       }
                     }
