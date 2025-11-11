@@ -38,7 +38,7 @@ spec:
       {{- with .Values.observability.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ . }}
       {{- end }}
-    {{- if $.Values.envoySidecar.enabled }}
+    {{- if (eq (include "document-engine.envoySidecar.enabled" $ ) "true" ) }}
     - port: envoy-admin
       path: /stats/prometheus
       {{- with .Values.observability.metrics.serviceMonitor.interval }}
