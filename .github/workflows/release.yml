@@ -25,6 +25,54 @@ jobs:
         uses: helm/chart-releaser-action@v1.7.0
         with:
           skip_existing: true
-          mark_as_latest: true          
+          mark_as_latest: true
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Update release notes with CHANGELOG
+        run: |
+          recent_releases=$(gh release list --limit 10 --json tagName,publishedAt,name --jq '.[] | select((.publishedAt | fromdateiso8601) > (now - 120)) | {tagName, name}')
+
+          if [ -z "$recent_releases" ]; then
+            echo "No recent releases found"
+            exit 0
+          fi
+
+          echo "$recent_releases" | jq -c '.' | while read -r release; do
+            tag=$(echo "$release" | jq -r '.tagName')
+            chart_name=$(echo "$tag" | sed 's/-[0-9].*//')
+            version=$(echo "$tag" | sed "s/${chart_name}-//")
+
+            echo "Processing release: $tag (chart: $chart_name, version: $version)"
+
+            # Check if CHANGELOG.md exists for this chart
+            changelog_file="charts/${chart_name}/CHANGELOG.md"
+            if [ ! -f "$changelog_file" ]; then
+              echo "No CHANGELOG.md found for $chart_name"
+              continue
+            fi
+
+            # Extract the changelog section for this version
+            # This extracts content between version header and next version header or end of file
+            changelog_content=$(awk -v ver="$version" '
+              /^## / {
+                if (found) exit
+                if ($0 ~ ver) {
+                  found=1
+                  header=$0
+                  next
+                }
+              }
+              found { print }
+            ' "$changelog_file")
+
+            if [ -z "$changelog_content" ]; then
+              echo "No changelog content found for version $version in $changelog_file"
+              continue
+            fi
+
+            gh release edit "$tag" --notes "$changelog_content"
+
+          done
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
