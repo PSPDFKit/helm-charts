@@ -14,9 +14,19 @@ data:
     #!/bin/sh
     set -e
     export PRESERVATION_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ" -d @$(($(date -u +"%s") - {{ .keepHours }} * 3600)))
+    {{- if .deletionPrefix }}
     curl --request POST \
          --header "Authorization: Token token=${API_AUTH_TOKEN}" \
-         --url {{ $url }}?created_before=${PRESERVATION_DATE}
+         --header "Content-Type: application/json" \
+         --url {{ $url }} \
+         --data '{"document_id_prefix": "{{ .deletionPrefix }}", "created_before": "'"${PRESERVATION_DATE}"'"}'
+    {{- else }}
+    curl --request POST \
+         --header "Authorization: Token token=${API_AUTH_TOKEN}" \
+         --header "Content-Type: application/json" \
+         --url {{ $url }} \
+         --data '{"created_before": "'"${PRESERVATION_DATE}"'"}'
+    {{- end }}
   {{- end }}
 # Can be used for hash updating
   HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}

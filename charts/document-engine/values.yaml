@@ -306,10 +306,10 @@ documentLifecycle:
     # -- Documents TTL in hours
     # @section -- 06. Document lifecycle
     keepHours: 24  # @schema type: integer; minimum: 1
-    # -- Keep documents with IDs beginning with `persistent` indefinitely
-    # WARNING: does not currently work
+    # -- Only delete documents with IDs beginning with this prefix.
+    # Leave empty to delete all documents matching the time filter.
     # @section -- 06. Document lifecycle
-    persistentLike: "persistent%"
+    deletionPrefix: "temp_"
     # @ignored
     resources: {}
     # @ignored
