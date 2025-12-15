@@ -323,7 +323,7 @@ documentLifecycle:
     image:
       repository: curlimages/curl
       pullPolicy: IfNotPresent
-      tag: "8.14.1"
+      tag: "8.17.0"
     # -- Service account name to specify for the expiration jobs
     # @section -- 06. Document lifecycle
     serviceAccountName: ""
