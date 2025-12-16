@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 7.3.0](https://img.shields.io/badge/Version-7.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.13.0](https://img.shields.io/badge/AppVersion-1.13.0-informational?style=flat-square)
+![Version: 7.4.0](https://img.shields.io/badge/Version-7.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.13.0](https://img.shields.io/badge/AppVersion-1.13.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -305,229 +305,228 @@ Note:
 | [`documentLifecycle.bulkDocumentDeletionEnabled`](./values.yaml#L295) | `ENABLE_BULK_DOCUMENT_DELETION`: enable `/api/async/delete_documents` API endpoint | `false` |
 | [`documentLifecycle.expirationJob`](./values.yaml#L299) | Regular job to remove documents from the database, requires `documentLifecycle.bulkDocumentDeletionEnabled` to be `true` | [...](./values.yaml#L299) |
 | [`documentLifecycle.expirationJob.enabled`](./values.yaml#L302) | Enable the document expiration job | `false` |
-| [`documentLifecycle.expirationJob.image`](./values.yaml#L323) | Image used for running the expiration job API calls | `{"pullPolicy":"IfNotPresent","repository":"curlimages/curl","tag":"8.14.1"}` |
 | [`documentLifecycle.expirationJob.keepHours`](./values.yaml#L308) | Documents TTL in hours | `24` |
 | [`documentLifecycle.expirationJob.persistentLike`](./values.yaml#L312) | Keep documents with IDs beginning with `persistent` indefinitely WARNING: does not currently work | `"persistent%"` |
 | [`documentLifecycle.expirationJob.schedule`](./values.yaml#L305) | Expiration job schedule in cron format | `"13 * * * *"` |
-| [`documentLifecycle.expirationJob.serviceAccountName`](./values.yaml#L329) | Service account name to specify for the expiration jobs | `""` |
+| [`documentLifecycle.expirationJob.serviceAccountName`](./values.yaml#L323) | Service account name to specify for the expiration jobs | `""` |
 
 ### Asset storage
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`assetStorage`](./values.yaml#L340) | Everything about storing and caching assets |  |
-| [`assetStorage.azure`](./values.yaml#L412) | Azure blob storage settings, in case `assetStorage.backendType` is set to `azure` | [...](./values.yaml#L412) |
-| [`assetStorage.azure.container`](./values.yaml#L423) | `AZURE_STORAGE_DEFAULT_CONTAINER` | `""` |
-| [`assetStorage.backendFallback`](./values.yaml#L359) | Asset storage fallback settings | [...](./values.yaml#L359) |
-| [`assetStorage.backendFallback.enabled`](./values.yaml#L362) | `ENABLE_ASSET_STORAGE_FALLBACK` | `false` |
-| [`assetStorage.backendFallback.enabledAzure`](./values.yaml#L371) | `ENABLE_ASSET_STORAGE_FALLBACK_AZURE` | `false` |
-| [`assetStorage.backendFallback.enabledPostgres`](./values.yaml#L365) | `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES` | `false` |
-| [`assetStorage.backendFallback.enabledS3`](./values.yaml#L368) | `ENABLE_ASSET_STORAGE_FALLBACK_S3` | `false` |
-| [`assetStorage.backendType`](./values.yaml#L352) | Asset storage backend is only available if `database.enabled` is `true` Sets `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure` | `"built-in"` |
-| [`assetStorage.fileUploadTimeoutSeconds`](./values.yaml#L355) | `FILE_UPLOAD_TIMEOUT_MS` in seconds | `30` |
-| [`assetStorage.localCacheSizeMegabytes`](./values.yaml#L344) | Sets local asset storage value in megabytes Results in `ASSET_STORAGE_CACHE_SIZE` (in bytes) | `2000` |
-| [`assetStorage.localCacheTimeoutSeconds`](./values.yaml#L348) | Sets local asset storage cache timeout in seconds Results in `ASSET_STORAGE_CACHE_TIMEOUT` (in milliseconds) | `5` |
-| [`assetStorage.redis`](./values.yaml#L441) | Redis settings for caching and prerendering | [...](./values.yaml#L441) |
-| [`assetStorage.redis.database`](./values.yaml#L459) | `REDIS_DATABASE` | `""` |
-| [`assetStorage.redis.enabled`](./values.yaml#L444) | `USE_REDIS_CACHE` | `false` |
-| [`assetStorage.redis.externalSecretName`](./values.yaml#L496) | External secret name. Must contain `REDIS_USERNAME` and `REDIS_PASSWORD` if they are needed, and _may_ set other values | `""` |
-| [`assetStorage.redis.host`](./values.yaml#L453) | `REDIS_HOST` | `"{{ .Release.Name }}-redis-master"` |
-| [`assetStorage.redis.password`](./values.yaml#L485) | `REDIS_PASSWORD` | `""` |
-| [`assetStorage.redis.port`](./values.yaml#L456) | `REDIS_PORT` | `6379` |
-| [`assetStorage.redis.sentinel`](./values.yaml#L464) | Redis Sentinel | [...](./values.yaml#L464) |
-| [`assetStorage.redis.tls`](./values.yaml#L489) | TLS settings |  |
-| [`assetStorage.redis.tls.enabled`](./values.yaml#L492) | Enable TLS (`REDIS_SSL`) | `false` |
-| [`assetStorage.redis.ttlSeconds`](./values.yaml#L450) | `REDIS_TTL` Time to live in seconds | `86400` |
-| [`assetStorage.redis.useTtl`](./values.yaml#L447) | `USE_REDIS_TTL_FOR_PRERENDERING` | `true` |
-| [`assetStorage.redis.username`](./values.yaml#L482) | `REDIS_USERNAME` | `""` |
-| [`assetStorage.s3`](./values.yaml#L375) | S3 backend storage settings, in case `assetStorage.backendType` is set to `s3 | [...](./values.yaml#L375) |
-| [`assetStorage.s3.bucket`](./values.yaml#L386) | `ASSET_STORAGE_S3_BUCKET` | `"document-engine-assets"` |
-| [`assetStorage.s3.region`](./values.yaml#L389) | `ASSET_STORAGE_S3_REGION` | `"us-east-1"` |
+| [`assetStorage`](./values.yaml#L334) | Everything about storing and caching assets |  |
+| [`assetStorage.azure`](./values.yaml#L406) | Azure blob storage settings, in case `assetStorage.backendType` is set to `azure` | [...](./values.yaml#L406) |
+| [`assetStorage.azure.container`](./values.yaml#L417) | `AZURE_STORAGE_DEFAULT_CONTAINER` | `""` |
+| [`assetStorage.backendFallback`](./values.yaml#L353) | Asset storage fallback settings | [...](./values.yaml#L353) |
+| [`assetStorage.backendFallback.enabled`](./values.yaml#L356) | `ENABLE_ASSET_STORAGE_FALLBACK` | `false` |
+| [`assetStorage.backendFallback.enabledAzure`](./values.yaml#L365) | `ENABLE_ASSET_STORAGE_FALLBACK_AZURE` | `false` |
+| [`assetStorage.backendFallback.enabledPostgres`](./values.yaml#L359) | `ENABLE_ASSET_STORAGE_FALLBACK_POSTGRES` | `false` |
+| [`assetStorage.backendFallback.enabledS3`](./values.yaml#L362) | `ENABLE_ASSET_STORAGE_FALLBACK_S3` | `false` |
+| [`assetStorage.backendType`](./values.yaml#L346) | Asset storage backend is only available if `database.enabled` is `true` Sets `ASSET_STORAGE_BACKEND`: `built-in`, `s3` or `azure` | `"built-in"` |
+| [`assetStorage.fileUploadTimeoutSeconds`](./values.yaml#L349) | `FILE_UPLOAD_TIMEOUT_MS` in seconds | `30` |
+| [`assetStorage.localCacheSizeMegabytes`](./values.yaml#L338) | Sets local asset storage value in megabytes Results in `ASSET_STORAGE_CACHE_SIZE` (in bytes) | `2000` |
+| [`assetStorage.localCacheTimeoutSeconds`](./values.yaml#L342) | Sets local asset storage cache timeout in seconds Results in `ASSET_STORAGE_CACHE_TIMEOUT` (in milliseconds) | `5` |
+| [`assetStorage.redis`](./values.yaml#L435) | Redis settings for caching and prerendering | [...](./values.yaml#L435) |
+| [`assetStorage.redis.database`](./values.yaml#L453) | `REDIS_DATABASE` | `""` |
+| [`assetStorage.redis.enabled`](./values.yaml#L438) | `USE_REDIS_CACHE` | `false` |
+| [`assetStorage.redis.externalSecretName`](./values.yaml#L490) | External secret name. Must contain `REDIS_USERNAME` and `REDIS_PASSWORD` if they are needed, and _may_ set other values | `""` |
+| [`assetStorage.redis.host`](./values.yaml#L447) | `REDIS_HOST` | `"{{ .Release.Name }}-redis-master"` |
+| [`assetStorage.redis.password`](./values.yaml#L479) | `REDIS_PASSWORD` | `""` |
+| [`assetStorage.redis.port`](./values.yaml#L450) | `REDIS_PORT` | `6379` |
+| [`assetStorage.redis.sentinel`](./values.yaml#L458) | Redis Sentinel | [...](./values.yaml#L458) |
+| [`assetStorage.redis.tls`](./values.yaml#L483) | TLS settings |  |
+| [`assetStorage.redis.tls.enabled`](./values.yaml#L486) | Enable TLS (`REDIS_SSL`) | `false` |
+| [`assetStorage.redis.ttlSeconds`](./values.yaml#L444) | `REDIS_TTL` Time to live in seconds | `86400` |
+| [`assetStorage.redis.useTtl`](./values.yaml#L441) | `USE_REDIS_TTL_FOR_PRERENDERING` | `true` |
+| [`assetStorage.redis.username`](./values.yaml#L476) | `REDIS_USERNAME` | `""` |
+| [`assetStorage.s3`](./values.yaml#L369) | S3 backend storage settings, in case `assetStorage.backendType` is set to `s3 | [...](./values.yaml#L369) |
+| [`assetStorage.s3.bucket`](./values.yaml#L380) | `ASSET_STORAGE_S3_BUCKET` | `"document-engine-assets"` |
+| [`assetStorage.s3.region`](./values.yaml#L383) | `ASSET_STORAGE_S3_REGION` | `"us-east-1"` |
 
 ### Digital signatures
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`documentSigningService`](./values.yaml#L501) | Signing service parameters |  |
-| [`documentSigningService.cadesLevel`](./values.yaml#L527) | `DIGITAL_SIGNATURE_CADES_LEVEL` | `"b-lt"` |
-| [`documentSigningService.certificateCheckTime`](./values.yaml#L530) | `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME` | `"current_time"` |
-| [`documentSigningService.defaultSignatureLocation`](./values.yaml#L521) | `DEFAULT_SIGNATURE_LOCATION` | `"Head Quarters"` |
-| [`documentSigningService.defaultSignatureReason`](./values.yaml#L517) | `DEFAULT_SIGNATURE_REASON` | `"approved"` |
-| [`documentSigningService.defaultSignerName`](./values.yaml#L513) | `DEFAULT_SIGNER_NAME` | `"John Doe"` |
-| [`documentSigningService.enabled`](./values.yaml#L504) | Enable signing service integration | `false` |
-| [`documentSigningService.hashAlgorithm`](./values.yaml#L524) | `DIGITAL_SIGNATURE_HASH_ALGORITHM` | `"sha512"` |
-| [`documentSigningService.timeoutSeconds`](./values.yaml#L510) | `SIGNING_SERVICE_TIMEOUT` in seconds | `10` |
-| [`documentSigningService.timestampAuthority`](./values.yaml#L534) | Timestamp Authority (TSA) settings | [...](./values.yaml#L534) |
-| [`documentSigningService.timestampAuthority.url`](./values.yaml#L537) | `TIMESTAMP_AUTHORITY_URL` | `"https://freetsa.org/"` |
-| [`documentSigningService.url`](./values.yaml#L507) | `SIGNING_SERVICE_URL` | `"https://signing-thing.local/sign"` |
+| [`documentSigningService`](./values.yaml#L495) | Signing service parameters |  |
+| [`documentSigningService.cadesLevel`](./values.yaml#L521) | `DIGITAL_SIGNATURE_CADES_LEVEL` | `"b-lt"` |
+| [`documentSigningService.certificateCheckTime`](./values.yaml#L524) | `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME` | `"current_time"` |
+| [`documentSigningService.defaultSignatureLocation`](./values.yaml#L515) | `DEFAULT_SIGNATURE_LOCATION` | `"Head Quarters"` |
+| [`documentSigningService.defaultSignatureReason`](./values.yaml#L511) | `DEFAULT_SIGNATURE_REASON` | `"approved"` |
+| [`documentSigningService.defaultSignerName`](./values.yaml#L507) | `DEFAULT_SIGNER_NAME` | `"John Doe"` |
+| [`documentSigningService.enabled`](./values.yaml#L498) | Enable signing service integration | `false` |
+| [`documentSigningService.hashAlgorithm`](./values.yaml#L518) | `DIGITAL_SIGNATURE_HASH_ALGORITHM` | `"sha512"` |
+| [`documentSigningService.timeoutSeconds`](./values.yaml#L504) | `SIGNING_SERVICE_TIMEOUT` in seconds | `10` |
+| [`documentSigningService.timestampAuthority`](./values.yaml#L528) | Timestamp Authority (TSA) settings | [...](./values.yaml#L528) |
+| [`documentSigningService.timestampAuthority.url`](./values.yaml#L531) | `TIMESTAMP_AUTHORITY_URL` | `"https://freetsa.org/"` |
+| [`documentSigningService.url`](./values.yaml#L501) | `SIGNING_SERVICE_URL` | `"https://signing-thing.local/sign"` |
 
 ### Document conversion
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`documentConversion`](./values.yaml#L550) | Document conversion parameters |  |
-| [`documentConversion.spreadsheetMaxContentHeightMm`](./values.yaml#L554) | Maximal spreadhseet content height in millimetres (`SPREADSHEET_MAX_CONTENT_HEIGHT_MM`). Defaults to `0` for unlimited height. | `0` |
-| [`documentConversion.spreadsheetMaxContentWidthMm`](./values.yaml#L558) | Maximal spreadhseet content width in millimetres (`SPREADSHEET_MAX_CONTENT_WIDTH_MM`). Defaults to `0` for unlimited width. | `0` |
+| [`documentConversion`](./values.yaml#L544) | Document conversion parameters |  |
+| [`documentConversion.spreadsheetMaxContentHeightMm`](./values.yaml#L548) | Maximal spreadhseet content height in millimetres (`SPREADSHEET_MAX_CONTENT_HEIGHT_MM`). Defaults to `0` for unlimited height. | `0` |
+| [`documentConversion.spreadsheetMaxContentWidthMm`](./values.yaml#L552) | Maximal spreadhseet content width in millimetres (`SPREADSHEET_MAX_CONTENT_WIDTH_MM`). Defaults to `0` for unlimited width. | `0` |
 
 ### Clustering
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`clustering`](./values.yaml#L563) | Clustering settings |  |
-| [`clustering.enabled`](./values.yaml#L566) | `CLUSTERING_ENABLED`, enable clustering, only works when `replicaCount` is greater than 1 | `false` |
-| [`clustering.method`](./values.yaml#L569) | `CLUSTERING_METHOD`, only `kubernetes_dns` is currently supported | `"kubernetes_dns"` |
+| [`clustering`](./values.yaml#L557) | Clustering settings |  |
+| [`clustering.enabled`](./values.yaml#L560) | `CLUSTERING_ENABLED`, enable clustering, only works when `replicaCount` is greater than 1 | `false` |
+| [`clustering.method`](./values.yaml#L563) | `CLUSTERING_METHOD`, only `kubernetes_dns` is currently supported | `"kubernetes_dns"` |
 
 ### Dashboard
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`dashboard`](./values.yaml#L580) | Document Engine Dashboard settings |  |
-| [`dashboard.auth`](./values.yaml#L587) | Dashboard authentication | [...](./values.yaml#L587) |
-| [`dashboard.auth.externalSecret`](./values.yaml#L597) | Use an external secret for dashboard credentials | [...](./values.yaml#L597) |
-| [`dashboard.auth.externalSecret.name`](./values.yaml#L600) | External secret name | `""` |
-| [`dashboard.auth.externalSecret.passwordKey`](./values.yaml#L606) | Secret key name for the password | `"DASHBOARD_PASSWORD"` |
-| [`dashboard.auth.externalSecret.usernameKey`](./values.yaml#L603) | Secret key name for the username | `"DASHBOARD_USERNAME"` |
-| [`dashboard.auth.password`](./values.yaml#L593) | `DASHBOARD_PASSWORD` — will generate a random password if not set | `""` |
-| [`dashboard.auth.username`](./values.yaml#L590) | `DASHBOARD_USERNAME` | `"admin"` |
-| [`dashboard.enabled`](./values.yaml#L583) | Enable dashboard | `true` |
+| [`dashboard`](./values.yaml#L574) | Document Engine Dashboard settings |  |
+| [`dashboard.auth`](./values.yaml#L581) | Dashboard authentication | [...](./values.yaml#L581) |
+| [`dashboard.auth.externalSecret`](./values.yaml#L591) | Use an external secret for dashboard credentials | [...](./values.yaml#L591) |
+| [`dashboard.auth.externalSecret.name`](./values.yaml#L594) | External secret name | `""` |
+| [`dashboard.auth.externalSecret.passwordKey`](./values.yaml#L600) | Secret key name for the password | `"DASHBOARD_PASSWORD"` |
+| [`dashboard.auth.externalSecret.usernameKey`](./values.yaml#L597) | Secret key name for the username | `"DASHBOARD_USERNAME"` |
+| [`dashboard.auth.password`](./values.yaml#L587) | `DASHBOARD_PASSWORD` — will generate a random password if not set | `""` |
+| [`dashboard.auth.username`](./values.yaml#L584) | `DASHBOARD_USERNAME` | `"admin"` |
+| [`dashboard.enabled`](./values.yaml#L577) | Enable dashboard | `true` |
 
 ### Environment
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`extraEnvFrom`](./values.yaml#L795) | Extra environment variables from resources | `[]` |
-| [`extraEnvs`](./values.yaml#L792) | Extra environment variables | `[]` |
-| [`extraVolumeMounts`](./values.yaml#L801) | Additional volume mounts for Document Engine container | `[]` |
-| [`extraVolumes`](./values.yaml#L798) | Additional volumes | `[]` |
-| [`image`](./values.yaml#L752) | Image settings | [...](./values.yaml#L752) |
-| [`imagePullSecrets`](./values.yaml#L759) | Pull secrets | `[]` |
-| [`initContainers`](./values.yaml#L807) | Init containers | `[]` |
-| [`podSecurityContext`](./values.yaml#L778) | Pod security context | `{}` |
-| [`securityContext`](./values.yaml#L782) | Security context | `{}` |
-| [`serviceAccount`](./values.yaml#L771) | ServiceAccount | [...](./values.yaml#L771) |
-| [`sidecars`](./values.yaml#L804) | Additional containers | `[]` |
+| [`extraEnvFrom`](./values.yaml#L789) | Extra environment variables from resources | `[]` |
+| [`extraEnvs`](./values.yaml#L786) | Extra environment variables | `[]` |
+| [`extraVolumeMounts`](./values.yaml#L795) | Additional volume mounts for Document Engine container | `[]` |
+| [`extraVolumes`](./values.yaml#L792) | Additional volumes | `[]` |
+| [`image`](./values.yaml#L746) | Image settings | [...](./values.yaml#L746) |
+| [`imagePullSecrets`](./values.yaml#L753) | Pull secrets | `[]` |
+| [`initContainers`](./values.yaml#L801) | Init containers | `[]` |
+| [`podSecurityContext`](./values.yaml#L772) | Pod security context | `{}` |
+| [`securityContext`](./values.yaml#L776) | Security context | `{}` |
+| [`serviceAccount`](./values.yaml#L765) | ServiceAccount | [...](./values.yaml#L765) |
+| [`sidecars`](./values.yaml#L798) | Additional containers | `[]` |
 
 ### Metadata
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`deploymentAnnotations`](./values.yaml#L817) | Deployment annotations | `{}` |
-| [`deploymentExtraSelectorLabels`](./values.yaml#L820) | Additional label selector for the deployment | `{}` |
-| [`fullnameOverride`](./values.yaml#L766) | Release full name override | `""` |
-| [`nameOverride`](./values.yaml#L763) | Release name override | `""` |
-| [`podAnnotations`](./values.yaml#L814) | Pod annotations | `{}` |
-| [`podLabels`](./values.yaml#L811) | Pod labels | `{}` |
+| [`deploymentAnnotations`](./values.yaml#L811) | Deployment annotations | `{}` |
+| [`deploymentExtraSelectorLabels`](./values.yaml#L814) | Additional label selector for the deployment | `{}` |
+| [`fullnameOverride`](./values.yaml#L760) | Release full name override | `""` |
+| [`nameOverride`](./values.yaml#L757) | Release name override | `""` |
+| [`podAnnotations`](./values.yaml#L808) | Pod annotations | `{}` |
+| [`podLabels`](./values.yaml#L805) | Pod labels | `{}` |
 
 ### Networking
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`envoySidecar`](./values.yaml#L896) | Envoy sidecar for consistent hashing by document ID | [...](./values.yaml#L896) |
-| [`envoySidecar.adminPort`](./values.yaml#L912) | Admin port for Envoy | `9901` |
-| [`envoySidecar.enabled`](./values.yaml#L899) | Enable Envoy sidecar for consistent hashing | `false` |
-| [`envoySidecar.healthCheck`](./values.yaml#L916) | Health check configuration for upstream cluster | [...](./values.yaml#L916) |
-| [`envoySidecar.healthCheck.healthyThreshold`](./values.yaml#L928) | Healthy threshold | `2` |
-| [`envoySidecar.healthCheck.interval`](./values.yaml#L922) | Health check interval | `"10s"` |
-| [`envoySidecar.healthCheck.timeout`](./values.yaml#L919) | Health check timeout | `"5s"` |
-| [`envoySidecar.healthCheck.unhealthyThreshold`](./values.yaml#L925) | Unhealthy threshold | `2` |
-| [`envoySidecar.image`](./values.yaml#L903) | Envoy sidecar image configuration | [...](./values.yaml#L903) |
-| [`envoySidecar.port`](./values.yaml#L909) | Port where Envoy sidecar listens | `8080` |
-| [`envoySidecar.resources`](./values.yaml#L932) | Resource limits for Envoy sidecar | [...](./values.yaml#L932) |
-| [`extraIngresses`](./values.yaml#L880) | Additional ingresses, e.g. for the dashboard | [...](./values.yaml#L880) |
-| [`ingress`](./values.yaml#L845) | Ingress | [...](./values.yaml#L845) |
-| [`ingress.annotations`](./values.yaml#L854) | Ingress annotations | `{}` |
-| [`ingress.className`](./values.yaml#L851) | Ingress class name | `""` |
-| [`ingress.enabled`](./values.yaml#L848) | Enable ingress | `false` |
-| [`ingress.hosts`](./values.yaml#L857) | Hosts | `[]` |
-| [`ingress.tls`](./values.yaml#L871) | Ingress TLS section | `[]` |
-| [`networkPolicy`](./values.yaml#L944) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L944) |
-| [`networkPolicy.allowExternal`](./values.yaml#L952) | Allow access from anywhere | `true` |
-| [`networkPolicy.allowExternalEgress`](./values.yaml#L976) | Allow the pod to access any range of port and all destinations. | `true` |
-| [`networkPolicy.enabled`](./values.yaml#L947) | Enable network policy | `true` |
-| [`networkPolicy.extraEgress`](./values.yaml#L979) | Extra egress rules | `[]` |
-| [`networkPolicy.extraIngress`](./values.yaml#L955) | Additional ingress rules | `[]` |
-| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L970) | Allow traffic from other namespaces | `[]` |
-| [`service`](./values.yaml#L825) | Service | [...](./values.yaml#L825) |
-| [`service.annotations`](./values.yaml#L834) | Service annotations | `{}` |
-| [`service.internalTrafficPolicy`](./values.yaml#L837) | Service internal traffic policy | `"Cluster"` |
-| [`service.port`](./values.yaml#L831) | Service port — see also `config.port` | `5000` |
-| [`service.trafficDistribution`](./values.yaml#L840) | Service [traffic distribution policy](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution) | `nil` |
-| [`service.type`](./values.yaml#L828) | Service type | `"ClusterIP"` |
+| [`envoySidecar`](./values.yaml#L890) | Envoy sidecar for consistent hashing by document ID | [...](./values.yaml#L890) |
+| [`envoySidecar.adminPort`](./values.yaml#L906) | Admin port for Envoy | `9901` |
+| [`envoySidecar.enabled`](./values.yaml#L893) | Enable Envoy sidecar for consistent hashing | `false` |
+| [`envoySidecar.healthCheck`](./values.yaml#L910) | Health check configuration for upstream cluster | [...](./values.yaml#L910) |
+| [`envoySidecar.healthCheck.healthyThreshold`](./values.yaml#L922) | Healthy threshold | `2` |
+| [`envoySidecar.healthCheck.interval`](./values.yaml#L916) | Health check interval | `"10s"` |
+| [`envoySidecar.healthCheck.timeout`](./values.yaml#L913) | Health check timeout | `"5s"` |
+| [`envoySidecar.healthCheck.unhealthyThreshold`](./values.yaml#L919) | Unhealthy threshold | `2` |
+| [`envoySidecar.image`](./values.yaml#L897) | Envoy sidecar image configuration | [...](./values.yaml#L897) |
+| [`envoySidecar.port`](./values.yaml#L903) | Port where Envoy sidecar listens | `8080` |
+| [`envoySidecar.resources`](./values.yaml#L926) | Resource limits for Envoy sidecar | [...](./values.yaml#L926) |
+| [`extraIngresses`](./values.yaml#L874) | Additional ingresses, e.g. for the dashboard | [...](./values.yaml#L874) |
+| [`ingress`](./values.yaml#L839) | Ingress | [...](./values.yaml#L839) |
+| [`ingress.annotations`](./values.yaml#L848) | Ingress annotations | `{}` |
+| [`ingress.className`](./values.yaml#L845) | Ingress class name | `""` |
+| [`ingress.enabled`](./values.yaml#L842) | Enable ingress | `false` |
+| [`ingress.hosts`](./values.yaml#L851) | Hosts | `[]` |
+| [`ingress.tls`](./values.yaml#L865) | Ingress TLS section | `[]` |
+| [`networkPolicy`](./values.yaml#L938) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L938) |
+| [`networkPolicy.allowExternal`](./values.yaml#L946) | Allow access from anywhere | `true` |
+| [`networkPolicy.allowExternalEgress`](./values.yaml#L970) | Allow the pod to access any range of port and all destinations. | `true` |
+| [`networkPolicy.enabled`](./values.yaml#L941) | Enable network policy | `true` |
+| [`networkPolicy.extraEgress`](./values.yaml#L973) | Extra egress rules | `[]` |
+| [`networkPolicy.extraIngress`](./values.yaml#L949) | Additional ingress rules | `[]` |
+| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L964) | Allow traffic from other namespaces | `[]` |
+| [`service`](./values.yaml#L819) | Service | [...](./values.yaml#L819) |
+| [`service.annotations`](./values.yaml#L828) | Service annotations | `{}` |
+| [`service.internalTrafficPolicy`](./values.yaml#L831) | Service internal traffic policy | `"Cluster"` |
+| [`service.port`](./values.yaml#L825) | Service port — see also `config.port` | `5000` |
+| [`service.trafficDistribution`](./values.yaml#L834) | Service [traffic distribution policy](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution) | `nil` |
+| [`service.type`](./values.yaml#L822) | Service type | `"ClusterIP"` |
 
 ### Observability
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`observability`](./values.yaml#L611) | Observability settings |  |
-| [`observability.log`](./values.yaml#L615) | Logs | [...](./values.yaml#L615) |
-| [`observability.log.healthcheckLevel`](./values.yaml#L624) | `HEALTHCHECK_LOGLEVEL` — log level for health checks | `"debug"` |
-| [`observability.log.level`](./values.yaml#L618) | `LOG_LEVEL` | `"info"` |
-| [`observability.log.structured`](./values.yaml#L621) | `LOG_STRUCTURED` — enable structured logging in JSON format | `false` |
-| [`observability.metrics`](./values.yaml#L659) | Metrics configuration | [...](./values.yaml#L659) |
-| [`observability.metrics.customTags`](./values.yaml#L668) | Prometheus metrics endpoint settings | `namespace={{ .Release.Namespace }},app={{ include "document-engine.fullname" . }}` |
-| [`observability.metrics.grafanaDashboard`](./values.yaml#L707) | Grafana dashboard | [...](./values.yaml#L707) |
-| [`observability.metrics.grafanaDashboard.configMap`](./values.yaml#L715) | ConfigMap parameters | [...](./values.yaml#L715) |
-| [`observability.metrics.grafanaDashboard.configMap.labels`](./values.yaml#L718) | ConfigMap labels | `{"grafana_dashboard":"1"}` |
-| [`observability.metrics.grafanaDashboard.enabled`](./values.yaml#L711) | Enable Grafana dashboard. To work, requires Prometheus metrics enabled in `observability.metrics.prometheusEndpoint.enabled` | `false` |
-| [`observability.metrics.grafanaDashboard.tags`](./values.yaml#L728) | Dashboard tags | `["Nutrient","document-engine"]` |
-| [`observability.metrics.grafanaDashboard.title`](./values.yaml#L725) | Dashboard title | *generated* |
-| [`observability.metrics.prometheusEndpoint.enabled`](./values.yaml#L672) | Enable Prometheus metrics endpoint, `ENABLE_PROMETHEUS` | `false` |
-| [`observability.metrics.prometheusEndpoint.port`](./values.yaml#L675) | Port for the Prometheus metrics endpoint, `PROMETHEUS_PORT` | `10254` |
-| [`observability.metrics.prometheusRule`](./values.yaml#L699) | Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule) Requires `observability.metrics.prometheusEndpoint.enabled` to be `true` | [...](./values.yaml#L699) |
-| [`observability.metrics.serviceMonitor`](./values.yaml#L684) | Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor) Requires `observability.metrics.prometheusEndpoint.enabled` to be `true` | [...](./values.yaml#L684) |
-| [`observability.metrics.statsd`](./values.yaml#L734) | StatsD parameters | [...](./values.yaml#L734) |
-| [`observability.metrics.statsd.customTags`](./values.yaml#L747) | StatsD custom tags, `STATSD_CUSTOM_TAGS` | `` |
-| [`observability.metrics.statsd.port`](./values.yaml#L743) | StatsD port, `STATSD_PORT` | `9125` |
-| [`observability.opentelemetry`](./values.yaml#L628) | OpenTelemetry settings | [...](./values.yaml#L628) |
-| [`observability.opentelemetry.enabled`](./values.yaml#L631) | Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported | `false` |
-| [`observability.opentelemetry.otelPropagators`](./values.yaml#L647) | `OTEL_PROPAGATORS`, propagators | `""` |
-| [`observability.opentelemetry.otelResourceAttributes`](./values.yaml#L644) | `OTEL_RESOURCE_ATTRIBUTES`, resource attributes | `""` |
-| [`observability.opentelemetry.otelServiceName`](./values.yaml#L641) | `OTEL_SERVICE_NAME`, service name | `""` |
-| [`observability.opentelemetry.otelTracesSampler`](./values.yaml#L652) | `OTEL_TRACES_SAMPLER`, should normally not be touched to allow custom `parent_based` work, but something like `parentbased_traceidratio` may be considered | `""` |
-| [`observability.opentelemetry.otelTracesSamplerArg`](./values.yaml#L655) | `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler | `""` |
-| [`observability.opentelemetry.otlpExporterEndpoint`](./values.yaml#L635) | https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317` | `""` |
-| [`observability.opentelemetry.otlpExporterProtocol`](./values.yaml#L638) | `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc` | `""` |
+| [`observability`](./values.yaml#L605) | Observability settings |  |
+| [`observability.log`](./values.yaml#L609) | Logs | [...](./values.yaml#L609) |
+| [`observability.log.healthcheckLevel`](./values.yaml#L618) | `HEALTHCHECK_LOGLEVEL` — log level for health checks | `"debug"` |
+| [`observability.log.level`](./values.yaml#L612) | `LOG_LEVEL` | `"info"` |
+| [`observability.log.structured`](./values.yaml#L615) | `LOG_STRUCTURED` — enable structured logging in JSON format | `false` |
+| [`observability.metrics`](./values.yaml#L653) | Metrics configuration | [...](./values.yaml#L653) |
+| [`observability.metrics.customTags`](./values.yaml#L662) | Prometheus metrics endpoint settings | `namespace={{ .Release.Namespace }},app={{ include "document-engine.fullname" . }}` |
+| [`observability.metrics.grafanaDashboard`](./values.yaml#L701) | Grafana dashboard | [...](./values.yaml#L701) |
+| [`observability.metrics.grafanaDashboard.configMap`](./values.yaml#L709) | ConfigMap parameters | [...](./values.yaml#L709) |
+| [`observability.metrics.grafanaDashboard.configMap.labels`](./values.yaml#L712) | ConfigMap labels | `{"grafana_dashboard":"1"}` |
+| [`observability.metrics.grafanaDashboard.enabled`](./values.yaml#L705) | Enable Grafana dashboard. To work, requires Prometheus metrics enabled in `observability.metrics.prometheusEndpoint.enabled` | `false` |
+| [`observability.metrics.grafanaDashboard.tags`](./values.yaml#L722) | Dashboard tags | `["Nutrient","document-engine"]` |
+| [`observability.metrics.grafanaDashboard.title`](./values.yaml#L719) | Dashboard title | *generated* |
+| [`observability.metrics.prometheusEndpoint.enabled`](./values.yaml#L666) | Enable Prometheus metrics endpoint, `ENABLE_PROMETHEUS` | `false` |
+| [`observability.metrics.prometheusEndpoint.port`](./values.yaml#L669) | Port for the Prometheus metrics endpoint, `PROMETHEUS_PORT` | `10254` |
+| [`observability.metrics.prometheusRule`](./values.yaml#L693) | Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule) Requires `observability.metrics.prometheusEndpoint.enabled` to be `true` | [...](./values.yaml#L693) |
+| [`observability.metrics.serviceMonitor`](./values.yaml#L678) | Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor) Requires `observability.metrics.prometheusEndpoint.enabled` to be `true` | [...](./values.yaml#L678) |
+| [`observability.metrics.statsd`](./values.yaml#L728) | StatsD parameters | [...](./values.yaml#L728) |
+| [`observability.metrics.statsd.customTags`](./values.yaml#L741) | StatsD custom tags, `STATSD_CUSTOM_TAGS` | `` |
+| [`observability.metrics.statsd.port`](./values.yaml#L737) | StatsD port, `STATSD_PORT` | `9125` |
+| [`observability.opentelemetry`](./values.yaml#L622) | OpenTelemetry settings | [...](./values.yaml#L622) |
+| [`observability.opentelemetry.enabled`](./values.yaml#L625) | Enable OpenTelemetry (`ENABLE_OPENTELEMETRY`), only tracing is currently supported | `false` |
+| [`observability.opentelemetry.otelPropagators`](./values.yaml#L641) | `OTEL_PROPAGATORS`, propagators | `""` |
+| [`observability.opentelemetry.otelResourceAttributes`](./values.yaml#L638) | `OTEL_RESOURCE_ATTRIBUTES`, resource attributes | `""` |
+| [`observability.opentelemetry.otelServiceName`](./values.yaml#L635) | `OTEL_SERVICE_NAME`, service name | `""` |
+| [`observability.opentelemetry.otelTracesSampler`](./values.yaml#L646) | `OTEL_TRACES_SAMPLER`, should normally not be touched to allow custom `parent_based` work, but something like `parentbased_traceidratio` may be considered | `""` |
+| [`observability.opentelemetry.otelTracesSamplerArg`](./values.yaml#L649) | `OTEL_TRACES_SAMPLER_ARG`, argument for the sampler | `""` |
+| [`observability.opentelemetry.otlpExporterEndpoint`](./values.yaml#L629) | https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ `OTEL_EXPORTER_OTLP_ENDPOINT`, if not set, defaults to `http://localhost:4317` | `""` |
+| [`observability.opentelemetry.otlpExporterProtocol`](./values.yaml#L632) | `OTEL_EXPORTER_OTLP_PROTOCOL`, if not set, defaults to `grpc` | `""` |
 
 ### Pod lifecycle
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`lifecycle`](./values.yaml#L1039) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
-| [`livenessProbe`](./values.yaml#L1009) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1009) |
-| [`readinessProbe`](./values.yaml#L1022) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1022) |
-| [`startupProbe`](./values.yaml#L996) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L996) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L1035) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
+| [`lifecycle`](./values.yaml#L1033) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
+| [`livenessProbe`](./values.yaml#L1003) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1003) |
+| [`readinessProbe`](./values.yaml#L1016) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1016) |
+| [`startupProbe`](./values.yaml#L990) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L990) |
+| [`terminationGracePeriodSeconds`](./values.yaml#L1029) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
 
 ### Scheduling
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`affinity`](./values.yaml#L1094) | Node affinity | `{}` |
-| [`autoscaling`](./values.yaml#L1047) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L1047) |
-| [`nodeSelector`](./values.yaml#L1091) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
-| [`podDisruptionBudget`](./values.yaml#L1084) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1084) |
-| [`priorityClassName`](./values.yaml#L1103) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
-| [`replicaCount`](./values.yaml#L1072) | Number of replicas | `1` |
-| [`resources`](./values.yaml#L1069) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
-| [`schedulerName`](./values.yaml#L1106) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
-| [`tolerations`](./values.yaml#L1097) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
-| [`topologySpreadConstraints`](./values.yaml#L1100) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
-| [`updateStrategy`](./values.yaml#L1075) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
+| [`affinity`](./values.yaml#L1088) | Node affinity | `{}` |
+| [`autoscaling`](./values.yaml#L1041) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L1041) |
+| [`nodeSelector`](./values.yaml#L1085) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| [`podDisruptionBudget`](./values.yaml#L1078) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1078) |
+| [`priorityClassName`](./values.yaml#L1097) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
+| [`replicaCount`](./values.yaml#L1066) | Number of replicas | `1` |
+| [`resources`](./values.yaml#L1063) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
+| [`schedulerName`](./values.yaml#L1100) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
+| [`tolerations`](./values.yaml#L1091) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
+| [`topologySpreadConstraints`](./values.yaml#L1094) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
+| [`updateStrategy`](./values.yaml#L1069) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
 
 ### Storage resource definitions
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`cloudNativePG`](./values.yaml#L1111) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1111) |
-| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1146) | Cluster annotations | `{}` |
-| [`cloudNativePG.clusterLabels`](./values.yaml#L1143) | Cluster labels | `{}` |
-| [`cloudNativePG.clusterName`](./values.yaml#L1123) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
-| [`cloudNativePG.clusterSpec`](./values.yaml#L1127) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1127) |
-| [`cloudNativePG.enabled`](./values.yaml#L1114) | Enable CloudNativePG resources | `false` |
-| [`cloudNativePG.networkPolicy`](./values.yaml#L1155) | Network policy to allow access to the cluster | `{"enabled":true}` |
-| [`cloudNativePG.operatorNamespace`](./values.yaml#L1117) | CloudNativePG operator namespace | `"cnpg-system"` |
-| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1120) | CloudNativePG operator release name | `"cloudnative-pg"` |
-| [`cloudNativePG.superuserSecret`](./values.yaml#L1149) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
+| [`cloudNativePG`](./values.yaml#L1105) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1105) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1140) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L1137) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterName`](./values.yaml#L1117) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L1121) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1121) |
+| [`cloudNativePG.enabled`](./values.yaml#L1108) | Enable CloudNativePG resources | `false` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L1149) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.operatorNamespace`](./values.yaml#L1111) | CloudNativePG operator namespace | `"cnpg-system"` |
+| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1114) | CloudNativePG operator release name | `"cloudnative-pg"` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L1143) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
 
 ### Other Values
 
@@ -537,7 +536,7 @@ Note:
 | [`config.hoard.binaryCopyThreshold`](./values.yaml#L139) | `HOARD_BINARY_COPY_THRESHOLD` — internal parameter, do not change unless explicitly recommended by Nutrient support. | `2` |
 | [`config.http2SharedRendering.checkinTimeoutMilliseconds`](./values.yaml#L150) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKIN_TIMEOUT` — document processing daemon checkin timeout. Do not change unless explicitly recommended by Nutrient support. | `0` |
 | [`config.http2SharedRendering.checkoutTimeoutMilliseconds`](./values.yaml#L153) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKOUT_TIMEOUT` — document processing daemon checkout timeout. Do not change unless explicitly recommended by Nutrient support. | `5000` |
-| [`revisionHistoryLimit`](./values.yaml#L1079) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
+| [`revisionHistoryLimit`](./values.yaml#L1073) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
 
 ## Contribution
 

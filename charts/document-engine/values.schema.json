@@ -712,20 +712,6 @@
             "extraEnvs": {
               "type": "array"
             },
-            "image": {
-              "type": "object",
-              "properties": {
-                "pullPolicy": {
-                  "type": "string"
-                },
-                "repository": {
-                  "type": "string"
-                },
-                "tag": {
-                  "type": "string"
-                }
-              }
-            },
             "keepHours": {
               "type": "integer",
               "minimum": 1
