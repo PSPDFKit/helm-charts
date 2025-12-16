@@ -1,7 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [7.3.1 (2025-12-15)](#731-2025-12-15)
+  - [7.4.0 (2025-12-15)](#740-2025-12-15)
     - [Changed](#changed)
     - [Fixed](#fixed)
   - [7.3.0 (2025-11-21)](#730-2025-11-21)
@@ -191,12 +191,12 @@
   - [2.0.0](#200)
     - [Changed](#changed-56)
 
-## 7.3.1 (2025-12-15)
+## 7.4.0 (2025-12-15)
 
 ### Changed
 
+* Switched to Document Engine image for the expiration jobs, and consequently, removed `documentLifecycle.image`
 * Document expiration job output
-* Dependency updates
 
 ### Fixed 
 

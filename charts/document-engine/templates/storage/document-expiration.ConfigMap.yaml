@@ -9,16 +9,38 @@ metadata:
     {{- include "document-engine.labels" . | nindent 4 }}
 data:
   {{- with .Values.documentLifecycle.expirationJob }}
-  {{- $url := printf "http://%s:%s/api/async/delete_documents" ( include "document-engine.fullname" $ ) ( toString $.Values.service.port ) }}
+  {{- $urlDelete := printf "http://%s:%s/api/async/delete_documents" ( include "document-engine.fullname" $ ) ( toString $.Values.service.port ) }}
+  {{- $urlStatus := printf "http://%s:%s/api/async/jobs" ( include "document-engine.fullname" $ ) ( toString $.Values.service.port ) }}
   run.sh: |
-    #!/bin/sh
+    #!/bin/bash
     set -e
+
+    export AUTH_HEADER="Authorization: Token token=${API_AUTH_TOKEN}"
     export PRESERVATION_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ" -d @$(($(date -u +"%s") - {{ .keepHours }} * 3600)))
+
     echo "Deleting documents created before ${PRESERVATION_DATE}"
-    curl -sS --request POST \
-         --header "Authorization: Token token=${API_AUTH_TOKEN}" \
-         --url "{{ $url }}?created_before=${PRESERVATION_DATE}"
+    export JOB_ID=$(curl -sS --request POST --header "${AUTH_HEADER}" \
+                         --url "{{ $urlDelete }}?created_before=${PRESERVATION_DATE}" \
+                    | jq -r .data.jobId)
+
+    echo "Job ID: ${JOB_ID}"
+    sleep 1
+
+    echo "Polling job status every 10 seconds..."
+    while true; do
+      STATUS=$(curl -sS --header "${AUTH_HEADER}" \
+                        --url "{{ $urlStatus }}/${JOB_ID}" \
+                   | jq -r '.data.status // "error"')
+
+      echo "[$(date -u +"%Y-%m-%d %H:%M:%S")] Current job status: \"${STATUS}\""
+
+      if [ "${STATUS}" != "not_started" ] && [ "${STATUS}" != "in_progress" ]; then
+        echo "Job finished with status: \"${STATUS}\""
+        break
+      fi
+
+      sleep 10
+    done
+
   {{- end }}
-# Can be used for hash updating
-  HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}
 {{- end }}

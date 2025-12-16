@@ -318,12 +318,6 @@ documentLifecycle:
     podLabels: {}
     # @ignored
     extraEnvs: []
-    # -- Image used for running the expiration job API calls
-    # @section -- 06. Document lifecycle
-    image:
-      repository: curlimages/curl
-      pullPolicy: IfNotPresent
-      tag: "8.17.0"
     # -- Service account name to specify for the expiration jobs
     # @section -- 06. Document lifecycle
     serviceAccountName: ""
