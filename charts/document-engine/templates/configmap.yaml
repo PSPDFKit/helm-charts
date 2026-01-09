@@ -248,6 +248,14 @@ data:
 {{-   end }}
 {{- end }}
 #
+# Dashboard
+#
+{{- with .Values.dashboard }}
+{{-   if .enabled }}
+  DASHBOARD_RATE_LIMITING_ENABLED: {{ .rateLimitingEnabled | quote }}
+{{-   end }}
+{{- end }}
+#
 # Can be used for hash updating
 #
   HELM_CHART_VERSION: {{ include "document-engine.chart" . | quote }}

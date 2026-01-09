@@ -575,6 +575,11 @@ dashboard:
   # -- Enable dashboard
   # @section -- A. Dashboard
   enabled: true
+  # -- `DASHBOARD_RATE_LIMITING_ENABLED` — enables rate limiting for dashboard authentication
+  # to prevent brute force attacks. When enabled, failed authentication attempts
+  # are limited to 5 per minute per IP address.
+  # @section -- A. Dashboard
+  rateLimitingEnabled: true
   # -- (object) Dashboard authentication
   # @section -- A. Dashboard
   # @notationType -- reference

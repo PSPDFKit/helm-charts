@@ -561,6 +561,9 @@
         },
         "enabled": {
           "type": "boolean"
+        },
+        "rateLimitingEnabled": {
+          "type": "boolean"
         }
       }
     },
