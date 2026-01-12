@@ -561,6 +561,17 @@
         },
         "enabled": {
           "type": "boolean"
+        },
+        "rateLimitingEnabled": {
+          "type": "boolean"
+        },
+        "rateLimitingMaxRequests": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rateLimitingWindowMs": {
+          "type": "integer",
+          "minimum": 1000
         }
       }
     },

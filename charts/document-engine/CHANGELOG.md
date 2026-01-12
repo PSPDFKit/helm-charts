@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [7.5.0 (2026-01-09)](#750-2026-01-09)
+    - [Added](#added)
   - [7.4.0 (2025-12-15)](#740-2025-12-15)
     - [Changed](#changed)
     - [Fixed](#fixed)
@@ -190,6 +192,14 @@
     - [Changed](#changed-55)
   - [2.0.0](#200)
     - [Changed](#changed-56)
+
+## 7.5.0 (2026-01-09)
+
+### Added
+
+* `dashboard.rateLimitingEnabled` to enable rate limiting for dashboard authentication (prevents brute force attacks)
+* `dashboard.rateLimitingMaxRequests` to configure maximum failed attempts before blocking (default: 5)
+* `dashboard.rateLimitingWindowMs` to configure the time window for tracking attempts (default: 60000ms)
 
 ## 7.4.0 (2025-12-15)
 
