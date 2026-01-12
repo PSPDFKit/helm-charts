@@ -198,6 +198,8 @@
 ### Added
 
 * `dashboard.rateLimitingEnabled` to enable rate limiting for dashboard authentication (prevents brute force attacks)
+* `dashboard.rateLimitingMaxRequests` to configure maximum failed attempts before blocking (default: 5)
+* `dashboard.rateLimitingWindowMs` to configure the time window for tracking attempts (default: 60000ms)
 
 ## 7.4.0 (2025-12-15)
 

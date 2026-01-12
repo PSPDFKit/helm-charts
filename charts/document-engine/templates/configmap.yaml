@@ -253,6 +253,8 @@ data:
 {{- with .Values.dashboard }}
 {{-   if .enabled }}
   DASHBOARD_RATE_LIMITING_ENABLED: {{ .rateLimitingEnabled | quote }}
+  DASHBOARD_RATE_LIMITING_MAX_REQUESTS: {{ .rateLimitingMaxRequests | quote }}
+  DASHBOARD_RATE_LIMITING_WINDOW_MS: {{ .rateLimitingWindowMs | quote }}
 {{-   end }}
 {{- end }}
 #
