@@ -5,7 +5,7 @@ description: AI Assistant is a thing that assists an AI
 home: https://www.nutrient.io/guides/ai-assistant/
 icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
 version: 0.5.0
-appVersion: "2.0.0"
+appVersion: "2.0.1"
 
 keywords:
   - nutrient

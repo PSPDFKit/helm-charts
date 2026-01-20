@@ -26,7 +26,7 @@
 
 ### Changed
 
-* [AI Assistant 2.0.0](https://www.nutrient.io/guides/ai-assistant/changelog/#2.0.0)
+* [AI Assistant 2.0.1](https://www.nutrient.io/guides/ai-assistant/changelog/#2.0.0)
 
 ## 0.4.0 (2025-11-7)
 
