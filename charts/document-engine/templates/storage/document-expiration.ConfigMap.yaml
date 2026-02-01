@@ -28,7 +28,7 @@ data:
 
     export JOB_ID=$(curl -sS --request POST \
                          --header "${AUTH_HEADER}" \
-                         --header "Content-Type: application/json"
+                         --header "Content-Type: application/json" \
                          --url "{{ $urlDelete }}" \
                          --data "${REQUEST_DATA}" \
                     | jq -r .data.jobId)
