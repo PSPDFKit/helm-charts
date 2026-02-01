@@ -200,7 +200,7 @@
 
 ### Added
 
-* `documentLifecycle.expirationJob.deletionPrefix` to set document id prefix for the expiration jobs, defaults to `ephemeral`, leave empty to delete all documents older than `documentLifecycle.expirationJob.keepHours` hours
+* By [InosRahul](https://github.com/InosRahul): `documentLifecycle.expirationJob.deletionPrefix` to set document id prefix for the expiration jobs, defaults to `ephemeral`, leave empty to delete all documents older than `documentLifecycle.expirationJob.keepHours` hours
 
 ### Changed
 
