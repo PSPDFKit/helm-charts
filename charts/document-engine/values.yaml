@@ -309,7 +309,7 @@ documentLifecycle:
     # -- Only delete documents with IDs beginning with this prefix.
     # Leave empty to delete all documents matching the time filter.
     # @section -- 06. Document lifecycle
-    deletionPrefix: "temp_"
+    deletionPrefix: "ephemeral"
     # @ignored
     resources: {}
     # @ignored
@@ -318,12 +318,6 @@ documentLifecycle:
     podLabels: {}
     # @ignored
     extraEnvs: []
-    # -- Image used for running the expiration job API calls
-    # @section -- 06. Document lifecycle
-    image:
-      repository: curlimages/curl
-      pullPolicy: IfNotPresent
-      tag: "8.14.1"
     # -- Service account name to specify for the expiration jobs
     # @section -- 06. Document lifecycle
     serviceAccountName: ""
@@ -581,6 +575,19 @@ dashboard:
   # -- Enable dashboard
   # @section -- A. Dashboard
   enabled: true
+  # -- `DASHBOARD_RATE_LIMITING_ENABLED` — enables rate limiting for dashboard authentication
+  # to prevent brute force attacks. When enabled, failed authentication attempts
+  # are tracked per IP address.
+  # @section -- A. Dashboard
+  rateLimitingEnabled: true
+  # -- `DASHBOARD_RATE_LIMITING_MAX_REQUESTS` — maximum number of failed authentication
+  # attempts allowed per IP address within the time window before blocking.
+  # @section -- A. Dashboard
+  rateLimitingMaxRequests: 5
+  # -- `DASHBOARD_RATE_LIMITING_WINDOW_MS` — time window in milliseconds for tracking
+  # failed authentication attempts. After this period, the counter resets.
+  # @section -- A. Dashboard
+  rateLimitingWindowMs: 60000
   # -- (object) Dashboard authentication
   # @section -- A. Dashboard
   # @notationType -- reference

@@ -55,10 +55,8 @@ spec:
               {{- with .Values.documentLifecycle.expirationJob.extraEnvs }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
-              {{- with .Values.documentLifecycle.expirationJob.image }}
-              image: "{{ .repository }}:{{ .tag }}"
-              imagePullPolicy: {{ .pullPolicy }}
-              {{- end }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
               command:
                 - /documents-expiration/run.sh
               resources:
