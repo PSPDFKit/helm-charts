@@ -8,7 +8,7 @@ metadata:
   labels:
     {{- include "document-engine.labels" . | nindent 4 }}
 spec:
-  schedule: {{ .Values.documentLifecycle.expirationJob.schedule }}
+  schedule: {{ .Values.documentLifecycle.expirationJob.schedule | quote }}
   startingDeadlineSeconds: {{ .Values.documentLifecycle.expirationJob.startingDeadlineSeconds }}
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1

@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 7.5.0](https://img.shields.io/badge/Version-7.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.13.0](https://img.shields.io/badge/AppVersion-1.13.0-informational?style=flat-square)
+![Version: 7.5.1](https://img.shields.io/badge/Version-7.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.13.0](https://img.shields.io/badge/AppVersion-1.13.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -304,9 +304,9 @@ Note:
 | [`documentLifecycle`](./values.yaml#L292) | Document lifecycle management |  |
 | [`documentLifecycle.bulkDocumentDeletionEnabled`](./values.yaml#L295) | `ENABLE_BULK_DOCUMENT_DELETION`: enable `/api/async/delete_documents` API endpoint | `false` |
 | [`documentLifecycle.expirationJob`](./values.yaml#L299) | Regular job to remove documents from the database, requires `documentLifecycle.bulkDocumentDeletionEnabled` to be `true` | [...](./values.yaml#L299) |
+| [`documentLifecycle.expirationJob.deletionPrefix`](./values.yaml#L312) | Only delete documents with IDs beginning with this prefix. Leave empty to delete all documents matching the time filter. | `"ephemeral"` |
 | [`documentLifecycle.expirationJob.enabled`](./values.yaml#L302) | Enable the document expiration job | `false` |
 | [`documentLifecycle.expirationJob.keepHours`](./values.yaml#L308) | Documents TTL in hours | `24` |
-| [`documentLifecycle.expirationJob.persistentLike`](./values.yaml#L312) | Keep documents with IDs beginning with `persistent` indefinitely WARNING: does not currently work | `"persistent%"` |
 | [`documentLifecycle.expirationJob.schedule`](./values.yaml#L305) | Expiration job schedule in cron format | `"13 * * * *"` |
 | [`documentLifecycle.expirationJob.serviceAccountName`](./values.yaml#L323) | Service account name to specify for the expiration jobs | `""` |
 

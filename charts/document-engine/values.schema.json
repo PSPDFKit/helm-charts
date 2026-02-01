@@ -566,12 +566,10 @@
           "type": "boolean"
         },
         "rateLimitingMaxRequests": {
-          "type": "integer",
-          "minimum": 1
+          "type": "integer"
         },
         "rateLimitingWindowMs": {
-          "type": "integer",
-          "minimum": 1000
+          "type": "integer"
         }
       }
     },
@@ -717,6 +715,9 @@
             "activeDeadlineSeconds": {
               "type": "integer"
             },
+            "deletionPrefix": {
+              "type": "string"
+            },
             "enabled": {
               "type": "boolean"
             },
@@ -726,9 +727,6 @@
             "keepHours": {
               "type": "integer",
               "minimum": 1
-            },
-            "persistentLike": {
-              "type": "string"
             },
             "podAnnotations": {
               "type": "object"

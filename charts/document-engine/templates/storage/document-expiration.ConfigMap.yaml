@@ -17,10 +17,20 @@ data:
 
     export AUTH_HEADER="Authorization: Token token=${API_AUTH_TOKEN}"
     export PRESERVATION_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ" -d @$(($(date -u +"%s") - {{ .keepHours }} * 3600)))
-
+    
+    {{- if .deletionPrefix }}
+    export REQUEST_DATA='{"document_id_prefix": "{{ .deletionPrefix }}", "created_before": "'"${PRESERVATION_DATE}"'"}'
+    echo "Deleting documents with prefix '{{ .deletionPrefix }}' created before ${PRESERVATION_DATE}"
+    {{- else }}
+    export REQUEST_DATA='{"created_before": "'"${PRESERVATION_DATE}"'"}'
     echo "Deleting documents created before ${PRESERVATION_DATE}"
-    export JOB_ID=$(curl -sS --request POST --header "${AUTH_HEADER}" \
-                         --url "{{ $urlDelete }}?created_before=${PRESERVATION_DATE}" \
+    {{- end }}
+
+    export JOB_ID=$(curl -sS --request POST \
+                         --header "${AUTH_HEADER}" \
+                         --header "Content-Type: application/json" \
+                         --url "{{ $urlDelete }}" \
+                         --data "${REQUEST_DATA}" \
                     | jq -r .data.jobId)
 
     echo "Job ID: ${JOB_ID}"
