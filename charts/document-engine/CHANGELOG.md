@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [7.6.1 (2026-02-24)](#761-2026-02-24)
+    - [Fixed (TLS)](#fixed-tls)
   - [7.6.0 (2026-02-03)](#760-2026-02-03)
     - [Changed](#changed)
   - [7.5.1 (2026-02-01)](#751-2026-02-01)
@@ -197,6 +199,12 @@
     - [Changed](#changed-57)
   - [2.0.0](#200)
     - [Changed](#changed-58)
+
+## 7.6.1 (2026-02-24)
+
+### Fixed
+
+* Corrected the PostgreSQL TLS common name mapping: `database.postgres.tls.commonName` now renders `PGSSL_CERT_COMMON_NAME`, no longer overwriting `PGSSL_CA_CERTS`.
 
 ## 7.6.0 (2026-02-03)
 

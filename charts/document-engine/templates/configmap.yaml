@@ -76,7 +76,7 @@ data:
   PGSSL_DISABLE_VERIFY: {{ not .tls.verify | quote }}
   PGSSL_DISABLE_HOSTNAME_VERIFY: {{ not .tls.hostVerify | quote }}
 {{-       with .tls.commonName }}
-  PGSSL_CA_CERTS: {{ . | quote }}
+  PGSSL_CERT_COMMON_NAME: {{ . | quote }}
 {{-       end }}
 {{-       if .tls.trustBundle }}
   PGSSL_CA_CERTS: {{ .tls.trustBundle | quote }}
