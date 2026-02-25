@@ -31,7 +31,9 @@ spec:
   template:
     {{- include "document-engine.podTemplate" . | nindent 4 }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- with .Values.persistence.annotations }}
         annotations:
@@ -39,11 +41,19 @@ spec:
         {{- end }}
       spec:
         accessModes:
-          {{- toYaml .Values.persistence.accessModes | nindent 10 }}
-        {{- if .Values.persistence.storageClassName }}
-        storageClassName: {{ .Values.persistence.storageClassName | quote }}
+          {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        storageClassName: {{ .Values.persistence.storageClassName }}
+        {{- with .Values.persistence.volumeName }}
+        volumeName: {{ . | quote }}
         {{- end }}
         resources:
           requests:
             storage: {{ .Values.persistence.size }}
+        {{- with .Values.persistence.selectorLabels }}
+        selector:
+          matchLabels:
+            {{- toYaml . | nindent 12 }}
+        {{- end }}
 {{- end }}
