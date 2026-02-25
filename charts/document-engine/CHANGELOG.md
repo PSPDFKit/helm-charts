@@ -207,7 +207,7 @@
 
 ### Added
 
-* `workloadType` to choose between `Deployment` (default) and `StatefulSet` with persistent storage via `volumeClaimTemplates`
+* Persistent local asset cache through `workloadType`. Defaults to `Deployment` (old behaviour), also accepts `StatefulSet` with persistent storage via `volumeClaimTemplates`
 * `podManagementPolicy` for StatefulSet pod management (`OrderedReady` or `Parallel`)
 * `persistence` configuration block (`storageClassName`, `accessModes`, `size`, `mountPath`, `annotations`) for StatefulSet persistent volumes
 

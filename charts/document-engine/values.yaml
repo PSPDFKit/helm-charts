@@ -489,52 +489,86 @@ assetStorage:
     # @section -- 07. Asset storage
     externalSecretName: ""
 
+# -- Workload type: `Deployment` or `StatefulSet`.
+# When `StatefulSet`, persistent storage is provisioned per pod via volumeClaimTemplates.
+# **Note:** Switching an existing release from Deployment to StatefulSet requires
+# deleting the existing Deployment first, as Kubernetes cannot change a resource kind in-place.
+# @section -- 08. Persistence
+workloadType: Deployment  # @schema enum: [Deployment, StatefulSet]
+
+# -- Pod management policy for StatefulSet: `OrderedReady` or `Parallel`.
+# Only used when `workloadType` is `StatefulSet`.
+# @section -- 08. Persistence
+podManagementPolicy: OrderedReady  # @schema enum: [OrderedReady, Parallel]
+
+# -- (object) Persistent storage settings for StatefulSet pods.
+# Only used when `workloadType` is `StatefulSet`.
+# @section -- 08. Persistence
+# @notationType -- reference
+persistence:
+  # -- Storage class for PVCs. Empty string uses cluster default.
+  # @section -- 08. Persistence
+  storageClassName: ""
+  # -- PVC access modes
+  # @section -- 08. Persistence
+  accessModes:
+    - ReadWriteOnce
+  # -- PVC storage size
+  # @section -- 08. Persistence
+  size: 10Gi
+  # -- Mount path inside the container
+  # @section -- 08. Persistence
+  mountPath: /data
+  # -- Annotations for each PVC
+  # @section -- 08. Persistence
+  annotations: {}
+
 # -- (object) Signing service parameters
-# @section -- 08. Digital signatures
+# @section -- 09. Digital signatures
 # @notationType -- none
 documentSigningService:
   # -- Enable signing service integration
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   enabled: false
   # -- `SIGNING_SERVICE_URL`
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   url: https://signing-thing.local/sign
   # -- `SIGNING_SERVICE_TIMEOUT` in seconds
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   timeoutSeconds: 10
   # -- `DEFAULT_SIGNER_NAME`
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   defaultSignerName: "John Doe"
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   # -- `DEFAULT_SIGNATURE_REASON`
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   defaultSignatureReason: "approved"
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   # -- `DEFAULT_SIGNATURE_LOCATION`
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   defaultSignatureLocation: "Head Quarters"
   # -- `DIGITAL_SIGNATURE_HASH_ALGORITHM`
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   hashAlgorithm: sha512  # @schema enum: [md5, sha160, sha224, sha256, sha384, sha512]
   # -- `DIGITAL_SIGNATURE_CADES_LEVEL`
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   cadesLevel: "b-lt"  # @schema enum: [b-lt, b-l, b-b]
   # -- `DIGITAL_SIGNATURE_CERTIFICATE_CHECK_TIME`
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   certificateCheckTime: current_time  # @schema enum: [current_time, signing_time]
   # -- (object) Timestamp Authority (TSA) settings
-  # @section -- 08. Digital signatures
+  # @section -- 09. Digital signatures
   # @notationType -- reference
   timestampAuthority:
     # -- `TIMESTAMP_AUTHORITY_URL`
-    # @section -- 08. Digital signatures
+    # @section -- 09. Digital signatures
     url: https://freetsa.org/
     # -- `TIMESTAMP_AUTHORITY_USERNAME`
-    # @section -- 08. Digital signatures
+    # @section -- 09. Digital signatures
     # @ignored
     username: ""
     # -- `TIMESTAMP_AUTHORITY_PASSWORD`
-    # @section -- 08. Digital signatures
+    # @section -- 09. Digital signatures
     # @ignored
     password: ""
 
@@ -1086,40 +1120,6 @@ updateStrategy:
   rollingUpdate: {}
 # -- [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
 revisionHistoryLimit: 10
-
-# -- Workload type: `Deployment` or `StatefulSet`.
-# When `StatefulSet`, persistent storage is provisioned per pod via volumeClaimTemplates.
-# **Note:** Switching an existing release from Deployment to StatefulSet requires
-# deleting the existing Deployment first, as Kubernetes cannot change a resource kind in-place.
-# @section -- G. Scheduling
-workloadType: Deployment  # @schema enum: [Deployment, StatefulSet]
-
-# -- Pod management policy for StatefulSet: `OrderedReady` or `Parallel`.
-# Only used when `workloadType` is `StatefulSet`.
-# @section -- G. Scheduling
-podManagementPolicy: OrderedReady  # @schema enum: [OrderedReady, Parallel]
-
-# -- (object) Persistent storage settings for StatefulSet pods.
-# Only used when `workloadType` is `StatefulSet`.
-# @section -- G. Scheduling
-# @notationType -- reference
-persistence:
-  # -- Storage class for PVCs. Empty string uses cluster default.
-  # @section -- G. Scheduling
-  storageClassName: ""
-  # -- PVC access modes
-  # @section -- G. Scheduling
-  accessModes:
-    - ReadWriteOnce
-  # -- PVC storage size
-  # @section -- G. Scheduling
-  size: 10Gi
-  # -- Mount path inside the container
-  # @section -- G. Scheduling
-  mountPath: /data
-  # -- Annotations for each PVC
-  # @section -- G. Scheduling
-  annotations: {}
 
 # -- (object) [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
 # @section -- G. Scheduling
