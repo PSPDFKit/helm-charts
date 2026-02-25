@@ -1,6 +1,9 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.0.0 (2026-02-25)](#800-2026-02-25)
+    - [Added](#added)
+    - [Changed](#changed)
   - [7.6.1 (2026-02-24)](#761-2026-02-24)
     - [Fixed (TLS)](#fixed-tls)
   - [7.6.0 (2026-02-03)](#760-2026-02-03)
@@ -199,6 +202,21 @@
     - [Changed](#changed-57)
   - [2.0.0](#200)
     - [Changed](#changed-58)
+
+## 8.0.0 (2026-02-25)
+
+### Added
+
+* `workloadType` to choose between `Deployment` (default) and `StatefulSet` with persistent storage via `volumeClaimTemplates`
+* `podManagementPolicy` for StatefulSet pod management (`OrderedReady` or `Parallel`)
+* `persistence` configuration block (`storageClassName`, `accessModes`, `size`, `mountPath`, `annotations`) for StatefulSet persistent volumes
+* Extracted pod template into `_pod-template.tpl` shared by both workload types
+* Reusable helpers for scheduling and certificate trust, reducing duplication in migration job
+
+### Changed
+
+* Headless service is now also created when `workloadType` is `StatefulSet`
+* HPA dynamically targets `StatefulSet` or `Deployment` based on `workloadType`
 
 ## 7.6.1 (2026-02-24)
 
