@@ -819,10 +819,12 @@ podLabels: {}
 # -- Pod annotations
 # @section -- B. Metadata
 podAnnotations: {}
-# -- Deployment annotations
+# -- Workload annotations (`Deployment`/`StatefulSet`)
 # @section -- B. Metadata
 deploymentAnnotations: {}
-# -- Additional label selector for the deployment
+# -- Additional selector labels for the workload (`Deployment`/`StatefulSet`)
+# **Note:** Kubernetes selectors are immutable. Changing this value after first install
+# may require recreating the workload.
 # @section -- B. Metadata
 deploymentExtraSelectorLabels: {}
 

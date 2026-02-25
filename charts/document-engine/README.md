@@ -413,8 +413,8 @@ Note:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`deploymentAnnotations`](./values.yaml#L824) | Deployment annotations | `{}` |
-| [`deploymentExtraSelectorLabels`](./values.yaml#L827) | Additional label selector for the deployment | `{}` |
+| [`deploymentAnnotations`](./values.yaml#L824) | Workload annotations (`Deployment`/`StatefulSet`) | `{}` |
+| [`deploymentExtraSelectorLabels`](./values.yaml#L829) | Additional selector labels for the workload (`Deployment`/`StatefulSet`) **Note:** Kubernetes selectors are immutable. Changing this value after first install may require recreating the workload. | `{}` |
 | [`fullnameOverride`](./values.yaml#L773) | Release full name override | `""` |
 | [`nameOverride`](./values.yaml#L770) | Release name override | `""` |
 | [`podAnnotations`](./values.yaml#L821) | Pod annotations | `{}` |
@@ -424,37 +424,37 @@ Note:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`envoySidecar`](./values.yaml#L903) | Envoy sidecar for consistent hashing by document ID | [...](./values.yaml#L903) |
-| [`envoySidecar.adminPort`](./values.yaml#L919) | Admin port for Envoy | `9901` |
-| [`envoySidecar.enabled`](./values.yaml#L906) | Enable Envoy sidecar for consistent hashing | `false` |
-| [`envoySidecar.healthCheck`](./values.yaml#L923) | Health check configuration for upstream cluster | [...](./values.yaml#L923) |
-| [`envoySidecar.healthCheck.healthyThreshold`](./values.yaml#L935) | Healthy threshold | `2` |
-| [`envoySidecar.healthCheck.interval`](./values.yaml#L929) | Health check interval | `"10s"` |
-| [`envoySidecar.healthCheck.timeout`](./values.yaml#L926) | Health check timeout | `"5s"` |
-| [`envoySidecar.healthCheck.unhealthyThreshold`](./values.yaml#L932) | Unhealthy threshold | `2` |
-| [`envoySidecar.image`](./values.yaml#L910) | Envoy sidecar image configuration | [...](./values.yaml#L910) |
-| [`envoySidecar.port`](./values.yaml#L916) | Port where Envoy sidecar listens | `8080` |
-| [`envoySidecar.resources`](./values.yaml#L939) | Resource limits for Envoy sidecar | [...](./values.yaml#L939) |
-| [`extraIngresses`](./values.yaml#L887) | Additional ingresses, e.g. for the dashboard | [...](./values.yaml#L887) |
-| [`ingress`](./values.yaml#L852) | Ingress | [...](./values.yaml#L852) |
-| [`ingress.annotations`](./values.yaml#L861) | Ingress annotations | `{}` |
-| [`ingress.className`](./values.yaml#L858) | Ingress class name | `""` |
-| [`ingress.enabled`](./values.yaml#L855) | Enable ingress | `false` |
-| [`ingress.hosts`](./values.yaml#L864) | Hosts | `[]` |
-| [`ingress.tls`](./values.yaml#L878) | Ingress TLS section | `[]` |
-| [`networkPolicy`](./values.yaml#L951) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L951) |
-| [`networkPolicy.allowExternal`](./values.yaml#L959) | Allow access from anywhere | `true` |
-| [`networkPolicy.allowExternalEgress`](./values.yaml#L983) | Allow the pod to access any range of port and all destinations. | `true` |
-| [`networkPolicy.enabled`](./values.yaml#L954) | Enable network policy | `true` |
-| [`networkPolicy.extraEgress`](./values.yaml#L986) | Extra egress rules | `[]` |
-| [`networkPolicy.extraIngress`](./values.yaml#L962) | Additional ingress rules | `[]` |
-| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L977) | Allow traffic from other namespaces | `[]` |
-| [`service`](./values.yaml#L832) | Service | [...](./values.yaml#L832) |
-| [`service.annotations`](./values.yaml#L841) | Service annotations | `{}` |
-| [`service.internalTrafficPolicy`](./values.yaml#L844) | Service internal traffic policy | `"Cluster"` |
-| [`service.port`](./values.yaml#L838) | Service port — see also `config.port` | `5000` |
-| [`service.trafficDistribution`](./values.yaml#L847) | Service [traffic distribution policy](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution) | `nil` |
-| [`service.type`](./values.yaml#L835) | Service type | `"ClusterIP"` |
+| [`envoySidecar`](./values.yaml#L905) | Envoy sidecar for consistent hashing by document ID | [...](./values.yaml#L905) |
+| [`envoySidecar.adminPort`](./values.yaml#L921) | Admin port for Envoy | `9901` |
+| [`envoySidecar.enabled`](./values.yaml#L908) | Enable Envoy sidecar for consistent hashing | `false` |
+| [`envoySidecar.healthCheck`](./values.yaml#L925) | Health check configuration for upstream cluster | [...](./values.yaml#L925) |
+| [`envoySidecar.healthCheck.healthyThreshold`](./values.yaml#L937) | Healthy threshold | `2` |
+| [`envoySidecar.healthCheck.interval`](./values.yaml#L931) | Health check interval | `"10s"` |
+| [`envoySidecar.healthCheck.timeout`](./values.yaml#L928) | Health check timeout | `"5s"` |
+| [`envoySidecar.healthCheck.unhealthyThreshold`](./values.yaml#L934) | Unhealthy threshold | `2` |
+| [`envoySidecar.image`](./values.yaml#L912) | Envoy sidecar image configuration | [...](./values.yaml#L912) |
+| [`envoySidecar.port`](./values.yaml#L918) | Port where Envoy sidecar listens | `8080` |
+| [`envoySidecar.resources`](./values.yaml#L941) | Resource limits for Envoy sidecar | [...](./values.yaml#L941) |
+| [`extraIngresses`](./values.yaml#L889) | Additional ingresses, e.g. for the dashboard | [...](./values.yaml#L889) |
+| [`ingress`](./values.yaml#L854) | Ingress | [...](./values.yaml#L854) |
+| [`ingress.annotations`](./values.yaml#L863) | Ingress annotations | `{}` |
+| [`ingress.className`](./values.yaml#L860) | Ingress class name | `""` |
+| [`ingress.enabled`](./values.yaml#L857) | Enable ingress | `false` |
+| [`ingress.hosts`](./values.yaml#L866) | Hosts | `[]` |
+| [`ingress.tls`](./values.yaml#L880) | Ingress TLS section | `[]` |
+| [`networkPolicy`](./values.yaml#L953) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L953) |
+| [`networkPolicy.allowExternal`](./values.yaml#L961) | Allow access from anywhere | `true` |
+| [`networkPolicy.allowExternalEgress`](./values.yaml#L985) | Allow the pod to access any range of port and all destinations. | `true` |
+| [`networkPolicy.enabled`](./values.yaml#L956) | Enable network policy | `true` |
+| [`networkPolicy.extraEgress`](./values.yaml#L988) | Extra egress rules | `[]` |
+| [`networkPolicy.extraIngress`](./values.yaml#L964) | Additional ingress rules | `[]` |
+| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L979) | Allow traffic from other namespaces | `[]` |
+| [`service`](./values.yaml#L834) | Service | [...](./values.yaml#L834) |
+| [`service.annotations`](./values.yaml#L843) | Service annotations | `{}` |
+| [`service.internalTrafficPolicy`](./values.yaml#L846) | Service internal traffic policy | `"Cluster"` |
+| [`service.port`](./values.yaml#L840) | Service port — see also `config.port` | `5000` |
+| [`service.trafficDistribution`](./values.yaml#L849) | Service [traffic distribution policy](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution) | `nil` |
+| [`service.type`](./values.yaml#L837) | Service type | `"ClusterIP"` |
 
 ### Observability
 
@@ -494,50 +494,50 @@ Note:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`lifecycle`](./values.yaml#L1046) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
-| [`livenessProbe`](./values.yaml#L1016) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1016) |
-| [`readinessProbe`](./values.yaml#L1029) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1029) |
-| [`startupProbe`](./values.yaml#L1003) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1003) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L1042) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
+| [`lifecycle`](./values.yaml#L1048) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
+| [`livenessProbe`](./values.yaml#L1018) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1018) |
+| [`readinessProbe`](./values.yaml#L1031) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1031) |
+| [`startupProbe`](./values.yaml#L1005) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1005) |
+| [`terminationGracePeriodSeconds`](./values.yaml#L1044) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
 
 ### Scheduling
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`affinity`](./values.yaml#L1135) | Node affinity | `{}` |
-| [`autoscaling`](./values.yaml#L1054) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L1054) |
-| [`nodeSelector`](./values.yaml#L1132) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
-| [`persistence`](./values.yaml#L1104) | Persistent storage settings for StatefulSet pods. Only used when `workloadType` is `StatefulSet`. | [...](./values.yaml#L1104) |
-| [`persistence.accessModes`](./values.yaml#L1110) | PVC access modes | `["ReadWriteOnce"]` |
-| [`persistence.annotations`](./values.yaml#L1120) | Annotations for each PVC | `{}` |
-| [`persistence.mountPath`](./values.yaml#L1117) | Mount path inside the container | `"/data"` |
-| [`persistence.size`](./values.yaml#L1114) | PVC storage size | `"10Gi"` |
-| [`persistence.storageClassName`](./values.yaml#L1107) | Storage class for PVCs. Empty string uses cluster default. | `""` |
-| [`podDisruptionBudget`](./values.yaml#L1125) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1125) |
-| [`podManagementPolicy`](./values.yaml#L1098) | Pod management policy for StatefulSet: `OrderedReady` or `Parallel`. Only used when `workloadType` is `StatefulSet`. | `"OrderedReady"` |
-| [`priorityClassName`](./values.yaml#L1144) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
-| [`replicaCount`](./values.yaml#L1079) | Number of replicas | `1` |
-| [`resources`](./values.yaml#L1076) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
-| [`schedulerName`](./values.yaml#L1147) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
-| [`tolerations`](./values.yaml#L1138) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
-| [`topologySpreadConstraints`](./values.yaml#L1141) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
-| [`updateStrategy`](./values.yaml#L1082) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
-| [`workloadType`](./values.yaml#L1093) | Workload type: `Deployment` or `StatefulSet`. When `StatefulSet`, persistent storage is provisioned per pod via volumeClaimTemplates. **Note:** Switching an existing release from Deployment to StatefulSet requires deleting the existing Deployment first, as Kubernetes cannot change a resource kind in-place. | `"Deployment"` |
+| [`affinity`](./values.yaml#L1137) | Node affinity | `{}` |
+| [`autoscaling`](./values.yaml#L1056) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L1056) |
+| [`nodeSelector`](./values.yaml#L1134) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| [`persistence`](./values.yaml#L1106) | Persistent storage settings for StatefulSet pods. Only used when `workloadType` is `StatefulSet`. | [...](./values.yaml#L1106) |
+| [`persistence.accessModes`](./values.yaml#L1112) | PVC access modes | `["ReadWriteOnce"]` |
+| [`persistence.annotations`](./values.yaml#L1122) | Annotations for each PVC | `{}` |
+| [`persistence.mountPath`](./values.yaml#L1119) | Mount path inside the container | `"/data"` |
+| [`persistence.size`](./values.yaml#L1116) | PVC storage size | `"10Gi"` |
+| [`persistence.storageClassName`](./values.yaml#L1109) | Storage class for PVCs. Empty string uses cluster default. | `""` |
+| [`podDisruptionBudget`](./values.yaml#L1127) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1127) |
+| [`podManagementPolicy`](./values.yaml#L1100) | Pod management policy for StatefulSet: `OrderedReady` or `Parallel`. Only used when `workloadType` is `StatefulSet`. | `"OrderedReady"` |
+| [`priorityClassName`](./values.yaml#L1146) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
+| [`replicaCount`](./values.yaml#L1081) | Number of replicas | `1` |
+| [`resources`](./values.yaml#L1078) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
+| [`schedulerName`](./values.yaml#L1149) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
+| [`tolerations`](./values.yaml#L1140) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
+| [`topologySpreadConstraints`](./values.yaml#L1143) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
+| [`updateStrategy`](./values.yaml#L1084) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
+| [`workloadType`](./values.yaml#L1095) | Workload type: `Deployment` or `StatefulSet`. When `StatefulSet`, persistent storage is provisioned per pod via volumeClaimTemplates. **Note:** Switching an existing release from Deployment to StatefulSet requires deleting the existing Deployment first, as Kubernetes cannot change a resource kind in-place. | `"Deployment"` |
 
 ### Storage resource definitions
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`cloudNativePG`](./values.yaml#L1152) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1152) |
-| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1187) | Cluster annotations | `{}` |
-| [`cloudNativePG.clusterLabels`](./values.yaml#L1184) | Cluster labels | `{}` |
-| [`cloudNativePG.clusterName`](./values.yaml#L1164) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
-| [`cloudNativePG.clusterSpec`](./values.yaml#L1168) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1168) |
-| [`cloudNativePG.enabled`](./values.yaml#L1155) | Enable CloudNativePG resources | `false` |
-| [`cloudNativePG.networkPolicy`](./values.yaml#L1196) | Network policy to allow access to the cluster | `{"enabled":true}` |
-| [`cloudNativePG.operatorNamespace`](./values.yaml#L1158) | CloudNativePG operator namespace | `"cnpg-system"` |
-| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1161) | CloudNativePG operator release name | `"cloudnative-pg"` |
-| [`cloudNativePG.superuserSecret`](./values.yaml#L1190) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
+| [`cloudNativePG`](./values.yaml#L1154) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1154) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1189) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L1186) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterName`](./values.yaml#L1166) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L1170) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1170) |
+| [`cloudNativePG.enabled`](./values.yaml#L1157) | Enable CloudNativePG resources | `false` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L1198) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.operatorNamespace`](./values.yaml#L1160) | CloudNativePG operator namespace | `"cnpg-system"` |
+| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1163) | CloudNativePG operator release name | `"cloudnative-pg"` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L1192) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
 
 ### Other Values
 
@@ -547,7 +547,7 @@ Note:
 | [`config.hoard.binaryCopyThreshold`](./values.yaml#L139) | `HOARD_BINARY_COPY_THRESHOLD` — internal parameter, do not change unless explicitly recommended by Nutrient support. | `2` |
 | [`config.http2SharedRendering.checkinTimeoutMilliseconds`](./values.yaml#L150) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKIN_TIMEOUT` — document processing daemon checkin timeout. Do not change unless explicitly recommended by Nutrient support. | `0` |
 | [`config.http2SharedRendering.checkoutTimeoutMilliseconds`](./values.yaml#L153) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKOUT_TIMEOUT` — document processing daemon checkout timeout. Do not change unless explicitly recommended by Nutrient support. | `5000` |
-| [`revisionHistoryLimit`](./values.yaml#L1086) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
+| [`revisionHistoryLimit`](./values.yaml#L1088) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
 
 ## Contribution
 
