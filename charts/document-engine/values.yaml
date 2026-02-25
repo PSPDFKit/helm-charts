@@ -1085,6 +1085,40 @@ updateStrategy:
 # -- [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
 revisionHistoryLimit: 10
 
+# -- Workload type: `Deployment` or `StatefulSet`.
+# When `StatefulSet`, persistent storage is provisioned per pod via volumeClaimTemplates.
+# **Note:** Switching an existing release from Deployment to StatefulSet requires
+# deleting the existing Deployment first, as Kubernetes cannot change a resource kind in-place.
+# @section -- G. Scheduling
+workloadType: Deployment  # @schema enum: [Deployment, StatefulSet]
+
+# -- Pod management policy for StatefulSet: `OrderedReady` or `Parallel`.
+# Only used when `workloadType` is `StatefulSet`.
+# @section -- G. Scheduling
+podManagementPolicy: OrderedReady  # @schema enum: [OrderedReady, Parallel]
+
+# -- (object) Persistent storage settings for StatefulSet pods.
+# Only used when `workloadType` is `StatefulSet`.
+# @section -- G. Scheduling
+# @notationType -- reference
+persistence:
+  # -- Storage class for PVCs. Empty string uses cluster default.
+  # @section -- G. Scheduling
+  storageClassName: ""
+  # -- PVC access modes
+  # @section -- G. Scheduling
+  accessModes:
+    - ReadWriteOnce
+  # -- PVC storage size
+  # @section -- G. Scheduling
+  size: 10Gi
+  # -- Mount path inside the container
+  # @section -- G. Scheduling
+  mountPath: /data
+  # -- Annotations for each PVC
+  # @section -- G. Scheduling
+  annotations: {}
+
 # -- (object) [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
 # @section -- G. Scheduling
 # @notationType -- reference

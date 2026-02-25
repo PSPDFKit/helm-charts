@@ -217,3 +217,80 @@ CloudNativePG
 {{- define "document-engine.storage.cloudNativePG.superuser-secret.name" -}}
 {{- include "document-engine.storage.cloudNativePG.cluster.name" . }}-superuser
 {{- end -}}
+
+{{/*
+Whether the workload type is StatefulSet
+*/}}
+{{- define "document-engine.isStatefulSet" -}}
+  {{- if eq .Values.workloadType "StatefulSet" -}}
+    {{- true -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Pod scheduling: nodeSelector, affinity, tolerations, priorityClassName, topologySpread, schedulerName
+*/}}
+{{- define "document-engine.scheduling" -}}
+{{- with .Values.nodeSelector }}
+nodeSelector:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.affinity }}
+affinity:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- with .Values.tolerations }}
+tolerations:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- if .Values.priorityClassName }}
+priorityClassName: {{ .Values.priorityClassName | quote }}
+{{- end }}
+{{- with .Values.topologySpreadConstraints }}
+topologySpreadConstraints:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- if .Values.schedulerName }}
+schedulerName: {{ .Values.schedulerName | quote }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Custom certificate trust volume definitions
+*/}}
+{{- define "document-engine.certificateTrust.customCertificates.volumes" -}}
+{{- with .Values.certificateTrust.customCertificates }}
+{{-   range $trustSource := . }}
+- name: custom-trust-{{ $trustSource.name }}
+{{-     if $trustSource.configMap }}
+  configMap:
+    name: {{ $trustSource.configMap.name }}
+    items:
+      - key: {{ $trustSource.configMap.key }}
+        path: {{ $trustSource.path }}
+{{-     else if $trustSource.secret }}
+  secret:
+    secretName: {{ $trustSource.secret.name }}
+    items:
+      - key: {{ $trustSource.secret.key }}
+        path: {{ $trustSource.path }}
+{{-     else }}
+{{-       fail "Expecting ConfigMap or Secret for a certificate trust" }}
+{{-     end }}
+{{-   end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Custom certificate trust volume mounts
+*/}}
+{{- define "document-engine.certificateTrust.customCertificates.volumeMounts" -}}
+{{- with .Values.certificateTrust.customCertificates }}
+{{-   range $trustSource := . }}
+- name: custom-trust-{{ $trustSource.name }}
+  mountPath: /certificate-stores-custom/{{ $trustSource.path }}
+  subPath: {{ $trustSource.path }}
+  readOnly: true
+{{-   end }}
+{{- end }}
+{{- end -}}

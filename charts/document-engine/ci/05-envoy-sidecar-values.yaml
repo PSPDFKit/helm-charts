@@ -1,4 +1,10 @@
 # Minimal test for Envoy sidecar consistent hashing
+workloadType: StatefulSet
+persistence:
+  storageClassName: standard
+  size: 5Gi
+  mountPath: /data
+
 envoySidecar:
   enabled: true
 

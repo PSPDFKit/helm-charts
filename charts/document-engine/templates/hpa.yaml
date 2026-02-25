@@ -12,7 +12,7 @@ metadata:
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
-    kind: Deployment
+    kind: {{ if (include "document-engine.isStatefulSet" .) }}StatefulSet{{ else }}Deployment{{ end }}
     name: {{ include "document-engine.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}

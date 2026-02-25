@@ -1,4 +1,5 @@
-{{- if (eq (include "document-engine.envoySidecar.enabled" . ) "true" ) -}}
+{{- if or (eq (include "document-engine.envoySidecar.enabled" . ) "true")
+          (include "document-engine.isStatefulSet" .) -}}
 apiVersion: v1
 kind: Service
 metadata:

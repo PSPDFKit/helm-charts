@@ -9,6 +9,7 @@
   * Clustering is enabled
   * Prometheus endpoint and related resources are enabled
   * Cleanup job is created
+  * StatefulSet workload type with persistent volume claims
 * `03-cnpg-s3-redis-values.yaml`
   * PostgreSQL
   * MinIO as S3 asset storage backend through MinIO operator
@@ -22,5 +23,6 @@
   * Envoy admin endpoint exposed for metrics
   * Network policy enabled to test Envoy port access
   * Headless service for pod discovery
+  * StatefulSet workload type with persistent volume claims
 * `10-env-variables-values.yaml`
   * Very blunt environment variables setting, an easy migration from Docker compose

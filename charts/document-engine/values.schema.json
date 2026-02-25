@@ -1206,8 +1206,36 @@
     "podLabels": {
       "type": "object"
     },
+    "podManagementPolicy": {
+      "type": "string",
+      "enum": ["OrderedReady", "Parallel"],
+      "default": "OrderedReady"
+    },
     "podSecurityContext": {
       "type": "object"
+    },
+    "persistence": {
+      "type": "object",
+      "properties": {
+        "storageClassName": {
+          "type": "string"
+        },
+        "accessModes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "size": {
+          "type": "string"
+        },
+        "mountPath": {
+          "type": "string"
+        },
+        "annotations": {
+          "type": "object"
+        }
+      }
     },
     "priorityClassName": {
       "type": "string"
@@ -1368,6 +1396,11 @@
           "type": "string"
         }
       }
+    },
+    "workloadType": {
+      "type": "string",
+      "enum": ["Deployment", "StatefulSet"],
+      "default": "Deployment"
     }
   }
 }
