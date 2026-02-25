@@ -1202,6 +1202,9 @@
           "type": "string",
           "pattern": "^/srv/pspdfkit/assets/cache$"
         },
+        "selectorLabels": {
+          "type": "object"
+        },
         "size": {
           "type": "string"
         },
