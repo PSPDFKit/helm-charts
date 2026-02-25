@@ -116,7 +116,7 @@ Functions {
   * [PostgreSQL](#postgresql)
   * [Object storage](#object-storage)
   * [Rendering cache](#rendering-cache)
-* [Persistence](#persistence)
+  * [Persistent local cache](#persistent-local-cache)
 * [Integrations](#integrations)
   * [AWS ALB](#aws-alb-integration)
   * [CloudNativePG operator](#cloudnativepg-operator)
@@ -191,9 +191,10 @@ Public cloud vendors offer managed services (e.g., Amazon ElastiCache),
 but there are also well known open source alternatives for Redis clusters operations, 
 e.g., [Redis operator](https://ot-container-kit.github.io/redis-operator/guide/).
 
-## Persistence
+## Persistenct local cache
 
-It is possible to improve "warm up" time of restarted and new Document Engine pods by enabling persistent local cache. 
+It is possible to improve "warm up" time of restarted and new Document Engine pods by enabling [persistent local cache](#persistence). 
+Note that the size of the volumes (`persistence.size`) must be larger than the local cache size limit (`assetStorage.localCacheSizeMegabytes`).
 
 ## Integrations
 
