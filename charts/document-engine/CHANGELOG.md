@@ -210,13 +210,13 @@
 * `workloadType` to choose between `Deployment` (default) and `StatefulSet` with persistent storage via `volumeClaimTemplates`
 * `podManagementPolicy` for StatefulSet pod management (`OrderedReady` or `Parallel`)
 * `persistence` configuration block (`storageClassName`, `accessModes`, `size`, `mountPath`, `annotations`) for StatefulSet persistent volumes
-* Extracted pod template into `_pod-template.tpl` shared by both workload types
-* Reusable helpers for scheduling and certificate trust, reducing duplication in migration job
 
 ### Changed
 
 * Headless service is now also created when `workloadType` is `StatefulSet`
 * HPA dynamically targets `StatefulSet` or `Deployment` based on `workloadType`
+* Extracted pod template into `_pod-template.tpl` shared by both workload types
+* Reusable helpers for scheduling and certificate trust, reducing duplication in migration job
 
 ## 7.6.1 (2026-02-24)
 
