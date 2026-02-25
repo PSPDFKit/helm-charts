@@ -518,7 +518,7 @@ persistence:
   size: 10Gi
   # -- Mount path inside the container
   # @section -- 08. Persistence
-  mountPath: /srv/pspdfkit/assets/cache
+  mountPath: /srv/pspdfkit/assets/cache  # @schema pattern:^/srv/pspdfkit/assets/cache$
   # -- Annotations for each PVC
   # @section -- 08. Persistence
   annotations: {}

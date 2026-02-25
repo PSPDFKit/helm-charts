@@ -1199,7 +1199,8 @@
           "type": "object"
         },
         "mountPath": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^/srv/pspdfkit/assets/cache$"
         },
         "size": {
           "type": "string"

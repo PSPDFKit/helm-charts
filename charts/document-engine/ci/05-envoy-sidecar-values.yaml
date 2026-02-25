@@ -2,8 +2,7 @@
 workloadType: StatefulSet
 persistence:
   storageClassName: standard
-  size: 5Gi
-  mountPath: /data
+  size: 1Gi
 
 envoySidecar:
   enabled: true
