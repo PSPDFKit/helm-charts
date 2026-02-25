@@ -102,14 +102,7 @@ spec:
             {{- with .Values.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-            {{- with .Values.certificateTrust.customCertificates }}
-            {{-   range $trustSource := . }}
-            - name: custom-trust-{{ $trustSource.name }}
-              mountPath: /certificate-stores-custom/{{ $trustSource.path }}
-              subPath: {{ $trustSource.path }}
-              readOnly: true
-            {{-   end }}
-            {{- end }}
+            {{- include "document-engine.certificateTrust.customCertificates.volumeMounts" . | nindent 12 }}
           {{- end }}
       {{- if .Values.sidecars }}
         {{ toYaml .Values.sidecars | nindent 8 }}
@@ -120,37 +113,7 @@ spec:
         {{- with .Values.extraVolumes }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
-        {{- with .Values.certificateTrust.customCertificates }}
-        {{-   range $trustSource := . }}
-        - name: custom-trust-{{ $trustSource.name }}
-        {{-     if $trustSource.configMap }}
-          configMap:
-            name: {{ $trustSource.configMap.name }}
-            items:
-              - key: {{ $trustSource.configMap.key }}
-                path: {{ $trustSource.path }}
-        {{-     else if $trustSource.secret }}
-          secret:
-            secretName: {{ $trustSource.secret.name }}
-            items:
-              - key: {{ $trustSource.secret.key }}
-                path: {{ $trustSource.path }}
-        {{-     else }}
-        {{-       fail "Expecting ConfigMap or Secret for a certificate trust" }}
-        {{-     end }}
-        {{-   end }}
-        {{- end }}
+        {{- include "document-engine.certificateTrust.customCertificates.volumes" . | nindent 8 }}
       {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      {{- include "document-engine.scheduling" . | nindent 6 }}
 {{- end }}

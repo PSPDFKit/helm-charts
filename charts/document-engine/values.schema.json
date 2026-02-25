@@ -1186,6 +1186,30 @@
         }
       }
     },
+    "persistence": {
+      "type": "object",
+      "properties": {
+        "accessModes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "mountPath": {
+          "type": "string",
+          "pattern": "^/srv/pspdfkit/assets/cache$"
+        },
+        "size": {
+          "type": "string"
+        },
+        "storageClassName": {
+          "type": "string"
+        }
+      }
+    },
     "podAnnotations": {
       "type": "object"
     },
@@ -1205,6 +1229,13 @@
     },
     "podLabels": {
       "type": "object"
+    },
+    "podManagementPolicy": {
+      "type": "string",
+      "enum": [
+        "OrderedReady",
+        "Parallel"
+      ]
     },
     "podSecurityContext": {
       "type": "object"
@@ -1368,6 +1399,13 @@
           "type": "string"
         }
       }
+    },
+    "workloadType": {
+      "type": "string",
+      "enum": [
+        "Deployment",
+        "StatefulSet"
+      ]
     }
   }
 }

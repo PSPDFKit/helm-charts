@@ -1,3 +1,9 @@
+workloadType: StatefulSet
+persistence:
+  storageClassName: standard
+  size: 1Gi
+podManagementPolicy: Parallel
+
 apiAuth:
   apiToken: secretThatIsNotSoSecret
   secretKeyBase: verySecretStringToNeverBeUsedInProduction
