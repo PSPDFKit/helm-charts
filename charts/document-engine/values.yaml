@@ -508,7 +508,7 @@ podManagementPolicy: OrderedReady  # @schema enum: [OrderedReady, Parallel]
 persistence:
   # -- Storage class for PVCs. Empty string uses cluster default.
   # @section -- 08. Persistence
-  storageClassName: default
+  storageClassName: standard
   # -- PVC access modes
   # @section -- 08. Persistence
   accessModes:

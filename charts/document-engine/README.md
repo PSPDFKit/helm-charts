@@ -360,7 +360,7 @@ Note:
 | [`persistence.mountPath`](./values.yaml#L521) | Mount path inside the container | `"/srv/pspdfkit/assets/cache"` |
 | [`persistence.selectorLabels`](./values.yaml#L527) | Selector labels for PVCs | `{}` |
 | [`persistence.size`](./values.yaml#L518) | PVC storage size | `"10Gi"` |
-| [`persistence.storageClassName`](./values.yaml#L511) | Storage class for PVCs. Empty string uses cluster default. | `"default"` |
+| [`persistence.storageClassName`](./values.yaml#L511) | Storage class for PVCs. Empty string uses cluster default. | `"standard"` |
 | [`podManagementPolicy`](./values.yaml#L502) | Pod management policy for StatefulSet: `OrderedReady` or `Parallel`. Only used when `workloadType` is `StatefulSet`. | `"OrderedReady"` |
 | [`workloadType`](./values.yaml#L497) | Workload type: `Deployment` or `StatefulSet`. When `StatefulSet`, persistent storage is provisioned per pod via volumeClaimTemplates. **Note:** Switching an existing release from Deployment to StatefulSet requires deleting the existing Deployment first, as Kubernetes cannot change a resource kind in-place. | `"Deployment"` |
 
