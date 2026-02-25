@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 7.6.1](https://img.shields.io/badge/Version-7.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
+![Version: 8.0.0](https://img.shields.io/badge/Version-8.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -504,32 +504,40 @@ Note:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`affinity`](./values.yaml#L1101) | Node affinity | `{}` |
+| [`affinity`](./values.yaml#L1135) | Node affinity | `{}` |
 | [`autoscaling`](./values.yaml#L1054) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L1054) |
-| [`nodeSelector`](./values.yaml#L1098) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
-| [`podDisruptionBudget`](./values.yaml#L1091) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1091) |
-| [`priorityClassName`](./values.yaml#L1110) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
+| [`nodeSelector`](./values.yaml#L1132) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| [`persistence`](./values.yaml#L1104) | Persistent storage settings for StatefulSet pods. Only used when `workloadType` is `StatefulSet`. | [...](./values.yaml#L1104) |
+| [`persistence.accessModes`](./values.yaml#L1110) | PVC access modes | `["ReadWriteOnce"]` |
+| [`persistence.annotations`](./values.yaml#L1120) | Annotations for each PVC | `{}` |
+| [`persistence.mountPath`](./values.yaml#L1117) | Mount path inside the container | `"/data"` |
+| [`persistence.size`](./values.yaml#L1114) | PVC storage size | `"10Gi"` |
+| [`persistence.storageClassName`](./values.yaml#L1107) | Storage class for PVCs. Empty string uses cluster default. | `""` |
+| [`podDisruptionBudget`](./values.yaml#L1125) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1125) |
+| [`podManagementPolicy`](./values.yaml#L1098) | Pod management policy for StatefulSet: `OrderedReady` or `Parallel`. Only used when `workloadType` is `StatefulSet`. | `"OrderedReady"` |
+| [`priorityClassName`](./values.yaml#L1144) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
 | [`replicaCount`](./values.yaml#L1079) | Number of replicas | `1` |
 | [`resources`](./values.yaml#L1076) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
-| [`schedulerName`](./values.yaml#L1113) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
-| [`tolerations`](./values.yaml#L1104) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
-| [`topologySpreadConstraints`](./values.yaml#L1107) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
+| [`schedulerName`](./values.yaml#L1147) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
+| [`tolerations`](./values.yaml#L1138) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
+| [`topologySpreadConstraints`](./values.yaml#L1141) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
 | [`updateStrategy`](./values.yaml#L1082) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
+| [`workloadType`](./values.yaml#L1093) | Workload type: `Deployment` or `StatefulSet`. When `StatefulSet`, persistent storage is provisioned per pod via volumeClaimTemplates. **Note:** Switching an existing release from Deployment to StatefulSet requires deleting the existing Deployment first, as Kubernetes cannot change a resource kind in-place. | `"Deployment"` |
 
 ### Storage resource definitions
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`cloudNativePG`](./values.yaml#L1118) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1118) |
-| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1153) | Cluster annotations | `{}` |
-| [`cloudNativePG.clusterLabels`](./values.yaml#L1150) | Cluster labels | `{}` |
-| [`cloudNativePG.clusterName`](./values.yaml#L1130) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
-| [`cloudNativePG.clusterSpec`](./values.yaml#L1134) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1134) |
-| [`cloudNativePG.enabled`](./values.yaml#L1121) | Enable CloudNativePG resources | `false` |
-| [`cloudNativePG.networkPolicy`](./values.yaml#L1162) | Network policy to allow access to the cluster | `{"enabled":true}` |
-| [`cloudNativePG.operatorNamespace`](./values.yaml#L1124) | CloudNativePG operator namespace | `"cnpg-system"` |
-| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1127) | CloudNativePG operator release name | `"cloudnative-pg"` |
-| [`cloudNativePG.superuserSecret`](./values.yaml#L1156) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
+| [`cloudNativePG`](./values.yaml#L1152) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1152) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1187) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L1184) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterName`](./values.yaml#L1164) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L1168) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1168) |
+| [`cloudNativePG.enabled`](./values.yaml#L1155) | Enable CloudNativePG resources | `false` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L1196) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.operatorNamespace`](./values.yaml#L1158) | CloudNativePG operator namespace | `"cnpg-system"` |
+| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1161) | CloudNativePG operator release name | `"cloudnative-pg"` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L1190) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
 
 ### Other Values
 
