@@ -357,7 +357,7 @@ Note:
 | [`persistence`](./values.yaml#L508) | Persistent storage settings for StatefulSet pods. Only used when `workloadType` is `StatefulSet`. | [...](./values.yaml#L508) |
 | [`persistence.accessModes`](./values.yaml#L514) | PVC access modes | `["ReadWriteOnce"]` |
 | [`persistence.annotations`](./values.yaml#L524) | Annotations for each PVC | `{}` |
-| [`persistence.mountPath`](./values.yaml#L521) | Mount path inside the container | `"/srv/pspdfkit/assets/cache"` |
+| [`persistence.mountPath`](./values.yaml#L521) | Mount path inside the container | `"/srv/pspdfkit/assets"` |
 | [`persistence.selectorLabels`](./values.yaml#L527) | Selector labels for PVCs | `{}` |
 | [`persistence.size`](./values.yaml#L518) | PVC storage size | `"10Gi"` |
 | [`persistence.storageClassName`](./values.yaml#L511) | Storage class for PVCs. Empty string uses cluster default. | `"standard"` |
