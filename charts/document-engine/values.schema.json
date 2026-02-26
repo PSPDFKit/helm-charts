@@ -1223,10 +1223,16 @@
           "type": "boolean"
         },
         "maxUnavailable": {
-          "type": "string"
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "minAvailable": {
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         }
       }
     },
