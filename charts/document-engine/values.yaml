@@ -1128,9 +1128,9 @@ revisionHistoryLimit: 10
 # @section -- G. Scheduling
 # @notationType -- reference
 podDisruptionBudget:
-  create: false
-  minAvailable: 1
-  maxUnavailable: ""
+  create: true
+  minAvailable: 1  # @schema type: integer, null
+  maxUnavailable:  # @schema type: integer, null
 
 # -- [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
 # @section -- G. Scheduling
