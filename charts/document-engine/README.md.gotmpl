@@ -193,7 +193,7 @@ e.g., [Redis operator](https://ot-container-kit.github.io/redis-operator/guide/)
 
 ## Persistent local cache
 
-It is possible to improve "warm up" time of restarted and new Document Engine pods by enabling [persistent local cache](#persistence). 
+It is possible to improve "warm up" time of restarted and new Document Engine pods by enabling [statefulness](#statefulness). 
 Note that the size of the volumes (`persistence.size`) must be larger than the local cache size limit (`assetStorage.localCacheSizeMegabytes`).
 
 ## Integrations

@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 8.0.5](https://img.shields.io/badge/Version-8.0.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
+![Version: 8.0.6](https://img.shields.io/badge/Version-8.0.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -23,7 +23,7 @@ Document Engine is a backend software for processing documents and powering auto
   * [Database](#database)
   * [Document lifecycle](#document-lifecycle)
   * [Asset storage](#asset-storage)
-  * [Persistence](#persistence)
+  * [Statefulness](#statefulness)
   * [Digital signatures](#digital-signatures)
   * [Document conversion](#document-conversion)
   * [Clustering](#clustering)
@@ -109,7 +109,7 @@ e.g., [Redis operator](https://ot-container-kit.github.io/redis-operator/guide/)
 
 ## Persistent local cache
 
-It is possible to improve "warm up" time of restarted and new Document Engine pods by enabling [persistent local cache](#persistence).
+It is possible to improve "warm up" time of restarted and new Document Engine pods by enabling [statefulness](#statefulness).
 Note that the size of the volumes (`persistence.size`) must be larger than the local cache size limit (`assetStorage.localCacheSizeMegabytes`).
 
 ## Integrations
@@ -350,7 +350,7 @@ Note:
 | [`assetStorage.s3.bucket`](./values.yaml#L380) | `ASSET_STORAGE_S3_BUCKET` | `"document-engine-assets"` |
 | [`assetStorage.s3.region`](./values.yaml#L383) | `ASSET_STORAGE_S3_REGION` | `"us-east-1"` |
 
-### Persistence
+### Statefulness
 
 | Key | Description | Default |
 |-----|-------------|---------|
