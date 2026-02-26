@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 8.0.2](https://img.shields.io/badge/Version-8.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
+![Version: 8.0.3](https://img.shields.io/badge/Version-8.0.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -357,7 +357,7 @@ Note:
 | [`persistence`](./values.yaml#L508) | Persistent storage settings for StatefulSet pods. Only used when `workloadType` is `StatefulSet`. | [...](./values.yaml#L508) |
 | [`persistence.accessModes`](./values.yaml#L514) | PVC access modes | `["ReadWriteOnce"]` |
 | [`persistence.annotations`](./values.yaml#L524) | Annotations for each PVC | `{}` |
-| [`persistence.mountPath`](./values.yaml#L521) | Mount path inside the container | `"/srv/pspdfkit/assets"` |
+| [`persistence.mountPath`](./values.yaml#L521) | Mount path inside the container | `"/srv/pspdfkit/assets/cache"` |
 | [`persistence.selectorLabels`](./values.yaml#L527) | Selector labels for PVCs | `{}` |
 | [`persistence.size`](./values.yaml#L518) | PVC storage size | `"10Gi"` |
 | [`persistence.storageClassName`](./values.yaml#L511) | Storage class for PVCs. Empty string uses cluster default. | `"standard"` |
@@ -425,7 +425,7 @@ Note:
 | [`image`](./values.yaml#L796) | Image settings | [...](./values.yaml#L796) |
 | [`imagePullSecrets`](./values.yaml#L803) | Pull secrets | `[]` |
 | [`initContainers`](./values.yaml#L851) | Init containers | `[]` |
-| [`podSecurityContext`](./values.yaml#L822) | Pod security context | `{}` |
+| [`podSecurityContext`](./values.yaml#L822) | Pod security context | `{"fsGroup":999}` |
 | [`securityContext`](./values.yaml#L826) | Security context | `{}` |
 | [`serviceAccount`](./values.yaml#L815) | ServiceAccount | [...](./values.yaml#L815) |
 | [`sidecars`](./values.yaml#L848) | Additional containers | `[]` |

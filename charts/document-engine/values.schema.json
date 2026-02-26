@@ -1200,7 +1200,7 @@
         },
         "mountPath": {
           "type": "string",
-          "pattern": "^/srv/pspdfkit/assets$"
+          "pattern": "^/srv/pspdfkit/assets/cache$"
         },
         "selectorLabels": {
           "type": "object"
@@ -1241,7 +1241,14 @@
       ]
     },
     "podSecurityContext": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "fsGroup": {
+          "type": "integer",
+          "maximum": 999,
+          "minimum": 999
+        }
+      }
     },
     "priorityClassName": {
       "type": "string"
