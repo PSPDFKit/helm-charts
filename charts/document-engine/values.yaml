@@ -518,7 +518,7 @@ persistence:
   size: 10Gi
   # -- Mount path inside the container
   # @section -- 08. Persistence
-  mountPath: /srv/pspdfkit/assets  # @schema pattern:^/srv/pspdfkit/assets$
+  mountPath: /srv/pspdfkit/assets/cache  # @schema pattern:^/srv/pspdfkit/assets/cache$
   # -- Annotations for each PVC
   # @section -- 08. Persistence
   annotations: {}
@@ -819,8 +819,8 @@ serviceAccount:
 
 # -- Pod security context
 # @section -- B. Environment
-podSecurityContext: {}
-# fsGroup: 2000
+podSecurityContext:
+  fsGroup: 999  # @schema minimum: 999; maximum: 999
 # -- Security context
 # @section -- B. Environment
 securityContext: {}
