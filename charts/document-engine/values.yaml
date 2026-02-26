@@ -493,37 +493,37 @@ assetStorage:
 # When `StatefulSet`, persistent storage is provisioned per pod via volumeClaimTemplates.
 # **Note:** Switching an existing release from Deployment to StatefulSet requires
 # deleting the existing Deployment first, as Kubernetes cannot change a resource kind in-place.
-# @section -- 08. Persistence
+# @section -- 08. Statefulness
 workloadType: Deployment  # @schema enum: [Deployment, StatefulSet]
 
 # -- Pod management policy for StatefulSet: `OrderedReady` or `Parallel`.
 # Only used when `workloadType` is `StatefulSet`.
-# @section -- 08. Persistence
+# @section -- 08. Statefulness
 podManagementPolicy: OrderedReady  # @schema enum: [OrderedReady, Parallel]
 
 # -- (object) Persistent storage settings for StatefulSet pods.
 # Only used when `workloadType` is `StatefulSet`.
-# @section -- 08. Persistence
+# @section -- 08. Statefulness
 # @notationType -- reference
 persistence:
   # -- Storage class for PVCs. Empty string uses cluster default.
-  # @section -- 08. Persistence
+  # @section -- 08. Statefulness
   storageClassName: standard
   # -- PVC access modes
-  # @section -- 08. Persistence
+  # @section -- 08. Statefulness
   accessModes:
     - ReadWriteOnce
   # -- PVC storage size
-  # @section -- 08. Persistence
+  # @section -- 08. Statefulness
   size: 10Gi
   # -- Mount path inside the container
-  # @section -- 08. Persistence
+  # @section -- 08. Statefulness
   mountPath: /srv/pspdfkit/assets/cache  # @schema pattern:^/srv/pspdfkit/assets/cache$
   # -- Annotations for each PVC
-  # @section -- 08. Persistence
+  # @section -- 08. Statefulness
   annotations: {}
   # -- Selector labels for PVCs
-  # @section -- 08. Persistence
+  # @section -- 08. Statefulness
   selectorLabels: {}
 
 # -- (object) Signing service parameters
