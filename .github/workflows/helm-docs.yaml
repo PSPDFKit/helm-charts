@@ -1,13 +1,16 @@
 name: Documentation
 
-on: 
+on:
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
