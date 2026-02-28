@@ -17,5 +17,16 @@ database:
 assetStorage:
   backendType: built-in
 
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+  hosts:
+    - paths:
+        - path: /
+          pathType: ImplementationSpecific
+
 cloudNativePG:
   enabled: true

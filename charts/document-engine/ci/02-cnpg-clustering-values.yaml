@@ -44,5 +44,27 @@ observability:
     grafanaDashboard:
       enabled: true
 
+gateway:
+  enabled: true
+  annotations:
+    test-annotation: value
+  labels:
+    test-label: value
+  parentRefs:
+    - name: my-gateway
+      namespace: gateway-infra
+      sectionName: https
+  hostnames:
+    - document-engine.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
 cloudNativePG:
   enabled: true
