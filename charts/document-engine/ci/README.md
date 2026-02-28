@@ -24,5 +24,8 @@
   * Network policy enabled to test Envoy port access
   * Headless service for pod discovery
   * StatefulSet workload type with persistent volume claims
+* `06-gateway-values.yaml`
+  * Gateway API HTTPRoute configuration
+  * Additional `extraHTTPRoutes` coverage
 * `10-env-variables-values.yaml`
   * Very blunt environment variables setting, an easy migration from Docker compose

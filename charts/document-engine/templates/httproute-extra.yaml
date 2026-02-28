@@ -29,21 +29,11 @@ spec:
   rules:
     {{- if $routeConfig.rules }}
     {{- range $routeConfig.rules }}
-    - {{- with .matches }}
-      matches:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .filters }}
-      filters:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      backendRefs:
-        {{- if .backendRefs }}
-        {{- toYaml .backendRefs | nindent 8 }}
-        {{- else }}
-        - name: {{ $fullName }}
-          port: {{ $svcPort }}
-        {{- end }}
+    {{- $rule := deepCopy . }}
+    {{- if not (hasKey $rule "backendRefs") }}
+    {{- $_ := set $rule "backendRefs" (list (dict "name" $fullName "port" $svcPort)) }}
+    {{- end }}
+    {{- toYaml (list $rule) | nindent 4 }}
     {{- end }}
     {{- else }}
     - backendRefs:
