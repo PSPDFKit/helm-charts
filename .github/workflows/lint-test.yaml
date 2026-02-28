@@ -50,6 +50,14 @@ jobs:
         if: steps.list-changed.outputs.changed == 'true'
         uses: helm/kind-action@v1
 
+      - name: Install Gateway API CRDs
+        if: steps.list-changed.outputs.changed == 'true'
+        run: |
+          kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/standard-install.yaml
+          kubectl wait --for=condition=Established crd/gatewayclasses.gateway.networking.k8s.io --timeout=120s
+          kubectl wait --for=condition=Established crd/gateways.gateway.networking.k8s.io --timeout=120s
+          kubectl wait --for=condition=Established crd/httproutes.gateway.networking.k8s.io --timeout=120s
+
       - name: Install CloudNativePG
         if: steps.list-changed.outputs.changed == 'true'
         run: |
