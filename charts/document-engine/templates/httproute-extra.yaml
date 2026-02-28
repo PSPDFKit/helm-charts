@@ -1,0 +1,54 @@
+{{- $fullName := include "document-engine.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- $labels := include "document-engine.labels" . -}}
+{{- range $routeName, $routeConfig := .Values.extraHTTPRoutes }}
+{{- if $routeConfig.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ $fullName }}-{{ $routeName }}
+  labels:
+    {{- $labels | nindent 4 }}
+    {{- with $routeConfig.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with $routeConfig.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with $routeConfig.parentRefs }}
+  parentRefs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $routeConfig.hostnames }}
+  hostnames:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    {{- if $routeConfig.rules }}
+    {{- range $routeConfig.rules }}
+    - {{- with .matches }}
+      matches:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .filters }}
+      filters:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      backendRefs:
+        {{- if .backendRefs }}
+        {{- toYaml .backendRefs | nindent 8 }}
+        {{- else }}
+        - name: {{ $fullName }}
+          port: {{ $svcPort }}
+        {{- end }}
+    {{- end }}
+    {{- else }}
+    - backendRefs:
+        - name: {{ $fullName }}
+          port: {{ $svcPort }}
+    {{- end }}
+{{- end }}
+{{- end }}

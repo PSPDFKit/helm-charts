@@ -110,12 +110,12 @@ config:
     aiServices:  # @schema required:true; additionalProperties: false
       chat:  # @schema required:true
         provider:  # @schema required:true
-          name: 'azure'  # @schema pattern:^(openai|azure|bedrock|openai-compat)$
+          name: 'azure'  # @schema pattern:^(openai|azure|bedrock|openai-compat|mock)$
           instanceName: 'ci-testing'
         model: 'gpt4o-mini'
       textEmbeddings:  # @schema required:true
         provider:  # @schema required:true
-          name: 'azure'  # @schema pattern:^(openai|azure|bedrock|openai-compat)$
+          name: 'azure'  # @schema pattern:^(openai|azure|bedrock|openai-compat|mock)$
           instanceName: 'ci-testing'
         model: 'text-embedding-3-small'
   # -- (object) Credentials for AI service providers.
@@ -445,6 +445,39 @@ ingress:
     #   hosts:
     #     - chart-example.local
 
+# -- (object) Kubernetes Gateway API [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/)
+# @section -- C. Networking
+# @notationType -- reference
+gateway:
+  # -- Enable Gateway API HTTPRoute
+  # @section -- C. Networking
+  enabled: false
+  # -- Annotations for the HTTPRoute resource
+  # @section -- C. Networking
+  annotations: {}
+  # -- Labels for the HTTPRoute resource
+  # @section -- C. Networking
+  labels: {}
+  # -- References to Gateway resources this route attaches to.
+  # See [ParentRef](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference)
+  # @section -- C. Networking
+  parentRefs: []
+    # - name: my-gateway
+    #   namespace: default
+    #   sectionName: https
+  # -- Hostnames for the HTTPRoute
+  # @section -- C. Networking
+  hostnames: []
+    # - example.com
+  # -- HTTP routing rules.
+  # When empty, a default catch-all rule routing to the chart service is created.
+  # When rules are provided without `backendRefs`, the chart service is used as the default backend.
+  # @section -- C. Networking
+  rules: []
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
 
 # https://editor.networkpolicy.io/
 # -- (object) [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)

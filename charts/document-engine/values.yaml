@@ -936,6 +936,60 @@ extraIngresses: {}
   #           pathType: Prefix
   #   tls: []
 
+# -- (object) Kubernetes Gateway API [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/)
+# @section -- C. Networking
+# @notationType -- reference
+gateway:
+  # -- Enable Gateway API HTTPRoute
+  # @section -- C. Networking
+  enabled: false
+  # -- Annotations for the HTTPRoute resource
+  # @section -- C. Networking
+  annotations: {}
+  # -- Labels for the HTTPRoute resource
+  # @section -- C. Networking
+  labels: {}
+  # -- References to Gateway resources this route attaches to.
+  # See [ParentRef](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference)
+  # @section -- C. Networking
+  parentRefs: []
+    # - name: my-gateway
+    #   namespace: default
+    #   sectionName: https
+  # -- Hostnames for the HTTPRoute
+  # @section -- C. Networking
+  hostnames: []
+    # - example.com
+  # -- HTTP routing rules.
+  # When empty, a default catch-all rule routing to the chart service is created.
+  # When rules are provided without `backendRefs`, the chart service is used as the default backend.
+  # @section -- C. Networking
+  rules: []
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
+
+# -- (object) Additional HTTPRoutes, e.g. for the dashboard
+# @section -- C. Networking
+# @default -- none
+# @notationType -- reference
+extraHTTPRoutes: {}
+  # dashboard:
+  #   enabled: false
+  #   annotations: {}
+  #   labels: {}
+  #   parentRefs:
+  #     - name: my-gateway
+  #       namespace: default
+  #   hostnames:
+  #     - dashboard.example.com
+  #   rules:
+  #     - matches:
+  #         - path:
+  #             type: PathPrefix
+  #             value: /dashboard
+
 # -- (object) Envoy sidecar for consistent hashing by document ID
 # @section -- C. Networking
 # @notationType -- reference

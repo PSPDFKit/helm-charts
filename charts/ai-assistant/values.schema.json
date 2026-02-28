@@ -545,6 +545,29 @@
     "fullnameOverride": {
       "type": "string"
     },
+    "gateway": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "hostnames": {
+          "type": "array"
+        },
+        "labels": {
+          "type": "object"
+        },
+        "parentRefs": {
+          "type": "array"
+        },
+        "rules": {
+          "type": "array"
+        }
+      }
+    },
     "image": {
       "type": "object",
       "properties": {

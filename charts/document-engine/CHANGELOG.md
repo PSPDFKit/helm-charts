@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.1.0 (2026-02-28)](#810-2026-02-28)
+    - [Added](#added)
   - [8.0.7 (2026-02-27)](#807-2026-02-27)
     - [Fixed](#fixed)
   - [8.0.6 (2026-02-26)](#806-2026-02-26)
@@ -213,6 +215,13 @@
     - [Changed](#changed-60)
   - [2.0.0](#200)
     - [Changed](#changed-61)
+
+## 8.1.0 (2026-02-28)
+
+### Added
+
+* Gateway API support: `gateway` values for creating [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) resources as an alternative to Ingress
+* `extraHTTPRoutes` for additional HTTPRoute resources (analogous to `extraIngresses`)
 
 ## 8.0.7 (2026-02-27)
 

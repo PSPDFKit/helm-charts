@@ -119,6 +119,7 @@ Functions {
   * [Persistent local cache](#persistent-local-cache)
 * [Integrations](#integrations)
   * [AWS ALB](#aws-alb-integration)
+  * [Gateway API](#gateway-api)
   * [CloudNativePG operator](#cloudnativepg-operator)
 * [Values](#values)
 {{- template "chart.valuesTableOfContents" . }}
@@ -243,6 +244,50 @@ ingress:
       routing.http.response.server.enabled=false,
       routing.http.response.strict_transport_security.header_value=max-age=31536000;includeSubDomains;preload;
 ```
+
+### Gateway API
+
+As an alternative to Ingress, the chart supports the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) by creating [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) resources.
+
+The Gateway API separates infrastructure concerns (the `Gateway` resource, managed by platform teams) from application routing (the `HTTPRoute`, managed by this chart). Both `ingress` and `gateway` can be enabled simultaneously.
+
+> [!NOTE]
+> TLS termination in Gateway API is configured on the Gateway Listener, not on the HTTPRoute. This differs from Ingress, where TLS is specified per-Ingress resource.
+
+Basic configuration:
+
+```yaml
+gateway:
+  enabled: true
+  parentRefs:
+    - name: my-gateway
+      namespace: gateway-infra
+      sectionName: https
+  hostnames:
+    - document-engine.example.com
+```
+
+With custom routing rules:
+
+```yaml
+gateway:
+  enabled: true
+  parentRefs:
+    - name: my-gateway
+  hostnames:
+    - document-engine.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /dashboard
+```
+
+Additional HTTPRoutes (e.g., for the dashboard) can be created using `extraHTTPRoutes`, following the same pattern as `extraIngresses`.
 
 ### CloudNativePG operator
 

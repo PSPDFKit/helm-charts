@@ -1,0 +1,42 @@
+apiAuth:
+  apiToken: secret
+  secretKeyBase: verySecretStringToNeverBeUsedInProduction
+
+database:
+  enabled: false
+
+gateway:
+  enabled: true
+  annotations:
+    test-annotation: value
+  labels:
+    test-label: value
+  parentRefs:
+    - name: my-gateway
+      namespace: gateway-infra
+      sectionName: https
+  hostnames:
+    - document-engine.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+extraHTTPRoutes:
+  dashboard:
+    enabled: true
+    parentRefs:
+      - name: my-gateway
+        namespace: gateway-infra
+    hostnames:
+      - dashboard.example.com
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /dashboard
