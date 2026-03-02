@@ -270,10 +270,16 @@
           "type": "integer"
         },
         "targetCPUUtilizationPercentage": {
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "targetMemoryUtilizationPercentage": {
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         }
       }
     },

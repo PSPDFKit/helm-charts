@@ -36,6 +36,7 @@
 ### Changed
 
 * Document Engine dependency updated
+* Autoscaling: no dewfault CPU and memory target values, for more flexibility
 
 ## 1.0.0 (2026-01-20)
 
