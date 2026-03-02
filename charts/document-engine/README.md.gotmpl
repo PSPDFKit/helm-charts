@@ -313,9 +313,9 @@ Additional HTTPRoutes (e.g., for the dashboard) can be created using `gateway.ex
 
 #### AWS ALB Controller with Gateway API
 
-The [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/) supports Gateway API since [v2.12](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/gateway/). This allows managing ALBs through `Gateway` and `HTTPRoute` resources instead of Ingress annotations.
+The [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/) supports Gateway API and allows managing ALBs through `Gateway` and `HTTPRoute` resources instead of Ingress annotations. Refer to the [Current Support](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/gateway/#current-support) matrix for minimum supported versions (for L7 `HTTPRoute`, use a release with `ALBGatewayAPI` support).
 
-A `LoadBalancerConfiguration` CRD (from the ALB controller) is used to pass load balancer settings that were previously specified as Ingress annotations. Refer to the [ALB Gateway API documentation](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/gateway/) for full details.
+A `LoadBalancerConfiguration` CRD (from the ALB controller) is used to pass load balancer settings that were previously specified as Ingress annotations. For HTTPS listeners, configure certificates in `LoadBalancerConfiguration.spec.listenerConfigurations` (for example via `defaultCertificate`) instead of `certificateRefs` on the Gateway listener. Refer to the [ALB Gateway API documentation](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/gateway/) for full details.
 
 ```yaml
 config:
@@ -343,12 +343,6 @@ gateway:
       - name: https
         protocol: HTTPS
         port: 443
-        tls:
-          mode: Terminate
-          certificateRefs:
-            - name: my-acm-cert
-              group: ""
-              kind: Secret
     infrastructure:
       parametersRef:
         group: gateway.k8s.aws
@@ -365,6 +359,9 @@ metadata:
   name: document-engine-lbconfig
 spec:
   scheme: internet-facing
+  listenerConfigurations:
+    - protocolPort: HTTPS:443
+      defaultCertificate: arn:aws:acm:us-east-1:123456789012:certificate/abc-123
   loadBalancerAttributes:
     - key: routing.http2.enabled
       value: "true"

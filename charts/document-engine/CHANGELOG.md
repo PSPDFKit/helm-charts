@@ -220,8 +220,10 @@
 
 ### Added
 
-* Gateway API support: `gateway` values for creating [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) resources as an alternative to Ingress
-* `extraHTTPRoutes` for additional HTTPRoute resources (analogous to `extraIngresses`)
+* Gateway API support under `gateway.*` for creating [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) resources as an alternative to Ingress
+* Optional chart-managed [Gateway](https://gateway-api.sigs.k8s.io/api-types/gateway/) resource via `gateway.gateway.*`
+* `gateway.extraHTTPRoutes` for additional HTTPRoute resources (analogous to `extraIngresses`)
+* HTTPRoute `parentRefs` auto-wiring to the chart-managed Gateway when `gateway.gateway.enabled=true` and `gateway.parentRefs` is empty
 
 ## 8.0.7 (2026-02-27)
 
