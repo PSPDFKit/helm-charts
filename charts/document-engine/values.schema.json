@@ -894,9 +894,6 @@
     "extraEnvs": {
       "type": "array"
     },
-    "extraHTTPRoutes": {
-      "type": "object"
-    },
     "extraIngresses": {
       "type": "object"
     },
@@ -917,6 +914,35 @@
         },
         "enabled": {
           "type": "boolean"
+        },
+        "extraHTTPRoutes": {
+          "type": "object"
+        },
+        "gateway": {
+          "type": "object",
+          "properties": {
+            "addresses": {
+              "type": "array"
+            },
+            "annotations": {
+              "type": "object"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "gatewayClassName": {
+              "type": "string"
+            },
+            "infrastructure": {
+              "type": "object"
+            },
+            "labels": {
+              "type": "object"
+            },
+            "listeners": {
+              "type": "array"
+            }
+          }
         },
         "hostnames": {
           "type": "array"

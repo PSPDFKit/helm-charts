@@ -15,7 +15,7 @@
   * PostgreSQL
   * MinIO as S3 asset storage backend through MinIO operator
   * Redis for rendering cache as a sidecar container
-  * `extraHTTPRoutes` for dashboard
+  * `gateway.extraHTTPRoutes` for dashboard
 * `04-cnpg-azure-values.yaml`
   * PostgreSQL
   * Azurite to test Azure Blob storage

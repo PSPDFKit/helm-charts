@@ -445,7 +445,7 @@ ingress:
     #   hosts:
     #     - chart-example.local
 
-# -- (object) Kubernetes Gateway API [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/)
+# -- (object) Kubernetes [Gateway API](https://gateway-api.sigs.k8s.io/)
 # @section -- C. Networking
 # @notationType -- reference
 gateway:
@@ -459,6 +459,7 @@ gateway:
   # @section -- C. Networking
   labels: {}
   # -- References to Gateway resources this route attaches to.
+  # When `gateway.gateway.enabled` is true and this is empty, the chart-created Gateway is used automatically.
   # See [ParentRef](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference)
   # @section -- C. Networking
   parentRefs: []
@@ -478,6 +479,45 @@ gateway:
     #     - path:
     #         type: PathPrefix
     #         value: /
+  # -- (object) Optional [Gateway](https://gateway-api.sigs.k8s.io/api-types/gateway/) resource.
+  # Most clusters have Gateways managed by platform teams;
+  # enable this only if you want the chart to create one.
+  # @section -- C. Networking
+  # @notationType -- reference
+  gateway:
+    # -- Create a Gateway resource
+    # @section -- C. Networking
+    enabled: false
+    # -- GatewayClass name (e.g. `amazon-vpc-lattice`, or a custom ALB class)
+    # @section -- C. Networking
+    gatewayClassName: ""
+    # -- Annotations for the Gateway resource
+    # @section -- C. Networking
+    annotations: {}
+    # -- Labels for the Gateway resource
+    # @section -- C. Networking
+    labels: {}
+    # -- Gateway [listeners](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.Listener)
+    # @section -- C. Networking
+    listeners: []
+      # - name: https
+      #   protocol: HTTPS
+      #   port: 443
+      #   tls:
+      #     mode: Terminate
+      #     certificateRefs:
+      #       - name: my-cert
+    # -- [Infrastructure](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.GatewayInfrastructure)
+    # parameters, e.g. `parametersRef` for AWS Load Balancer Controller
+    # @section -- C. Networking
+    infrastructure: {}
+      # parametersRef:
+      #   group: gateway.k8s.aws
+      #   kind: LoadBalancerConfiguration
+      #   name: my-lbconfig
+    # -- Gateway [addresses](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.GatewayAddress)
+    # @section -- C. Networking
+    addresses: []
 
 # https://editor.networkpolicy.io/
 # -- (object) [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)

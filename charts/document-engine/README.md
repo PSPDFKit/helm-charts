@@ -15,6 +15,8 @@ Document Engine is a backend software for processing documents and powering auto
 * [Integrations](#integrations)
   * [AWS ALB](#aws-alb-integration)
   * [Gateway API](#gateway-api)
+    * [AWS ALB Controller with Gateway API](#aws-alb-controller-with-gateway-api)
+    * [AWS VPC Lattice](#aws-vpc-lattice)
   * [CloudNativePG operator](#cloudnativepg-operator)
 * [Values](#values)
   * [Document Engine License](#document-engine-license)
@@ -163,14 +165,14 @@ ingress:
 
 ### Gateway API
 
-As an alternative to Ingress, the chart supports the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) by creating [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) resources.
+As an alternative to Ingress, the chart supports the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) by creating [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) and optionally [Gateway](https://gateway-api.sigs.k8s.io/api-types/gateway/) resources.
 
-The Gateway API separates infrastructure concerns (the `Gateway` resource, managed by platform teams) from application routing (the `HTTPRoute`, managed by this chart). Both `ingress` and `gateway` can be enabled simultaneously.
+The Gateway API separates infrastructure concerns (the `Gateway` resource, typically managed by platform teams) from application routing (the `HTTPRoute`, managed by this chart). Both `ingress` and `gateway` can be enabled simultaneously.
 
 > [!NOTE]
 > TLS termination in Gateway API is configured on the Gateway Listener, not on the HTTPRoute. This differs from Ingress, where TLS is specified per-Ingress resource.
 
-Basic configuration:
+Basic configuration (referencing an existing Gateway):
 
 ```yaml
 gateway:
@@ -203,7 +205,124 @@ gateway:
             value: /dashboard
 ```
 
-Additional HTTPRoutes (e.g., for the dashboard) can be created using `extraHTTPRoutes`, following the same pattern as `extraIngresses`.
+Creating a Gateway resource alongside the HTTPRoute (the HTTPRoute auto-wires `parentRefs` when `gateway.gateway.enabled` is true and `parentRefs` is empty):
+
+```yaml
+gateway:
+  enabled: true
+  hostnames:
+    - document-engine.example.com
+  gateway:
+    enabled: true
+    gatewayClassName: my-gateway-class
+    listeners:
+      - name: https
+        protocol: HTTPS
+        port: 443
+        tls:
+          mode: Terminate
+          certificateRefs:
+            - name: my-cert
+```
+
+Additional HTTPRoutes (e.g., for the dashboard) can be created using `gateway.extraHTTPRoutes`, following the same pattern as `extraIngresses`.
+
+#### AWS ALB Controller with Gateway API
+
+The [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/) supports Gateway API since [v2.12](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/gateway/). This allows managing ALBs through `Gateway` and `HTTPRoute` resources instead of Ingress annotations.
+
+A `LoadBalancerConfiguration` CRD (from the ALB controller) is used to pass load balancer settings that were previously specified as Ingress annotations. Refer to the [ALB Gateway API documentation](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/gateway/) for full details.
+
+```yaml
+config:
+  requestTimeoutSeconds: 180
+  urlFetchTimeoutSeconds: 120
+  generationTimeoutSeconds: 120
+  workerTimeoutSeconds: 150
+  readAnnotationBatchTimeoutSeconds: 120
+terminationGracePeriodSeconds: 330
+lifecycle:
+  preStop:
+    sleep:
+      seconds: 305
+gateway:
+  enabled: true
+  hostnames:
+    - document-engine.example.com
+  gateway:
+    enabled: true
+    gatewayClassName: amazon-alb
+    listeners:
+      - name: http
+        protocol: HTTP
+        port: 80
+      - name: https
+        protocol: HTTPS
+        port: 443
+        tls:
+          mode: Terminate
+          certificateRefs:
+            - name: my-acm-cert
+              group: ""
+              kind: Secret
+    infrastructure:
+      parametersRef:
+        group: gateway.k8s.aws
+        kind: LoadBalancerConfiguration
+        name: document-engine-lbconfig
+```
+
+The `LoadBalancerConfiguration` resource is not managed by this chart and must be created separately:
+
+```yaml
+apiVersion: gateway.k8s.aws/v1beta1
+kind: LoadBalancerConfiguration
+metadata:
+  name: document-engine-lbconfig
+spec:
+  scheme: internet-facing
+  loadBalancerAttributes:
+    - key: routing.http2.enabled
+      value: "true"
+    - key: idle_timeout.timeout_seconds
+      value: "600"
+  targetGroupAttributes:
+    - key: deregistration_delay.timeout_seconds
+      value: "300"
+    - key: load_balancing.algorithm.type
+      value: least_outstanding_requests
+  healthCheck:
+    path: /healthcheck
+    intervalSeconds: 5
+    timeoutSeconds: 2
+    healthyThresholdCount: 2
+    successCodes: "200"
+```
+
+#### AWS VPC Lattice
+
+[Amazon VPC Lattice](https://aws.amazon.com/vpc/lattice/) is a service-to-service networking layer. The [AWS Gateway API Controller](https://www.gateway-api-controller.eks.aws.dev/) implements Gateway API for VPC Lattice, using `amazon-vpc-lattice` as the GatewayClass.
+
+> [!NOTE]
+> VPC Lattice operates at the service network level and does not provision traditional load balancers. Some Gateway API fields (e.g., `addresses`, `infrastructure`) are not applicable.
+
+```yaml
+gateway:
+  enabled: true
+  hostnames:
+    - document-engine.example.com
+  gateway:
+    enabled: true
+    gatewayClassName: amazon-vpc-lattice
+    listeners:
+      - name: https
+        protocol: HTTPS
+        port: 443
+        tls:
+          mode: Terminate
+          options:
+            application-networking.k8s.aws/certificate-arn: arn:aws:acm:us-east-1:123456789012:certificate/abc-123
+```
 
 ### CloudNativePG operator
 
@@ -490,39 +609,47 @@ Note:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`envoySidecar`](./values.yaml#L996) | Envoy sidecar for consistent hashing by document ID | [...](./values.yaml#L996) |
-| [`envoySidecar.adminPort`](./values.yaml#L1012) | Admin port for Envoy | `9901` |
-| [`envoySidecar.enabled`](./values.yaml#L999) | Enable Envoy sidecar for consistent hashing | `false` |
-| [`envoySidecar.healthCheck`](./values.yaml#L1016) | Health check configuration for upstream cluster | [...](./values.yaml#L1016) |
-| [`envoySidecar.healthCheck.healthyThreshold`](./values.yaml#L1028) | Healthy threshold | `2` |
-| [`envoySidecar.healthCheck.interval`](./values.yaml#L1022) | Health check interval | `"10s"` |
-| [`envoySidecar.healthCheck.timeout`](./values.yaml#L1019) | Health check timeout | `"5s"` |
-| [`envoySidecar.healthCheck.unhealthyThreshold`](./values.yaml#L1025) | Unhealthy threshold | `2` |
-| [`envoySidecar.image`](./values.yaml#L1003) | Envoy sidecar image configuration | [...](./values.yaml#L1003) |
-| [`envoySidecar.port`](./values.yaml#L1009) | Port where Envoy sidecar listens | `8080` |
-| [`envoySidecar.resources`](./values.yaml#L1032) | Resource limits for Envoy sidecar | [...](./values.yaml#L1032) |
-| [`extraHTTPRoutes`](./values.yaml#L977) | Additional HTTPRoutes, e.g. for the dashboard | [...](./values.yaml#L977) |
+| [`envoySidecar`](./values.yaml#L1035) | Envoy sidecar for consistent hashing by document ID | [...](./values.yaml#L1035) |
+| [`envoySidecar.adminPort`](./values.yaml#L1051) | Admin port for Envoy | `9901` |
+| [`envoySidecar.enabled`](./values.yaml#L1038) | Enable Envoy sidecar for consistent hashing | `false` |
+| [`envoySidecar.healthCheck`](./values.yaml#L1055) | Health check configuration for upstream cluster | [...](./values.yaml#L1055) |
+| [`envoySidecar.healthCheck.healthyThreshold`](./values.yaml#L1067) | Healthy threshold | `2` |
+| [`envoySidecar.healthCheck.interval`](./values.yaml#L1061) | Health check interval | `"10s"` |
+| [`envoySidecar.healthCheck.timeout`](./values.yaml#L1058) | Health check timeout | `"5s"` |
+| [`envoySidecar.healthCheck.unhealthyThreshold`](./values.yaml#L1064) | Unhealthy threshold | `2` |
+| [`envoySidecar.image`](./values.yaml#L1042) | Envoy sidecar image configuration | [...](./values.yaml#L1042) |
+| [`envoySidecar.port`](./values.yaml#L1048) | Port where Envoy sidecar listens | `8080` |
+| [`envoySidecar.resources`](./values.yaml#L1071) | Resource limits for Envoy sidecar | [...](./values.yaml#L1071) |
 | [`extraIngresses`](./values.yaml#L926) | Additional ingresses, e.g. for the dashboard | [...](./values.yaml#L926) |
-| [`gateway`](./values.yaml#L942) | Kubernetes Gateway API [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) | [...](./values.yaml#L942) |
+| [`gateway`](./values.yaml#L942) | Kubernetes [Gateway API](https://gateway-api.sigs.k8s.io/) | [...](./values.yaml#L942) |
 | [`gateway.annotations`](./values.yaml#L948) | Annotations for the HTTPRoute resource | `{}` |
 | [`gateway.enabled`](./values.yaml#L945) | Enable Gateway API HTTPRoute | `false` |
-| [`gateway.hostnames`](./values.yaml#L961) | Hostnames for the HTTPRoute | `[]` |
+| [`gateway.extraHTTPRoutes`](./values.yaml#L1016) | Additional HTTPRoutes, e.g. for the dashboard | [...](./values.yaml#L1016) |
+| [`gateway.gateway`](./values.yaml#L978) | Optional [Gateway](https://gateway-api.sigs.k8s.io/api-types/gateway/) resource. Most clusters have Gateways managed by platform teams; enable this only if you want the chart to create one. | [...](./values.yaml#L978) |
+| [`gateway.gateway.addresses`](./values.yaml#L1011) | Gateway [addresses](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.GatewayAddress) | `[]` |
+| [`gateway.gateway.annotations`](./values.yaml#L987) | Annotations for the Gateway resource | `{}` |
+| [`gateway.gateway.enabled`](./values.yaml#L981) | Create a Gateway resource | `false` |
+| [`gateway.gateway.gatewayClassName`](./values.yaml#L984) | GatewayClass name (e.g. `amazon-vpc-lattice`, or a custom ALB class) | `""` |
+| [`gateway.gateway.infrastructure`](./values.yaml#L1004) | [Infrastructure](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.GatewayInfrastructure) parameters, e.g. `parametersRef` for AWS Load Balancer Controller | `{}` |
+| [`gateway.gateway.labels`](./values.yaml#L990) | Labels for the Gateway resource | `{}` |
+| [`gateway.gateway.listeners`](./values.yaml#L993) | Gateway [listeners](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.Listener) | `[]` |
+| [`gateway.hostnames`](./values.yaml#L962) | Hostnames for the HTTPRoute | `[]` |
 | [`gateway.labels`](./values.yaml#L951) | Labels for the HTTPRoute resource | `{}` |
-| [`gateway.parentRefs`](./values.yaml#L955) | References to Gateway resources this route attaches to. See [ParentRef](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference) | `[]` |
-| [`gateway.rules`](./values.yaml#L967) | HTTP routing rules. When empty, a default catch-all rule routing to the chart service is created. When rules are provided without `backendRefs`, the chart service is used as the default backend. | `[]` |
+| [`gateway.parentRefs`](./values.yaml#L956) | References to Gateway resources this route attaches to. When `gateway.gateway.enabled` is true and this is empty, the chart-created Gateway is used automatically. See [ParentRef](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference) | `[]` |
+| [`gateway.rules`](./values.yaml#L968) | HTTP routing rules. When empty, a default catch-all rule routing to the chart service is created. When rules are provided without `backendRefs`, the chart service is used as the default backend. | `[]` |
 | [`ingress`](./values.yaml#L891) | Ingress | [...](./values.yaml#L891) |
 | [`ingress.annotations`](./values.yaml#L900) | Ingress annotations | `{}` |
 | [`ingress.className`](./values.yaml#L897) | Ingress class name | `""` |
 | [`ingress.enabled`](./values.yaml#L894) | Enable ingress | `false` |
 | [`ingress.hosts`](./values.yaml#L903) | Hosts | `[]` |
 | [`ingress.tls`](./values.yaml#L917) | Ingress TLS section | `[]` |
-| [`networkPolicy`](./values.yaml#L1044) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L1044) |
-| [`networkPolicy.allowExternal`](./values.yaml#L1052) | Allow access from anywhere | `true` |
-| [`networkPolicy.allowExternalEgress`](./values.yaml#L1076) | Allow the pod to access any range of port and all destinations. | `true` |
-| [`networkPolicy.enabled`](./values.yaml#L1047) | Enable network policy | `true` |
-| [`networkPolicy.extraEgress`](./values.yaml#L1079) | Extra egress rules | `[]` |
-| [`networkPolicy.extraIngress`](./values.yaml#L1055) | Additional ingress rules | `[]` |
-| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L1070) | Allow traffic from other namespaces | `[]` |
+| [`networkPolicy`](./values.yaml#L1083) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L1083) |
+| [`networkPolicy.allowExternal`](./values.yaml#L1091) | Allow access from anywhere | `true` |
+| [`networkPolicy.allowExternalEgress`](./values.yaml#L1115) | Allow the pod to access any range of port and all destinations. | `true` |
+| [`networkPolicy.enabled`](./values.yaml#L1086) | Enable network policy | `true` |
+| [`networkPolicy.extraEgress`](./values.yaml#L1118) | Extra egress rules | `[]` |
+| [`networkPolicy.extraIngress`](./values.yaml#L1094) | Additional ingress rules | `[]` |
+| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L1109) | Allow traffic from other namespaces | `[]` |
 | [`service`](./values.yaml#L871) | Service | [...](./values.yaml#L871) |
 | [`service.annotations`](./values.yaml#L880) | Service annotations | `{}` |
 | [`service.internalTrafficPolicy`](./values.yaml#L883) | Service internal traffic policy | `"Cluster"` |
@@ -568,42 +695,42 @@ Note:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`lifecycle`](./values.yaml#L1139) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
-| [`livenessProbe`](./values.yaml#L1109) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1109) |
-| [`readinessProbe`](./values.yaml#L1122) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1122) |
-| [`startupProbe`](./values.yaml#L1096) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1096) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L1135) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
+| [`lifecycle`](./values.yaml#L1178) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
+| [`livenessProbe`](./values.yaml#L1148) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1148) |
+| [`readinessProbe`](./values.yaml#L1161) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1161) |
+| [`startupProbe`](./values.yaml#L1135) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1135) |
+| [`terminationGracePeriodSeconds`](./values.yaml#L1174) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
 
 ### Scheduling
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`affinity`](./values.yaml#L1194) | Node affinity | `{}` |
-| [`autoscaling`](./values.yaml#L1147) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L1147) |
-| [`nodeSelector`](./values.yaml#L1191) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
-| [`podDisruptionBudget`](./values.yaml#L1184) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1184) |
-| [`priorityClassName`](./values.yaml#L1203) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
-| [`replicaCount`](./values.yaml#L1172) | Number of replicas | `1` |
-| [`resources`](./values.yaml#L1169) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
-| [`schedulerName`](./values.yaml#L1206) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
-| [`tolerations`](./values.yaml#L1197) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
-| [`topologySpreadConstraints`](./values.yaml#L1200) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
-| [`updateStrategy`](./values.yaml#L1175) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
+| [`affinity`](./values.yaml#L1233) | Node affinity | `{}` |
+| [`autoscaling`](./values.yaml#L1186) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L1186) |
+| [`nodeSelector`](./values.yaml#L1230) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| [`podDisruptionBudget`](./values.yaml#L1223) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L1223) |
+| [`priorityClassName`](./values.yaml#L1242) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
+| [`replicaCount`](./values.yaml#L1211) | Number of replicas | `1` |
+| [`resources`](./values.yaml#L1208) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
+| [`schedulerName`](./values.yaml#L1245) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
+| [`tolerations`](./values.yaml#L1236) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
+| [`topologySpreadConstraints`](./values.yaml#L1239) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
+| [`updateStrategy`](./values.yaml#L1214) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
 
 ### Storage resource definitions
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`cloudNativePG`](./values.yaml#L1211) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1211) |
-| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1246) | Cluster annotations | `{}` |
-| [`cloudNativePG.clusterLabels`](./values.yaml#L1243) | Cluster labels | `{}` |
-| [`cloudNativePG.clusterName`](./values.yaml#L1223) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
-| [`cloudNativePG.clusterSpec`](./values.yaml#L1227) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1227) |
-| [`cloudNativePG.enabled`](./values.yaml#L1214) | Enable CloudNativePG resources | `false` |
-| [`cloudNativePG.networkPolicy`](./values.yaml#L1255) | Network policy to allow access to the cluster | `{"enabled":true}` |
-| [`cloudNativePG.operatorNamespace`](./values.yaml#L1217) | CloudNativePG operator namespace | `"cnpg-system"` |
-| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1220) | CloudNativePG operator release name | `"cloudnative-pg"` |
-| [`cloudNativePG.superuserSecret`](./values.yaml#L1249) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
+| [`cloudNativePG`](./values.yaml#L1250) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L1250) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L1285) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L1282) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterName`](./values.yaml#L1262) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L1266) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L1266) |
+| [`cloudNativePG.enabled`](./values.yaml#L1253) | Enable CloudNativePG resources | `false` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L1294) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.operatorNamespace`](./values.yaml#L1256) | CloudNativePG operator namespace | `"cnpg-system"` |
+| [`cloudNativePG.operatorReleaseName`](./values.yaml#L1259) | CloudNativePG operator release name | `"cloudnative-pg"` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L1288) | Superuser secret to use with the cluster | `{"create":true,"password":"despair","username":"postgres"}` |
 
 ### Other Values
 
@@ -613,7 +740,7 @@ Note:
 | [`config.hoard.binaryCopyThreshold`](./values.yaml#L139) | `HOARD_BINARY_COPY_THRESHOLD` — internal parameter, do not change unless explicitly recommended by Nutrient support. | `2` |
 | [`config.http2SharedRendering.checkinTimeoutMilliseconds`](./values.yaml#L150) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKIN_TIMEOUT` — document processing daemon checkin timeout. Do not change unless explicitly recommended by Nutrient support. | `0` |
 | [`config.http2SharedRendering.checkoutTimeoutMilliseconds`](./values.yaml#L153) | `HTTP2_SHARED_RENDERING_PROCESS_CHECKOUT_TIMEOUT` — document processing daemon checkout timeout. Do not change unless explicitly recommended by Nutrient support. | `5000` |
-| [`revisionHistoryLimit`](./values.yaml#L1179) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
+| [`revisionHistoryLimit`](./values.yaml#L1218) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
 
 ## Contribution
 

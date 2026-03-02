@@ -278,26 +278,34 @@ cloudNativePG:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`gateway`](./values.yaml#L451) | Kubernetes Gateway API [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) | [...](./values.yaml#L451) |
+| [`gateway`](./values.yaml#L451) | Kubernetes [Gateway API](https://gateway-api.sigs.k8s.io/) | [...](./values.yaml#L451) |
 | [`gateway.annotations`](./values.yaml#L457) | Annotations for the HTTPRoute resource | `{}` |
 | [`gateway.enabled`](./values.yaml#L454) | Enable Gateway API HTTPRoute | `false` |
-| [`gateway.hostnames`](./values.yaml#L470) | Hostnames for the HTTPRoute | `[]` |
+| [`gateway.gateway`](./values.yaml#L487) | Optional [Gateway](https://gateway-api.sigs.k8s.io/api-types/gateway/) resource. Most clusters have Gateways managed by platform teams; enable this only if you want the chart to create one. | [...](./values.yaml#L487) |
+| [`gateway.gateway.addresses`](./values.yaml#L520) | Gateway [addresses](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.GatewayAddress) | `[]` |
+| [`gateway.gateway.annotations`](./values.yaml#L496) | Annotations for the Gateway resource | `{}` |
+| [`gateway.gateway.enabled`](./values.yaml#L490) | Create a Gateway resource | `false` |
+| [`gateway.gateway.gatewayClassName`](./values.yaml#L493) | GatewayClass name (e.g. `amazon-vpc-lattice`, or a custom ALB class) | `""` |
+| [`gateway.gateway.infrastructure`](./values.yaml#L513) | [Infrastructure](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.GatewayInfrastructure) parameters, e.g. `parametersRef` for AWS Load Balancer Controller | `{}` |
+| [`gateway.gateway.labels`](./values.yaml#L499) | Labels for the Gateway resource | `{}` |
+| [`gateway.gateway.listeners`](./values.yaml#L502) | Gateway [listeners](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.Listener) | `[]` |
+| [`gateway.hostnames`](./values.yaml#L471) | Hostnames for the HTTPRoute | `[]` |
 | [`gateway.labels`](./values.yaml#L460) | Labels for the HTTPRoute resource | `{}` |
-| [`gateway.parentRefs`](./values.yaml#L464) | References to Gateway resources this route attaches to. See [ParentRef](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference) | `[]` |
-| [`gateway.rules`](./values.yaml#L476) | HTTP routing rules. When empty, a default catch-all rule routing to the chart service is created. When rules are provided without `backendRefs`, the chart service is used as the default backend. | `[]` |
+| [`gateway.parentRefs`](./values.yaml#L465) | References to Gateway resources this route attaches to. When `gateway.gateway.enabled` is true and this is empty, the chart-created Gateway is used automatically. See [ParentRef](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.ParentReference) | `[]` |
+| [`gateway.rules`](./values.yaml#L477) | HTTP routing rules. When empty, a default catch-all rule routing to the chart service is created. When rules are provided without `backendRefs`, the chart service is used as the default backend. | `[]` |
 | [`ingress`](./values.yaml#L417) | Ingress | [...](./values.yaml#L417) |
 | [`ingress.annotations`](./values.yaml#L426) | Ingress annotations | `{}` |
 | [`ingress.className`](./values.yaml#L423) | Ingress class name | `""` |
 | [`ingress.enabled`](./values.yaml#L420) | Enable ingress | `false` |
 | [`ingress.hosts`](./values.yaml#L429) | Hosts | `[]` |
 | [`ingress.tls`](./values.yaml#L443) | Ingress TLS section | `[]` |
-| [`networkPolicy`](./values.yaml#L486) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L486) |
-| [`networkPolicy.allowExternal`](./values.yaml#L494) | Allow access from anywhere | `true` |
-| [`networkPolicy.allowExternalEgress`](./values.yaml#L518) | Allow the pod to access any range of port and all destinations. | `true` |
-| [`networkPolicy.enabled`](./values.yaml#L489) | Enable network policy | `true` |
-| [`networkPolicy.extraEgress`](./values.yaml#L521) | Extra egress rules | `[]` |
-| [`networkPolicy.extraIngress`](./values.yaml#L497) | Additional ingress rules | `[]` |
-| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L512) | Allow traffic from other namespaces | `[]` |
+| [`networkPolicy`](./values.yaml#L526) | [Network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | [...](./values.yaml#L526) |
+| [`networkPolicy.allowExternal`](./values.yaml#L534) | Allow access from anywhere | `true` |
+| [`networkPolicy.allowExternalEgress`](./values.yaml#L558) | Allow the pod to access any range of port and all destinations. | `true` |
+| [`networkPolicy.enabled`](./values.yaml#L529) | Enable network policy | `true` |
+| [`networkPolicy.extraEgress`](./values.yaml#L561) | Extra egress rules | `[]` |
+| [`networkPolicy.extraIngress`](./values.yaml#L537) | Additional ingress rules | `[]` |
+| [`networkPolicy.ingressMatchSelectorLabels`](./values.yaml#L552) | Allow traffic from other namespaces | `[]` |
 | [`service`](./values.yaml#L406) | Service | [...](./values.yaml#L406) |
 | [`service.port`](./values.yaml#L412) | Service port — see also `config.port` | `4000` |
 | [`service.type`](./values.yaml#L409) | Service type | `"ClusterIP"` |
@@ -315,55 +323,55 @@ cloudNativePG:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`lifecycle`](./values.yaml#L581) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
-| [`livenessProbe`](./values.yaml#L551) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L551) |
-| [`readinessProbe`](./values.yaml#L564) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L564) |
-| [`startupProbe`](./values.yaml#L538) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L538) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L577) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
+| [`lifecycle`](./values.yaml#L621) | [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/) | `map[]` |
+| [`livenessProbe`](./values.yaml#L591) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L591) |
+| [`readinessProbe`](./values.yaml#L604) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L604) |
+| [`startupProbe`](./values.yaml#L578) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L578) |
+| [`terminationGracePeriodSeconds`](./values.yaml#L617) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
 
 ### Scheduling
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`affinity`](./values.yaml#L633) | Node affinity | `{}` |
-| [`autoscaling`](./values.yaml#L586) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L586) |
-| [`nodeSelector`](./values.yaml#L630) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
-| [`podDisruptionBudget`](./values.yaml#L623) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L623) |
-| [`priorityClassName`](./values.yaml#L642) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
-| [`replicaCount`](./values.yaml#L611) | Number of replicas | `1` |
-| [`resources`](./values.yaml#L608) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
-| [`schedulerName`](./values.yaml#L645) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
-| [`tolerations`](./values.yaml#L636) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
-| [`topologySpreadConstraints`](./values.yaml#L639) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
-| [`updateStrategy`](./values.yaml#L614) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
+| [`affinity`](./values.yaml#L673) | Node affinity | `{}` |
+| [`autoscaling`](./values.yaml#L626) | [Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) | [...](./values.yaml#L626) |
+| [`nodeSelector`](./values.yaml#L670) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) | `{}` |
+| [`podDisruptionBudget`](./values.yaml#L663) | [Pod disruption budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) | [...](./values.yaml#L663) |
+| [`priorityClassName`](./values.yaml#L682) | [Priority classs](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) | `""` |
+| [`replicaCount`](./values.yaml#L651) | Number of replicas | `1` |
+| [`resources`](./values.yaml#L648) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) | `{}` |
+| [`schedulerName`](./values.yaml#L685) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) | `""` |
+| [`tolerations`](./values.yaml#L676) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) | `[]` |
+| [`topologySpreadConstraints`](./values.yaml#L679) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) | `[]` |
+| [`updateStrategy`](./values.yaml#L654) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) | `{"rollingUpdate":{},"type":"RollingUpdate"}` |
 
 ### Dependencies
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`document-engine`](./values.yaml#L700) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L700) |
+| [`document-engine`](./values.yaml#L740) | [Nutrient Document Engine chart](https://github.com/PSPDFKit/helm-charts/tree/master/charts/document-engine) | [...](./values.yaml#L740) |
 
 ### Storage resource definitions
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`cloudNativePG`](./values.yaml#L650) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L650) |
-| [`cloudNativePG.clusterAnnotations`](./values.yaml#L680) | Cluster annotations | `{}` |
-| [`cloudNativePG.clusterLabels`](./values.yaml#L677) | Cluster labels | `{}` |
-| [`cloudNativePG.clusterName`](./values.yaml#L662) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
-| [`cloudNativePG.clusterSpec`](./values.yaml#L666) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L666) |
-| [`cloudNativePG.documentEngineDatabase`](./values.yaml#L693) | Additional database for Document Engine | `{"enabled":false,"name":"document_engine"}` |
-| [`cloudNativePG.enabled`](./values.yaml#L653) | Enable CloudNativePG resources | `false` |
-| [`cloudNativePG.networkPolicy`](./values.yaml#L689) | Network policy to allow access to the cluster | `{"enabled":true}` |
-| [`cloudNativePG.operatorNamespace`](./values.yaml#L656) | CloudNativePG operator namespace | `"cnpg-system"` |
-| [`cloudNativePG.operatorReleaseName`](./values.yaml#L659) | CloudNativePG operator release name | `"cloudnative-pg"` |
-| [`cloudNativePG.superuserSecret`](./values.yaml#L683) | Superuser secret to use with the cluster | `{"create":true,"password":"nutrientArtificialIntelligenceAssistant","username":"postgres"}` |
+| [`cloudNativePG`](./values.yaml#L690) | [CloudNativePG](https://cloudnative-pg.io/) resources | [...](./values.yaml#L690) |
+| [`cloudNativePG.clusterAnnotations`](./values.yaml#L720) | Cluster annotations | `{}` |
+| [`cloudNativePG.clusterLabels`](./values.yaml#L717) | Cluster labels | `{}` |
+| [`cloudNativePG.clusterName`](./values.yaml#L702) | CloudNativePG custom Cluster name | `"{{ .Release.Name }}-postgres"` |
+| [`cloudNativePG.clusterSpec`](./values.yaml#L706) | CloudNativePG [cluster spec](https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec) | [...](./values.yaml#L706) |
+| [`cloudNativePG.documentEngineDatabase`](./values.yaml#L733) | Additional database for Document Engine | `{"enabled":false,"name":"document_engine"}` |
+| [`cloudNativePG.enabled`](./values.yaml#L693) | Enable CloudNativePG resources | `false` |
+| [`cloudNativePG.networkPolicy`](./values.yaml#L729) | Network policy to allow access to the cluster | `{"enabled":true}` |
+| [`cloudNativePG.operatorNamespace`](./values.yaml#L696) | CloudNativePG operator namespace | `"cnpg-system"` |
+| [`cloudNativePG.operatorReleaseName`](./values.yaml#L699) | CloudNativePG operator release name | `"cloudnative-pg"` |
+| [`cloudNativePG.superuserSecret`](./values.yaml#L723) | Superuser secret to use with the cluster | `{"create":true,"password":"nutrientArtificialIntelligenceAssistant","username":"postgres"}` |
 
 ### Other Values
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`revisionHistoryLimit`](./values.yaml#L618) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
+| [`revisionHistoryLimit`](./values.yaml#L658) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy) | `10` |
 
 ## Contribution
 
