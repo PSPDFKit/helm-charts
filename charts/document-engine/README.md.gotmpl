@@ -119,6 +119,9 @@ Functions {
   * [Persistent local cache](#persistent-local-cache)
 * [Integrations](#integrations)
   * [AWS ALB](#aws-alb-integration)
+  * [Gateway API](#gateway-api)
+    * [AWS ALB Controller with Gateway API](#aws-alb-controller-with-gateway-api)
+    * [AWS VPC Lattice](#aws-vpc-lattice)
   * [CloudNativePG operator](#cloudnativepg-operator)
 * [Values](#values)
 {{- template "chart.valuesTableOfContents" . }}
@@ -242,6 +245,164 @@ ingress:
     alb.ingress.kubernetes.io/listener-attributes.HTTPS-443: >-
       routing.http.response.server.enabled=false,
       routing.http.response.strict_transport_security.header_value=max-age=31536000;includeSubDomains;preload;
+```
+
+### Gateway API
+
+As an alternative to Ingress, the chart supports the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) by creating [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) and optionally [Gateway](https://gateway-api.sigs.k8s.io/api-types/gateway/) resources.
+
+The Gateway API separates infrastructure concerns (the `Gateway` resource, typically managed by platform teams) from application routing (the `HTTPRoute`, managed by this chart). Both `ingress` and `gateway` can be enabled simultaneously.
+
+> [!NOTE]
+> TLS termination in Gateway API is configured on the Gateway Listener, not on the HTTPRoute. This differs from Ingress, where TLS is specified per-Ingress resource.
+
+Basic configuration (referencing an existing Gateway):
+
+```yaml
+gateway:
+  enabled: true
+  parentRefs:
+    - name: my-gateway
+      namespace: gateway-infra
+      sectionName: https
+  hostnames:
+    - document-engine.example.com
+```
+
+With custom routing rules:
+
+```yaml
+gateway:
+  enabled: true
+  parentRefs:
+    - name: my-gateway
+  hostnames:
+    - document-engine.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /dashboard
+```
+
+Creating a Gateway resource alongside the HTTPRoute (the HTTPRoute auto-wires `parentRefs` when `gateway.gateway.enabled` is true and `parentRefs` is empty):
+
+```yaml
+gateway:
+  enabled: true
+  hostnames:
+    - document-engine.example.com
+  gateway:
+    enabled: true
+    gatewayClassName: my-gateway-class
+    listeners:
+      - name: https
+        protocol: HTTPS
+        port: 443
+        tls:
+          mode: Terminate
+          certificateRefs:
+            - name: my-cert
+```
+
+Additional HTTPRoutes (e.g., for the dashboard) can be created using `gateway.extraHTTPRoutes`, following the same pattern as `extraIngresses`.
+
+#### AWS ALB Controller with Gateway API
+
+The [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/) supports Gateway API and allows managing ALBs through `Gateway` and `HTTPRoute` resources instead of Ingress annotations. Refer to the [Current Support](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/gateway/#current-support) matrix for minimum supported versions (for L7 `HTTPRoute`, use a release with `ALBGatewayAPI` support).
+
+A `LoadBalancerConfiguration` CRD (from the ALB controller) is used to pass load balancer settings that were previously specified as Ingress annotations. For HTTPS listeners, configure certificates in `LoadBalancerConfiguration.spec.listenerConfigurations` (for example via `defaultCertificate`) instead of `certificateRefs` on the Gateway listener. Refer to the [ALB Gateway API documentation](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/gateway/gateway/) for full details.
+
+```yaml
+config:
+  requestTimeoutSeconds: 180
+  urlFetchTimeoutSeconds: 120
+  generationTimeoutSeconds: 120
+  workerTimeoutSeconds: 150
+  readAnnotationBatchTimeoutSeconds: 120
+terminationGracePeriodSeconds: 330
+lifecycle:
+  preStop:
+    sleep:
+      seconds: 305
+gateway:
+  enabled: true
+  hostnames:
+    - document-engine.example.com
+  gateway:
+    enabled: true
+    gatewayClassName: amazon-alb
+    listeners:
+      - name: http
+        protocol: HTTP
+        port: 80
+      - name: https
+        protocol: HTTPS
+        port: 443
+    infrastructure:
+      parametersRef:
+        group: gateway.k8s.aws
+        kind: LoadBalancerConfiguration
+        name: document-engine-lbconfig
+```
+
+The `LoadBalancerConfiguration` resource is not managed by this chart and must be created separately:
+
+```yaml
+apiVersion: gateway.k8s.aws/v1beta1
+kind: LoadBalancerConfiguration
+metadata:
+  name: document-engine-lbconfig
+spec:
+  scheme: internet-facing
+  listenerConfigurations:
+    - protocolPort: HTTPS:443
+      defaultCertificate: arn:aws:acm:us-east-1:123456789012:certificate/abc-123
+  loadBalancerAttributes:
+    - key: routing.http2.enabled
+      value: "true"
+    - key: idle_timeout.timeout_seconds
+      value: "600"
+  targetGroupAttributes:
+    - key: deregistration_delay.timeout_seconds
+      value: "300"
+    - key: load_balancing.algorithm.type
+      value: least_outstanding_requests
+  healthCheck:
+    path: /healthcheck
+    intervalSeconds: 5
+    timeoutSeconds: 2
+    healthyThresholdCount: 2
+    successCodes: "200"
+```
+
+#### AWS VPC Lattice
+
+[Amazon VPC Lattice](https://aws.amazon.com/vpc/lattice/) is a service-to-service networking layer. The [AWS Gateway API Controller](https://www.gateway-api-controller.eks.aws.dev/) implements Gateway API for VPC Lattice, using `amazon-vpc-lattice` as the GatewayClass.
+
+> [!NOTE]
+> VPC Lattice operates at the service network level and does not provision traditional load balancers. Some Gateway API fields (e.g., `addresses`, `infrastructure`) are not applicable.
+
+```yaml
+gateway:
+  enabled: true
+  hostnames:
+    - document-engine.example.com
+  gateway:
+    enabled: true
+    gatewayClassName: amazon-vpc-lattice
+    listeners:
+      - name: https
+        protocol: HTTPS
+        port: 443
+        tls:
+          mode: Terminate
+          options:
+            application-networking.k8s.aws/certificate-arn: arn:aws:acm:us-east-1:123456789012:certificate/abc-123
 ```
 
 ### CloudNativePG operator

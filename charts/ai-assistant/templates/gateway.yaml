@@ -1,0 +1,30 @@
+{{- if .Values.gateway.gateway.enabled -}}
+{{- $fullName := include "ai-assistant.fullname" . -}}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "ai-assistant.labels" . | nindent 4 }}
+    {{- with .Values.gateway.gateway.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.gateway.gateway.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  gatewayClassName: {{ .Values.gateway.gateway.gatewayClassName }}
+  {{- with .Values.gateway.gateway.listeners }}
+  listeners:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.gateway.gateway.infrastructure }}
+  infrastructure:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.gateway.gateway.addresses }}
+  addresses:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

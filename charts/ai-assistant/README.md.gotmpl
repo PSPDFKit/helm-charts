@@ -115,6 +115,7 @@ Functions {
 * [Database](#database)
   * [PostgreSQL](#postgresql)
 * [Integrations](#integrations)
+  * [Gateway API](#gateway-api)
   * [CloudNativePG operator](#cloudnativepg-operator)
 * [Values](#values)
 {{- template "chart.valuesTableOfContents" . }}
@@ -173,6 +174,28 @@ However, the chart suggests generation of PostgreSQL Cluster custom resource pro
 CloudNativePG is not the only possible solution, and we recommend to also consider [StackGres](https://stackgres.io/), [Zalando Postgres Operator](https://github.com/zalando/postgres-operator).
 
 ## Integrations
+
+### Gateway API
+
+As an alternative to Ingress, the chart supports the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) by creating [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) and optionally [Gateway](https://gateway-api.sigs.k8s.io/api-types/gateway/) resources.
+
+The Gateway API separates infrastructure concerns (the `Gateway` resource, typically managed by platform teams) from application routing (the `HTTPRoute`, managed by this chart). Both `ingress` and `gateway` can be enabled simultaneously.
+
+> [!NOTE]
+> TLS termination in Gateway API is configured on the Gateway Listener, not on the HTTPRoute. This differs from Ingress, where TLS is specified per-Ingress resource.
+
+Basic configuration:
+
+```yaml
+gateway:
+  enabled: true
+  parentRefs:
+    - name: my-gateway
+      namespace: gateway-infra
+      sectionName: https
+  hostnames:
+    - ai-assistant.example.com
+```
 
 ### CloudNativePG operator
 

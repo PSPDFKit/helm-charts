@@ -36,5 +36,16 @@ observability:
       port: 9125
       host: localhost
 
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+  hosts:
+    - paths:
+        - path: /
+          pathType: ImplementationSpecific
+
 cloudNativePG:
   enabled: true

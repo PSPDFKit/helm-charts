@@ -140,10 +140,16 @@
           "type": "integer"
         },
         "targetCPUUtilizationPercentage": {
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "targetMemoryUtilizationPercentage": {
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         }
       }
     },
@@ -544,6 +550,55 @@
     },
     "fullnameOverride": {
       "type": "string"
+    },
+    "gateway": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "gateway": {
+          "type": "object",
+          "properties": {
+            "addresses": {
+              "type": "array"
+            },
+            "annotations": {
+              "type": "object"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "gatewayClassName": {
+              "type": "string"
+            },
+            "infrastructure": {
+              "type": "object"
+            },
+            "labels": {
+              "type": "object"
+            },
+            "listeners": {
+              "type": "array"
+            }
+          }
+        },
+        "hostnames": {
+          "type": "array"
+        },
+        "labels": {
+          "type": "object"
+        },
+        "parentRefs": {
+          "type": "array"
+        },
+        "rules": {
+          "type": "array"
+        }
+      }
     },
     "image": {
       "type": "object",

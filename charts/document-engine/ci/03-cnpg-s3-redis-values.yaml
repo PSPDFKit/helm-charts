@@ -47,5 +47,20 @@ observability:
     prometheusEndpoint:
       enabled: true
 
+gateway:
+  extraHTTPRoutes:
+    dashboard:
+      enabled: true
+      parentRefs:
+        - name: my-gateway
+          namespace: gateway-infra
+      hostnames:
+        - dashboard.example.com
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /dashboard
+
 cloudNativePG:
   enabled: true
