@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [1.2.0 (2026-03-05)](#120-2026-03-05)
+    - [Changed](#changed-9)
   - [1.1.0 (2026-02-28)](#110-2026-02-28)
     - [Added](#added)
     - [Changed](#changed)
@@ -24,6 +26,12 @@
     - [Changed](#changed-8)
   - [0.0.1 (2025-05-28)](#001-2025-05-28)
     - [Added](#added-3)
+
+## 1.2.0 (2026-03-05)
+
+### Changed
+
+* [AI Assistant 2.1.0](https://www.nutrient.io/guides/ai-assistant/changelog/#2.1.0)
 
 ## 1.1.0 (2026-02-28)
 
