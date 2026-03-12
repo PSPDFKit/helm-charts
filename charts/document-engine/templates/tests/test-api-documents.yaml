@@ -44,7 +44,7 @@ data:
     echo -e "\nDeleting the test document..."
     curl --silent \
           --request DELETE \
-          --url ${URL}/api/documents?document_id=test \
+          --url ${URL}/api/documents?document_id=test-document-id-13 \
           --header "${AUTH_HEADER}"
           
     echo -e "\nChecking if the document was deleted..."

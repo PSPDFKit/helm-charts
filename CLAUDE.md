@@ -127,6 +127,22 @@ Dependency chart archives in `charts/*/charts/` are gitignored.
 - **Patch bump**: bug fixes, documentation
 - Update `CHANGELOG.md` for every version bump (used in GitHub release notes)
 
+## Pre-commit Checklist
+
+After modifying any chart, regenerate derived files before committing:
+
+1. **README.md** — run `helm-docs` whenever `values.yaml`, `Chart.yaml`, or `README.md.gotmpl` change:
+   ```bash
+   helm-docs --chart-search-root charts/document-engine
+   helm-docs --chart-search-root charts/ai-assistant
+   ```
+2. **values.schema.json** — run `helm schema` whenever `values.yaml` schema annotations change:
+   ```bash
+   cd charts/document-engine && helm schema -input values.yaml -draft 2020 -indent 2 -output values.schema.json
+   ```
+
+CI will fail if generated files are out of sync with their sources.
+
 ## Template Patterns
 
 ### Shared Helpers (`_helpers.tpl`)
