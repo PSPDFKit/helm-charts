@@ -127,6 +127,22 @@ Dependency chart archives in `charts/*/charts/` are gitignored.
 - **Patch bump**: bug fixes, documentation
 - Update `CHANGELOG.md` for every version bump (used in GitHub release notes)
 
+## Pre-commit Checklist
+
+After modifying any chart, regenerate derived files before committing:
+
+1. **README.md** — run `helm-docs` whenever `values.yaml`, `Chart.yaml`, or `README.md.gotmpl` change:
+   ```bash
+   helm-docs --chart-search-root charts/document-engine
+   helm-docs --chart-search-root charts/ai-assistant
+   ```
+2. **values.schema.json** — run `helm schema` whenever `values.yaml` schema annotations change:
+   ```bash
+   cd charts/document-engine && helm schema -input values.yaml -draft 2020 -indent 2 -output values.schema.json
+   ```
+
+CI will fail if generated files are out of sync with their sources.
+
 ## Template Patterns
 
 ### Shared Helpers (`_helpers.tpl`)
@@ -143,3 +159,9 @@ Standard helpers for names, labels, selectors plus:
 ### Schema Defaults
 
 All default values come from `values.schema.json`. Templates reference `.Values.*` directly without `| default` fallbacks.
+
+### Template Pitfalls
+
+- **YAML document separators (`---`)**: Never use `{{-` (left-trim) on the line immediately after `---`. The trim eats the newline and produces the invalid token `---apiVersion:`. Use `{{` (no dash) or leave a YAML comment between them.
+- **Go template comments in Helm**: Avoid `{{- /* ... */ }}` (trimming comment) in templates. Helm's linter can misparse the `{{-` trim prefix followed by `/*` as a broken action. Use YAML comments (`# ...`) for inline notes instead.
+- **`{{` in YAML comments**: Go's template engine processes all `{{` delimiters *before* YAML parsing, so even `# some comment {{-` will be parsed as a template action. Never use `{{` in YAML comments inside Helm templates.

@@ -4,6 +4,7 @@
 {{- range $routeName, $routeConfig := .Values.gateway.extraHTTPRoutes }}
 {{- if $routeConfig.enabled }}
 ---
+# NOTE: Do not left-trim between --- and apiVersion, it merges them into ---apiVersion:
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

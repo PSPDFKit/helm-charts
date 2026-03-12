@@ -152,10 +152,10 @@ config:
     # Do not change unless explicitly recommended by Nutrient support.
     checkoutTimeoutMilliseconds: 5000
   # -- `TRUSTED_PROXIES` — comma-separated list of IP addresses or IP address ranges of trusted proxies.
-  # Setting to `default` will use the default will use private IP ranges.
+  # Setting to `default` will use private IP ranges.
   # @section -- 03. Configuration options
   trustedProxies: default
-  # -- Proxy settings, `HTTP_PROXY` amd `HTTPS_PROXY`
+  # -- Proxy settings, `HTTP_PROXY` and `HTTPS_PROXY`
   # @section -- 03. Configuration options
   proxy:
     http: ""
@@ -579,11 +579,11 @@ documentSigningService:
 # @section -- 09. Document conversion
 # @notationType -- none
 documentConversion:
-  # -- Maximal spreadhseet content height in millimetres (`SPREADSHEET_MAX_CONTENT_HEIGHT_MM`).
+  # -- Maximal spreadsheet content height in millimetres (`SPREADSHEET_MAX_CONTENT_HEIGHT_MM`).
   # Defaults to `0` for unlimited height.
   # @section -- 09. Document conversion
   spreadsheetMaxContentHeightMm: 0
-  # -- Maximal spreadhseet content width in millimetres (`SPREADSHEET_MAX_CONTENT_WIDTH_MM`).
+  # -- Maximal spreadsheet content width in millimetres (`SPREADSHEET_MAX_CONTENT_WIDTH_MM`).
   # Defaults to `0` for unlimited width.
   # @section -- 09. Document conversion
   spreadsheetMaxContentWidthMm: 0
@@ -706,10 +706,10 @@ observability:
     # @notationType -- tpl
     # @default -- *generated*
     # @notationType -- plain
+    customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
     # -- (object) Prometheus metrics endpoint settings
     # @section -- D. Observability
     # @notationType -- reference
-    customTags: "namespace={{ .Release.Namespace }},app={{ include \"document-engine.fullname\" . }}"
     prometheusEndpoint:
       # -- Enable Prometheus metrics endpoint, `ENABLE_PROMETHEUS`
       # @section -- D. Observability
