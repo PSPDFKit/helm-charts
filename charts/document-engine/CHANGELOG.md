@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.1.1 (2026-03-12)](#811-2026-03-12)
+    - [Fixed](#fixed)
   - [8.1.0 (2026-02-28)](#810-2026-02-28)
     - [Added](#added)
     - [Changed](#changed)
@@ -216,6 +218,12 @@
     - [Changed](#changed-61)
   - [2.0.0](#200)
     - [Changed](#changed-62)
+
+## 8.1.1 (2026-03-12)
+
+### Fixed
+
+* `ingress-extra.yaml`: fixed invalid YAML document separator (`---apiVersion:` merged onto one line) caused by aggressive whitespace trimming in the template
 
 ## 8.1.0 (2026-02-28)
 
