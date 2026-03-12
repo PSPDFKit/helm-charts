@@ -419,11 +419,11 @@ Note:
 | [`config.maxUploadSizeMegaBytes`](./values.yaml#L103) | `MAX_UPLOAD_SIZE_BYTES` in megabytes | `950` |
 | [`config.minSearchQueryLength`](./values.yaml#L127) | `MIN_SEARCH_QUERY_LENGTH` | `3` |
 | [`config.port`](./values.yaml#L165) | `PORT` for the Document Engine API | `5000` |
-| [`config.proxy`](./values.yaml#L160) | Proxy settings, `HTTP_PROXY` amd `HTTPS_PROXY` | `{"http":"","https":""}` |
+| [`config.proxy`](./values.yaml#L160) | Proxy settings, `HTTP_PROXY` and `HTTPS_PROXY` | `{"http":"","https":""}` |
 | [`config.readAnnotationBatchTimeoutSeconds`](./values.yaml#L100) | `READ_ANNOTATION_BATCH_TIMEOUT` in seconds | `20` |
 | [`config.replaceSecretsFromEnv`](./values.yaml#L170) | `REPLACE_SECRETS_FROM_ENV` — whether to consider environment variables, values and secrets for `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD` | `true` |
 | [`config.requestTimeoutSeconds`](./values.yaml#L88) | Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`). Should be lesser than `terminationGracePeriodSeconds`. | `60` |
-| [`config.trustedProxies`](./values.yaml#L157) | `TRUSTED_PROXIES` — comma-separated list of IP addresses or IP address ranges of trusted proxies. Setting to `default` will use the default will use private IP ranges. | `"default"` |
+| [`config.trustedProxies`](./values.yaml#L157) | `TRUSTED_PROXIES` — comma-separated list of IP addresses or IP address ranges of trusted proxies. Setting to `default` will use private IP ranges. | `"default"` |
 | [`config.urlFetchTimeoutSeconds`](./values.yaml#L97) | `REMOTE_URL_FETCH_TIMEOUT` in seconds | `5` |
 | [`config.workerPoolSize`](./values.yaml#L85) | `PSPDFKIT_WORKER_POOL_SIZE` | `16` |
 | [`config.workerTimeoutSeconds`](./values.yaml#L91) | Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`). Should not be greater than `config.requestTimeoutSeconds`. | `60` |
@@ -547,8 +547,8 @@ Note:
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`documentConversion`](./values.yaml#L581) | Document conversion parameters |  |
-| [`documentConversion.spreadsheetMaxContentHeightMm`](./values.yaml#L585) | Maximal spreadhseet content height in millimetres (`SPREADSHEET_MAX_CONTENT_HEIGHT_MM`). Defaults to `0` for unlimited height. | `0` |
-| [`documentConversion.spreadsheetMaxContentWidthMm`](./values.yaml#L589) | Maximal spreadhseet content width in millimetres (`SPREADSHEET_MAX_CONTENT_WIDTH_MM`). Defaults to `0` for unlimited width. | `0` |
+| [`documentConversion.spreadsheetMaxContentHeightMm`](./values.yaml#L585) | Maximal spreadsheet content height in millimetres (`SPREADSHEET_MAX_CONTENT_HEIGHT_MM`). Defaults to `0` for unlimited height. | `0` |
+| [`documentConversion.spreadsheetMaxContentWidthMm`](./values.yaml#L589) | Maximal spreadsheet content width in millimetres (`SPREADSHEET_MAX_CONTENT_WIDTH_MM`). Defaults to `0` for unlimited width. | `0` |
 
 ### Clustering
 
@@ -664,13 +664,14 @@ Note:
 | [`observability.log.level`](./values.yaml#L662) | `LOG_LEVEL` | `"info"` |
 | [`observability.log.structured`](./values.yaml#L665) | `LOG_STRUCTURED` — enable structured logging in JSON format | `false` |
 | [`observability.metrics`](./values.yaml#L703) | Metrics configuration | [...](./values.yaml#L703) |
-| [`observability.metrics.customTags`](./values.yaml#L712) | Prometheus metrics endpoint settings | `namespace={{ .Release.Namespace }},app={{ include "document-engine.fullname" . }}` |
+| [`observability.metrics.customTags`](./values.yaml#L709) | Global metrics tags for all exporters: `METRICS_CUSTOM_TAGS` | *generated* |
 | [`observability.metrics.grafanaDashboard`](./values.yaml#L751) | Grafana dashboard | [...](./values.yaml#L751) |
 | [`observability.metrics.grafanaDashboard.configMap`](./values.yaml#L759) | ConfigMap parameters | [...](./values.yaml#L759) |
 | [`observability.metrics.grafanaDashboard.configMap.labels`](./values.yaml#L762) | ConfigMap labels | `{"grafana_dashboard":"1"}` |
 | [`observability.metrics.grafanaDashboard.enabled`](./values.yaml#L755) | Enable Grafana dashboard. To work, requires Prometheus metrics enabled in `observability.metrics.prometheusEndpoint.enabled` | `false` |
 | [`observability.metrics.grafanaDashboard.tags`](./values.yaml#L772) | Dashboard tags | `["Nutrient","document-engine"]` |
 | [`observability.metrics.grafanaDashboard.title`](./values.yaml#L769) | Dashboard title | *generated* |
+| [`observability.metrics.prometheusEndpoint`](./values.yaml#L713) | Prometheus metrics endpoint settings | [...](./values.yaml#L713) |
 | [`observability.metrics.prometheusEndpoint.enabled`](./values.yaml#L716) | Enable Prometheus metrics endpoint, `ENABLE_PROMETHEUS` | `false` |
 | [`observability.metrics.prometheusEndpoint.port`](./values.yaml#L719) | Port for the Prometheus metrics endpoint, `PROMETHEUS_PORT` | `10254` |
 | [`observability.metrics.prometheusRule`](./values.yaml#L743) | Prometheus [PrometheusRule](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusRule) Requires `observability.metrics.prometheusEndpoint.enabled` to be `true` | [...](./values.yaml#L743) |
