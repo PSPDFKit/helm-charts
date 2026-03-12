@@ -164,3 +164,4 @@ All default values come from `values.schema.json`. Templates reference `.Values.
 
 - **YAML document separators (`---`)**: Never use `{{-` (left-trim) on the line immediately after `---`. The trim eats the newline and produces the invalid token `---apiVersion:`. Use `{{` (no dash) or leave a YAML comment between them.
 - **Go template comments in Helm**: Avoid `{{- /* ... */ }}` (trimming comment) in templates. Helm's linter can misparse the `{{-` trim prefix followed by `/*` as a broken action. Use YAML comments (`# ...`) for inline notes instead.
+- **`{{` in YAML comments**: Go's template engine processes all `{{` delimiters *before* YAML parsing, so even `# some comment {{-` will be parsed as a template action. Never use `{{` in YAML comments inside Helm templates.
