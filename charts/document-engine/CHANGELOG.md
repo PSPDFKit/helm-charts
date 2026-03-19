@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.2.0 (2026-03-19)](#820-2026-03-19)
+    - [Added](#added)
   - [8.1.1 (2026-03-12)](#811-2026-03-12)
     - [Fixed](#fixed)
   - [8.1.0 (2026-02-28)](#810-2026-02-28)
@@ -218,6 +220,12 @@
     - [Changed](#changed-61)
   - [2.0.0](#200)
     - [Changed](#changed-62)
+
+## 8.2.0 (2026-03-19)
+
+### Added
+
+* `config.readTimeoutMilliseconds` for `PSPDFKITD_READ_TIMEOUT_MS` and `config.writeTimeoutMilliseconds` for `PSPDFKITD_WRITE_TIMEOUT_MS`
 
 ## 8.1.1 (2026-03-12)
 

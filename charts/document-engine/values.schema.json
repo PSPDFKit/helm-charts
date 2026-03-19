@@ -516,6 +516,10 @@
         "readAnnotationBatchTimeoutSeconds": {
           "type": "integer"
         },
+        "readTimeoutMilliseconds": {
+          "type": "integer",
+          "minimum": 1
+        },
         "replaceSecretsFromEnv": {
           "type": "boolean"
         },
@@ -534,6 +538,10 @@
         },
         "workerTimeoutSeconds": {
           "type": "integer"
+        },
+        "writeTimeoutMilliseconds": {
+          "type": "integer",
+          "minimum": 1
         }
       }
     },
