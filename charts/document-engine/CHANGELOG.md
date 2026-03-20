@@ -225,7 +225,7 @@
 
 ### Added
 
-* `config.readTimeoutMilliseconds` for `PSPDFKITD_READ_TIMEOUT_MS` and `config.writeTimeoutMilliseconds` for `PSPDFKITD_WRITE_TIMEOUT_MS`
+* `config.daemonReadTimeoutSeconds` for `PSPDFKITD_READ_TIMEOUT` and `config.daemonWriteTimeoutSeconds` for `PSPDFKITD_WRITE_TIMEOUT`
 
 ## 8.1.1 (2026-03-12)
 
