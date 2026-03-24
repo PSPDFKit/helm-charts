@@ -57,6 +57,12 @@ Functions {
 
 {{- define "chart.valuesTable" -}}
 {{-   if .Sections.Sections -}}
+{{-     $sectionNotes := dict
+          "Clustering" (trim `
+> [!NOTE]
+> Clustering is an experimental feature; use with caution!
+`)
+      -}}
 {{-     $sectionNames := list -}}
 {{-     range .Sections.Sections -}}
 {{-       $sectionNames = append $sectionNames .SectionName -}}
@@ -88,6 +94,11 @@ Functions {
 {{-     range $sections }}
 
 ### {{ .SectionTitle }}
+
+{{-       with index $sectionNotes .SectionTitle }}
+
+{{ . }}
+{{-       end }}
 
 | Key | Description | Default |
 |-----|-------------|---------|

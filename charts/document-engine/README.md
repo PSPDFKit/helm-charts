@@ -552,6 +552,9 @@ Note:
 
 ### Clustering
 
+> [!NOTE]
+> Clustering is an experimental feature; use with caution!
+
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`clustering`](./values.yaml#L594) | Clustering settings |  |
