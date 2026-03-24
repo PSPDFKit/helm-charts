@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.1.2 (2026-03-24)](#812-2026-03-24)
+    - [Changed](#changed)
   - [8.1.1 (2026-03-12)](#811-2026-03-12)
     - [Fixed](#fixed)
   - [8.1.0 (2026-02-28)](#810-2026-02-28)
@@ -218,6 +220,13 @@
     - [Changed](#changed-61)
   - [2.0.0](#200)
     - [Changed](#changed-62)
+
+## 8.1.2 (2026-03-24)
+
+### Changed
+
+* `README.md.gotmpl`: added support for section-wide notes in generated values sections
+* `README.md`: added a note in the `Clustering` section that it is an experimental feature
 
 ## 8.1.1 (2026-03-12)
 
