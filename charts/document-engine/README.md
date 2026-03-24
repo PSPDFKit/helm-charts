@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 8.1.1](https://img.shields.io/badge/Version-8.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
+![Version: 8.1.2](https://img.shields.io/badge/Version-8.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
