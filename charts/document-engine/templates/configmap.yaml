@@ -12,6 +12,8 @@ data:
   PORT: {{ .Values.config.port | quote }}
   SERVER_REQUEST_TIMEOUT: {{ mul 1000 .Values.config.requestTimeoutSeconds | quote }}
   PSPDFKIT_WORKER_TIMEOUT: {{ mul 1000 .Values.config.workerTimeoutSeconds | quote }}
+  PSPDFKITD_READ_TIMEOUT: {{ mul 1000 .Values.config.daemonReadTimeoutSeconds | quote }}
+  PSPDFKITD_WRITE_TIMEOUT: {{ mul 1000 .Values.config.daemonWriteTimeoutSeconds | quote }}
   PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
   REMOTE_URL_FETCH_TIMEOUT: {{ mul 1000 .Values.config.urlFetchTimeoutSeconds | quote }}
   READ_ANNOTATION_BATCH_TIMEOUT: {{ mul 1000 .Values.config.readAnnotationBatchTimeoutSeconds | quote }}

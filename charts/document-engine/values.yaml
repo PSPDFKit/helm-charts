@@ -89,6 +89,12 @@ config:
   # -- Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`). Should not be greater than `config.requestTimeoutSeconds`.
   # @section -- 03. Configuration options
   workerTimeoutSeconds: 60
+  # -- `PSPDFKITD_READ_TIMEOUT` in seconds
+  # @section -- 03. Configuration options
+  daemonReadTimeoutSeconds: 120
+  # -- `PSPDFKITD_WRITE_TIMEOUT` in seconds
+  # @section -- 03. Configuration options
+  daemonWriteTimeoutSeconds: 10
   # -- `PDF_GENERATION_TIMEOUT` in seconds
   # @section -- 03. Configuration options
   generationTimeoutSeconds: 20

@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.2.0 (2026-03-26)](#820-2026-03-26)
+    - [Changed](#changed)
   - [8.1.2 (2026-03-24)](#812-2026-03-24)
     - [Changed](#changed)
   - [8.1.1 (2026-03-12)](#811-2026-03-12)
@@ -220,6 +222,13 @@
     - [Changed](#changed-61)
   - [2.0.0](#200)
     - [Changed](#changed-62)
+
+## 8.2.0 (2026-03-26)
+
+### Changed
+
+* [Document Engine 1.15.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1.15.0)
+* New options `daemonReadTimeoutSeconds` and `daemonWriteTimeoutSeconds` are available to control the worker daemon socket timeouts
 
 ## 8.1.2 (2026-03-24)
 
