@@ -458,6 +458,12 @@
         "automaticLinkExtraction": {
           "type": "boolean"
         },
+        "daemonReadTimeoutSeconds": {
+          "type": "integer"
+        },
+        "daemonWriteTimeoutSeconds": {
+          "type": "integer"
+        },
         "generationTimeoutSeconds": {
           "type": "integer"
         },
