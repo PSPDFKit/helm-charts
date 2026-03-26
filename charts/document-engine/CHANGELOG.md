@@ -228,6 +228,7 @@
 ### Changed
 
 * [Document Engine 1.15.0](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1.15.0)
+* New options `daemonReadTimeoutSeconds` and `daemonWriteTimeoutSeconds` are available to control the worker daemon socket timeouts
 
 ## 8.1.2 (2026-03-24)
 
