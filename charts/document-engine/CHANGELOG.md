@@ -230,6 +230,7 @@
 ### Changed
 
 * [Document Engine 1.15.1](https://www.nutrient.io/guides/document-engine/release-notes/changelog/#1.15.1)
+* New options `workerPoolMaxRestarts` and `workerPoolMaxSeconds` are available to control the worker supervisor restart throttling.
 
 ## 8.2.0 (2026-03-26)
 
