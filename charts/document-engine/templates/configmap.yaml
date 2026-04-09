@@ -14,6 +14,8 @@ data:
   PSPDFKIT_WORKER_TIMEOUT: {{ mul 1000 .Values.config.workerTimeoutSeconds | quote }}
   PSPDFKITD_READ_TIMEOUT: {{ mul 1000 .Values.config.daemonReadTimeoutSeconds | quote }}
   PSPDFKITD_WRITE_TIMEOUT: {{ mul 1000 .Values.config.daemonWriteTimeoutSeconds | quote }}
+  PSPDFKIT_WORKER_POOL_MAX_RESTARTS: {{ .Values.config.workerPoolMaxRestarts | quote }}
+  PSPDFKIT_WORKER_POOL_MAX_SECONDS: {{ .Values.config.workerPoolMaxSeconds | quote }}
   PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
   REMOTE_URL_FETCH_TIMEOUT: {{ mul 1000 .Values.config.urlFetchTimeoutSeconds | quote }}
   READ_ANNOTATION_BATCH_TIMEOUT: {{ mul 1000 .Values.config.readAnnotationBatchTimeoutSeconds | quote }}

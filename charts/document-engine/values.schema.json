@@ -534,6 +534,12 @@
         "urlFetchTimeoutSeconds": {
           "type": "integer"
         },
+        "workerPoolMaxRestarts": {
+          "type": "integer"
+        },
+        "workerPoolMaxSeconds": {
+          "type": "integer"
+        },
         "workerPoolSize": {
           "type": "integer",
           "minimum": 1

@@ -89,6 +89,12 @@ config:
   # -- Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`). Should not be greater than `config.requestTimeoutSeconds`.
   # @section -- 03. Configuration options
   workerTimeoutSeconds: 60
+  # -- Maximum number of restarts (`PSPDFKIT_WORKER_POOL_MAX_RESTARTS`) before supervisor starts throttling them.
+  # @section -- 03. Configuration options
+  workerPoolMaxRestarts: 20
+  # -- Time window in which the supervisor monitors the number of restarts (`PSPDFKIT_WORKER_POOL_MAX_SECONDS`).
+  # @section -- 03. Configuration options
+  workerPoolMaxSeconds: 60
   # -- `PSPDFKITD_READ_TIMEOUT` in seconds
   # @section -- 03. Configuration options
   daemonReadTimeoutSeconds: 120
