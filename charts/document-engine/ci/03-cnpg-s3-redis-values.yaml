@@ -20,7 +20,7 @@ assetStorage:
     secretAccessKey: despairIsUnbearable87
     bucket: whatever
     region: us-east-1
-    host: minio.whatever.svc.cluster.local
+    host: garage.whatever.svc.cluster.local
     port: 80
     scheme: "http://"
   redis:

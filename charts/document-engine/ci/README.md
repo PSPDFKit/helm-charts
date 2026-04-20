@@ -13,7 +13,7 @@
   * Gateway API HTTPRoute with custom rules
 * `03-cnpg-s3-redis-values.yaml`
   * PostgreSQL
-  * MinIO as S3 asset storage backend through MinIO operator
+  * Garage as S3 asset storage backend
   * Redis for rendering cache as a sidecar container
   * `gateway.extraHTTPRoutes` for dashboard
 * `04-cnpg-azure-values.yaml`

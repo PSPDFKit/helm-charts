@@ -66,30 +66,112 @@ jobs:
             --namespace cnpg-system --create-namespace \
             cnpg/cloudnative-pg
 
-      - name: Install MinIO
+      - name: Install Garage
         if: steps.list-changed.outputs.changed == 'true'
         run: |
-          helm repo add minio https://operator.min.io/
-          # Install operator with minimal resources
-          helm upgrade --install \
-            --namespace minio-operator --create-namespace \
-            minio-operator minio/operator
-          helm upgrade --install \
-            --namespace whatever --create-namespace \
-            --set tenant.name=s3thing \
-            --set tenant.pools[0].name=pool-0 \
-            --set tenant.pools[0].servers=1 \
-            --set tenant.pools[0].volumesPerServer=1 \
-            --set tenant.pools[0].size=256Mi \
-            --set tenant.pools[0].storageClassName=standard \
-            --set tenant.certificate.requestAutoCert=false \
-            --set tenant.configSecret.accessKey=nutrient \
-            --set tenant.configSecret.secretKey=despairIsUnbearable87 \
-            --set tenant.buckets[0].name=whatever \
-            --set tenant.buckets[0].region=us-east-1 \
-            tenant minio/tenant
-          sleep 30
-          kubectl wait --namespace whatever --for=condition=ready pod -l v1.min.io/tenant=s3thing --timeout=300s
+          kubectl create namespace whatever --dry-run=client -o yaml | kubectl apply -f -
+          cat <<'EOF' | kubectl apply -f -
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: garage-config
+            namespace: whatever
+          data:
+            garage.toml: |
+              metadata_dir = "/var/lib/garage/meta"
+              data_dir = "/var/lib/garage/data"
+              db_engine = "sqlite"
+
+              replication_factor = 1
+
+              rpc_bind_addr = "[::]:3901"
+              rpc_public_addr = "garage.whatever.svc.cluster.local:3901"
+              rpc_secret = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+
+              [s3_api]
+              s3_region = "us-east-1"
+              api_bind_addr = "[::]:3900"
+
+              [admin]
+              api_bind_addr = "[::]:3903"
+              admin_token = "garage-admin-token-for-ci"
+              metrics_token = "garage-metrics-token-for-ci"
+          ---
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: garage
+            namespace: whatever
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: garage
+            template:
+              metadata:
+                labels:
+                  app: garage
+              spec:
+                containers:
+                  - name: garage
+                    image: dxflrs/garage:v2.3.0
+                    imagePullPolicy: IfNotPresent
+                    args:
+                      - /garage
+                      - server
+                      - --single-node
+                      - --default-bucket
+                    env:
+                      - name: GARAGE_DEFAULT_ACCESS_KEY
+                        value: nutrient
+                      - name: GARAGE_DEFAULT_SECRET_KEY
+                        value: despairIsUnbearable87
+                      - name: GARAGE_DEFAULT_BUCKET
+                        value: whatever
+                    ports:
+                      - containerPort: 3900
+                        name: s3
+                      - containerPort: 3901
+                        name: rpc
+                      - containerPort: 3903
+                        name: admin
+                    volumeMounts:
+                      - name: config
+                        mountPath: /etc/garage.toml
+                        subPath: garage.toml
+                      - name: meta
+                        mountPath: /var/lib/garage/meta
+                      - name: data
+                        mountPath: /var/lib/garage/data
+                volumes:
+                  - name: config
+                    configMap:
+                      name: garage-config
+                  - name: meta
+                    emptyDir: {}
+                  - name: data
+                    emptyDir: {}
+          ---
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: garage
+            namespace: whatever
+          spec:
+            selector:
+              app: garage
+            ports:
+              - name: s3
+                port: 80
+                targetPort: 3900
+              - name: rpc
+                port: 3901
+                targetPort: 3901
+              - name: admin
+                port: 3903
+                targetPort: 3903
+          EOF
+          kubectl rollout status deployment/garage --namespace whatever --timeout=300s
 
       - name: Run chart-testing (install)
         if: steps.list-changed.outputs.changed == 'true'

@@ -70,7 +70,7 @@ These annotations drive README and schema generation:
 Three GitHub Actions workflows run on this repository:
 
 1. **Documentation** (`helm-docs.yaml`) — PR trigger. Validates README.md is in sync with values.yaml. Fails on diff.
-2. **Lint and Test** (`lint-test.yaml`) — PR trigger. Runs `ct lint` and `ct install` against a Kind cluster with CloudNativePG and MinIO pre-installed.
+2. **Lint and Test** (`lint-test.yaml`) — PR trigger. Runs `ct lint` and `ct install` against a Kind cluster with CloudNativePG and Garage pre-installed.
 3. **Release** (`release.yml`) — Push to `master`. Publishes chart releases via chart-releaser and updates GitHub release notes from CHANGELOG.md.
 
 ## CI Test Values
@@ -81,7 +81,7 @@ Each chart has a `ci/` directory with test value files used by `ct install`:
 ci/00-simple-values.yaml          # Symlink to values.simple.yaml
 ci/01-no-storage-values.yaml      # No database
 ci/02-cnpg-clustering-values.yaml # CloudNativePG clustering + StatefulSet
-ci/03-cnpg-s3-redis-values.yaml   # MinIO S3 + Redis
+ci/03-cnpg-s3-redis-values.yaml   # Garage S3 + Redis
 ci/04-cnpg-azure-values.yaml      # Azure Blob storage
 ci/05-envoy-sidecar-values.yaml   # Envoy sidecar + StatefulSet
 ci/10-env-variables-values.yaml   # Raw environment variables
