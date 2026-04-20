@@ -65,6 +65,23 @@ jobs:
           helm upgrade --install cnpg \
             --namespace cnpg-system --create-namespace \
             cnpg/cloudnative-pg
+          kubectl wait \
+            --namespace cnpg-system \
+            --for=condition=Available=true \
+            deployment \
+            -l app.kubernetes.io/name=cloudnative-pg \
+            --timeout=300s
+          kubectl wait \
+            --namespace cnpg-system \
+            --for=condition=Ready=true \
+            pod \
+            -l app.kubernetes.io/name=cloudnative-pg \
+            --timeout=300s
+          kubectl wait \
+            --namespace cnpg-system \
+            --for=jsonpath='{.subsets[0].addresses[0].ip}' \
+            endpoints/cnpg-webhook-service \
+            --timeout=300s
 
       - name: Install Garage
         if: steps.list-changed.outputs.changed == 'true'
