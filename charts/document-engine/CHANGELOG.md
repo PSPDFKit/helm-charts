@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.2.2 (2026-04-20)](#822-2026-04-20)
+    - [Changed](#changed)
   - [8.2.1 (2026-04-09)](#821-2026-04-09)
     - [Changed](#changed)
   - [8.2.0 (2026-03-26)](#820-2026-03-26)
@@ -224,6 +226,12 @@
     - [Changed](#changed-61)
   - [2.0.0](#200)
     - [Changed](#changed-62)
+
+## 8.2.2 (2026-04-20)
+
+### Changed
+
+* MinIO references replaced with Garage
 
 ## 8.2.1 (2026-04-09)
 
