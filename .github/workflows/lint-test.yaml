@@ -189,6 +189,42 @@ jobs:
                 targetPort: 3903
           EOF
           kubectl rollout status deployment/garage --namespace whatever --timeout=300s
+          cat <<'EOF' | kubectl apply -f -
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: garage-create-buckets
+            namespace: whatever
+          spec:
+            backoffLimit: 6
+            template:
+              spec:
+                restartPolicy: OnFailure
+                containers:
+                  - name: aws-cli
+                    image: amazon/aws-cli:2.17.40
+                    imagePullPolicy: IfNotPresent
+                    command:
+                      - /bin/sh
+                      - -ec
+                      - |
+                        until aws --endpoint-url http://garage.whatever.svc.cluster.local s3 ls >/dev/null 2>&1; do
+                          sleep 1
+                        done
+                        aws --endpoint-url http://garage.whatever.svc.cluster.local s3api create-bucket \
+                          --bucket whatever \
+                          --region us-east-1 || true
+                    env:
+                      - name: AWS_ACCESS_KEY_ID
+                        value: nutrient
+                      - name: AWS_SECRET_ACCESS_KEY
+                        value: despairIsUnbearable87
+                      - name: AWS_DEFAULT_REGION
+                        value: us-east-1
+                      - name: AWS_EC2_METADATA_DISABLED
+                        value: "true"
+          EOF
+          kubectl wait --namespace whatever --for=condition=complete job/garage-create-buckets --timeout=300s
 
       - name: Run chart-testing (install)
         if: steps.list-changed.outputs.changed == 'true'
