@@ -396,7 +396,7 @@ assetStorage:
     # -- (tpl/string) `ASSET_STORAGE_S3_HOST`
     # @section -- 07. Asset storage
     # @ignored
-    # host: "{{ .Release.Name }}-minio"
+    # host: "{{ .Release.Name }}-garage"
     host: ""
     # -- `ASSET_STORAGE_S3_PORT`
     # @section -- 07. Asset storage

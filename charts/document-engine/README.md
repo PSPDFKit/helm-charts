@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 8.2.1](https://img.shields.io/badge/Version-8.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.15.1](https://img.shields.io/badge/AppVersion-1.15.1-informational?style=flat-square)
+![Version: 8.2.2](https://img.shields.io/badge/Version-8.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.15.1](https://img.shields.io/badge/AppVersion-1.15.1-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -97,10 +97,10 @@ CloudNativePG is not the only possible solution, and we recommend to also consid
 To offload the bulk of binary storage from the database,
 Document Engine can [utilise](https://www.nutrient.io/guides/document-engine/configuration/asset-storage/) S3-compatible object storage or Azure Blob Storage.
 
-In addition to the managed services (Amazon S3, Google Cloud Storage, many others), there are also options for self-hosting, including, but not limited to [Ceph](https://ceph.io/en/), [MinIO](https://www.min.io/).
+In addition to the managed services (Amazon S3, Google Cloud Storage, many others), there are also options for self-hosting, including, but not limited to [Ceph](https://ceph.io/en/), [Garage](https://garagehq.deuxfleurs.fr/).
 
-The latter is a popular way to implement S3-compatible buckets in a vendor-agnostic way.
-However, due to very limited Custom Resource Definitions ecosystem in MinIO, this chart is not attempting to provide a plug-in support for it.
+The latter is a lightweight way to implement S3-compatible buckets in a vendor-agnostic way.
+However, this chart does not attempt to manage Garage resources directly.
 
 ## Rendering cache
 
