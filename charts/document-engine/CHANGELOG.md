@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.2.3 (2026-05-04)](#823-2026-05-04)
+    - [Added](#added)
   - [8.2.2 (2026-04-20)](#822-2026-04-20)
     - [Changed](#changed)
   - [8.2.1 (2026-04-09)](#821-2026-04-09)
@@ -226,6 +228,12 @@
     - [Changed](#changed-61)
   - [2.0.0](#200)
     - [Changed](#changed-62)
+
+## 8.2.3 (2026-05-04)
+
+### Added
+
+* New clustering panels in the Document Engine Grafana dashboard
 
 ## 8.2.2 (2026-04-20)
 
