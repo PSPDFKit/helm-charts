@@ -505,6 +505,10 @@
         "minSearchQueryLength": {
           "type": "integer"
         },
+        "tileMaxScale": {
+          "type": "number",
+          "exclusiveMinimum": 1
+        },
         "port": {
           "type": "integer"
         },
