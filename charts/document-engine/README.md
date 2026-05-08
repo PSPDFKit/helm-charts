@@ -1,6 +1,6 @@
 # Document Engine Helm chart
 
-![Version: 8.3.0](https://img.shields.io/badge/Version-8.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.15.1](https://img.shields.io/badge/AppVersion-1.15.1-informational?style=flat-square)
+![Version: 8.3.1](https://img.shields.io/badge/Version-8.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.15.1](https://img.shields.io/badge/AppVersion-1.15.1-informational?style=flat-square)
 
 Document Engine is a backend software for processing documents and powering automation workflows.
 
@@ -425,7 +425,7 @@ Note:
 | [`config.readAnnotationBatchTimeoutSeconds`](./values.yaml#L112) | `READ_ANNOTATION_BATCH_TIMEOUT` in seconds | `20` |
 | [`config.replaceSecretsFromEnv`](./values.yaml#L186) | `REPLACE_SECRETS_FROM_ENV` — whether to consider environment variables, values and secrets for `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD` | `true` |
 | [`config.requestTimeoutSeconds`](./values.yaml#L88) | Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`). Should be lesser than `terminationGracePeriodSeconds`. | `60` |
-| [`config.tileMaxScale`](./values.yaml#L143) | `TILE_MAX_SCALE` — maximum allowed tile scale, calculated as requested tile size divided by actual page size. Must be greater than 1. | `2` |
+| [`config.tileMaxScale`](./values.yaml#L143) | `TILE_MAX_SCALE` — maximum allowed tile scale, calculated as requested tile size divided by actual page size. Must be greater than 1. | `16` |
 | [`config.trustedProxies`](./values.yaml#L173) | `TRUSTED_PROXIES` — comma-separated list of IP addresses or IP address ranges of trusted proxies. Setting to `default` will use private IP ranges. | `"default"` |
 | [`config.urlFetchTimeoutSeconds`](./values.yaml#L109) | `REMOTE_URL_FETCH_TIMEOUT` in seconds | `5` |
 | [`config.workerPoolMaxRestarts`](./values.yaml#L94) | Maximum number of restarts (`PSPDFKIT_WORKER_POOL_MAX_RESTARTS`) before supervisor starts throttling them. | `20` |
