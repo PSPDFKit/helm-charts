@@ -140,7 +140,7 @@ config:
   # -- `TILE_MAX_SCALE` — maximum allowed tile scale, calculated as requested tile size divided by actual page size.
   # Must be greater than 1.
   # @section -- 03. Configuration options
-  tileMaxScale: 2  # @schema type: number; exclusiveMinimum: 1
+  tileMaxScale: 16  # @schema type: number; exclusiveMinimum: 1
   # -- Hoard — internal caching service parameters
   # @default -- none
   # @notationType -- reference
