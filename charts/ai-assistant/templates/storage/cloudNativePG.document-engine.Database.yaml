@@ -13,4 +13,5 @@ spec:
 {{- with .Values.cloudNativePG.documentEngineDatabase }}
   name: {{ .name }}
 {{- end }}
+  owner: {{ .Values.database.postgres.username }}
 {{- end }}

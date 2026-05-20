@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [1.2.1 (2026-05-20)](#121-2026-05-20)
+    - [Fixed](#fixed)
   - [1.2.0 (2026-03-05)](#120-2026-03-05)
     - [Changed](#changed-9)
   - [1.1.0 (2026-02-28)](#110-2026-02-28)
@@ -26,6 +28,12 @@
     - [Changed](#changed-8)
   - [0.0.1 (2025-05-28)](#001-2025-05-28)
     - [Added](#added-3)
+
+## 1.2.1 (2026-05-20)
+
+### Fixed
+
+* `cloudNativePG.Database` and `cloudNativePG.document-engine.Database` resources now set the required `spec.owner` field. Without it the CloudNativePG admission webhook rejects the resources with `Database.postgresql.cnpg.io ... is invalid: [spec.owner: Required value, ...]`, breaking install of the chart when `cloudNativePG.enabled` is `true`. `owner` is sourced from `database.postgres.username` (defaults to `postgres`, which exists in the cluster via `clusterSpec.enableSuperuserAccess: true`).
 
 ## 1.2.0 (2026-03-05)
 

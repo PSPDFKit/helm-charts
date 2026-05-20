@@ -11,6 +11,7 @@ spec:
     name: {{ include "ai-assistant.storage.cloudNativePG.cluster.name" . }}
 {{- with .Values.database.postgres }}
   name: {{ .database }}
+  owner: {{ .username }}
 {{- end }}
   extensions:
     - name: vector
