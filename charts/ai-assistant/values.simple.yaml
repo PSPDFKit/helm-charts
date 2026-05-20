@@ -13,21 +13,18 @@ apiAuth:
 
 config:
   serviceConfiguration:
-    version: '1'
-    aiServices:
-      chat:
-        provider:
-          name: "mock"
-          fakeResponses:
-            - "Hello! This is a mock response for testing."
-            - "Mock provider is working correctly."
-            - "Test response from AIA mock provider."
-        model: "mock-chat-model"
-      textEmbeddings:
-        provider:
-          name: "mock"
-          fakeResponses: []
-        model: "mock-embedding-model"
+    version: '2'
+    providers:
+      - name: "mock"
+        fakeResponses:
+          - "Hello! This is a mock response for testing."
+          - "Mock provider is working correctly."
+          - "Test response from AIA mock provider."
+    models:
+      - model: "mock:mock-chat-model"
+        labels: ["default-llm"]
+      - model: "mock:mock-embedding-model"
+        labels: ["default-embedding"]
   documentEngine:
     enabled: true
     url: http://document-engine:5000

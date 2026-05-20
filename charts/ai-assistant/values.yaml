@@ -101,23 +101,28 @@ config:
     # @section -- 03. Configuration options
     key: service-configuration.yaml
   # -- (object) Inline content for service configuration, used if `config.serviceConfigurationConfigMap.name` is not set.
+  # Uses the v2 service configuration schema (`version: "2"` with `providers` and `models`).
   # See more in [our guide](https://www.nutrient.io/guides/ai-assistant/service-configuration/ai-configuration/#service-configuration-file)
   # @section -- 03. Configuration options
   # @default -- none
   # @notationType -- reference
-  serviceConfiguration:  # @schema oneOf: [{"type": "object"}, {"type": "null"}]
-    version: '1'  # @schema required:true; pattern:^1$
-    aiServices:  # @schema required:true; additionalProperties: false
-      chat:  # @schema required:true
-        provider:  # @schema required:true
-          name: 'azure'  # @schema pattern:^(openai|azure|bedrock|openai-compat|mock)$
-          instanceName: 'ci-testing'
-        model: 'gpt4o-mini'
-      textEmbeddings:  # @schema required:true
-        provider:  # @schema required:true
-          name: 'azure'  # @schema pattern:^(openai|azure|bedrock|openai-compat|mock)$
-          instanceName: 'ci-testing'
-        model: 'text-embedding-3-small'
+  serviceConfiguration:  # @schema type: [object, null]
+    # -- Service configuration schema version. Must be `"2"`.
+    # @section -- 03. Configuration options
+    version: '2'  # @schema required:true; pattern:^2$
+    # -- AI service providers. Each entry has a `name` (`openai`, `anthropic`,
+    # `azure`, `bedrock`, `openai-compat` or `mock`) plus provider-specific fields
+    # such as `instanceName` (Azure), `region` (Bedrock) or `baseUrl`
+    # (OpenAI-compatible).
+    # See [our guide](https://www.nutrient.io/guides/ai-assistant/service-configuration/ai-configuration/).
+    # @section -- 03. Configuration options
+    providers: []  # @schema required:true; item: object
+    # -- Models exposed to the application. Each entry has a `{provider}:{model}`
+    # reference and one or more semantic `labels` (e.g. `default-llm`,
+    # `default-embedding`) used for label-based model selection and request-time
+    # `provider:model` overrides.
+    # @section -- 03. Configuration options
+    models: []  # @schema required:true; item: object
   # -- (object) Credentials for AI service providers.
   # It is recommended to use extrenal secrets through `extraEnvFromSecrets` instead.
   # @section -- 03. Configuration options

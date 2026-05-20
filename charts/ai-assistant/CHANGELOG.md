@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [2.0.0 (2026-05-20)](#200-2026-05-20)
+    - [Changed](#changed-10)
   - [1.2.1 (2026-05-20)](#121-2026-05-20)
     - [Fixed](#fixed)
   - [1.2.0 (2026-03-05)](#120-2026-03-05)
@@ -28,6 +30,16 @@
     - [Changed](#changed-8)
   - [0.0.1 (2025-05-28)](#001-2025-05-28)
     - [Added](#added-3)
+
+## 2.0.0 (2026-05-20)
+
+### Changed
+
+* **Breaking:** `config.serviceConfiguration` now uses the v2 [service configuration schema](https://www.nutrient.io/guides/ai-assistant/service-configuration/ai-configuration/) (`version: "2"` with `providers` and `models`). The v1 schema (`version: "1"` with `aiServices`) is no longer accepted. v2 enables label-based model selection, multi-provider routing, and request-time `provider:model` overrides.
+
+  To upgrade, replace any v1 `config.serviceConfiguration` with a v2 configuration, or set `config.serviceConfigurationConfigMap` to supply the file from an external ConfigMap. See the [v2 configuration guide](https://www.nutrient.io/guides/ai-assistant/service-configuration/ai-configuration/).
+* The default `config.serviceConfiguration` is an empty v2 configuration (`version: "2"` with empty `providers` and `models`), replacing the previous v1 `aiServices` example.
+* Added `config.serviceConfiguration.providers` and `config.serviceConfiguration.models` values for the v2 schema.
 
 ## 1.2.1 (2026-05-20)
 
