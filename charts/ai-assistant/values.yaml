@@ -106,7 +106,7 @@ config:
   # @section -- 03. Configuration options
   # @default -- none
   # @notationType -- reference
-  serviceConfiguration:  # @schema type: [object, null]
+  serviceConfiguration:  # @schema type: [object, null]; additionalProperties: false
     # -- Service configuration schema version. Must be `"2"`.
     # @section -- 03. Configuration options
     version: '2'  # @schema required:true; pattern:^2$
