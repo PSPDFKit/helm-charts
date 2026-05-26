@@ -1,0 +1,18 @@
+{{- if .Values.podDisruptionBudget.create -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "maestrod.fullname" . }}
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+spec:
+{{- $maxUnavailable := .Values.podDisruptionBudget.maxUnavailable }}
+{{- $minAvailable := .Values.podDisruptionBudget.minAvailable }}
+{{- if and (not (kindIs "invalid" $maxUnavailable)) (ne (toString $maxUnavailable) "") }}
+  maxUnavailable: {{ $maxUnavailable }}
+{{- else if and (not (kindIs "invalid" $minAvailable)) (ne (toString $minAvailable) "") }}
+  minAvailable: {{ $minAvailable }}
+{{- end }}
+  selector:
+    matchLabels: {{- include "maestrod.selectorLabels" . | nindent 6 }}
+{{- end }}

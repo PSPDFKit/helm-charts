@@ -11,10 +11,16 @@ on:
 
 permissions:
   contents: read
+  id-token: write  # required for OIDC to assume the ECR-pull IAM role
 
 jobs:
   lint-test:
     runs-on: ubuntu-latest
+    env:
+      MAESTROD_ECR_REGISTRY: 111300957880.dkr.ecr.eu-west-1.amazonaws.com
+      MAESTROD_ECR_REPOSITORY: maestrod
+      MAESTROD_ECR_TAG: nightly
+      AWS_REGION: eu-west-1
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -41,6 +47,9 @@ jobs:
           if [[ -n "$changed" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+          if echo "$changed" | grep -qx 'charts/maestrod'; then
+            echo "maestrod-changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Run chart-testing (lint)
         if: steps.list-changed.outputs.changed == 'true'
@@ -49,6 +58,24 @@ jobs:
       - name: Create kind cluster
         if: steps.list-changed.outputs.changed == 'true'
         uses: helm/kind-action@v1
+
+      - name: Configure AWS credentials (for ECR pull)
+        if: steps.list-changed.outputs.maestrod-changed == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_CI_ECR_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        if: steps.list-changed.outputs.maestrod-changed == 'true'
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Side-load maestrod image into kind
+        if: steps.list-changed.outputs.maestrod-changed == 'true'
+        run: |
+          IMAGE="${MAESTROD_ECR_REGISTRY}/${MAESTROD_ECR_REPOSITORY}:${MAESTROD_ECR_TAG}"
+          docker pull "$IMAGE"
+          kind load docker-image "$IMAGE" --name chart-testing
 
       - name: Install Gateway API CRDs
         if: steps.list-changed.outputs.changed == 'true'
@@ -226,11 +253,29 @@ jobs:
           EOF
           kubectl wait --namespace whatever --for=condition=complete job/garage-create-buckets --timeout=300s
 
-      - name: Run chart-testing (install)
+      - name: Run chart-testing (install) — public-image charts
         if: steps.list-changed.outputs.changed == 'true'
+        # Public Nutrient charts (document-engine, ai-assistant, …): keep the
+        # original `pullPolicy=Always` behaviour so the nightly tag is always
+        # re-pulled from Docker Hub. Maestrod is excluded here and installed
+        # separately below against its kind-loaded ECR image.
         run: |
           helm repo add nutrient https://pspdfkit.github.io/helm-charts
           ct install --target-branch ${{ github.event.repository.default_branch }} \
+                     --excluded-charts maestrod \
                      --helm-extra-args "--timeout 300s" \
                      --helm-extra-set-args "--set=image.tag=nightly" \
                      --helm-extra-set-args "--set=image.pullPolicy=Always"
+
+      - name: Run chart-testing (install) — maestrod (ECR side-loaded)
+        if: steps.list-changed.outputs.maestrod-changed == 'true'
+        # Maestrod's image lives in a private ECR; the workflow pulls it on
+        # the runner and side-loads it into the kind node above. We omit
+        # `pullPolicy=Always` here so kubelet uses the loaded image
+        # (the chart's `IfNotPresent` default) instead of trying to re-pull
+        # from a registry kind has no credentials for.
+        run: |
+          ct install --target-branch ${{ github.event.repository.default_branch }} \
+                     --charts charts/maestrod \
+                     --helm-extra-args "--timeout 300s" \
+                     --helm-extra-set-args "--set=image.tag=${MAESTROD_ECR_TAG}"

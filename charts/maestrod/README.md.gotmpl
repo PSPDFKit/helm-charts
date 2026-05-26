@@ -1,0 +1,260 @@
+{{/*
+Functions {
+*/}}
+{{- define "chart.valuesTableOfContents" -}}
+{{-   if .Sections.Sections -}}
+{{-     $sectionNames := list -}}
+{{-     range .Sections.Sections -}}
+{{-       $sectionNames = append $sectionNames .SectionName -}}
+{{-     end -}}
+{{-     $sections := list -}}
+{{-     range ($sectionNames | sortAlpha) -}}
+{{-       $currentSectionName := . -}}
+{{-       range $.Sections.Sections -}}
+{{-         if eq .SectionName $currentSectionName -}}
+{{-           $thisSection := dict -}}
+{{-           $title := regexReplaceAll "^[0-9A-Z]+\\.\\s+" .SectionName "" -}}
+{{-           $link := printf "./values.yaml#L%d" (first .SectionItems).LineNumber -}}
+{{-           $_ := set $thisSection "SectionName" .SectionName -}}
+{{-           $_ := set $thisSection "SectionItems" .SectionItems -}}
+{{-           $_ := set $thisSection "SectionTitle" $title -}}
+{{-           $sections = append $sections $thisSection -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-     if .Sections.DefaultSection.SectionItems -}}
+{{-       $thisSection := dict -}}
+{{-       $_ := set $thisSection "SectionName" .Sections.DefaultSection.SectionName -}}
+{{-       $_ := set $thisSection "SectionItems" .Sections.DefaultSection.SectionItems -}}
+{{-       $_ := set $thisSection "SectionTitle" .Sections.DefaultSection.SectionName -}}
+{{-       $sections = append $sections $thisSection -}}
+{{-     end -}}
+{{-     range $sections -}}
+{{-       $sectionAnchor := regexReplaceAll "\\s" .SectionTitle "-" | lower }}
+  * [{{ .SectionTitle }}](#{{ $sectionAnchor }})
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+
+{{- define "chart.valueDefaultColumnRender" -}}
+{{-   $defaultValue := (default .Default .AutoDefault) -}}
+{{-   $notationType := .NotationType -}}
+{{-   if .Default -}}
+{{-     $defaultValue = (trimAll "`" (default .Default .AutoDefault) ) -}}
+{{-     $notationType = "json" -}}
+{{-   end -}}
+{{-   if eq $notationType "none" -}}
+{{-   else if eq $notationType "reference" -}}
+[...](./values.yaml#L{{ .LineNumber }})
+{{-   else if eq $notationType "plain" -}}
+{{-     $defaultValue }}
+{{-   else if eq $notationType "tpl" -}}
+`{{ $defaultValue }}`
+{{-   else -}}
+`{{ $defaultValue }}`
+{{-   end -}}
+{{- end -}}
+
+{{- define "chart.valuesTable" -}}
+{{-   if .Sections.Sections -}}
+{{-     $sectionNames := list -}}
+{{-     range .Sections.Sections -}}
+{{-       $sectionNames = append $sectionNames .SectionName -}}
+{{-     end -}}
+{{-     $sections := list -}}
+{{-     range ($sectionNames | sortAlpha) -}}
+{{-       $currentSectionName := . -}}
+{{-       range $.Sections.Sections -}}
+{{-         if eq .SectionName $currentSectionName -}}
+{{-           $thisSection := dict -}}
+{{-           $title := regexReplaceAll "^[0-9A-Z]+\\.\\s+" .SectionName "" -}}
+{{-           $link := printf "./values.yaml#L%d" (first .SectionItems).LineNumber -}}
+{{-           $_ := set $thisSection "SectionName" .SectionName -}}
+{{-           $_ := set $thisSection "SectionItems" .SectionItems -}}
+{{-           $_ := set $thisSection "SectionTitle" $title -}}
+{{-           $_ := set $thisSection "SectionHeading" (printf "[%s](%s)" $title $link) -}}
+{{-           $sections = append $sections $thisSection -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-     if .Sections.DefaultSection.SectionItems -}}
+{{-       $thisSection := dict -}}
+{{-       $_ := set $thisSection "SectionName" .Sections.DefaultSection.SectionName -}}
+{{-       $_ := set $thisSection "SectionItems" .Sections.DefaultSection.SectionItems -}}
+{{-       $_ := set $thisSection "SectionTitle" .Sections.DefaultSection.SectionName -}}
+{{-       $_ := set $thisSection "SectionHeading" .Sections.DefaultSection.SectionName -}}
+{{-       $sections = append $sections $thisSection -}}
+{{-     end -}}
+{{-     range $sections }}
+
+### {{ .SectionTitle }}
+
+| Key | Description | Default |
+|-----|-------------|---------|
+{{-       range .SectionItems }}
+| [`{{ .Key }}`](./values.yaml#L{{ .LineNumber }}) | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} | {{  template "chart.valueDefaultColumnRender" . }} |
+{{-       end }}
+{{-     end }}
+{{-   end -}}
+{{- end -}}
+{{/*
+} End of functions
+*/ -}}
+
+# Maestrod Helm chart
+
+> [!WARNING] This chart is made for internal use by Nutrient.
+
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+* [Using this chart](#using-this-chart)
+* [Prerequisites](#prerequisites)
+* [Migrating from the internal 0.3.x chart](#migrating-from-the-internal-03x-chart)
+* [Restart Job](#restart-job)
+* [Values](#values)
+{{- template "chart.valuesTableOfContents" . }}
+* [Contribution](#contribution)
+* [License](#license)
+* [Support, Issues and License Questions](#support-issues-and-license-questions)
+
+## Maintainers
+
+{{ template "chart.maintainersTable" . }}
+
+## Using this chart
+
+### Adding the repository
+
+```shell
+helm repo add nutrient https://pspdfkit.github.io/helm-charts
+helm repo update
+```
+
+### Installing Maestrod
+
+```shell
+helm upgrade --install -n maestrod \
+     maestrod nutrient/maestrod \
+     -f ./maestrod-values.yaml
+```
+
+Schema is generated using the [helm-values-schema-json plugin](https://github.com/losisin/helm-values-schema-json).
+
+`README.md` is generated with [helm-docs](https://github.com/norwoodj/helm-docs).
+
+### Upgrade
+
+> [!NOTE]
+> Please consult the [changelog](/charts/maestrod/CHANGELOG.md).
+
+## Prerequisites
+
+### License Secret
+
+Maestrod requires the activation key to be supplied via an existing
+Kubernetes Secret in the release namespace. The chart does **not** create
+this secret. Create it before installing:
+
+```shell
+kubectl create secret generic maestrod-secret \
+  -n maestrod \
+  --from-literal=NUTRIENT_LICENSE_KEY="$YOUR_LICENSE_KEY"
+```
+
+Override `licenseSecret.name` / `licenseSecret.key` to reference a different
+Secret/key.
+
+### Image
+
+`image.repository` defaults to `pspdfkit/maestrod`. Override it to use a
+private registry or mirror:
+
+```yaml
+image:
+  repository: my-registry.example.com/maestrod
+  tag: "1.0.0"
+```
+
+When `image.tag` is empty, the chart falls back to the chart's `appVersion`.
+
+## Migrating from the internal 0.3.x chart
+
+This is the first public release of the chart. It is value-compatible with
+the internal `cloud-demo-infra/charts/maestrod@0.3.4`, with a small number of
+defaults reset to neutral values. If your existing values file relied on any
+of the internal defaults below, copy them into your values file as-is. All
+other value paths (`licenseSecret`, `maestro.*`, `service`, `ingress`,
+`subdomainHostName`, `subdomainRootName`, `environmentShortName`, scheduling,
+resources, `updateStrategy`, `restartJob.*`) keep identical defaults and
+semantics.
+
+```yaml
+image:
+  repository: 111300957880.dkr.ecr.eu-west-1.amazonaws.com/maestrod  # no default in public chart
+  tag: stable                                                          # default was 'stable', now empty (falls back to appVersion)
+  pullPolicy: Always                                                   # default was 'Always', now 'IfNotPresent'
+
+imagePullSecrets:
+  - name: image-registry-mcleod-ecr                                    # default was this, now []
+
+podLabels:
+  component_name: maestrod                                             # default was this, now {}
+  otel/logging-enabled: "true"
+
+# only if restartJob.enabled: true
+restartJob:
+  registryAuthSecretName: image-registry-mcleod-ecr                    # default was this, now ""
+```
+
+The Deployment selector labels are byte-identical between the internal and
+public chart, so existing releases can be upgraded in place without hitting
+selector-immutability errors.
+
+## Restart Job
+
+The chart ships an optional CronJob that polls the configured image registry
+for a new digest on the running `image.tag` and patches the Maestrod
+Deployment with a `nutrient/refresh-tag` annotation to trigger a rollout.
+
+It is disabled by default. To enable, set:
+
+```yaml
+restartJob:
+  enabled: true
+  schedule: "*/10 * * * *"
+  registryAuthSecretName: my-registry-credentials   # required: must be a kubernetes.io/dockerconfigjson Secret
+```
+
+The CronJob runs under a dedicated ServiceAccount with a Role that grants
+`get/list pods` and `get/list/update/patch deployments` in the release
+namespace.
+
+## Values
+
+{{ template "chart.valuesTable" . }}
+
+## Contribution
+
+The chart is validated using [ct](https://github.com/helm/chart-testing/tree/main) [lint](https://github.com/helm/chart-testing/blob/main/doc/ct_lint.md):
+
+```shell
+ct lint --target-branch "$(git rev-parse --abbrev-ref HEAD)"
+```
+
+## License
+
+This software is licensed under a [modified BSD license](LICENSE).
+
+## Support, Issues and License Questions
+
+Nutrient offers support via https://support.nutrient.io/hc/en-us/requests/new
+
+Are you [evaluating our SDK](https://www.nutrient.io/sdk/)? That's great, we're happy to help out! To make sure this is fast, please use a work email and have someone from your company fill out our sales form: https://www.nutrient.io/contact-sales/
+
+{{ template "helm-docs.versionFooter" . }}

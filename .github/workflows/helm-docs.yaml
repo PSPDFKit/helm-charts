@@ -27,3 +27,10 @@ jobs:
           chart-search-root: charts/ai-assistant
           # git-push: true
           fail-on-diff: true
+
+      - name: Run helm-docs for Maestrod
+        uses: losisin/helm-docs-github-action@v1
+        with:
+          chart-search-root: charts/maestrod
+          # git-push: true
+          fail-on-diff: true

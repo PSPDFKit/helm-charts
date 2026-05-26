@@ -1,0 +1,50 @@
+{{- if .Values.restartJob.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "maestrod.fullname" . }}-restart-job
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+data:
+  run.sh: |
+    #!/bin/bash
+    set -euo pipefail
+
+    export DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    export REGISTRY=$(echo "{{ .Values.image.repository }}" | cut -d'/' -f1)
+    export REPOSITORY=$(echo "{{ .Values.image.repository }}" | cut -d'/' -f2-)
+    export TAG="{{ .Values.image.tag | default .Chart.AppVersion }}"
+    export AUTH=$(cat /registry-auth/.dockerconfigjson | jq -r '.auths["'$REGISTRY'"].auth')
+
+    echo "Looking for image: ${REGISTRY}/${REPOSITORY}:${TAG}"
+
+    export IMAGE_LATEST=$(curl -I -L \
+      -H "Authorization: Basic ${AUTH}" \
+      -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+      -H "Accept: application/vnd.docker.distribution.manifest.list.v2+json" \
+      -s https://${REGISTRY}/v2/${REPOSITORY}/manifests/${TAG} \
+      | grep -i "^Docker-Content-Digest" | cut -d' ' -f2 | xargs)
+
+    export IMAGE_CURRENT=$(kubectl get pods \
+      --selector app.kubernetes.io/name={{ include "maestrod.name" . }},app.kubernetes.io/instance={{ .Release.Name }} \
+      -o jsonpath='{.items[0].status.containerStatuses[0].imageID}' \
+      | cut -d'@' -f2 | xargs)
+
+    echo "Current image: ${IMAGE_CURRENT}"
+    echo "Latest image:  ${IMAGE_LATEST}"
+
+    if [[ -z "${IMAGE_LATEST}" ]]; then
+      echo "Error: IMAGE_LATEST is empty. Exiting."
+      exit 0
+    fi
+
+    if [[ "${IMAGE_CURRENT}" == "${IMAGE_LATEST}" ]]; then
+      echo "No changes."
+    else
+      echo "Triggering restart."
+      kubectl patch deployment {{ include "maestrod.fullname" . }} \
+        -p "{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"nutrient/refresh-tag\": \"${DATE}\"}}}}}"
+    fi
+
+    echo "Done."
+{{- end }}

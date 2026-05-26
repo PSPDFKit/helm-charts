@@ -1,0 +1,35 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "maestrod.fullname" . }}
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+  {{- $annotations := omit (.Values.ingress.annotations | default dict) "external-dns.alpha.kubernetes.io/hostname" }}
+  {{- if or (gt (len $annotations) 0) (include "maestrod.ingressHost" .) }}
+  annotations:
+    {{- if gt (len $annotations) 0 }}
+    {{- toYaml $annotations | nindent 4 }}
+    {{- end }}
+    external-dns.alpha.kubernetes.io/hostname: {{ include "maestrod.ingressHost" . | quote }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ include "maestrod.ingressHost" . }}
+      secretName: {{ include "maestrod.ingressTlsSecretName" . }}
+  {{- end }}
+  rules:
+    - host: {{ include "maestrod.ingressHost" . }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.path }}
+            pathType: {{ .Values.ingress.pathType }}
+            backend:
+              service:
+                name: {{ include "maestrod.fullname" . }}
+                port:
+                  name: http
+{{- end }}

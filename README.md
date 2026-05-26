@@ -21,6 +21,14 @@ helm upgrade --install -n document-engine \
      -f ./document-engine-values.yaml
 ```
 
+### Maestrod
+
+```
+helm upgrade --install -n maestrod \
+     maestrod nutrient/maestrod \
+     -f ./maestrod-values.yaml
+```
+
 ## Support, Issues and License Questions
 
 Nutrient offers support via https://support.nutrient.io/hc/en-us/requests/new

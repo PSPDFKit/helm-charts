@@ -1,0 +1,76 @@
+{{- if .Values.restartJob.enabled -}}
+{{- if not .Values.restartJob.registryAuthSecretName -}}
+{{- fail "restartJob.registryAuthSecretName must be set when restartJob.enabled is true" -}}
+{{- end -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "maestrod.fullname" . }}-restart-job
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.restartJob.schedule | quote }}
+  startingDeadlineSeconds: 600
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 300
+      ttlSecondsAfterFinished: 300
+      template:
+        metadata:
+          {{- with .Values.restartJob.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          labels:
+            {{- include "maestrod.labels" . | nindent 12 }}
+            {{- with .Values.restartJob.podLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        spec:
+          restartPolicy: Never
+          serviceAccountName: {{ include "maestrod.fullname" . }}-restart-job
+          containers:
+            - name: restart-job
+              image: "{{ .Values.restartJob.image.repository }}:{{ .Values.restartJob.image.tag }}"
+              imagePullPolicy: {{ .Values.restartJob.image.pullPolicy }}
+              command:
+                - /run.sh
+              volumeMounts:
+                - name: registry-auth
+                  mountPath: /registry-auth/.dockerconfigjson
+                  subPath: .dockerconfigjson
+                  readOnly: true
+                - name: script
+                  mountPath: /run.sh
+                  subPath: run.sh
+          volumes:
+            - name: script
+              configMap:
+                name: {{ include "maestrod.fullname" . }}-restart-job
+                items:
+                  - key: run.sh
+                    path: run.sh
+                defaultMode: 0o777
+            - name: registry-auth
+              secret:
+                secretName: {{ .Values.restartJob.registryAuthSecretName }}
+                items:
+                  - key: .dockerconfigjson
+                    path: .dockerconfigjson
+          {{- with .Values.restartJob.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.restartJob.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.restartJob.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}

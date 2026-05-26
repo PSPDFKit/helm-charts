@@ -15,6 +15,7 @@ Nutrient Helm Charts repository. Contains Kubernetes Helm charts for Nutrient pr
 |-------|-------------|
 | `document-engine` | Backend for document processing and automation workflows. Most complex chart. |
 | `ai-assistant` | AI Assistant application. Depends on `document-engine` chart. |
+| `maestrod` | Orchestration backend for Nutrient managed cloud workloads. Single stateless Deployment. |
 | `signing-service-example` | Example chart for demonstration. Excluded from CI. |
 | `simple-resource-wrapper` | Generic Kubernetes resource wrapper (Terraform workaround). |
 
@@ -22,7 +23,7 @@ Nutrient Helm Charts repository. Contains Kubernetes Helm charts for Nutrient pr
 
 ### README.md (helm-docs)
 
-README.md files for `document-engine` and `ai-assistant` are **auto-generated** by
+README.md files for `document-engine`, `ai-assistant`, and `maestrod` are **auto-generated** by
 [helm-docs](https://github.com/norwoodj/helm-docs). CI fails if they are out of sync.
 
 - **Template**: `charts/<chart>/README.md.gotmpl`
@@ -34,6 +35,7 @@ To regenerate locally:
 ```bash
 helm-docs --chart-search-root charts/document-engine
 helm-docs --chart-search-root charts/ai-assistant
+helm-docs --chart-search-root charts/maestrod
 ```
 
 ### values.schema.json (helm-values-schema-json)
@@ -49,6 +51,7 @@ To regenerate locally:
 ```bash
 cd charts/document-engine && helm schema -input values.yaml -draft 2020 -indent 2 -output values.schema.json
 cd charts/ai-assistant && helm schema -input values.yaml -draft 2020 -indent 2 -output values.schema.json
+cd charts/maestrod && helm schema
 ```
 
 ## values.yaml Comment Conventions
@@ -135,6 +138,7 @@ After modifying any chart, regenerate derived files before committing:
    ```bash
    helm-docs --chart-search-root charts/document-engine
    helm-docs --chart-search-root charts/ai-assistant
+   helm-docs --chart-search-root charts/maestrod
    ```
 2. **values.schema.json** — run `helm schema` whenever `values.yaml` schema annotations change:
    ```bash

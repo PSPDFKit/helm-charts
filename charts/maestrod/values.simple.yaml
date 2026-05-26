@@ -1,0 +1,22 @@
+image:
+  repository: pspdfkit/maestrod
+
+# Reuse the default `maestrod-secret` Secret in the release namespace. Create
+# it before installing:
+#   kubectl create secret generic maestrod-secret -n <namespace> \
+#     --from-literal=NUTRIENT_LICENSE_KEY="$YOUR_LICENSE_KEY"
+licenseSecret:
+  name: maestrod-secret
+  key: NUTRIENT_LICENSE_KEY
+
+replicaCount: 1
+
+# Modest CI defaults — the production-style 4 CPU / 8Gi requests in values.yaml
+# will not fit on a one-node kind cluster.
+resources:
+  requests:
+    cpu: "100m"
+    memory: 256Mi
+  limits:
+    cpu: "2"
+    memory: 2Gi
