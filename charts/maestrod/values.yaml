@@ -203,19 +203,50 @@ subdomainRootName: ""
 # @section -- C. Networking
 environmentShortName: ""
 
-# -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
-# Empty by default (no probe configured) for backwards compatibility with the
-# internal `0.3.x` chart. Provide a probe spec to enable.
+# -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# against Maestrod's `/health` HTTP endpoint. Generous `failureThreshold` so a
+# slow initial boot doesn't get killed (10 s × 30 = 5 min budget). Set
+# `startupProbe: {}` to disable.
 # @section -- F. Pod lifecycle
-startupProbe: {}
-# -- (object) [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
-# Empty by default. Provide a probe spec to enable.
+# @notationType -- reference
+startupProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 5
+# -- (object) [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# against Maestrod's `/health` HTTP endpoint. Polls less often than readiness
+# and is more forgiving — a failure restarts the container, so this should
+# only trip on true deadlock. Set `livenessProbe: {}` to disable.
 # @section -- F. Pod lifecycle
-livenessProbe: {}
-# -- (object) [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
-# Empty by default. Provide a probe spec to enable.
+# @notationType -- reference
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 0
+  periodSeconds: 30
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+# -- (object) [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# against Maestrod's `/health` HTTP endpoint. Set `readinessProbe: {}` to
+# disable.
 # @section -- F. Pod lifecycle
-readinessProbe: {}
+# @notationType -- reference
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 0
+  periodSeconds: 5
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
 # -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).
 # @section -- F. Pod lifecycle
 terminationGracePeriodSeconds: 30  # @schema type: integer

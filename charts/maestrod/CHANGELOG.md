@@ -1,7 +1,23 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [0.5.0 (2026-05-27)](#050-2026-05-27)
   - [0.4.0 (2026-05-26)](#040-2026-05-26)
+
+## 0.5.0 (2026-05-27)
+
+### Changed
+
+- `appVersion` bumped to `v1.1.1`.
+- `startupProbe`, `livenessProbe`, and `readinessProbe` now default to HTTP
+  GET on `/health` (port `http`). Set the corresponding value to `{}` to
+  disable an individual probe.
+  - Startup: `failureThreshold: 30`, `periodSeconds: 10`, `timeoutSeconds: 5`
+    (≈ 5 min boot budget before kubelet starts liveness/readiness checks).
+  - Liveness: `failureThreshold: 3`, `periodSeconds: 30`, `timeoutSeconds: 5`
+    (intentionally less aggressive than readiness — a failure restarts the
+    container).
+  - Readiness: `failureThreshold: 3`, `periodSeconds: 10`, `timeoutSeconds: 5`.
 
 ## 0.4.0 (2026-05-26)
 
