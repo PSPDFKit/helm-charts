@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "maestrod.fullname" . }}-test-connection"
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: nc
+      image: busybox:1.37
+      command: ['nc']
+      args: ['-z', '-v', '{{ include "maestrod.fullname" . }}', '{{ .Values.service.port }}']

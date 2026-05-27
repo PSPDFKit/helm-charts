@@ -1,0 +1,390 @@
+# -- (object) Maestrod license. When `licenseSecret.name` is non-empty (the
+# default), the chart wires the `NUTRIENT_LICENSE_KEY` environment variable to
+# the referenced Secret/key. The Secret is **not** managed by the chart and
+# must exist in the release namespace prior to install. Set
+# `licenseSecret.name: ""` to omit the env var entirely (e.g. for chart-level
+# template tests where the license is not exercised).
+# @section -- 00. Maestrod License
+# @notationType -- reference
+licenseSecret:
+  # -- Name of the pre-existing Kubernetes Secret that holds the Maestrod
+  # activation key. When empty, the chart skips wiring the
+  # `NUTRIENT_LICENSE_KEY` env var.
+  # @section -- 00. Maestrod License
+  name: maestrod-secret
+  # -- Key inside the referenced Secret whose value is the Maestrod activation
+  # key. The chart wires this into the `NUTRIENT_LICENSE_KEY` environment
+  # variable.
+  # @section -- 00. Maestrod License
+  key: NUTRIENT_LICENSE_KEY
+
+# -- (object) Maestrod-specific runtime flags. Each key maps directly to a
+# `NUTRIENT_*` / `NATIVESDK_*` environment variable on the container.
+# @section -- 01. Maestrod configuration
+# @notationType -- reference
+maestro:
+  # -- `NUTRIENT_SHOW_SCALAR` — enable Nutrient Scalar integration in the
+  # Maestrod UI. Rendered as a string-quoted boolean.
+  # @section -- 01. Maestrod configuration
+  showScalar: false
+  # -- `NATIVESDK_VISION_LOGS` — enable native SDK vision-mode logging.
+  # Rendered as a string-quoted boolean.
+  # @section -- 01. Maestrod configuration
+  nativeSdkVisionLogs: false
+
+# -- (object) Image settings.
+# @section -- B. Environment
+# @notationType -- reference
+image:
+  # -- Image repository. The default points at the canonical public Nutrient
+  # registry; override to use a private registry or mirror. The schema
+  # rejects an empty string.
+  # @section -- B. Environment
+  repository: pspdfkit/maestrod  # @schema minLength: 1
+  # -- Image pull policy.
+  # @section -- B. Environment
+  pullPolicy: IfNotPresent  # @schema enum: [Always, IfNotPresent, Never]
+  # -- Image tag. Defaults to the chart's `appVersion` when empty.
+  # @section -- B. Environment
+  tag: ""
+
+# -- [ImagePullSecrets](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod)
+# referencing pre-existing Secrets in the release namespace.
+# @section -- B. Environment
+imagePullSecrets: []
+  # - name: my-registry-credentials
+
+# -- (object) ServiceAccount for the Maestrod pod. With `create: false`
+# (default), the pod runs under the namespace's `default` ServiceAccount and
+# no ServiceAccount resource is created by the chart.
+# @section -- B. Environment
+# @notationType -- reference
+serviceAccount:
+  # -- Create a ServiceAccount.
+  # @section -- B. Environment
+  create: true
+  # -- Annotations for the created ServiceAccount.
+  # @section -- B. Environment
+  annotations: {}
+  # -- Name to use for the ServiceAccount. When empty and `create: true`, the
+  # chart's fullname is used.
+  # @section -- B. Environment
+  name: ""
+  # -- Auto-mount the ServiceAccount token in the pod.
+  # @section -- B. Environment
+  automount: false
+
+# -- [Pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @section -- B. Environment
+podSecurityContext: {}
+# -- [Container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @section -- B. Environment
+securityContext: {}
+
+# -- Extra environment variables appended to the Maestrod container.
+# @section -- B. Environment
+extraEnvs: []
+  # - name: SOME_VAR
+  #   value: some-value
+
+# -- Extra `envFrom` sources appended to the Maestrod container.
+# @section -- B. Environment
+extraEnvFrom: []
+  # - configMapRef:
+  #     name: my-config
+  # - secretRef:
+  #     name: my-secret
+
+# -- Extra Secret names whose contents are loaded into the container env via
+# `envFrom: secretRef:`. Convenience for the common case of supplying credentials.
+# @section -- B. Environment
+extraEnvFromSecrets: []
+  # - my-credentials-secret
+
+# -- Additional volumes for the pod.
+# @section -- B. Environment
+extraVolumes: []
+
+# -- Additional volume mounts for the Maestrod container.
+# @section -- B. Environment
+extraVolumeMounts: []
+
+# -- Additional sidecar containers for the pod.
+# @section -- B. Environment
+sidecars: []
+
+# -- [Init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
+# for the pod.
+# @section -- B. Environment
+initContainers: []
+
+# -- Release name override.
+# @section -- B. Metadata
+nameOverride: ""
+# -- Release full name override.
+# @section -- B. Metadata
+fullnameOverride: ""
+
+# -- Pod labels merged on top of the common chart labels.
+# @section -- B. Metadata
+podLabels: {}
+# -- Pod annotations.
+# @section -- B. Metadata
+podAnnotations: {}
+# -- Annotations for the Deployment resource itself (distinct from
+# `podAnnotations`, which apply to the pod template).
+# @section -- B. Metadata
+deploymentAnnotations: {}
+
+# -- (object) Service exposing the Maestrod container.
+# @section -- C. Networking
+# @notationType -- reference
+service:
+  # -- Service type.
+  # @section -- C. Networking
+  type: ClusterIP  # @schema enum: [ClusterIP, NodePort, LoadBalancer]
+  # -- Service port.
+  # @section -- C. Networking
+  port: 5000
+  # -- Container port the Service routes to.
+  # @section -- C. Networking
+  targetPort: 5000
+  # -- Service annotations.
+  # @section -- C. Networking
+  annotations: {}
+
+# -- (object) Ingress for the Maestrod Service. Single-host structure for
+# backwards compatibility with the internal `0.3.x` chart. The host is resolved
+# from `ingress.host` (preferred), or composed from
+# `subdomainHostName` + `subdomainRootName` (fallback).
+# @section -- C. Networking
+# @notationType -- reference
+ingress:
+  # -- Enable ingress.
+  # @section -- C. Networking
+  enabled: false
+  # -- Ingress class name.
+  # @section -- C. Networking
+  className: nginx
+  # -- Ingress annotations. The chart additionally injects an
+  # `external-dns.alpha.kubernetes.io/hostname` annotation with the resolved host.
+  # @section -- C. Networking
+  annotations: {}
+  # -- Explicit ingress host. When empty, the host is composed from
+  # `subdomainHostName` and `subdomainRootName`.
+  # @section -- C. Networking
+  host: ""
+  # -- Ingress path.
+  # @section -- C. Networking
+  path: /
+  # -- Path type.
+  # @section -- C. Networking
+  pathType: Prefix  # @schema enum: [Exact, Prefix, ImplementationSpecific]
+  # -- (object) Ingress TLS settings.
+  # @section -- C. Networking
+  # @notationType -- reference
+  tls:
+    # -- Enable TLS.
+    # @section -- C. Networking
+    enabled: false
+    # -- TLS secret name. When empty, defaults to `<fullname>-ingress`.
+    # @section -- C. Networking
+    secretName: ""
+
+# -- Subdomain part of the composed ingress host. Used when `ingress.host` is
+# empty: the chart joins `<subdomainHostName>.<subdomainRootName>`.
+# @section -- C. Networking
+subdomainHostName: ""
+# -- Root domain part of the composed ingress host.
+# @section -- C. Networking
+subdomainRootName: ""
+# -- Short environment identifier (e.g. `staging`, `prod`). Kept for
+# backwards compatibility; not currently consumed by any template.
+# @section -- C. Networking
+environmentShortName: ""
+
+# -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# against Maestrod's `/health` HTTP endpoint. Generous `failureThreshold` so a
+# slow initial boot doesn't get killed (10 s × 30 = 5 min budget). Set
+# `startupProbe: {}` to disable.
+# @section -- F. Pod lifecycle
+# @notationType -- reference
+startupProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 5
+# -- (object) [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# against Maestrod's `/health` HTTP endpoint. Polls less often than readiness
+# and is more forgiving — a failure restarts the container, so this should
+# only trip on true deadlock. Set `livenessProbe: {}` to disable.
+# @section -- F. Pod lifecycle
+# @notationType -- reference
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 0
+  periodSeconds: 30
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+# -- (object) [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+# against Maestrod's `/health` HTTP endpoint. Set `readinessProbe: {}` to
+# disable.
+# @section -- F. Pod lifecycle
+# @notationType -- reference
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 0
+  periodSeconds: 5
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+# -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).
+# @section -- F. Pod lifecycle
+terminationGracePeriodSeconds: 30  # @schema type: integer
+# -- (object) [Container lifecycle hooks](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/).
+# @section -- F. Pod lifecycle
+lifecycle: {}
+
+# -- (object) [HorizontalPodAutoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/).
+# When `enabled: true`, the chart's HPA controls the replica count and
+# `replicaCount` is ignored.
+# @section -- G. Scheduling
+# @notationType -- reference
+autoscaling:
+  # -- Enable the HPA.
+  # @section -- G. Scheduling
+  enabled: false
+  # -- Minimum replicas.
+  # @section -- G. Scheduling
+  minReplicas: 1
+  # -- Maximum replicas.
+  # @section -- G. Scheduling
+  maxReplicas: 10
+  # -- Target average CPU utilisation (percentage). `null` disables the metric.
+  # @section -- G. Scheduling
+  targetCPUUtilizationPercentage: null  # @schema type: [integer, null]
+  # -- Target average memory utilisation (percentage). `null` disables the metric.
+  # @section -- G. Scheduling
+  targetMemoryUtilizationPercentage: null  # @schema type: [integer, null]
+  # -- (object) HPA [scaling behaviour](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior).
+  # @section -- G. Scheduling
+  behavior: {}
+
+# -- [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+# @section -- G. Scheduling
+resources:
+  requests:
+    cpu: "4"
+    memory: 8Gi
+  limits:
+    cpu: "4"
+    memory: 8Gi
+
+# -- Number of replicas. Ignored when `autoscaling.enabled` is `true`.
+# @section -- G. Scheduling
+replicaCount: 3
+# -- [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
+# `rollingUpdate.maxSurge` and `rollingUpdate.maxUnavailable` are `IntOrString`
+# in Kubernetes — both an integer (e.g. `1`) and a percentage string
+# (e.g. `"25%"`) are accepted.
+# @section -- G. Scheduling
+updateStrategy:
+  type: RollingUpdate  # @schema enum: [RollingUpdate, Recreate]
+  rollingUpdate:
+    maxSurge: 1  # @schema type: [integer, string]
+    maxUnavailable: 0  # @schema type: [integer, string]
+# -- [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy).
+# @section -- G. Scheduling
+revisionHistoryLimit: 1
+
+# -- (object) [PodDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/).
+# When both `minAvailable` and `maxUnavailable` are non-empty,
+# `maxUnavailable` wins (the two fields are mutually exclusive in Kubernetes).
+# Either field accepts an integer (e.g. `1`) or a percentage string (e.g. `"50%"`).
+# @section -- G. Scheduling
+# @notationType -- reference
+podDisruptionBudget:
+  # -- Create a PodDisruptionBudget for Maestrod.
+  # @section -- G. Scheduling
+  create: false
+  # -- `spec.minAvailable`. Integer or percentage string. Ignored when `maxUnavailable` is set.
+  # @section -- G. Scheduling
+  minAvailable: 1  # @schema type: [integer, string, null]
+  # -- `spec.maxUnavailable`. Integer or percentage string. Takes precedence over `minAvailable`.
+  # @section -- G. Scheduling
+  maxUnavailable: ""  # @schema type: [integer, string, null]
+
+# -- [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/).
+# @section -- G. Scheduling
+nodeSelector: {}
+# -- Node affinity.
+# @section -- G. Scheduling
+affinity: {}
+# -- [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/).
+# @section -- G. Scheduling
+tolerations: []
+# -- [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+# @section -- G. Scheduling
+topologySpreadConstraints: []
+# -- [PriorityClass](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) name.
+# @section -- G. Scheduling
+priorityClassName: ""
+# -- [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) name.
+# @section -- G. Scheduling
+schedulerName: ""
+
+# -- (object) Optional CronJob that polls the configured image registry for a
+# new digest on the running `image.tag` and patches the Maestrod Deployment
+# with a refresh annotation to trigger a rollout. Disabled by default.
+# @section -- H. Restart job
+# @notationType -- reference
+restartJob:
+  # -- Enable the restart-job CronJob and its supporting RBAC/ServiceAccount.
+  # @section -- H. Restart job
+  enabled: false
+  # -- CronJob schedule.
+  # @section -- H. Restart job
+  schedule: "*/10 * * * *"
+  # -- (object) Image for the restart-job container. Must contain `kubectl`,
+  # `curl`, `jq`, and `bash` — `alpine/k8s` covers all four.
+  # @section -- H. Restart job
+  # @notationType -- reference
+  image:
+    repository: alpine/k8s
+    tag: "1.35.2"
+    pullPolicy: IfNotPresent  # @schema enum: [Always, IfNotPresent, Never]
+  # -- Name of a pre-existing `kubernetes.io/dockerconfigjson` Secret holding
+  # the registry credentials used to query the image manifest. Required when
+  # `restartJob.enabled: true`; rendering fails otherwise.
+  # @section -- H. Restart job
+  registryAuthSecretName: ""
+  # -- Pod annotations for the restart-job pod.
+  # @section -- H. Restart job
+  podAnnotations:
+    skip-auto-labelling: "true"
+  # -- Pod labels for the restart-job pod.
+  # @section -- H. Restart job
+  podLabels: {}
+  # -- (object) ServiceAccount for the restart-job pod.
+  # @section -- H. Restart job
+  # @notationType -- reference
+  serviceAccount:
+    annotations: {}
+  # -- Node selector for the restart-job pod.
+  # @section -- H. Restart job
+  nodeSelector: {}
+  # -- Tolerations for the restart-job pod.
+  # @section -- H. Restart job
+  tolerations: []
+  # -- Affinity for the restart-job pod.
+  # @section -- H. Restart job
+  affinity: {}

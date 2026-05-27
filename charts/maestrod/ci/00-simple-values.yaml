@@ -1,0 +1,21 @@
+# Repository must match the image the lint-test workflow pulls and side-loads
+# into kind; `image.tag` is overridden to `nightly` by the workflow's
+# --helm-extra-set-args.
+image:
+  repository: 111300957880.dkr.ecr.eu-west-1.amazonaws.com/maestrod
+
+# Skip the NUTRIENT_LICENSE_KEY env var so the pod can start without the
+# external license Secret being pre-provisioned in the CI cluster. Real
+# installs should keep the `licenseSecret.name` default (`maestrod-secret`).
+licenseSecret:
+  name: ""
+
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: 256Mi
+  limits:
+    cpu: "2"
+    memory: 2Gi

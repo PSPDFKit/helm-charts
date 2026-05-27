@@ -1,0 +1,35 @@
+{{- if .Values.restartJob.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "maestrod.fullname" . }}-restart-job
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs:
+      - get
+      - list
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs:
+      - get
+      - list
+      - update
+      - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "maestrod.fullname" . }}-restart-job
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "maestrod.fullname" . }}-restart-job
+roleRef:
+  kind: Role
+  name: {{ include "maestrod.fullname" . }}-restart-job
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
