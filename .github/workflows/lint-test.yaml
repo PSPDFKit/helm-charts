@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
         with:
           version: latest
 
@@ -64,7 +64,7 @@ jobs:
 
       - name: Configure AWS credentials (for ECR pull)
         if: steps.list-changed.outputs.maestrod-changed == 'true'
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_CI_ECR_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
