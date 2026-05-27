@@ -2,7 +2,7 @@
 
 > [!WARNING] This chart is made for internal use by Nutrient.
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.1.1](https://img.shields.io/badge/AppVersion-1.1.1-informational?style=flat-square)
 
 Maestrod, the orchestration backend for Nutrient managed cloud workloads.
 
@@ -177,7 +177,7 @@ namespace.
 | [`serviceAccount`](./values.yaml#L62) | ServiceAccount for the Maestrod pod. With `create: false` (default), the pod runs under the namespace's `default` ServiceAccount and no ServiceAccount resource is created by the chart. | [...](./values.yaml#L62) |
 | [`serviceAccount.annotations`](./values.yaml#L68) | Annotations for the created ServiceAccount. | `{}` |
 | [`serviceAccount.automount`](./values.yaml#L75) | Auto-mount the ServiceAccount token in the pod. | `false` |
-| [`serviceAccount.create`](./values.yaml#L65) | Create a ServiceAccount. | `false` |
+| [`serviceAccount.create`](./values.yaml#L65) | Create a ServiceAccount. | `true` |
 | [`serviceAccount.name`](./values.yaml#L72) | Name to use for the ServiceAccount. When empty and `create: true`, the chart's fullname is used. | `""` |
 | [`sidecars`](./values.yaml#L114) | Additional sidecar containers for the pod. | `[]` |
 

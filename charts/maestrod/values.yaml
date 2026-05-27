@@ -62,7 +62,7 @@ imagePullSecrets: []
 serviceAccount:
   # -- Create a ServiceAccount.
   # @section -- B. Environment
-  create: false
+  create: true
   # -- Annotations for the created ServiceAccount.
   # @section -- B. Environment
   annotations: {}
