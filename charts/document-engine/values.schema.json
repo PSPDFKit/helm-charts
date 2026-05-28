@@ -505,10 +505,6 @@
         "minSearchQueryLength": {
           "type": "integer"
         },
-        "tileMaxScale": {
-          "type": "number",
-          "exclusiveMinimum": 1
-        },
         "port": {
           "type": "integer"
         },
@@ -531,6 +527,13 @@
         },
         "requestTimeoutSeconds": {
           "type": "integer"
+        },
+        "tileMaxScale": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 1
         },
         "trustedProxies": {
           "type": "string"
@@ -1107,6 +1110,9 @@
               "pattern": "^(debug|info|warn|error)$"
             },
             "structured": {
+              "type": "boolean"
+            },
+            "structuredFlatten": {
               "type": "boolean"
             }
           }

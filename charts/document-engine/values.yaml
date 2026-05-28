@@ -138,9 +138,10 @@ config:
   # @section -- 03. Configuration options
   minSearchQueryLength: 3
   # -- `TILE_MAX_SCALE` — maximum allowed tile scale, calculated as requested tile size divided by actual page size.
-  # Must be greater than 1.
+  # Must be greater than 1. When unset, no limit is enforced.
   # @section -- 03. Configuration options
-  tileMaxScale: 16  # @schema type: number; exclusiveMinimum: 1
+  # @default -- unlimited
+  tileMaxScale: null  # @schema type: number, null; minimum: 1
   # -- Hoard — internal caching service parameters
   # @default -- none
   # @notationType -- reference
@@ -679,6 +680,12 @@ observability:
     # -- `LOG_STRUCTURED` — enable structured logging in JSON format
     # @section -- D. Observability
     structured: false
+    # -- `LOG_STRUCTURED_FLATTEN` — when structured logging is enabled, emit `meta`, `location`, `exception`, and `extra`
+    # fields as top-level dotted fields (e.g. `meta.event`, `location.file`) instead of nested JSON. Useful for
+    # OpenTelemetry collector pipelines and log backends that index top-level attributes. Only applies when
+    # `observability.log.structured` is `true`.
+    # @section -- D. Observability
+    structuredFlatten: true
     # -- `HEALTHCHECK_LOGLEVEL` — log level for health checks
     # @section -- D. Observability
     healthcheckLevel: debug  # @schema pattern:^(debug|info|warn|error)$
