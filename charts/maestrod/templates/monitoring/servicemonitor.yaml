@@ -1,0 +1,42 @@
+{{- if .Values.observability.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "maestrod.fullname" . }}
+  namespace: {{ default .Release.Namespace .Values.observability.metrics.serviceMonitor.namespace | quote }}
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+    {{- with .Values.observability.metrics.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- with .Values.observability.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ . }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "maestrod.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: http
+      path: /metrics
+      {{- with .Values.observability.metrics.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.observability.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+      {{- with .Values.observability.metrics.serviceMonitor.relabelings }}
+      relabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.observability.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.observability.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.observability.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace | quote }}
+{{- end }}

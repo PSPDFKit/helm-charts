@@ -185,6 +185,48 @@
     "nodeSelector": {
       "type": "object"
     },
+    "observability": {
+      "type": "object",
+      "properties": {
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "serviceMonitor": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "honorLabels": {
+                  "type": "boolean"
+                },
+                "interval": {
+                  "type": "string"
+                },
+                "jobLabel": {
+                  "type": "string"
+                },
+                "labels": {
+                  "type": "object"
+                },
+                "metricRelabelings": {
+                  "type": "array"
+                },
+                "namespace": {
+                  "type": "string"
+                },
+                "relabelings": {
+                  "type": "array"
+                },
+                "scrapeTimeout": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "podAnnotations": {
       "type": "object"
     },
