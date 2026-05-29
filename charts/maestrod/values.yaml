@@ -203,6 +203,47 @@ subdomainRootName: ""
 # @section -- C. Networking
 environmentShortName: ""
 
+# -- (object) Observability settings for Maestrod.
+# @section -- D. Observability
+# @notationType -- reference
+observability:
+  # -- (object) Metrics integration settings.
+  # @section -- D. Observability
+  # @notationType -- reference
+  metrics:
+    # -- (object) Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor)
+    # scraping Maestrod's `/metrics` endpoint on the existing `http` Service port.
+    # @section -- D. Observability
+    # @notationType -- reference
+    serviceMonitor:
+      # -- Create a Prometheus Operator ServiceMonitor for Maestrod.
+      # @section -- D. Observability
+      enabled: false
+      # -- Namespace where the ServiceMonitor is created. Defaults to the release namespace when empty.
+      # @section -- D. Observability
+      namespace: ""
+      # -- Scrape interval for the ServiceMonitor endpoint.
+      # @section -- D. Observability
+      interval: 30s
+      # -- Scrape timeout for the ServiceMonitor endpoint. Omitted when empty.
+      # @section -- D. Observability
+      scrapeTimeout: ""
+      # -- Extra labels added to the ServiceMonitor metadata.
+      # @section -- D. Observability
+      labels: {}
+      # -- Relabeling rules for the ServiceMonitor endpoint.
+      # @section -- D. Observability
+      relabelings: []
+      # -- Metric relabeling rules for the ServiceMonitor endpoint.
+      # @section -- D. Observability
+      metricRelabelings: []
+      # -- Honor labels from scraped metrics.
+      # @section -- D. Observability
+      honorLabels: false
+      # -- ServiceMonitor job label.
+      # @section -- D. Observability
+      jobLabel: ""
+
 # -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
 # against Maestrod's `/health` HTTP endpoint. Generous `failureThreshold` so a
 # slow initial boot doesn't get killed (10 s × 30 = 5 min budget). Set

@@ -2,7 +2,7 @@
 
 > [!WARNING] This chart is made for internal use by Nutrient.
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.1.1](https://img.shields.io/badge/AppVersion-v1.1.1-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.1.1](https://img.shields.io/badge/AppVersion-v1.1.1-informational?style=flat-square)
 
 Maestrod, the orchestration backend for Nutrient managed cloud workloads.
 
@@ -18,6 +18,7 @@ Maestrod, the orchestration backend for Nutrient managed cloud workloads.
   * [Environment](#environment)
   * [Metadata](#metadata)
   * [Networking](#networking)
+  * [Observability](#observability)
   * [Pod lifecycle](#pod-lifecycle)
   * [Scheduling](#scheduling)
   * [Restart job](#restart-job)
@@ -214,57 +215,74 @@ namespace.
 | [`subdomainHostName`](./values.yaml#L197) | Subdomain part of the composed ingress host. Used when `ingress.host` is empty: the chart joins `<subdomainHostName>.<subdomainRootName>`. | `""` |
 | [`subdomainRootName`](./values.yaml#L200) | Root domain part of the composed ingress host. | `""` |
 
+### Observability
+
+| Key | Description | Default |
+|-----|-------------|---------|
+| [`observability`](./values.yaml#L209) | Observability settings for Maestrod. | [...](./values.yaml#L209) |
+| [`observability.metrics`](./values.yaml#L213) | Metrics integration settings. | [...](./values.yaml#L213) |
+| [`observability.metrics.serviceMonitor`](./values.yaml#L218) | Prometheus [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor) scraping Maestrod's `/metrics` endpoint on the existing `http` Service port. | [...](./values.yaml#L218) |
+| [`observability.metrics.serviceMonitor.enabled`](./values.yaml#L221) | Create a Prometheus Operator ServiceMonitor for Maestrod. | `false` |
+| [`observability.metrics.serviceMonitor.honorLabels`](./values.yaml#L242) | Honor labels from scraped metrics. | `false` |
+| [`observability.metrics.serviceMonitor.interval`](./values.yaml#L227) | Scrape interval for the ServiceMonitor endpoint. | `"30s"` |
+| [`observability.metrics.serviceMonitor.jobLabel`](./values.yaml#L245) | ServiceMonitor job label. | `""` |
+| [`observability.metrics.serviceMonitor.labels`](./values.yaml#L233) | Extra labels added to the ServiceMonitor metadata. | `{}` |
+| [`observability.metrics.serviceMonitor.metricRelabelings`](./values.yaml#L239) | Metric relabeling rules for the ServiceMonitor endpoint. | `[]` |
+| [`observability.metrics.serviceMonitor.namespace`](./values.yaml#L224) | Namespace where the ServiceMonitor is created. Defaults to the release namespace when empty. | `""` |
+| [`observability.metrics.serviceMonitor.relabelings`](./values.yaml#L236) | Relabeling rules for the ServiceMonitor endpoint. | `[]` |
+| [`observability.metrics.serviceMonitor.scrapeTimeout`](./values.yaml#L230) | Scrape timeout for the ServiceMonitor endpoint. Omitted when empty. | `""` |
+
 ### Pod lifecycle
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`lifecycle`](./values.yaml#L255) | [Container lifecycle hooks](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/). | `{}` |
-| [`livenessProbe`](./values.yaml#L227) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) against Maestrod's `/health` HTTP endpoint. Polls less often than readiness and is more forgiving — a failure restarts the container, so this should only trip on true deadlock. Set `livenessProbe: {}` to disable. | [...](./values.yaml#L227) |
-| [`readinessProbe`](./values.yaml#L241) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) against Maestrod's `/health` HTTP endpoint. Set `readinessProbe: {}` to disable. | [...](./values.yaml#L241) |
-| [`startupProbe`](./values.yaml#L212) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) against Maestrod's `/health` HTTP endpoint. Generous `failureThreshold` so a slow initial boot doesn't get killed (10 s × 30 = 5 min budget). Set `startupProbe: {}` to disable. | [...](./values.yaml#L212) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L252) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). | `30` |
+| [`lifecycle`](./values.yaml#L296) | [Container lifecycle hooks](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/). | `{}` |
+| [`livenessProbe`](./values.yaml#L268) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) against Maestrod's `/health` HTTP endpoint. Polls less often than readiness and is more forgiving — a failure restarts the container, so this should only trip on true deadlock. Set `livenessProbe: {}` to disable. | [...](./values.yaml#L268) |
+| [`readinessProbe`](./values.yaml#L282) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) against Maestrod's `/health` HTTP endpoint. Set `readinessProbe: {}` to disable. | [...](./values.yaml#L282) |
+| [`startupProbe`](./values.yaml#L253) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) against Maestrod's `/health` HTTP endpoint. Generous `failureThreshold` so a slow initial boot doesn't get killed (10 s × 30 = 5 min budget). Set `startupProbe: {}` to disable. | [...](./values.yaml#L253) |
+| [`terminationGracePeriodSeconds`](./values.yaml#L293) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). | `30` |
 
 ### Scheduling
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`affinity`](./values.yaml#L331) | Node affinity. | `{}` |
-| [`autoscaling`](./values.yaml#L262) | [HorizontalPodAutoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/). When `enabled: true`, the chart's HPA controls the replica count and `replicaCount` is ignored. | [...](./values.yaml#L262) |
-| [`autoscaling.behavior`](./values.yaml#L280) | HPA [scaling behaviour](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior). | `{}` |
-| [`autoscaling.enabled`](./values.yaml#L265) | Enable the HPA. | `false` |
-| [`autoscaling.maxReplicas`](./values.yaml#L271) | Maximum replicas. | `10` |
-| [`autoscaling.minReplicas`](./values.yaml#L268) | Minimum replicas. | `1` |
-| [`autoscaling.targetCPUUtilizationPercentage`](./values.yaml#L274) | Target average CPU utilisation (percentage). `null` disables the metric. | `nil` |
-| [`autoscaling.targetMemoryUtilizationPercentage`](./values.yaml#L277) | Target average memory utilisation (percentage). `null` disables the metric. | `nil` |
-| [`nodeSelector`](./values.yaml#L328) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/). | `{}` |
-| [`podDisruptionBudget`](./values.yaml#L315) | [PodDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/). When both `minAvailable` and `maxUnavailable` are non-empty, `maxUnavailable` wins (the two fields are mutually exclusive in Kubernetes). Either field accepts an integer (e.g. `1`) or a percentage string (e.g. `"50%"`). | [...](./values.yaml#L315) |
-| [`podDisruptionBudget.create`](./values.yaml#L318) | Create a PodDisruptionBudget for Maestrod. | `false` |
-| [`podDisruptionBudget.maxUnavailable`](./values.yaml#L324) | `spec.maxUnavailable`. Integer or percentage string. Takes precedence over `minAvailable`. | `""` |
-| [`podDisruptionBudget.minAvailable`](./values.yaml#L321) | `spec.minAvailable`. Integer or percentage string. Ignored when `maxUnavailable` is set. | `1` |
-| [`priorityClassName`](./values.yaml#L340) | [PriorityClass](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) name. | `""` |
-| [`replicaCount`](./values.yaml#L294) | Number of replicas. Ignored when `autoscaling.enabled` is `true`. | `3` |
-| [`resources`](./values.yaml#L284) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/). | `{"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}` |
-| [`revisionHistoryLimit`](./values.yaml#L307) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy). | `1` |
-| [`schedulerName`](./values.yaml#L343) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) name. | `""` |
-| [`tolerations`](./values.yaml#L334) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/). | `[]` |
-| [`topologySpreadConstraints`](./values.yaml#L337) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/). | `[]` |
-| [`updateStrategy`](./values.yaml#L300) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). `rollingUpdate.maxSurge` and `rollingUpdate.maxUnavailable` are `IntOrString` in Kubernetes — both an integer (e.g. `1`) and a percentage string (e.g. `"25%"`) are accepted. | `{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"}` |
+| [`affinity`](./values.yaml#L372) | Node affinity. | `{}` |
+| [`autoscaling`](./values.yaml#L303) | [HorizontalPodAutoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/). When `enabled: true`, the chart's HPA controls the replica count and `replicaCount` is ignored. | [...](./values.yaml#L303) |
+| [`autoscaling.behavior`](./values.yaml#L321) | HPA [scaling behaviour](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior). | `{}` |
+| [`autoscaling.enabled`](./values.yaml#L306) | Enable the HPA. | `false` |
+| [`autoscaling.maxReplicas`](./values.yaml#L312) | Maximum replicas. | `10` |
+| [`autoscaling.minReplicas`](./values.yaml#L309) | Minimum replicas. | `1` |
+| [`autoscaling.targetCPUUtilizationPercentage`](./values.yaml#L315) | Target average CPU utilisation (percentage). `null` disables the metric. | `nil` |
+| [`autoscaling.targetMemoryUtilizationPercentage`](./values.yaml#L318) | Target average memory utilisation (percentage). `null` disables the metric. | `nil` |
+| [`nodeSelector`](./values.yaml#L369) | [Node selector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/). | `{}` |
+| [`podDisruptionBudget`](./values.yaml#L356) | [PodDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/). When both `minAvailable` and `maxUnavailable` are non-empty, `maxUnavailable` wins (the two fields are mutually exclusive in Kubernetes). Either field accepts an integer (e.g. `1`) or a percentage string (e.g. `"50%"`). | [...](./values.yaml#L356) |
+| [`podDisruptionBudget.create`](./values.yaml#L359) | Create a PodDisruptionBudget for Maestrod. | `false` |
+| [`podDisruptionBudget.maxUnavailable`](./values.yaml#L365) | `spec.maxUnavailable`. Integer or percentage string. Takes precedence over `minAvailable`. | `""` |
+| [`podDisruptionBudget.minAvailable`](./values.yaml#L362) | `spec.minAvailable`. Integer or percentage string. Ignored when `maxUnavailable` is set. | `1` |
+| [`priorityClassName`](./values.yaml#L381) | [PriorityClass](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) name. | `""` |
+| [`replicaCount`](./values.yaml#L335) | Number of replicas. Ignored when `autoscaling.enabled` is `true`. | `3` |
+| [`resources`](./values.yaml#L325) | [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/). | `{"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}` |
+| [`revisionHistoryLimit`](./values.yaml#L348) | [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy). | `1` |
+| [`schedulerName`](./values.yaml#L384) | [Scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) name. | `""` |
+| [`tolerations`](./values.yaml#L375) | [Node tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/). | `[]` |
+| [`topologySpreadConstraints`](./values.yaml#L378) | [Topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/). | `[]` |
+| [`updateStrategy`](./values.yaml#L341) | [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). `rollingUpdate.maxSurge` and `rollingUpdate.maxUnavailable` are `IntOrString` in Kubernetes — both an integer (e.g. `1`) and a percentage string (e.g. `"25%"`) are accepted. | `{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"}` |
 
 ### Restart job
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| [`restartJob`](./values.yaml#L350) | Optional CronJob that polls the configured image registry for a new digest on the running `image.tag` and patches the Maestrod Deployment with a refresh annotation to trigger a rollout. Disabled by default. | [...](./values.yaml#L350) |
-| [`restartJob.affinity`](./values.yaml#L390) | Affinity for the restart-job pod. | `{}` |
-| [`restartJob.enabled`](./values.yaml#L353) | Enable the restart-job CronJob and its supporting RBAC/ServiceAccount. | `false` |
-| [`restartJob.image`](./values.yaml#L361) | Image for the restart-job container. Must contain `kubectl`, `curl`, `jq`, and `bash` — `alpine/k8s` covers all four. | [...](./values.yaml#L361) |
-| [`restartJob.nodeSelector`](./values.yaml#L384) | Node selector for the restart-job pod. | `{}` |
-| [`restartJob.podAnnotations`](./values.yaml#L372) | Pod annotations for the restart-job pod. | `{"skip-auto-labelling":"true"}` |
-| [`restartJob.podLabels`](./values.yaml#L376) | Pod labels for the restart-job pod. | `{}` |
-| [`restartJob.registryAuthSecretName`](./values.yaml#L369) | Name of a pre-existing `kubernetes.io/dockerconfigjson` Secret holding the registry credentials used to query the image manifest. Required when `restartJob.enabled: true`; rendering fails otherwise. | `""` |
-| [`restartJob.schedule`](./values.yaml#L356) | CronJob schedule. | `"*/10 * * * *"` |
-| [`restartJob.serviceAccount`](./values.yaml#L380) | ServiceAccount for the restart-job pod. | [...](./values.yaml#L380) |
-| [`restartJob.tolerations`](./values.yaml#L387) | Tolerations for the restart-job pod. | `[]` |
+| [`restartJob`](./values.yaml#L391) | Optional CronJob that polls the configured image registry for a new digest on the running `image.tag` and patches the Maestrod Deployment with a refresh annotation to trigger a rollout. Disabled by default. | [...](./values.yaml#L391) |
+| [`restartJob.affinity`](./values.yaml#L431) | Affinity for the restart-job pod. | `{}` |
+| [`restartJob.enabled`](./values.yaml#L394) | Enable the restart-job CronJob and its supporting RBAC/ServiceAccount. | `false` |
+| [`restartJob.image`](./values.yaml#L402) | Image for the restart-job container. Must contain `kubectl`, `curl`, `jq`, and `bash` — `alpine/k8s` covers all four. | [...](./values.yaml#L402) |
+| [`restartJob.nodeSelector`](./values.yaml#L425) | Node selector for the restart-job pod. | `{}` |
+| [`restartJob.podAnnotations`](./values.yaml#L413) | Pod annotations for the restart-job pod. | `{"skip-auto-labelling":"true"}` |
+| [`restartJob.podLabels`](./values.yaml#L417) | Pod labels for the restart-job pod. | `{}` |
+| [`restartJob.registryAuthSecretName`](./values.yaml#L410) | Name of a pre-existing `kubernetes.io/dockerconfigjson` Secret holding the registry credentials used to query the image manifest. Required when `restartJob.enabled: true`; rendering fails otherwise. | `""` |
+| [`restartJob.schedule`](./values.yaml#L397) | CronJob schedule. | `"*/10 * * * *"` |
+| [`restartJob.serviceAccount`](./values.yaml#L421) | ServiceAccount for the restart-job pod. | [...](./values.yaml#L421) |
+| [`restartJob.tolerations`](./values.yaml#L428) | Tolerations for the restart-job pod. | `[]` |
 
 ## Contribution
 

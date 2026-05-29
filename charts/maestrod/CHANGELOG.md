@@ -1,8 +1,17 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [0.5.0 (2026-05-27)](#050-2026-05-27)
+  - [0.6.0 (2026-05-29)](#060-2026-05-29)
     - [Added](#added)
+  - [0.5.0 (2026-05-27)](#050-2026-05-27)
+    - [Added](#added-1)
+
+## 0.6.0 (2026-05-29)
+
+### Added
+
+- Optional Prometheus Operator ServiceMonitor via
+  `observability.metrics.serviceMonitor`.
 
 ## 0.5.0 (2026-05-27)
 
