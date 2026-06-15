@@ -10,26 +10,26 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           fetch-depth: 0
 
       - name: Run helm-docs for Document Engine
-        uses: losisin/helm-docs-github-action@v1
+        uses: losisin/helm-docs-github-action@2ccf3e77eb70dc80d62f8cc26f15d0a96b75fef4 # v1
         with:
           chart-search-root: charts/document-engine
           # git-push: true
           fail-on-diff: true
 
       - name: Run helm-docs for AI Assistant
-        uses: losisin/helm-docs-github-action@v1
+        uses: losisin/helm-docs-github-action@2ccf3e77eb70dc80d62f8cc26f15d0a96b75fef4 # v1
         with:
           chart-search-root: charts/ai-assistant
           # git-push: true
           fail-on-diff: true
 
       - name: Run helm-docs for Maestrod
-        uses: losisin/helm-docs-github-action@v1
+        uses: losisin/helm-docs-github-action@2ccf3e77eb70dc80d62f8cc26f15d0a96b75fef4 # v1
         with:
           chart-search-root: charts/maestrod
           # git-push: true
