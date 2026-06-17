@@ -243,6 +243,34 @@ observability:
       # -- ServiceMonitor job label.
       # @section -- D. Observability
       jobLabel: ""
+    # -- (object) Grafana dashboard delivered as a sidecar-discovered ConfigMap. Requires the
+    # `serviceMonitor` (or another scrape path) so Prometheus has Maestrod's `/metrics`, and a
+    # Grafana sidecar watching ConfigMaps with the `grafana_dashboard` label.
+    # @section -- D. Observability
+    # @notationType -- reference
+    grafanaDashboard:
+      # -- Create the Grafana dashboard ConfigMap for Maestrod.
+      # @section -- D. Observability
+      enabled: false
+      # -- (object) ConfigMap parameters.
+      # @section -- D. Observability
+      # @notationType -- reference
+      configMap:
+        # -- (object) ConfigMap labels. The Grafana sidecar discovers dashboards by the
+        # `grafana_dashboard` label; keep it set unless your sidecar uses a different selector.
+        # @section -- D. Observability
+        labels:
+          grafana_dashboard: "1"
+      # -- (tpl/string) Dashboard title.
+      # @notationType -- tpl
+      # @section -- D. Observability
+      # @default -- *generated*
+      title: "Maestrod ({{ .Release.Namespace }}/{{ include \"maestrod.fullname\" . }})"
+      # -- Dashboard tags.
+      # @section -- D. Observability
+      tags:
+        - Nutrient
+        - maestrod
 
 # -- (object) [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
 # against Maestrod's `/health` HTTP endpoint. Generous `failureThreshold` so a

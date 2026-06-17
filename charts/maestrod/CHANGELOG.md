@@ -1,14 +1,27 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [0.7.0 (2026-06-17)](#070-2026-06-17)
+    - [Added](#added)
   - [0.6.2 (2026-06-12)](#062-2026-06-12)
     - [Changed](#changed)
   - [0.6.1 (2026-05-30)](#061-2026-05-30)
     - [Changed](#changed-1)
   - [0.6.0 (2026-05-29)](#060-2026-05-29)
-    - [Added](#added)
-  - [0.5.0 (2026-05-27)](#050-2026-05-27)
     - [Added](#added-1)
+  - [0.5.0 (2026-05-27)](#050-2026-05-27)
+    - [Added](#added-2)
+
+## 0.7.0 (2026-06-17)
+
+### Added
+
+- Grafana dashboard for Maestrod, delivered as a sidecar-discovered ConfigMap
+  (`observability.metrics.grafanaDashboard`, disabled by default). Panels cover
+  per-route AI token usage (`nutrient.ai.tokens_total`), AI call latency and
+  reliability, per-route HTTP RED metrics, vision quality/throughput, and process
+  health. Requires the `serviceMonitor` (or another scrape path) and a Grafana
+  sidecar watching the `grafana_dashboard` label.
 
 ## 0.6.2 (2026-06-12)
 

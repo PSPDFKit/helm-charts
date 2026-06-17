@@ -1,0 +1,23 @@
+{{- if .Values.observability.metrics.grafanaDashboard.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "maestrod.fullname" . }}-dashboard
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+    {{- with .Values.observability.metrics.grafanaDashboard.configMap.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+data:
+  maestrod-{{ printf "%s-%s" .Release.Namespace .Release.Name }}.json: |-
+{{ .Files.Get "dashboards/maestrod-single-namespace.json"
+   | replace "<<<<DASHBOARD_TITLE>>>>" (tpl .Values.observability.metrics.grafanaDashboard.title $)
+   | replace "<<<<TAGS>>>>" (join "\", \"" .Values.observability.metrics.grafanaDashboard.tags)
+   | replace "<<<<DASHBOARD_UID>>>>" (printf "%s-%s" .Release.Namespace .Release.Name | trunc 40 | trimSuffix "-")
+   | replace "<<<<NAMESPACE>>>>" .Release.Namespace
+   | indent 4 }}
+
+  # Bumps the ConfigMap checksum on chart upgrade so the Grafana sidecar reloads the dashboard.
+  HELM_CHART_VERSION: {{ include "maestrod.chart" . | quote }}
+{{- end }}
