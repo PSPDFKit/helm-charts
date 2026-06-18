@@ -100,7 +100,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Total tokens consumed per route and model over the selected time range. Token counts only — no cost/pricing is applied.",
+      "description": "Total tokens consumed per route and model over the selected time range.",
       "fieldConfig": {
         "defaults": {
           "color": {
