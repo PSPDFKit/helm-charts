@@ -31,7 +31,7 @@
       },
       "id": 100,
       "panels": [],
-      "title": "AI tokens & cost",
+      "title": "AI token usage",
       "type": "row"
     },
     {
@@ -100,7 +100,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Total tokens consumed per route over the selected range — proxy for spend (multiply by per-model price).",
+      "description": "Total tokens consumed per route and model over the selected time range. Token counts only — no cost/pricing is applied.",
       "fieldConfig": {
         "defaults": {
           "color": {
