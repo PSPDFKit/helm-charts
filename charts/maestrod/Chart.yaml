@@ -4,8 +4,8 @@ type: application
 description: Maestrod, the orchestration backend for Nutrient managed cloud workloads.
 home: https://www.nutrient.io
 icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
-version: 0.6.2
-appVersion: "1.1.3"
+version: 0.6.3
+appVersion: "1.1.5"
 
 keywords:
   - nutrient
