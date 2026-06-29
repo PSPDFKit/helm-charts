@@ -1,6 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.5.0 (2026-06-29)](#850-2026-06-29)
   - [8.4.0 (2026-05-28)](#840-2026-05-28)
     - [Added](#added)
     - [Changed](#changed)
@@ -235,6 +236,13 @@
     - [Changed](#changed-67)
   - [2.0.0](#200)
     - [Changed](#changed-68)
+
+## 8.5.0 (2026-06-29)
+
+* Updated Document Engine to 1.17.0.
+* Added Helm values for async job admission, worker queues, retry, retention, and encryption settings.
+* Added external Secret support for `ASYNC_JOB_ENCRYPTION_KEYS`.
+* Added Helm values for batch render, remote URL fetch policy, and full-text search settings.
 
 ## 8.4.0 (2026-05-28)
 

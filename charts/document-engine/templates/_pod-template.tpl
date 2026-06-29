@@ -111,6 +111,13 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
+      {{- if .Values.config.asyncJobEncryption.externalSecret.name }}
+        - name: ASYNC_JOB_ENCRYPTION_KEYS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.config.asyncJobEncryption.externalSecret.name }}
+              key: {{ .Values.config.asyncJobEncryption.externalSecret.key }}
+      {{- end }}
       {{- if and .Values.dashboard.enabled
                  .Values.dashboard.auth.externalSecret.name}}
         - name: DASHBOARD_USERNAME

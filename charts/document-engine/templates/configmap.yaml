@@ -19,8 +19,20 @@ data:
   PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
   REMOTE_URL_FETCH_TIMEOUT: {{ mul 1000 .Values.config.urlFetchTimeoutSeconds | quote }}
   READ_ANNOTATION_BATCH_TIMEOUT: {{ mul 1000 .Values.config.readAnnotationBatchTimeoutSeconds | quote }}
+{{- with .Values.config.batchRender }}
+  BATCH_RENDER_MAX_CONCURRENCY: {{ .maxConcurrency | quote }}
+  BATCH_RENDER_MAX_PAGES: {{ .maxPages | quote }}
+  BATCH_RENDER_PAGE_TIMEOUT_MS: {{ mul 1000 .pageTimeoutSeconds | quote }}
+{{- end }}
   MAX_UPLOAD_SIZE_BYTES: {{ mul 1048576 .Values.config.maxUploadSizeMegaBytes | quote }}
   ASYNC_JOBS_TTL: {{ .Values.config.asyncJobsTtlSeconds | quote }}
+  ASYNC_JOBS_METADATA_TTL: {{ .Values.config.asyncJobsMetadataTtlSeconds | quote }}
+  ASYNC_JOB_TIMEOUT: {{ .Values.config.asyncJobTimeoutSeconds | quote }}
+  ASYNC_JOB_MAX_RETRIES: {{ .Values.config.asyncJobMaxRetries | quote }}
+  ASYNC_JOB_RETRY_BACKOFF_SECONDS: {{ .Values.config.asyncJobRetryBackoffSeconds | quote }}
+  ASYNC_ADMISSION_QUEUES: {{ .Values.config.asyncAdmissionQueues | quote }}
+  ASYNC_ADMISSION_QUEUE_LIMITS: {{ .Values.config.asyncAdmissionQueueLimits | quote }}
+  ASYNC_WORKER_QUEUES: {{ .Values.config.asyncWorkerQueues | quote }}
   ALLOW_DOCUMENT_UPLOADS: {{ .Values.config.allowDocumentUploads | quote }}
   ALLOW_REMOTE_DOCUMENTS: {{ .Values.config.allowRemoteDocuments | quote }}
   ALLOW_DOCUMENT_GENERATION: {{ .Values.config.allowDocumentGeneration | quote }}
@@ -28,6 +40,18 @@ data:
   IGNORE_INVALID_ANNOTATIONS: {{ .Values.config.ignoreInvalidAnnotations | quote }}
   AUTOMATIC_LINK_EXTRACTION: {{ .Values.config.automaticLinkExtraction | quote }}
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
+{{- with .Values.config.remoteUrlFetch }}
+  REMOTE_URL_FETCH_POLICY: {{ .policy | quote }}
+  REMOTE_URL_FETCH_ALLOWED_HOSTS: {{ .allowedHosts | quote }}
+  REMOTE_URL_FETCH_ALLOWED_CIDRS: {{ .allowedCidrs | quote }}
+  REMOTE_URL_FETCH_ALLOW_EMBEDDED_CREDENTIALS: {{ .allowEmbeddedCredentials | quote }}
+{{- end }}
+{{- with .Values.config.search }}
+  SEARCH_FTS_ENABLED: {{ .ftsEnabled | quote }}
+  SEARCH_FTS_ENRICHMENT: {{ .ftsEnrichment | quote }}
+  SEARCH_MAX_GLYPH_SIDECAR_PAGE_BYTES: {{ .maxGlyphSidecarPageBytes | int | quote }}
+  SEARCH_FTS_BUILD_ON_WRITE: {{ .ftsBuildOnWrite | quote }}
+{{- end }}
   {{- with .Values.config.tileMaxScale }}
   TILE_MAX_SCALE: {{ . | quote }}
   {{- end }}
