@@ -110,12 +110,72 @@ config:
   # -- `READ_ANNOTATION_BATCH_TIMEOUT` in seconds
   # @section -- 03. Configuration options
   readAnnotationBatchTimeoutSeconds: 20
+  # -- Batch render request settings.
+  # @default -- none
+  # @notationType -- reference
+  # @section -- 03. Configuration options
+  batchRender:
+    # -- `BATCH_RENDER_MAX_CONCURRENCY`
+    # @section -- 03. Configuration options
+    maxConcurrency: 4  # @schema minimum: 1
+    # -- `BATCH_RENDER_MAX_PAGES`
+    # @section -- 03. Configuration options
+    maxPages: 500  # @schema minimum: 1
+    # -- `BATCH_RENDER_PAGE_TIMEOUT_MS` in seconds
+    # @section -- 03. Configuration options
+    pageTimeoutSeconds: 120  # @schema minimum: 1
   # -- `MAX_UPLOAD_SIZE_BYTES` in megabytes
   # @section -- 03. Configuration options
   maxUploadSizeMegaBytes: 950
   # -- `ASYNC_JOBS_TTL`
   # @section -- 03. Configuration options
   asyncJobsTtlSeconds: 172800
+  # -- `ASYNC_JOBS_METADATA_TTL` in seconds. Must be greater than or equal to `config.asyncJobsTtlSeconds`.
+  # @section -- 03. Configuration options
+  asyncJobsMetadataTtlSeconds: 604800  # @schema minimum: 1
+  # -- `ASYNC_JOB_TIMEOUT` in seconds
+  # @section -- 03. Configuration options
+  asyncJobTimeoutSeconds: 600  # @schema minimum: 1
+  # -- `ASYNC_JOB_MAX_RETRIES`
+  # @section -- 03. Configuration options
+  asyncJobMaxRetries: 2  # @schema minimum: 0
+  # -- `ASYNC_JOB_RETRY_BACKOFF_SECONDS`
+  # @section -- 03. Configuration options
+  asyncJobRetryBackoffSeconds: 15  # @schema minimum: 1
+  # -- `ASYNC_ADMISSION_QUEUES` — comma-separated async queues accepted by this node.
+  # Set to an empty string to reject async operation admission.
+  # @section -- 03. Configuration options
+  asyncAdmissionQueues: default
+  # -- `ASYNC_ADMISSION_QUEUE_LIMITS` — optional comma-separated queue limits, for example `default=100`.
+  # Missing queues are unlimited.
+  # @section -- 03. Configuration options
+  # @default -- none
+  asyncAdmissionQueueLimits: ""
+  # -- `ASYNC_WORKER_QUEUES` — comma-separated async worker queues with concurrency, for example `default=5`.
+  # Set to an empty string to make this node skip async background work.
+  # @section -- 03. Configuration options
+  asyncWorkerQueues: default=5
+  # -- (object) Async job metadata encryption settings.
+  # @section -- 03. Configuration options
+  # @default -- none
+  # @notationType -- reference
+  asyncJobEncryption:
+    # -- `ASYNC_JOB_ENCRYPTION_KEYS` — comma-separated `key_id:base64_key[:current]` entries for encrypting async job metadata.
+    # Required for async Build API requests with remote URLs or PDF passwords.
+    # @section -- 03. Configuration options
+    # @default -- none
+    keys: ""
+    # -- (object) Use an external secret for `ASYNC_JOB_ENCRYPTION_KEYS`
+    # @section -- 03. Configuration options
+    # @default -- none
+    # @notationType -- reference
+    externalSecret:
+      # -- External secret name
+      # @section -- 03. Configuration options
+      name: ""
+      # -- Secret key name for the async job encryption keyring
+      # @section -- 03. Configuration options
+      key: ASYNC_JOB_ENCRYPTION_KEYS
   # -- `ALLOW_DOCUMENT_UPLOADS`
   # @section -- 03. Configuration options
   allowDocumentUploads: true
@@ -137,6 +197,42 @@ config:
   # -- `MIN_SEARCH_QUERY_LENGTH`
   # @section -- 03. Configuration options
   minSearchQueryLength: 3
+  # -- Customer-controlled remote URL fetch policy.
+  # @default -- none
+  # @notationType -- reference
+  # @section -- 03. Configuration options
+  remoteUrlFetch:
+    # -- `REMOTE_URL_FETCH_POLICY`
+    # @section -- 03. Configuration options
+    policy: public_only  # @schema enum: [allowlist_only, public_only, allow_private, allow_all]
+    # -- `REMOTE_URL_FETCH_ALLOWED_HOSTS` — comma-separated DNS hostnames or wildcard DNS patterns.
+    # @section -- 03. Configuration options
+    # @default -- none
+    allowedHosts: ""
+    # -- `REMOTE_URL_FETCH_ALLOWED_CIDRS` — comma-separated CIDR ranges.
+    # @section -- 03. Configuration options
+    # @default -- none
+    allowedCidrs: ""
+    # -- `REMOTE_URL_FETCH_ALLOW_EMBEDDED_CREDENTIALS`
+    # @section -- 03. Configuration options
+    allowEmbeddedCredentials: false
+  # -- Full-text search settings.
+  # @default -- none
+  # @notationType -- reference
+  # @section -- 03. Configuration options
+  search:
+    # -- `SEARCH_FTS_ENABLED`
+    # @section -- 03. Configuration options
+    ftsEnabled: false
+    # -- `SEARCH_FTS_ENRICHMENT`
+    # @section -- 03. Configuration options
+    ftsEnrichment: daemon  # @schema enum: [daemon, sidecar, none]
+    # -- `SEARCH_MAX_GLYPH_SIDECAR_PAGE_BYTES`
+    # @section -- 03. Configuration options
+    maxGlyphSidecarPageBytes: 2000000  # @schema minimum: 1
+    # -- `SEARCH_FTS_BUILD_ON_WRITE`
+    # @section -- 03. Configuration options
+    ftsBuildOnWrite: false
   # -- `TILE_MAX_SCALE` — maximum allowed tile scale, calculated as requested tile size divided by actual page size.
   # Must be greater than 1. When unset, no limit is enforced.
   # @section -- 03. Configuration options

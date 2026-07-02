@@ -452,11 +452,72 @@
         "allowRemoteDocuments": {
           "type": "boolean"
         },
+        "asyncAdmissionQueueLimits": {
+          "type": "string"
+        },
+        "asyncAdmissionQueues": {
+          "type": "string"
+        },
+        "asyncJobEncryption": {
+          "type": "object",
+          "properties": {
+            "externalSecret": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "keys": {
+              "type": "string"
+            }
+          }
+        },
+        "asyncJobMaxRetries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "asyncJobRetryBackoffSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "asyncJobTimeoutSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "asyncJobsMetadataTtlSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
         "asyncJobsTtlSeconds": {
           "type": "integer"
         },
+        "asyncWorkerQueues": {
+          "type": "string"
+        },
         "automaticLinkExtraction": {
           "type": "boolean"
+        },
+        "batchRender": {
+          "type": "object",
+          "properties": {
+            "maxConcurrency": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxPages": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "pageTimeoutSeconds": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
         },
         "daemonReadTimeoutSeconds": {
           "type": "integer"
@@ -522,11 +583,57 @@
         "readAnnotationBatchTimeoutSeconds": {
           "type": "integer"
         },
+        "remoteUrlFetch": {
+          "type": "object",
+          "properties": {
+            "allowEmbeddedCredentials": {
+              "type": "boolean"
+            },
+            "allowedCidrs": {
+              "type": "string"
+            },
+            "allowedHosts": {
+              "type": "string"
+            },
+            "policy": {
+              "type": "string",
+              "enum": [
+                "allowlist_only",
+                "public_only",
+                "allow_private",
+                "allow_all"
+              ]
+            }
+          }
+        },
         "replaceSecretsFromEnv": {
           "type": "boolean"
         },
         "requestTimeoutSeconds": {
           "type": "integer"
+        },
+        "search": {
+          "type": "object",
+          "properties": {
+            "ftsBuildOnWrite": {
+              "type": "boolean"
+            },
+            "ftsEnabled": {
+              "type": "boolean"
+            },
+            "ftsEnrichment": {
+              "type": "string",
+              "enum": [
+                "daemon",
+                "sidecar",
+                "none"
+              ]
+            },
+            "maxGlyphSidecarPageBytes": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
         },
         "tileMaxScale": {
           "type": [
