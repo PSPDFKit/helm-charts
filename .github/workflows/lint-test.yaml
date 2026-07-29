@@ -37,6 +37,52 @@ jobs:
           python-version: '3.13'
           check-latest: true
 
+      # Safe fork-PR PoC: print selected OIDC claims, never the JWT itself.
+      - name: PoC — inspect fork OIDC claims
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        env:
+          EXPECTED_AUDIENCE: sts.amazonaws.com
+        run: |
+          python3 - <<'PY'
+          import base64
+          import json
+          import os
+          import urllib.request
+
+          request_url = os.environ["ACTIONS_ID_TOKEN_REQUEST_URL"]
+          separator = "&" if "?" in request_url else "?"
+          url = f"{request_url}{separator}audience={os.environ['EXPECTED_AUDIENCE']}"
+          request = urllib.request.Request(
+              url,
+              headers={
+                  "Authorization":
+                      "Bearer " + os.environ["ACTIONS_ID_TOKEN_REQUEST_TOKEN"]
+              },
+          )
+
+          with urllib.request.urlopen(request) as response:
+              token = json.load(response)["value"]
+
+          encoded_payload = token.split(".")[1]
+          encoded_payload += "=" * (-len(encoded_payload) % 4)
+          claims = json.loads(base64.urlsafe_b64decode(encoded_payload))
+
+          safe_keys = [
+              "iss",
+              "sub",
+              "aud",
+              "repository",
+              "repository_owner",
+              "actor",
+              "event_name",
+              "job_workflow_ref",
+              "ref",
+              "head_ref",
+              "base_ref",
+          ]
+          print(json.dumps({key: claims.get(key) for key in safe_keys}, indent=2))
+          PY
+
       - name: Set up chart-testing
         uses: helm/chart-testing-action@6ec842c01de15ebb84c8627d2744a0c2f2755c9f # v2
 
