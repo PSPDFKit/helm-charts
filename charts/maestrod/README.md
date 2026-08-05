@@ -2,7 +2,7 @@
 
 > [!WARNING] This chart is made for internal use by Nutrient.
 
-![Version: 0.6.4](https://img.shields.io/badge/Version-0.6.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.2.0](https://img.shields.io/badge/AppVersion-1.2.0-informational?style=flat-square)
+![Version: 0.6.5](https://img.shields.io/badge/Version-0.6.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.3.0](https://img.shields.io/badge/AppVersion-1.3.0-informational?style=flat-square)
 
 Maestrod, the orchestration backend for Nutrient managed cloud workloads.
 
@@ -93,20 +93,20 @@ When `image.tag` is empty, the chart falls back to the chart's `appVersion`.
 This is the first public release of the chart. It is value-compatible with
 the internal `cloud-demo-infra/charts/maestrod@0.3.4`, with a small number of
 defaults reset to neutral values. If your existing values file relied on any
-of the internal defaults below, copy them into your values file as-is. All
-other value paths (`licenseSecret`, `maestro.*`, `service`, `ingress`,
+of the internal defaults below, reproduce the equivalent settings with your
+registry and Secret names. All other value paths (`licenseSecret`, `maestro.*`, `service`, `ingress`,
 `subdomainHostName`, `subdomainRootName`, `environmentShortName`, scheduling,
 resources, `updateStrategy`, `restartJob.*`) keep identical defaults and
 semantics.
 
 ```yaml
 image:
-  repository: 111300957880.dkr.ecr.eu-west-1.amazonaws.com/maestrod  # no default in public chart
+  repository: your-registry.example.com/maestrod                       # no default in public chart
   tag: stable                                                          # default was 'stable', now empty (falls back to appVersion)
   pullPolicy: Always                                                   # default was 'Always', now 'IfNotPresent'
 
 imagePullSecrets:
-  - name: image-registry-mcleod-ecr                                    # default was this, now []
+  - name: your-image-registry-secret                                   # default was this, now []
 
 podLabels:
   component_name: maestrod                                             # default was this, now {}
@@ -114,7 +114,7 @@ podLabels:
 
 # only if restartJob.enabled: true
 restartJob:
-  registryAuthSecretName: image-registry-mcleod-ecr                    # default was this, now ""
+  registryAuthSecretName: your-image-registry-secret                   # default was this, now ""
 ```
 
 The Deployment selector labels are byte-identical between the internal and
