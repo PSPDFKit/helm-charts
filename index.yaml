@@ -3960,6 +3960,25 @@ entries:
     version: 0.1.0
   maestrod:
   - apiVersion: v2
+    appVersion: 1.3.2
+    created: "2026-08-19T14:03:27.754208552Z"
+    description: Maestrod, the orchestration backend for Nutrient managed cloud workloads.
+    digest: 6aa2fcb072a05964de5659c5b8d7596f867778adefca89b5394ebe0e71c413fb
+    home: https://www.nutrient.io
+    icon: https://cdn.prod.website-files.com/65fdb7696055f07a05048833/66e58e33c3880ff24aa34027_nutrient-logo.png
+    keywords:
+    - nutrient
+    - maestrod
+    maintainers:
+    - email: support@nutrient.io
+      name: Nutrient
+      url: https://www.nutrient.io
+    name: maestrod
+    type: application
+    urls:
+    - https://github.com/PSPDFKit/helm-charts/releases/download/maestrod-0.6.7/maestrod-0.6.7.tgz
+    version: 0.6.7
+  - apiVersion: v2
     appVersion: 1.3.1
     created: "2026-08-07T10:59:35.590470403Z"
     description: Maestrod, the orchestration backend for Nutrient managed cloud workloads.
@@ -4274,4 +4293,4 @@ entries:
     urls:
     - https://github.com/PSPDFKit/helm-charts/releases/download/simple-resource-wrapper-1.0.0/simple-resource-wrapper-1.0.0.tgz
     version: 1.0.0
-generated: "2026-08-07T10:59:35.590801235Z"
+generated: "2026-08-19T14:03:27.754608388Z"
