@@ -83,7 +83,7 @@ config:
   # -- `PSPDFKIT_WORKER_POOL_SIZE`
   # @section -- 03. Configuration options
   workerPoolSize: 16  # @schema minimum: 1
-  # -- Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`). Should be lesser than `terminationGracePeriodSeconds`.
+  # -- Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`). Should be smaller than `terminationGracePeriodSeconds`, so a request cannot still be running when Kubernetes sends `SIGKILL`.
   # @section -- 03. Configuration options
   requestTimeoutSeconds: 60
   # -- Document processing timeout in seconds (`PSPDFKIT_WORKER_TIMEOUT`). Should not be greater than `config.requestTimeoutSeconds`.
@@ -1288,7 +1288,7 @@ readinessProbe:
   successThreshold: 1
   failureThreshold: 3
 # -- [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).
-# Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`).
+# How long Kubernetes waits after `SIGTERM` before `SIGKILL`. To let a long request finish, keep the pod out of rotation before `SIGTERM` using `lifecycle`, and size this above that delay.
 # @section -- F. Pod lifecycle
 terminationGracePeriodSeconds: 65  # @schema type: integer
 # -- [Lifecycle](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)

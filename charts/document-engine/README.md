@@ -124,7 +124,7 @@ When using an Application Load Balancer in front of Document Engine, it needs to
 Specifically:
 
 * A pod needs to stay alive longer than [target group deregistration delay](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_TargetGroupAttribute.html). This can be achieved using `lifecycle` and `terminationGracePeriodSeconds` values.
-* As in any other case for Document Engine, all timeouts should be smaller than `terminationGracePeriodSeconds`, especially `config.requestTimeoutSeconds`.
+* As in any other case for Document Engine, all timeouts should be smaller than `terminationGracePeriodSeconds`, especially `config.requestTimeoutSeconds`, so that nothing is still running when Kubernetes sends `SIGKILL`. What keeps a long request from being interrupted is the pod leaving rotation before `SIGTERM`, which is what `lifecycle` is for.
 * As common for ALB, [load balancer idle timeout](https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_LoadBalancerAttribute.html) should be greater than the target group deregistration delay.
 
 Here's an example of configuration subset to use with [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/), passing platform service parameters as [ingress annotations](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/):
@@ -445,7 +445,7 @@ Note:
 | [`config.remoteUrlFetch.allowedHosts`](./values.yaml#L211) | `REMOTE_URL_FETCH_ALLOWED_HOSTS` — comma-separated DNS hostnames or wildcard DNS patterns. | `none` |
 | [`config.remoteUrlFetch.policy`](./values.yaml#L207) | `REMOTE_URL_FETCH_POLICY` | `"public_only"` |
 | [`config.replaceSecretsFromEnv`](./values.yaml#L283) | `REPLACE_SECRETS_FROM_ENV` — whether to consider environment variables, values and secrets for `JWT_PUBLIC_KEY`, `SECRET_KEY_BASE` and `DASHBOARD_PASSWORD` | `true` |
-| [`config.requestTimeoutSeconds`](./values.yaml#L88) | Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`). Should be lesser than `terminationGracePeriodSeconds`. | `60` |
+| [`config.requestTimeoutSeconds`](./values.yaml#L88) | Full request timeout in seconds (`SERVER_REQUEST_TIMEOUT`). Should be smaller than `terminationGracePeriodSeconds`, so a request cannot still be running when Kubernetes sends `SIGKILL`. | `60` |
 | [`config.search`](./values.yaml#L223) | Full-text search settings. | [...](./values.yaml#L223) |
 | [`config.search.ftsBuildOnWrite`](./values.yaml#L235) | `SEARCH_FTS_BUILD_ON_WRITE` | `false` |
 | [`config.search.ftsEnabled`](./values.yaml#L226) | `SEARCH_FTS_ENABLED` | `false` |
@@ -732,7 +732,7 @@ Note:
 | [`livenessProbe`](./values.yaml#L1267) | [Liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1267) |
 | [`readinessProbe`](./values.yaml#L1280) | [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1280) |
 | [`startupProbe`](./values.yaml#L1254) | [Startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | [...](./values.yaml#L1254) |
-| [`terminationGracePeriodSeconds`](./values.yaml#L1293) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). Should be greater than the longest expected request processing time (`config.requestTimeoutSeconds`). | `65` |
+| [`terminationGracePeriodSeconds`](./values.yaml#L1293) | [Termination grace period](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/). How long Kubernetes waits after `SIGTERM` before `SIGKILL`. To let a long request finish, keep the pod out of rotation before `SIGTERM` using `lifecycle`, and size this above that delay. | `65` |
 
 ### Scheduling
 
