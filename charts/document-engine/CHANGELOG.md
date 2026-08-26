@@ -1,6 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.6.1 (2026-08-25)](#861-2026-08-25)
   - [8.6.0 (2026-08-20](#860-2026-08-20)
   - [8.5.0 (2026-06-29)](#850-2026-06-29)
   - [8.4.0 (2026-05-28)](#840-2026-05-28)
@@ -237,6 +238,10 @@
     - [Changed](#changed-67)
   - [2.0.0](#200)
     - [Changed](#changed-68)
+
+## 8.6.1 (2026-08-25)
+
+* Corrected the description of `terminationGracePeriodSeconds`, which implied it governs how long in-flight requests are given to finish.
 
 ## 8.6.0 (2026-08-20)
 
