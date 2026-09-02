@@ -1,6 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.6.3 (2026-09-02)](#863-2026-09-02)
   - [8.6.2 (2026-09-01)](#862-2026-09-01)
   - [8.6.1 (2026-08-25)](#861-2026-08-25)
   - [8.6.0 (2026-08-20)](#860-2026-08-20)
@@ -239,6 +240,11 @@
     - [Changed](#changed-67)
   - [2.0.0](#200)
     - [Changed](#changed-68)
+
+## 8.6.3 (2026-09-02)
+
+* Removed the note in the `Clustering` section calling it experimental. Clustering is supported.
+* `README.md.gotmpl`: removed section-wide note support, which had no remaining users.
 
 ## 8.6.2 (2026-09-01)
 
