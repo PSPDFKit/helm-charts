@@ -107,6 +107,15 @@ config:
   # -- `REMOTE_URL_FETCH_TIMEOUT` in seconds
   # @section -- 03. Configuration options
   urlFetchTimeoutSeconds: 5
+  # -- `DOWNLOADER_WORKER_POOL_SIZE`. How many documents are fetched from a remote URL at once, per pod.
+  # @section -- 03. Configuration options
+  urlFetchPoolSize: 16  # @schema minimum: 1
+  # -- `DOWNLOADER_BROKER_CLIENT_QUEUE_TIMEOUT` in seconds. How long a remote fetch waits for a free slot before it is rejected with `503`.
+  # @section -- 03. Configuration options
+  urlFetchQueueTimeoutSeconds: 5
+  # -- `DOWNLOADER_BROKER_CLIENT_QUEUE_MAX_SIZE`. How many remote fetches may wait for a free slot at once.
+  # @section -- 03. Configuration options
+  urlFetchQueueMaxSize: 128  # @schema minimum: 1
   # -- `READ_ANNOTATION_BATCH_TIMEOUT` in seconds
   # @section -- 03. Configuration options
   readAnnotationBatchTimeoutSeconds: 20
