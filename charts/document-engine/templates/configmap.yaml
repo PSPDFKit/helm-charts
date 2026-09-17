@@ -18,6 +18,9 @@ data:
   PSPDFKIT_WORKER_POOL_MAX_SECONDS: {{ .Values.config.workerPoolMaxSeconds | quote }}
   PDF_GENERATION_TIMEOUT: {{ mul 1000 .Values.config.generationTimeoutSeconds | quote }}
   REMOTE_URL_FETCH_TIMEOUT: {{ mul 1000 .Values.config.urlFetchTimeoutSeconds | quote }}
+  DOWNLOADER_WORKER_POOL_SIZE: {{ .Values.config.urlFetchPoolSize | quote }}
+  DOWNLOADER_BROKER_CLIENT_QUEUE_TIMEOUT: {{ mul 1000 .Values.config.urlFetchQueueTimeoutSeconds | quote }}
+  DOWNLOADER_BROKER_CLIENT_QUEUE_MAX_SIZE: {{ .Values.config.urlFetchQueueMaxSize | quote }}
   READ_ANNOTATION_BATCH_TIMEOUT: {{ mul 1000 .Values.config.readAnnotationBatchTimeoutSeconds | quote }}
 {{- with .Values.config.batchRender }}
   BATCH_RENDER_MAX_CONCURRENCY: {{ .maxConcurrency | quote }}
