@@ -560,6 +560,9 @@
         "ignoreInvalidAnnotations": {
           "type": "boolean"
         },
+        "instantPermissionAwareLongPoll": {
+          "type": "boolean"
+        },
         "maxUploadSizeMegaBytes": {
           "type": "integer"
         },

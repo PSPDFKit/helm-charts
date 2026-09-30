@@ -40,6 +40,7 @@ data:
   IGNORE_INVALID_ANNOTATIONS: {{ .Values.config.ignoreInvalidAnnotations | quote }}
   AUTOMATIC_LINK_EXTRACTION: {{ .Values.config.automaticLinkExtraction | quote }}
   MIN_SEARCH_QUERY_LENGTH: {{ .Values.config.minSearchQueryLength | quote }}
+  INSTANT_PERMISSION_AWARE_LONG_POLL: {{ .Values.config.instantPermissionAwareLongPoll | quote }}
 {{- with .Values.config.remoteUrlFetch }}
   REMOTE_URL_FETCH_POLICY: {{ .policy | quote }}
   REMOTE_URL_FETCH_ALLOWED_HOSTS: {{ .allowedHosts | quote }}

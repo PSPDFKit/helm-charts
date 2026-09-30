@@ -1,6 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.7.0 (2026-09-30)](#870-2026-09-30)
   - [8.6.3 (2026-09-02)](#863-2026-09-02)
   - [8.6.2 (2026-09-01)](#862-2026-09-01)
   - [8.6.1 (2026-08-25)](#861-2026-08-25)
@@ -240,6 +241,11 @@
     - [Changed](#changed-67)
   - [2.0.0](#200)
     - [Changed](#changed-68)
+
+## 8.7.0 (2026-09-30)
+
+* Updated Document Engine to 1.19.0.
+* Added a Helm value for `INSTANT_PERMISSION_AWARE_LONG_POLL` (`config.instantPermissionAwareLongPoll`).
 
 ## 8.6.3 (2026-09-02)
 
