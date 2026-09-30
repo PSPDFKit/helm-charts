@@ -197,6 +197,10 @@ config:
   # -- `MIN_SEARCH_QUERY_LENGTH`
   # @section -- 03. Configuration options
   minSearchQueryLength: 3
+  # -- `INSTANT_PERMISSION_AWARE_LONG_POLL` — keep Instant long-poll requests waiting when only records hidden by collaboration permissions change.
+  # Hidden changes are delivered with the next visible change or at the request timeout, so group changes that revoke visibility can reach clients late.
+  # @section -- 03. Configuration options
+  instantPermissionAwareLongPoll: false
   # -- Customer-controlled remote URL fetch policy.
   # @default -- none
   # @notationType -- reference
