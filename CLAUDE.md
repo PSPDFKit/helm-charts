@@ -54,8 +54,12 @@ clones the default branch, which reports the last tag but is whatever was on
 `main` that day, so two people can generate different schemas:
 
 ```bash
-helm plugin install https://github.com/losisin/helm-values-schema-json.git --version v2.6.0
+helm plugin install https://github.com/losisin/helm-values-schema-json.git --version v2.6.0 --verify=false
 ```
+
+Helm 4 verifies plugin signatures by default and a git source can't be
+verified, so the install fails without `--verify=false`. Drop that flag on
+Helm 3, whose `plugin install` has no `--verify` and rejects it.
 
 To regenerate locally:
 
