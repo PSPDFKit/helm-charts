@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [0.10.0 (2026-10-08)](#0100-2026-10-08)
+    - [Added](#added)
   - [0.9.0 (2026-10-07)](#090-2026-10-07)
     - [Changed](#changed)
   - [0.8.0 (2026-09-30)](#080-2026-09-30)
@@ -26,9 +28,19 @@
   - [0.6.1 (2026-05-30)](#061-2026-05-30)
     - [Changed](#changed-11)
   - [0.6.0 (2026-05-29)](#060-2026-05-29)
-    - [Added](#added)
-  - [0.5.0 (2026-05-27)](#050-2026-05-27)
     - [Added](#added-1)
+  - [0.5.0 (2026-05-27)](#050-2026-05-27)
+    - [Added](#added-2)
+
+## 0.10.0 (2026-10-08)
+
+### Added
+
+- Optional KEDA autoscaling via `keda`. When `keda.enabled` is `true`, the
+  chart renders a `keda.sh/v1alpha1` ScaledObject for the Deployment, passes
+  `keda.triggers`, `keda.advanced` and `keda.fallback` through verbatim, and
+  omits the Deployment's `replicas`. Rendering fails when `keda.enabled` and
+  `autoscaling.enabled` are both `true`, or when `keda.triggers` is empty.
 
 ## 0.9.0 (2026-10-07)
 
