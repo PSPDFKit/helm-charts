@@ -296,6 +296,12 @@
     "priorityClassName": {
       "type": "string"
     },
+    "progressDeadlineSeconds": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
     "readinessProbe": {
       "type": "object",
       "properties": {

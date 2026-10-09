@@ -39,3 +39,6 @@ keda:
         query: sum(http_server_active_requests{http_request_method="POST"})
         threshold: "10"
         ignoreNullValues: "false"
+
+# Exercises the progress deadline the GPU fleet raises for long drains.
+progressDeadlineSeconds: 1800

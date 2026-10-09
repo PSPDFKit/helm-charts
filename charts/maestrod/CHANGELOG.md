@@ -42,6 +42,8 @@
   `keda.triggers`, `keda.advanced` and `keda.fallback` through verbatim, and
   omits the Deployment's `replicas`. Rendering fails when `keda.enabled` and
   `autoscaling.enabled` are both `true`, or when `keda.triggers` is empty.
+- `progressDeadlineSeconds` sets the Deployment's progress deadline. Empty keeps
+  the Kubernetes default of 600.
 
 ### Changed
 

@@ -399,6 +399,12 @@ updateStrategy:
 # -- [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy).
 # @section -- G. Scheduling
 revisionHistoryLimit: 1
+# -- Seconds a rollout may go without progress before the Deployment reports it
+# failed ([progress deadline](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#progress-deadline-seconds)).
+# Empty keeps the Kubernetes default of 600. Raise it when old pods drain for
+# longer than that while their replacements wait for a node.
+# @section -- G. Scheduling
+progressDeadlineSeconds: null  # @schema type: [integer, null]
 
 # -- (object) [PodDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/).
 # When both `minAvailable` and `maxUnavailable` are non-empty,
