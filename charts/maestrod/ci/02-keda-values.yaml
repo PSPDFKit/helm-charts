@@ -1,0 +1,44 @@
+image:
+  repository: example.invalid/maestrod
+
+licenseSecret:
+  name: ""
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: 256Mi
+  limits:
+    cpu: "2"
+    memory: 2Gi
+
+# The lint-test workflow installs the KEDA CRDs but not the KEDA operator, so
+# the API server validates this ScaledObject and nothing acts on it: the
+# Deployment, which omits `replicas`, runs a single pod.
+keda:
+  enabled: true
+  minReplicaCount: 1
+  maxReplicaCount: 3
+  pollingInterval: 30
+  fallback:
+    failureThreshold: 3
+    replicas: 1
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 600
+          policies:
+            - type: Pods
+              value: 1
+              periodSeconds: 300
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-operated.monitoring.svc:9090
+        query: sum(http_server_active_requests{http_request_method="POST"})
+        threshold: "10"
+        ignoreNullValues: "false"
+
+# Exercises the progress deadline the GPU fleet raises for long drains.
+progressDeadlineSeconds: 1800

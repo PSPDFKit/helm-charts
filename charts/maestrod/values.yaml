@@ -297,7 +297,7 @@ lifecycle: {}
 
 # -- (object) [HorizontalPodAutoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/).
 # When `enabled: true`, the chart's HPA controls the replica count and
-# `replicaCount` is ignored.
+# `replicaCount` is ignored. Mutually exclusive with `keda.enabled`.
 # @section -- G. Scheduling
 # @notationType -- reference
 autoscaling:
@@ -320,6 +320,58 @@ autoscaling:
   # @section -- G. Scheduling
   behavior: {}
 
+# -- (object) [KEDA](https://keda.sh/) autoscaling. When `enabled: true`, the
+# chart renders a `keda.sh/v1alpha1` ScaledObject targeting the Deployment,
+# KEDA creates and owns the HPA, and `replicaCount` is ignored. Requires KEDA
+# in the cluster. Mutually exclusive with `autoscaling.enabled`: rendering
+# fails when both are `true`.
+# @section -- G. Scheduling
+# @notationType -- reference
+keda:
+  # -- Enable the KEDA ScaledObject.
+  # @section -- G. Scheduling
+  enabled: false
+  # -- Annotations for the ScaledObject.
+  # @section -- G. Scheduling
+  annotations: {}
+  # -- Minimum replicas (`spec.minReplicaCount`).
+  # @section -- G. Scheduling
+  minReplicaCount: 1
+  # -- Maximum replicas (`spec.maxReplicaCount`).
+  # @section -- G. Scheduling
+  maxReplicaCount: 10
+  # -- Seconds between two checks of each trigger (`spec.pollingInterval`).
+  # @section -- G. Scheduling
+  pollingInterval: 30
+  # -- Seconds to wait after the last active trigger before scaling to zero
+  # (`spec.cooldownPeriod`). KEDA applies it only to scale-to-zero, when
+  # `minReplicaCount` is `0`. Pace scale-down between non-zero replica counts
+  # with `advanced.horizontalPodAutoscalerConfig.behavior` instead. `null`
+  # omits the field.
+  # @section -- G. Scheduling
+  cooldownPeriod: null  # @schema type: [integer, null]
+  # -- (object) [Fallback](https://keda.sh/docs/latest/reference/scaledobject-spec/#fallback)
+  # replica count used when the triggers fail. Rendered verbatim; omitted when
+  # empty.
+  # @section -- G. Scheduling
+  fallback: {}
+  # -- (object) [Advanced](https://keda.sh/docs/latest/reference/scaledobject-spec/#advanced)
+  # settings, rendered verbatim; omitted when empty. HPA scaling behaviour goes
+  # in `horizontalPodAutoscalerConfig.behavior`.
+  # @section -- G. Scheduling
+  advanced: {}
+  # -- [Triggers](https://keda.sh/docs/latest/reference/scaledobject-spec/#triggers),
+  # rendered verbatim. Rendering fails when `enabled: true` and the list is
+  # empty. Trigger `metadata` values must be strings.
+  # @section -- G. Scheduling
+  triggers: []
+    # - type: prometheus
+    #   metadata:
+    #     serverAddress: http://prometheus-operated.monitoring.svc:9090
+    #     query: sum(http_server_active_requests{namespace="maestrod"})
+    #     threshold: "10"
+    #     ignoreNullValues: "false"
+
 # -- [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 # @section -- G. Scheduling
 resources:
@@ -330,7 +382,8 @@ resources:
     cpu: "4"
     memory: 8Gi
 
-# -- Number of replicas. Ignored when `autoscaling.enabled` is `true`.
+# -- Number of replicas. Ignored when `autoscaling.enabled` or `keda.enabled`
+# is `true`.
 # @section -- G. Scheduling
 replicaCount: 3
 # -- [Update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
@@ -346,6 +399,12 @@ updateStrategy:
 # -- [Revision history limit](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy).
 # @section -- G. Scheduling
 revisionHistoryLimit: 1
+# -- Seconds a rollout may go without progress before the Deployment reports it
+# failed ([progress deadline](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#progress-deadline-seconds)).
+# Empty keeps the Kubernetes default of 600. Raise it when old pods drain for
+# longer than that while their replacements wait for a node.
+# @section -- G. Scheduling
+progressDeadlineSeconds: null  # @schema type: [integer, null]
 
 # -- (object) [PodDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/).
 # When both `minAvailable` and `maxUnavailable` are non-empty,

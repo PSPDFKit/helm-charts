@@ -9,11 +9,14 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if not (or .Values.autoscaling.enabled .Values.keda.enabled) }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   {{- with .Values.revisionHistoryLimit }}
   revisionHistoryLimit: {{ . }}
+  {{- end }}
+  {{- with .Values.progressDeadlineSeconds }}
+  progressDeadlineSeconds: {{ . }}
   {{- end }}
   {{- with .Values.updateStrategy }}
   strategy:
