@@ -32,14 +32,15 @@ maestro:
   # Rendered as a string-quoted boolean.
   # @section -- 01. Maestrod configuration
   nativeSdkVisionLogs: false
-  # -- `MAESTRO_RELEASE_VERSION`: release name Maestrod reports as its
-  # version (OpenAPI `info.version`), verbatim. When empty, the chart derives
-  # it from `image.tag` (falling back to the chart's `appVersion`), with any
-  # `@sha256:...` digest suffix removed, so `latest`, `nightly` or `1.6.0` is
-  # reported as deployed. Set it explicitly when the tag does not name the
-  # release, e.g. a digest-pinned deployment. It only changes the reported
-  # version, not the binary. Rendered into the chart ConfigMap, so
-  # `extraEnvs`/`extraEnvFrom` entries with the same name take precedence.
+  # -- `MAESTRO_RELEASE_VERSION`: version Maestrod reports in OpenAPI
+  # `info.version`, verbatim. When empty, stable `x.y.z` image tags supply
+  # the version after removing any `@sha256:...` suffix; an empty image tag
+  # uses the chart's `appVersion`. Other tags, including `latest`, `nightly`
+  # and digest-only references, omit the variable so the daemon reports its
+  # full baked-in build version and source SHA. Set an explicit value to
+  # override that behavior. It changes only the reported version, not the
+  # binary. Rendered into the ConfigMap when present; `extraEnvs` and
+  # `extraEnvFrom` entries with the same name take precedence.
   # @section -- 01. Maestrod configuration
   releaseVersion: ""
 

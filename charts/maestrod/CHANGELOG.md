@@ -42,8 +42,9 @@
 ### Added
 
 - `maestro.releaseVersion` configures the daemon's reported release identity via
-  `MAESTRO_RELEASE_VERSION`. By default it uses the image tag or chart appVersion,
-  without a digest suffix. Set an explicit value for immutable commit images.
+  `MAESTRO_RELEASE_VERSION`. Stable numeric image tags or chart appVersion supply
+  the default; rolling tags and digest-only references preserve the daemon's full
+  build version and source SHA. An explicit value overrides either behavior.
 
 ## 0.10.1 (2026-10-13)
 

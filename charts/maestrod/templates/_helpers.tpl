@@ -66,14 +66,17 @@ true and no name override is given; otherwise the `serviceAccount.name` or
 
 {{/*
 Release version Maestrod reports (MAESTRO_RELEASE_VERSION). Prefers an explicit
-maestro.releaseVersion verbatim; otherwise the deployed image tag (or the
-chart's appVersion when the tag is empty) with any "@<digest>" suffix removed.
+maestro.releaseVersion verbatim; otherwise only stable x.y.z tags (or the chart's
+appVersion when the tag is empty) override the baked-in build version.
 */}}
 {{- define "maestrod.releaseVersion" -}}
 {{- if .Values.maestro.releaseVersion -}}
 {{- .Values.maestro.releaseVersion -}}
 {{- else -}}
-{{- regexReplaceAll "@.*$" (.Values.image.tag | default .Chart.AppVersion | toString) "" -}}
+{{- $tag := regexReplaceAll "@.*$" (.Values.image.tag | default .Chart.AppVersion | toString) "" -}}
+{{- if regexMatch "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" $tag -}}
+{{- $tag -}}
+{{- end -}}
 {{- end -}}
 {{- end }}
 
