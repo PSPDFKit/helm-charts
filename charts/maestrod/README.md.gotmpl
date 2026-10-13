@@ -183,6 +183,33 @@ image:
 
 When `image.tag` is empty, the chart falls back to the chart's `appVersion`.
 
+### Reported release version
+
+`maestro.releaseVersion` maps to `MAESTRO_RELEASE_VERSION`, not to a `NUTRIENT_*` or
+`NATIVESDK_*` variable. The chart injects it through the ConfigMap. When the value is empty,
+the chart derives it from `image.tag`, falling back to chart `appVersion`, and removes any
+`@sha256:...` suffix. Set it explicitly when the image reference doesn't name the deployed
+release, such as an immutable commit image or a digest-pinned deployment:
+
+```yaml
+image:
+  tag: "sha-<full SHA>@sha256:<digest>"
+maestro:
+  releaseVersion: "1.6.1"
+```
+
+A nonblank `MAESTRO_RELEASE_VERSION` changes the daemon's reported OpenAPI `info.version`
+verbatim without changing the binary or its baked-in `<next-patch>-dev+<full SHA>` assembly
+identity. When the runtime variable is absent or whitespace-only, the daemon reports its
+assembly informational version, falling back to `0.0.0` if unavailable. An empty chart value
+still injects the derived release name; it doesn't unset the runtime variable.
+
+CI builds or reuses immutable `sha-<full SHA>` images. `latest` advances per normal `master`
+commit without Hosted CI. Nightly validates a pinned `latest` digest through Hosted CI and
+promotes that same digest. Stable releases select an explicit source SHA and `x.y.z` version,
+reuse or build the commit image, and apply the Git release tag only after publishing the image.
+The chart supplies the deployment identity; it doesn't perform image promotion.
+
 ## Migrating from the internal 0.3.x chart
 
 This is the first public release of the chart. It is value-compatible with

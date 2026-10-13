@@ -1,10 +1,12 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [0.11.0 (2026-10-13)](#0110-2026-10-13)
+    - [Added](#added)
   - [0.10.1 (2026-10-13)](#0101-2026-10-13)
     - [Updated](#updated)
   - [0.10.0 (2026-10-09)](#0100-2026-10-09)
-    - [Added](#added)
+    - [Added](#added-1)
     - [Changed](#changed)
   - [0.9.0 (2026-10-07)](#090-2026-10-07)
     - [Changed](#changed-1)
@@ -31,9 +33,17 @@
   - [0.6.1 (2026-05-30)](#061-2026-05-30)
     - [Changed](#changed-12)
   - [0.6.0 (2026-05-29)](#060-2026-05-29)
-    - [Added](#added-1)
-  - [0.5.0 (2026-05-27)](#050-2026-05-27)
     - [Added](#added-2)
+  - [0.5.0 (2026-05-27)](#050-2026-05-27)
+    - [Added](#added-3)
+
+## 0.11.0 (2026-10-13)
+
+### Added
+
+- `maestro.releaseVersion` configures the daemon's reported release identity via
+  `MAESTRO_RELEASE_VERSION`. By default it uses the image tag or chart appVersion,
+  without a digest suffix. Set an explicit value for immutable commit images.
 
 ## 0.10.1 (2026-10-13)
 

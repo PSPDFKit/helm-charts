@@ -65,6 +65,19 @@ true and no name override is given; otherwise the `serviceAccount.name` or
 {{- end }}
 
 {{/*
+Release version Maestrod reports (MAESTRO_RELEASE_VERSION). Prefers an explicit
+maestro.releaseVersion verbatim; otherwise the deployed image tag (or the
+chart's appVersion when the tag is empty) with any "@<digest>" suffix removed.
+*/}}
+{{- define "maestrod.releaseVersion" -}}
+{{- if .Values.maestro.releaseVersion -}}
+{{- .Values.maestro.releaseVersion -}}
+{{- else -}}
+{{- regexReplaceAll "@.*$" (.Values.image.tag | default .Chart.AppVersion | toString) "" -}}
+{{- end -}}
+{{- end }}
+
+{{/*
 Ingress host. Prefers an explicit ingress.host; otherwise composes the host
 from subdomainHostName and subdomainRootName; otherwise falls back to
 subdomainHostName alone.
