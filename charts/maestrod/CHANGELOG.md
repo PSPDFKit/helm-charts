@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [0.10.1 (2026-10-13)](#0101-2026-10-13)
+    - [Updated](#updated)
   - [0.10.0 (2026-10-09)](#0100-2026-10-09)
     - [Added](#added)
     - [Changed](#changed)
@@ -32,6 +34,12 @@
     - [Added](#added-1)
   - [0.5.0 (2026-05-27)](#050-2026-05-27)
     - [Added](#added-2)
+
+## 0.10.1 (2026-10-13)
+
+### Updated
+
+- Updated maestrod appVersion to `1.6.2`.
 
 ## 0.10.0 (2026-10-09)
 
