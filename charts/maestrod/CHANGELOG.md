@@ -41,8 +41,9 @@
 
 ### Added
 
-- Report chart `appVersion` as the daemon version. `latest` and `nightly` retain
-  the baked-in build version and source SHA.
+- Report chart `appVersion` as the daemon version. Set `MAESTRO_RELEASE_VERSION`
+  to an empty string through `extraEnvs` to retain the baked-in build version
+  and source SHA.
 
 ## 0.10.1 (2026-10-13)
 

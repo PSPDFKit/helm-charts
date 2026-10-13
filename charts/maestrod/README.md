@@ -93,8 +93,17 @@ When `image.tag` is empty, the chart falls back to the chart's `appVersion`.
 The chart sets `MAESTRO_RELEASE_VERSION` to `appVersion`, which the daemon reports
 in OpenAPI `info.version`. Deploy releases using the matching chart version.
 
-For `latest` and `nightly` image tags, including digest-pinned variants, the chart
-omits the variable so the daemon reports its baked-in build version and source SHA.
+To report the daemon's baked-in build version and source SHA instead (for example,
+with `latest` or `nightly`), override the variable with an empty string:
+
+```yaml
+extraEnvs:
+  - name: MAESTRO_RELEASE_VERSION
+    value: ""
+```
+
+Keep any other entries in `extraEnvs`; Helm replaces the list rather than merging it.
+The variable remains present, but the daemon treats an empty value as no override.
 
 ## Migrating from the internal 0.3.x chart
 
