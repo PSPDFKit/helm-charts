@@ -185,33 +185,11 @@ When `image.tag` is empty, the chart falls back to the chart's `appVersion`.
 
 ### Reported release version
 
-`maestro.releaseVersion` maps to `MAESTRO_RELEASE_VERSION`, not to a `NUTRIENT_*` or
-`NATIVESDK_*` variable. A nonempty value is injected through the ConfigMap verbatim.
-When empty, a stable `x.y.z` image tag supplies the reported version, after removing any
-`@sha256:...` suffix. An empty image tag uses the chart's `appVersion`.
+The chart sets `MAESTRO_RELEASE_VERSION` to `appVersion`, which the daemon reports
+in OpenAPI `info.version`. Deploy releases using the matching chart version.
 
-Rolling tags such as `latest` and `nightly`, other nonnumeric tags, and digest-only references
-omit `MAESTRO_RELEASE_VERSION`. The daemon then reports its full baked-in
-`<next-patch>-dev+<full SHA>` assembly version rather than the rolling tag name.
-Set an explicit value when a digest-pinned image should report a stable release version:
-
-```yaml
-image:
-  tag: "@sha256:<digest>"
-maestro:
-  releaseVersion: "1.6.1"
-```
-
-A nonblank runtime override changes OpenAPI `info.version` verbatim without changing the
-binary or appending its source SHA. When the variable is absent or whitespace-only, the
-daemon reports its assembly informational version, falling back to `0.0.0` if unavailable.
-
-CI publishes commit images without permanent commit tags and reuses retained images by
-matching their OCI revision annotation to the source SHA. `latest` advances per normal
-`master` commit without Hosted CI. Nightly validates a pinned `latest` digest through Hosted
-CI and promotes that same digest. Stable releases select an explicit source SHA and `x.y.z`
-version, reuse or build the commit image, and apply the Git release tag only after publishing
-the image. The chart doesn't perform image promotion.
+For `latest` and `nightly` image tags, including digest-pinned variants, the chart
+omits the variable so the daemon reports its baked-in build version and source SHA.
 
 ## Migrating from the internal 0.3.x chart
 

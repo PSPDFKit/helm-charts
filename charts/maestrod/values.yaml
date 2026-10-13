@@ -18,9 +18,7 @@ licenseSecret:
   # @section -- 00. Maestrod License
   key: NUTRIENT_LICENSE_KEY
 
-# -- (object) Maestrod-specific runtime settings. `showScalar` and
-# `nativeSdkVisionLogs` map to `NUTRIENT_*` / `NATIVESDK_*` environment
-# variables; `releaseVersion` maps to `MAESTRO_RELEASE_VERSION`.
+# -- (object) Maestrod-specific runtime settings.
 # @section -- 01. Maestrod configuration
 # @notationType -- reference
 maestro:
@@ -32,17 +30,6 @@ maestro:
   # Rendered as a string-quoted boolean.
   # @section -- 01. Maestrod configuration
   nativeSdkVisionLogs: false
-  # -- `MAESTRO_RELEASE_VERSION`: version Maestrod reports in OpenAPI
-  # `info.version`, verbatim. When empty, stable `x.y.z` image tags supply
-  # the version after removing any `@sha256:...` suffix; an empty image tag
-  # uses the chart's `appVersion`. Other tags, including `latest`, `nightly`
-  # and digest-only references, omit the variable so the daemon reports its
-  # full baked-in build version and source SHA. Set an explicit value to
-  # override that behavior. It changes only the reported version, not the
-  # binary. Rendered into the ConfigMap when present; `extraEnvs` and
-  # `extraEnvFrom` entries with the same name take precedence.
-  # @section -- 01. Maestrod configuration
-  releaseVersion: ""
 
 # -- (object) Image settings.
 # @section -- B. Environment

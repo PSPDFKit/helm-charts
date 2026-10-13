@@ -209,9 +209,6 @@
         "nativeSdkVisionLogs": {
           "type": "boolean"
         },
-        "releaseVersion": {
-          "type": "string"
-        },
         "showScalar": {
           "type": "boolean"
         }

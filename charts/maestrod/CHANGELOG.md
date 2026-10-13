@@ -41,10 +41,8 @@
 
 ### Added
 
-- `maestro.releaseVersion` configures the daemon's reported release identity via
-  `MAESTRO_RELEASE_VERSION`. Stable numeric image tags or chart appVersion supply
-  the default; rolling tags and digest-only references preserve the daemon's full
-  build version and source SHA. An explicit value overrides either behavior.
+- Report chart `appVersion` as the daemon version. `latest` and `nightly` retain
+  the baked-in build version and source SHA.
 
 ## 0.10.1 (2026-10-13)
 
