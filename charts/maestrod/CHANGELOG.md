@@ -47,7 +47,7 @@
 - Skip refresh until the Deployment and all serving Pods finish startup or rollout, including old-Pod termination and image-ID availability.
 - Compare the named Maestrod container across active serving Pods, recover mixed mutable-tag digests after convergence, and ignore finished Pods unless still terminating.
 - Reject stale refresh patches if the Deployment changes during the check.
-- Fail registry HTTP errors and accept OCI manifests and indexes explicitly.
+- Fail registry HTTP errors, accept OCI manifests and indexes explicitly, and only trust the final response's digest.
 
 ## 0.11.0 (2026-10-13)
 

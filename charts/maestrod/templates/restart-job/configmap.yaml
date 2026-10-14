@@ -63,7 +63,7 @@ data:
       -H "Authorization: Basic ${AUTH}" \
       -H "Accept: application/vnd.docker.distribution.manifest.v2+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.oci.image.index.v1+json" \
       "https://${REGISTRY}/v2/${REPOSITORY}/manifests/${TAG}")
-    IMAGE_LATEST=$(awk 'tolower($1) == "docker-content-digest:" {digest=$2} END {gsub("\r", "", digest); print digest}' <<< "$HEADERS")
+    IMAGE_LATEST=$(awk '/^HTTP\// {digest=""} tolower($1) == "docker-content-digest:" {digest=$2} END {gsub("\r", "", digest); print digest}' <<< "$HEADERS")
 
     echo "Current images: ${DIGESTS}"
     echo "Latest image:  ${IMAGE_LATEST}"

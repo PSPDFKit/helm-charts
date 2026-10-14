@@ -251,6 +251,15 @@ class RestartJobTest(unittest.TestCase):
         self.assertIsNotNone(patch)
         self.assertIn("Latest image:  " + B + "\n", result.stdout)
 
+    def test_redirect_digest_is_ignored_when_final_response_has_no_digest(self):
+        headers = ("HTTP/1.1 307 Temporary Redirect\r\nDocker-Content-Digest: " + B +
+                   "\r\n\r\nHTTP/2 200 OK\r\n\r\n")
+        result, calls, patch = self.run_script(headers=headers)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("registry did not return a valid digest", result.stdout)
+        self.assertIsNone(patch)
+        self.assertFalse(any(call[:2] == ["kubectl", "patch"] for call in calls))
+
     def test_http_failure_cannot_trigger_rollout(self):
         result, _, patch = self.run_script(registry=B, HTTP_FAILURE="1")
         self.assertNotEqual(result.returncode, 0)
