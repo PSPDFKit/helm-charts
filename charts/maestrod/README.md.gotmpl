@@ -183,6 +183,20 @@ image:
 
 When `image.tag` is empty, the chart falls back to the chart's `appVersion`.
 
+### Reported release version
+
+The chart sets `MAESTRO_RELEASE_VERSION` to `appVersion`, which the daemon reports
+in OpenAPI `info.version`. Deploy releases using the matching chart version.
+
+To report the daemon's baked-in build version and source SHA instead, override
+the variable with an empty string:
+
+```yaml
+extraEnvs:
+  - name: MAESTRO_RELEASE_VERSION
+    value: ""
+```
+
 ## Migrating from the internal 0.3.x chart
 
 This is the first public release of the chart. It is value-compatible with

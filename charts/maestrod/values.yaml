@@ -18,8 +18,7 @@ licenseSecret:
   # @section -- 00. Maestrod License
   key: NUTRIENT_LICENSE_KEY
 
-# -- (object) Maestrod-specific runtime flags. Each key maps directly to a
-# `NUTRIENT_*` / `NATIVESDK_*` environment variable on the container.
+# -- (object) Maestrod-specific runtime settings.
 # @section -- 01. Maestrod configuration
 # @notationType -- reference
 maestro:
