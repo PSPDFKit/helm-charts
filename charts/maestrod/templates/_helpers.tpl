@@ -43,6 +43,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
+Refresh Pods must not match serving selectors, including when custom labels
+are supplied. Leave the Deployment's immutable selector unchanged.
+*/}}
+{{- define "maestrod.restartJobPodLabels" -}}
+{{- $labels := mergeOverwrite (include "maestrod.labels" . | fromYaml) .Values.restartJob.podLabels -}}
+{{- $_ := unset $labels "app.kubernetes.io/name" -}}
+{{- $_ := set $labels "app.kubernetes.io/component" "restart-job" -}}
+{{- toYaml $labels -}}
+{{- end }}
+
+{{/*
 Selector labels. Kept byte-identical to the internal 0.3.x chart so upgrades
 in place do not hit immutable-selector errors.
 */}}

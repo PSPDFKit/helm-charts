@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [0.11.1 (2026-10-14)](#0111-2026-10-14)
+    - [Fixed](#fixed)
   - [0.11.0 (2026-10-13)](#0110-2026-10-13)
     - [Added](#added)
   - [0.10.1 (2026-10-13)](#0101-2026-10-13)
@@ -36,6 +38,16 @@
     - [Added](#added-2)
   - [0.5.0 (2026-05-27)](#050-2026-05-27)
     - [Added](#added-3)
+
+## 0.11.1 (2026-10-14)
+
+### Fixed
+
+- Keep refresh helper Pods outside serving selectors so digest lookups and PodDisruptionBudgets cannot select Jobs.
+- Skip refresh until the Deployment and all serving Pods finish startup or rollout, including old-Pod termination and image-ID availability.
+- Compare the named Maestrod container across active serving Pods, recover mixed mutable-tag digests after convergence, and ignore finished Pods unless still terminating.
+- Reject stale refresh patches if the Deployment changes during the check.
+- Fail registry HTTP errors, accept OCI manifests and indexes explicitly, and only trust the final response's digest.
 
 ## 0.11.0 (2026-10-13)
 

@@ -2,7 +2,7 @@
 
 > [!WARNING] This chart is made for internal use by Nutrient.
 
-![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.2](https://img.shields.io/badge/AppVersion-1.6.2-informational?style=flat-square)
+![Version: 0.11.1](https://img.shields.io/badge/Version-0.11.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6.2](https://img.shields.io/badge/AppVersion-1.6.2-informational?style=flat-square)
 
 Maestrod, the orchestration backend for Nutrient managed cloud workloads.
 
@@ -149,6 +149,18 @@ restartJob:
   schedule: "*/10 * * * *"
   registryAuthSecretName: my-registry-credentials   # required: must be a kubernetes.io/dockerconfigjson Secret
 ```
+
+Helper Pods have distinct selector labels and are excluded from the serving
+Deployment and its PodDisruptionBudget. Refresh waits until all desired
+replicas are updated, ready and available, with no starting or terminating
+Pods and non-empty digests for the named Maestrod container. Finished Pods
+are excluded unless still terminating. If ready replicas have different
+digests after convergence, one refresh is requested unless every replica
+matches the registry digest. A publication
+during a rollout waits for convergence and a later scheduled tick; unfinished
+rollouts are not superseded. Registry HTTP failures fail the Job without
+patching the Deployment. A resource-version check rejects the patch if the
+Deployment changes during the refresh check.
 
 The CronJob runs under a dedicated ServiceAccount with a Role that grants
 `get/list pods` and `get/list/update/patch deployments` in the release
@@ -298,16 +310,16 @@ namespace.
 | Key | Description | Default |
 |-----|-------------|---------|
 | [`restartJob`](./values.yaml#L449) | Optional CronJob that polls the configured image registry for a new digest on the running `image.tag` and patches the Maestrod Deployment with a refresh annotation to trigger a rollout. Disabled by default. | [...](./values.yaml#L449) |
-| [`restartJob.affinity`](./values.yaml#L489) | Affinity for the restart-job pod. | `{}` |
+| [`restartJob.affinity`](./values.yaml#L491) | Affinity for the restart-job pod. | `{}` |
 | [`restartJob.enabled`](./values.yaml#L452) | Enable the restart-job CronJob and its supporting RBAC/ServiceAccount. | `false` |
 | [`restartJob.image`](./values.yaml#L460) | Image for the restart-job container. Must contain `kubectl`, `curl`, `jq`, and `bash` — `alpine/k8s` covers all four. | [...](./values.yaml#L460) |
-| [`restartJob.nodeSelector`](./values.yaml#L483) | Node selector for the restart-job pod. | `{}` |
+| [`restartJob.nodeSelector`](./values.yaml#L485) | Node selector for the restart-job pod. | `{}` |
 | [`restartJob.podAnnotations`](./values.yaml#L471) | Pod annotations for the restart-job pod. | `{"skip-auto-labelling":"true"}` |
-| [`restartJob.podLabels`](./values.yaml#L475) | Pod labels for the restart-job pod. | `{}` |
+| [`restartJob.podLabels`](./values.yaml#L477) | Additional Pod labels for the restart-job pod. The chart reserves `app.kubernetes.io/name` and `app.kubernetes.io/component` to keep helper Pods outside serving selectors. | `{}` |
 | [`restartJob.registryAuthSecretName`](./values.yaml#L468) | Name of a pre-existing `kubernetes.io/dockerconfigjson` Secret holding the registry credentials used to query the image manifest. Required when `restartJob.enabled: true`; rendering fails otherwise. | `""` |
 | [`restartJob.schedule`](./values.yaml#L455) | CronJob schedule. | `"*/10 * * * *"` |
-| [`restartJob.serviceAccount`](./values.yaml#L479) | ServiceAccount for the restart-job pod. | [...](./values.yaml#L479) |
-| [`restartJob.tolerations`](./values.yaml#L486) | Tolerations for the restart-job pod. | `[]` |
+| [`restartJob.serviceAccount`](./values.yaml#L481) | ServiceAccount for the restart-job pod. | [...](./values.yaml#L481) |
+| [`restartJob.tolerations`](./values.yaml#L488) | Tolerations for the restart-job pod. | `[]` |
 
 ## Contribution
 

@@ -245,6 +245,18 @@ restartJob:
   registryAuthSecretName: my-registry-credentials   # required: must be a kubernetes.io/dockerconfigjson Secret
 ```
 
+Helper Pods have distinct selector labels and are excluded from the serving
+Deployment and its PodDisruptionBudget. Refresh waits until all desired
+replicas are updated, ready and available, with no starting or terminating
+Pods and non-empty digests for the named Maestrod container. Finished Pods
+are excluded unless still terminating. If ready replicas have different
+digests after convergence, one refresh is requested unless every replica
+matches the registry digest. A publication
+during a rollout waits for convergence and a later scheduled tick; unfinished
+rollouts are not superseded. Registry HTTP failures fail the Job without
+patching the Deployment. A resource-version check rejects the patch if the
+Deployment changes during the refresh check.
+
 The CronJob runs under a dedicated ServiceAccount with a Role that grants
 `get/list pods` and `get/list/update/patch deployments` in the release
 namespace.
