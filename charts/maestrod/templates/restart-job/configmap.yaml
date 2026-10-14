@@ -10,40 +10,80 @@ data:
     #!/bin/bash
     set -euo pipefail
 
-    export DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-    export REGISTRY=$(echo "{{ .Values.image.repository }}" | cut -d'/' -f1)
-    export REPOSITORY=$(echo "{{ .Values.image.repository }}" | cut -d'/' -f2-)
-    export TAG="{{ .Values.image.tag | default .Chart.AppVersion }}"
-    export AUTH=$(cat /registry-auth/.dockerconfigjson | jq -r '.auths["'$REGISTRY'"].auth')
-
-    echo "Looking for image: ${REGISTRY}/${REPOSITORY}:${TAG}"
-
-    export IMAGE_LATEST=$(curl -I -L \
-      -H "Authorization: Basic ${AUTH}" \
-      -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-      -H "Accept: application/vnd.docker.distribution.manifest.list.v2+json" \
-      -s https://${REGISTRY}/v2/${REPOSITORY}/manifests/${TAG} \
-      | grep -i "^Docker-Content-Digest" | cut -d' ' -f2 | xargs)
-
-    export IMAGE_CURRENT=$(kubectl get pods \
-      --selector app.kubernetes.io/name={{ include "maestrod.name" . }},app.kubernetes.io/instance={{ .Release.Name }} \
-      -o jsonpath='{.items[0].status.containerStatuses[0].imageID}' \
-      | cut -d'@' -f2 | xargs)
-
-    echo "Current image: ${IMAGE_CURRENT}"
-    echo "Latest image:  ${IMAGE_LATEST}"
-
-    if [[ -z "${IMAGE_LATEST}" ]]; then
-      echo "Error: IMAGE_LATEST is empty. Exiting."
+    DEPLOYMENT=$(kubectl get deployment {{ include "maestrod.fullname" . }} -o json)
+    if ! jq -e '
+      (.spec.replicas // 1) as $desired |
+      $desired > 0 and (.spec.paused != true) and
+      (.status.observedGeneration // 0) >= .metadata.generation and
+      (.status.replicas // 0) == $desired and
+      (.status.updatedReplicas // 0) == $desired and
+      (.status.readyReplicas // 0) == $desired and
+      (.status.availableReplicas // 0) == $desired
+    ' <<< "$DEPLOYMENT" >/dev/null; then
+      echo "Skipping refresh: deployment is paused, scaled to zero, or still rolling out."
       exit 0
     fi
 
-    if [[ "${IMAGE_CURRENT}" == "${IMAGE_LATEST}" ]]; then
+    DESIRED=$(jq -r '.spec.replicas // 1' <<< "$DEPLOYMENT")
+    PODS=$(kubectl get pods \
+      --selector app.kubernetes.io/name={{ include "maestrod.name" . }},app.kubernetes.io/instance={{ .Release.Name }} \
+      -o json)
+    # Finished tests and evicted Pods are not serving replicas; keep terminating Pods.
+    PODS=$(jq '.items |= map(select(
+      .metadata.deletionTimestamp != null or
+      (.status.phase != "Succeeded" and .status.phase != "Failed")
+    ))' <<< "$PODS")
+    if ! jq -e --argjson desired "$DESIRED" '
+      .items | length == $desired and all(.[];
+        .metadata.deletionTimestamp == null and
+        .status.phase == "Running" and
+        any(.status.conditions[]?; .type == "Ready" and .status == "True") and
+        any(.status.containerStatuses[]?;
+          .name == "maestrod" and .ready == true and
+          ((.imageID // "") | test("sha256:[a-fA-F0-9]{64}$"))
+        )
+      )
+    ' <<< "$PODS" >/dev/null; then
+      echo "Skipping refresh: serving pods are starting or terminating, or have no image ID."
+      exit 0
+    fi
+
+    DIGESTS=$(jq -c '[.items[].status.containerStatuses[] |
+      select(.name == "maestrod") | .imageID |
+      capture("(?<digest>sha256:[a-fA-F0-9]{64})$").digest] | unique' <<< "$PODS")
+    DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    REGISTRY=$(echo "{{ .Values.image.repository }}" | cut -d'/' -f1)
+    REPOSITORY=$(echo "{{ .Values.image.repository }}" | cut -d'/' -f2-)
+    TAG="{{ .Values.image.tag | default .Chart.AppVersion }}"
+    AUTH=$(cat /registry-auth/.dockerconfigjson | jq -er --arg registry "$REGISTRY" '.auths[$registry].auth | select(type == "string" and length > 0)')
+
+    echo "Looking for image: ${REGISTRY}/${REPOSITORY}:${TAG}"
+    HEADERS=$(curl -I -L --fail --silent --show-error \
+      --connect-timeout 10 --max-time 30 \
+      -H "Authorization: Basic ${AUTH}" \
+      -H "Accept: application/vnd.docker.distribution.manifest.v2+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.oci.image.index.v1+json" \
+      "https://${REGISTRY}/v2/${REPOSITORY}/manifests/${TAG}")
+    IMAGE_LATEST=$(awk 'tolower($1) == "docker-content-digest:" {digest=$2} END {gsub("\r", "", digest); print digest}' <<< "$HEADERS")
+
+    echo "Current images: ${DIGESTS}"
+    echo "Latest image:  ${IMAGE_LATEST}"
+
+    if [[ ! "$IMAGE_LATEST" =~ ^sha256:[a-fA-F0-9]{64}$ ]]; then
+      echo "Skipping refresh: registry did not return a valid digest."
+      exit 0
+    fi
+
+    if jq -e --arg latest "$IMAGE_LATEST" '. == [$latest]' <<< "$DIGESTS" >/dev/null; then
       echo "No changes."
     else
       echo "Triggering restart."
-      kubectl patch deployment {{ include "maestrod.fullname" . }} \
-        -p "{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"nutrient/refresh-tag\": \"${DATE}\"}}}}}"
+      RESOURCE_VERSION=$(jq -r '.metadata.resourceVersion' <<< "$DEPLOYMENT")
+      PATCH=$(jq -nc --arg version "$RESOURCE_VERSION" --arg date "$DATE" '[
+        {op: "test", path: "/metadata/resourceVersion", value: $version},
+        {op: "add", path: "/spec/template/metadata/annotations/nutrient~1refresh-tag", value: $date}
+      ]')
+      # Reject the patch if another controller changed the Deployment since the check.
+      kubectl patch deployment {{ include "maestrod.fullname" . }} --type=json -p "$PATCH"
     fi
 
     echo "Done."

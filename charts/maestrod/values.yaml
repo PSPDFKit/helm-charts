@@ -470,7 +470,9 @@ restartJob:
   # @section -- H. Restart job
   podAnnotations:
     skip-auto-labelling: "true"
-  # -- Pod labels for the restart-job pod.
+  # -- Additional Pod labels for the restart-job pod. The chart reserves
+  # `app.kubernetes.io/name` and `app.kubernetes.io/component` to keep helper
+  # Pods outside serving selectors.
   # @section -- H. Restart job
   podLabels: {}
   # -- (object) ServiceAccount for the restart-job pod.
