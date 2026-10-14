@@ -65,7 +65,10 @@ if name == "kubectl":
         raise RuntimeError(args)
 elif name == "curl":
     if os.environ.get("HTTP_FAILURE"):
-        sys.exit(22)
+        if "--fail" in args:
+            sys.exit(22)
+        sys.stdout.buffer.write(b"HTTP/1.1 401 Unauthorized\\r\\n\\r\\n")
+        sys.exit(0)
     sys.stdout.buffer.write((root / "headers").read_bytes())
 elif name == "cat" and args == ["/registry-auth/.dockerconfigjson"]:
     print(json.dumps({"auths": {"registry.example": {"auth": "dGVzdDp0ZXN0"}}}))
