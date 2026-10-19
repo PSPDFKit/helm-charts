@@ -47,7 +47,7 @@
 
 ### Updated
 
-- Updated maestrod appVersion to `1.8.0`.
+- Updated maestrod appVersion to `1.8.1`.
 
 ## 0.11.2 (2026-10-16)
 
