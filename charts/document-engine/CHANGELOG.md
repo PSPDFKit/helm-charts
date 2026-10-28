@@ -245,7 +245,7 @@
 
 ## 8.7.1 (2026-10-28)
 
-* Updated Document Engine to 1.19.1, which updates Brotli to address [CVE-2026-111497](https://www.cve.org/CVERecord?id=CVE-2026-111497).
+* Updated Document Engine to 1.19.1.
 
 ## 8.7.0 (2026-09-30)
 
