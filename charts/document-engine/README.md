@@ -455,8 +455,8 @@ Note:
 | [`config.tileMaxScale`](./values.yaml#L253) | `TILE_MAX_SCALE` — maximum allowed tile scale, calculated as requested tile size divided by actual page size. Must be greater than 1. When unset, no limit is enforced. | `unlimited` |
 | [`config.trustedProxies`](./values.yaml#L283) | `TRUSTED_PROXIES` — comma-separated list of IP addresses or IP address ranges of trusted proxies. Setting to `default` will use private IP ranges. | `"default"` |
 | [`config.urlFetchPoolSize`](./values.yaml#L112) | `DOWNLOADER_WORKER_POOL_SIZE`. How many documents are fetched from a remote URL at once, per pod. | `16` |
-| [`config.urlFetchQueueMaxSize`](./values.yaml#L118) | `DOWNLOADER_BROKER_CLIENT_QUEUE_MAX_SIZE`. How many remote fetches may wait for a free slot at once. | `128` |
-| [`config.urlFetchQueueTimeoutSeconds`](./values.yaml#L115) | `DOWNLOADER_BROKER_CLIENT_QUEUE_TIMEOUT` in seconds. How long a remote fetch waits for a free slot before it is rejected with `503`. | `5` |
+| [`config.urlFetchQueueMaxSize`](./values.yaml#L118) | `DOWNLOADER_BROKER_CLIENT_QUEUE_MAX_SIZE`. How many remote fetches may wait for a free slot at once. Once the queue is full, further requests are rejected immediately instead of waiting. | `128` |
+| [`config.urlFetchQueueTimeoutSeconds`](./values.yaml#L115) | `DOWNLOADER_BROKER_CLIENT_QUEUE_TIMEOUT` in seconds. How long a remote fetch waits for a free slot before it is rejected. A Build API request is rejected with `503`. Should not be greater than `config.requestTimeoutSeconds`. | `5` |
 | [`config.urlFetchTimeoutSeconds`](./values.yaml#L109) | `REMOTE_URL_FETCH_TIMEOUT` in seconds | `5` |
 | [`config.workerPoolMaxRestarts`](./values.yaml#L94) | Maximum number of restarts (`PSPDFKIT_WORKER_POOL_MAX_RESTARTS`) before supervisor starts throttling them. | `20` |
 | [`config.workerPoolMaxSeconds`](./values.yaml#L97) | Time window in which the supervisor monitors the number of restarts (`PSPDFKIT_WORKER_POOL_MAX_SECONDS`). | `60` |

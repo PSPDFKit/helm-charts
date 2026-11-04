@@ -247,7 +247,7 @@
 
 ## 8.9.0 (2026-11-04)
 
-* Added `config.urlFetchPoolSize`, `config.urlFetchQueueTimeoutSeconds` and `config.urlFetchQueueMaxSize`, which control how many documents Document Engine fetches from a remote URL at once per pod and how long a fetch waits for a free slot. Defaults match the values Document Engine used previously, so an existing deployment is unaffected.
+* Added `config.urlFetchPoolSize`, `config.urlFetchQueueTimeoutSeconds` and `config.urlFetchQueueMaxSize`, which control how many documents Document Engine fetches from a remote URL at once per pod, how long a fetch waits for a free slot, and how many may wait at once. Defaults match the values Document Engine used previously, so an existing deployment is unaffected.
 
 ## 8.8.0 (2026-10-30)
 
