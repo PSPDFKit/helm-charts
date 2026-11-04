@@ -1,0 +1,39 @@
+{{- if .Values.keda.enabled -}}
+{{- if .Values.autoscaling.enabled -}}
+{{- fail "keda.enabled and autoscaling.enabled are mutually exclusive: KEDA creates its own HPA for the Deployment, and two HPAs on one Deployment fight. Disable one of them." -}}
+{{- end -}}
+{{- if not .Values.keda.triggers -}}
+{{- fail "keda.triggers must contain at least one trigger when keda.enabled is true" -}}
+{{- end -}}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "maestrod.fullname" . }}
+  labels:
+    {{- include "maestrod.labels" . | nindent 4 }}
+  {{- with .Values.keda.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "maestrod.fullname" . }}
+  minReplicaCount: {{ .Values.keda.minReplicaCount }}
+  maxReplicaCount: {{ .Values.keda.maxReplicaCount }}
+  pollingInterval: {{ .Values.keda.pollingInterval }}
+  {{- if not (kindIs "invalid" .Values.keda.cooldownPeriod) }}
+  cooldownPeriod: {{ .Values.keda.cooldownPeriod }}
+  {{- end }}
+  {{- with .Values.keda.fallback }}
+  fallback:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.keda.advanced }}
+  advanced:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  triggers:
+    {{- toYaml .Values.keda.triggers | nindent 4 }}
+{{- end }}

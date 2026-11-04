@@ -1,26 +1,131 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [0.6.8 (2026-08-28)](#068-2026-08-28)
-    - [Changed](#changed)
-  - [0.6.7 (2026-08-19)](#067-2026-08-19)
-    - [Changed](#changed-1)
-  - [0.6.6 (2026-08-07)](#066-2026-08-07)
-    - [Changed](#changed-2)
-  - [0.6.5 (2026-08-05)](#065-2026-08-05)
-    - [Changed](#changed-3)
-  - [0.6.4 (2026-07-23)](#064-2026-07-23)
-    - [Changed](#changed-4)
-  - [0.6.3 (2026-06-23)](#063-2026-06-23)
-    - [Changed](#changed-5)
-  - [0.6.2 (2026-06-12)](#062-2026-06-12)
-    - [Changed](#changed-6)
-  - [0.6.1 (2026-05-30)](#061-2026-05-30)
-    - [Changed](#changed-7)
-  - [0.6.0 (2026-05-29)](#060-2026-05-29)
+  - [0.11.4 (2026-10-28)](#0114-2026-10-28)
+    - [Updated](#updated)
+  - [0.11.3 (2026-10-19)](#0113-2026-10-19)
+    - [Updated](#updated-1)
+  - [0.11.2 (2026-10-16)](#0112-2026-10-16)
+    - [Updated](#updated-2)
+  - [0.11.1 (2026-10-14)](#0111-2026-10-14)
+    - [Fixed](#fixed)
+  - [0.11.0 (2026-10-13)](#0110-2026-10-13)
     - [Added](#added)
-  - [0.5.0 (2026-05-27)](#050-2026-05-27)
+  - [0.10.1 (2026-10-13)](#0101-2026-10-13)
+    - [Updated](#updated-3)
+  - [0.10.0 (2026-10-09)](#0100-2026-10-09)
     - [Added](#added-1)
+    - [Changed](#changed)
+  - [0.9.0 (2026-10-07)](#090-2026-10-07)
+    - [Changed](#changed-1)
+  - [0.8.0 (2026-09-30)](#080-2026-09-30)
+    - [Changed](#changed-2)
+  - [0.7.1 (2026-09-18)](#071-2026-09-18)
+    - [Changed](#changed-3)
+  - [0.7.0 (2026-09-17)](#070-2026-09-17)
+    - [Changed](#changed-4)
+  - [0.6.8 (2026-08-28)](#068-2026-08-28)
+    - [Changed](#changed-5)
+  - [0.6.7 (2026-08-19)](#067-2026-08-19)
+    - [Changed](#changed-6)
+  - [0.6.6 (2026-08-07)](#066-2026-08-07)
+    - [Changed](#changed-7)
+  - [0.6.5 (2026-08-05)](#065-2026-08-05)
+    - [Changed](#changed-8)
+  - [0.6.4 (2026-07-23)](#064-2026-07-23)
+    - [Changed](#changed-9)
+  - [0.6.3 (2026-06-23)](#063-2026-06-23)
+    - [Changed](#changed-10)
+  - [0.6.2 (2026-06-12)](#062-2026-06-12)
+    - [Changed](#changed-11)
+  - [0.6.1 (2026-05-30)](#061-2026-05-30)
+    - [Changed](#changed-12)
+  - [0.6.0 (2026-05-29)](#060-2026-05-29)
+    - [Added](#added-2)
+  - [0.5.0 (2026-05-27)](#050-2026-05-27)
+    - [Added](#added-3)
+
+## 0.11.4 (2026-10-28)
+
+### Updated
+
+- Updated maestrod appVersion to `1.9.0`.
+
+## 0.11.3 (2026-10-19)
+
+### Updated
+
+- Updated maestrod appVersion to `1.8.1`.
+
+## 0.11.2 (2026-10-16)
+
+### Updated
+
+- Updated maestrod appVersion to `1.7.0`.
+
+## 0.11.1 (2026-10-14)
+
+### Fixed
+
+- Keep refresh helper Pods outside serving selectors so digest lookups and PodDisruptionBudgets cannot select Jobs.
+- Skip refresh until the Deployment and all serving Pods finish startup or rollout, including old-Pod termination and image-ID availability.
+- Compare the named Maestrod container across active serving Pods, recover mixed mutable-tag digests after convergence, and ignore finished Pods unless still terminating.
+- Reject stale refresh patches if the Deployment changes during the check.
+- Fail registry HTTP errors, accept OCI manifests and indexes explicitly, and only trust the final response's digest.
+
+## 0.11.0 (2026-10-13)
+
+### Added
+
+- Report chart `appVersion` as the daemon version. Set `MAESTRO_RELEASE_VERSION`
+  to an empty string through `extraEnvs` to retain the baked-in build version
+  and source SHA.
+
+## 0.10.1 (2026-10-13)
+
+### Updated
+
+- Updated maestrod appVersion to `1.6.2`.
+
+## 0.10.0 (2026-10-09)
+
+### Added
+
+- Optional KEDA autoscaling via `keda`. When `keda.enabled` is `true`, the
+  chart renders a `keda.sh/v1alpha1` ScaledObject for the Deployment, passes
+  `keda.triggers`, `keda.advanced` and `keda.fallback` through verbatim, and
+  omits the Deployment's `replicas`. Rendering fails when `keda.enabled` and
+  `autoscaling.enabled` are both `true`, or when `keda.triggers` is empty.
+- `progressDeadlineSeconds` sets the Deployment's progress deadline. Empty keeps
+  the Kubernetes default of 600.
+
+### Changed
+
+- Updated maestrod appVersion to `1.6.1`.
+
+## 0.9.0 (2026-10-07)
+
+### Changed
+
+- Updated maestrod appVersion to `1.6.0`.
+
+## 0.8.0 (2026-09-30)
+
+### Changed
+
+- Updated maestrod appVersion to `1.5.0`.
+
+## 0.7.1 (2026-09-18)
+
+### Changed
+
+- Updated maestrod appVersion to `1.4.1`.
+
+## 0.7.0 (2026-09-17)
+
+### Changed
+
+- Updated maestrod appVersion to `1.4.0`.
 
 ## 0.6.8 (2026-08-28)
 

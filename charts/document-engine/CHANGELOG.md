@@ -1,7 +1,10 @@
 # Changelog
 
 - [Changelog](#changelog)
-  - [8.7.0 (2026-09-17)](#870-2026-09-17)
+  - [8.9.0 (2026-11-04)](#890-2026-11-04)
+  - [8.8.0 (2026-10-30)](#880-2026-10-30)
+  - [8.7.1 (2026-10-28)](#871-2026-10-28)
+  - [8.7.0 (2026-09-30)](#870-2026-09-30)
   - [8.6.3 (2026-09-02)](#863-2026-09-02)
   - [8.6.2 (2026-09-01)](#862-2026-09-01)
   - [8.6.1 (2026-08-25)](#861-2026-08-25)
@@ -242,9 +245,22 @@
   - [2.0.0](#200)
     - [Changed](#changed-68)
 
-## 8.7.0 (2026-09-17)
+## 8.9.0 (2026-11-04)
 
 * Added `config.urlFetchPoolSize`, `config.urlFetchQueueTimeoutSeconds` and `config.urlFetchQueueMaxSize`, which control how many documents Document Engine fetches from a remote URL at once per pod and how long a fetch waits for a free slot. Defaults match the values Document Engine used previously, so an existing deployment is unaffected.
+
+## 8.8.0 (2026-10-30)
+
+* Updated Document Engine to 1.20.0.
+
+## 8.7.1 (2026-10-28)
+
+* Updated Document Engine to 1.19.1.
+
+## 8.7.0 (2026-09-30)
+
+* Updated Document Engine to 1.19.0.
+* Added a Helm value for `INSTANT_PERMISSION_AWARE_LONG_POLL` (`config.instantPermissionAwareLongPoll`).
 
 ## 8.6.3 (2026-09-02)
 

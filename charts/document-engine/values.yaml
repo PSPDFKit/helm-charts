@@ -112,7 +112,7 @@ config:
   urlFetchPoolSize: 16  # @schema minimum: 1
   # -- `DOWNLOADER_BROKER_CLIENT_QUEUE_TIMEOUT` in seconds. How long a remote fetch waits for a free slot before it is rejected with `503`.
   # @section -- 03. Configuration options
-  urlFetchQueueTimeoutSeconds: 5
+  urlFetchQueueTimeoutSeconds: 5  # @schema minimum: 1
   # -- `DOWNLOADER_BROKER_CLIENT_QUEUE_MAX_SIZE`. How many remote fetches may wait for a free slot at once.
   # @section -- 03. Configuration options
   urlFetchQueueMaxSize: 128  # @schema minimum: 1
@@ -206,6 +206,10 @@ config:
   # -- `MIN_SEARCH_QUERY_LENGTH`
   # @section -- 03. Configuration options
   minSearchQueryLength: 3
+  # -- `INSTANT_PERMISSION_AWARE_LONG_POLL` — keep Instant long-poll requests waiting when only records hidden by collaboration permissions change.
+  # Hidden changes are delivered with the next visible change or at the request timeout, so group changes that revoke visibility can reach clients late.
+  # @section -- 03. Configuration options
+  instantPermissionAwareLongPoll: false
   # -- Customer-controlled remote URL fetch policy.
   # @default -- none
   # @notationType -- reference

@@ -7,3 +7,4 @@ metadata:
 data:
   NUTRIENT_SHOW_SCALAR: {{ .Values.maestro.showScalar | quote }}
   NATIVESDK_VISION_LOGS: {{ .Values.maestro.nativeSdkVisionLogs | quote }}
+  MAESTRO_RELEASE_VERSION: {{ .Chart.AppVersion | quote }}

@@ -123,6 +123,41 @@
     "initContainers": {
       "type": "array"
     },
+    "keda": {
+      "type": "object",
+      "properties": {
+        "advanced": {
+          "type": "object"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "cooldownPeriod": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "fallback": {
+          "type": "object"
+        },
+        "maxReplicaCount": {
+          "type": "integer"
+        },
+        "minReplicaCount": {
+          "type": "integer"
+        },
+        "pollingInterval": {
+          "type": "integer"
+        },
+        "triggers": {
+          "type": "array"
+        }
+      }
+    },
     "licenseSecret": {
       "type": "object",
       "properties": {
@@ -260,6 +295,12 @@
     },
     "priorityClassName": {
       "type": "string"
+    },
+    "progressDeadlineSeconds": {
+      "type": [
+        "integer",
+        "null"
+      ]
     },
     "readinessProbe": {
       "type": "object",

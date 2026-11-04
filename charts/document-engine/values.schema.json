@@ -560,6 +560,9 @@
         "ignoreInvalidAnnotations": {
           "type": "boolean"
         },
+        "instantPermissionAwareLongPoll": {
+          "type": "boolean"
+        },
         "maxUploadSizeMegaBytes": {
           "type": "integer"
         },
@@ -654,7 +657,8 @@
           "minimum": 1
         },
         "urlFetchQueueTimeoutSeconds": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 1
         },
         "urlFetchTimeoutSeconds": {
           "type": "integer"
