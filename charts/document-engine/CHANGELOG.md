@@ -1,6 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.9.0 (2026-11-04)](#890-2026-11-04)
   - [8.8.0 (2026-10-30)](#880-2026-10-30)
   - [8.7.1 (2026-10-28)](#871-2026-10-28)
   - [8.7.0 (2026-09-30)](#870-2026-09-30)
@@ -243,6 +244,10 @@
     - [Changed](#changed-67)
   - [2.0.0](#200)
     - [Changed](#changed-68)
+
+## 8.9.0 (2026-11-04)
+
+* Added `config.urlFetchPoolSize`, `config.urlFetchQueueTimeoutSeconds` and `config.urlFetchQueueMaxSize`, which control how many documents Document Engine fetches from a remote URL at once per pod, how long a fetch waits for a free slot, and how many may wait at once. Defaults match the values Document Engine used previously, so an existing deployment is unaffected.
 
 ## 8.8.0 (2026-10-30)
 

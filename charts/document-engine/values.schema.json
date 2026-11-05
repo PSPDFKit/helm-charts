@@ -648,6 +648,18 @@
         "trustedProxies": {
           "type": "string"
         },
+        "urlFetchPoolSize": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "urlFetchQueueMaxSize": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "urlFetchQueueTimeoutSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
         "urlFetchTimeoutSeconds": {
           "type": "integer"
         },
