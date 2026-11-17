@@ -53,7 +53,7 @@
 
 ### Updated
 
-- Updated maestrod appVersion to `1.11.1`.
+- Updated maestrod appVersion to `1.11.2`.
 
 ## 0.11.5 (2026-11-06)
 
