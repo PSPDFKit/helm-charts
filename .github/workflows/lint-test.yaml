@@ -92,11 +92,14 @@ jobs:
         env:
           MAESTROD_ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
+          # Leave room for the image, its export, and the kind node's copy.
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/share/swift
           IMAGE="${MAESTROD_ECR_REGISTRY}/${MAESTROD_ECR_REPOSITORY}:${MAESTROD_ECR_TAG}"
           # Export only the node platform, not an index referencing unpulled manifests.
           docker pull --platform linux/amd64 "$IMAGE"
           docker image save --platform linux/amd64 "$IMAGE" -o "$RUNNER_TEMP/maestrod.tar"
           kind load image-archive "$RUNNER_TEMP/maestrod.tar" --name chart-testing
+          rm "$RUNNER_TEMP/maestrod.tar"
 
       - name: Install KEDA CRDs
         if: steps.list-changed.outputs.maestrod-changed == 'true'
