@@ -1,6 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.10.0 (2026-11-19)](#8100-2026-11-19)
   - [8.9.0 (2026-11-04)](#890-2026-11-04)
   - [8.8.0 (2026-10-30)](#880-2026-10-30)
   - [8.7.1 (2026-10-28)](#871-2026-10-28)
@@ -244,6 +245,10 @@
     - [Changed](#changed-67)
   - [2.0.0](#200)
     - [Changed](#changed-68)
+
+## 8.10.0 (2026-11-19)
+
+* Added the `nutrient.io/image-tag` annotation in `Chart.yaml` as a default for `image.tag`. If `image.tag` is empty, the chart uses the annotation, else the chart `appVersion` as before. This release does not set the annotation, so an existing deployment is unaffected. A value set in `image.tag` always takes precedence.
 
 ## 8.9.0 (2026-11-04)
 

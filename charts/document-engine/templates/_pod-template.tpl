@@ -136,7 +136,7 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
-      image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+      image: "{{ .Values.image.repository }}:{{ include "document-engine.imageTag" . }}"
       imagePullPolicy: {{ .Values.image.pullPolicy }}
       ports:
         - name: api
