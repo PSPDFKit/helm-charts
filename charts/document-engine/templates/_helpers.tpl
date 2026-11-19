@@ -31,6 +31,14 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Document Engine image tag: image.tag if set, else the nutrient.io/image-tag
+annotation in Chart.yaml, else the chart appVersion.
+*/}}
+{{- define "document-engine.imageTag" -}}
+{{- .Values.image.tag | default (index (.Chart.Annotations | default dict) "nutrient.io/image-tag") | default .Chart.AppVersion -}}
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "document-engine.labels" -}}
