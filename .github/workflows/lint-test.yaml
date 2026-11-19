@@ -84,16 +84,6 @@ jobs:
           (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
         uses: aws-actions/amazon-ecr-login@d539f0932e70871a027e9d5a9d8fc38589180a64 # v2
 
-      - name: Inspect disk space before maestrod side-load
-        if: >-
-          steps.list-changed.outputs.maestrod-changed == 'true' &&
-          (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) &&
-          steps.ecr-login.outcome == 'success'
-        run: |
-          df -h / /mnt
-          df -B1 / /mnt
-          ls -ld /mnt
-
       - name: Side-load maestrod image into kind
         if: >-
           steps.list-changed.outputs.maestrod-changed == 'true' &&
@@ -102,21 +92,13 @@ jobs:
         env:
           MAESTROD_ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
-          # Leave room for the image, its export, and the kind node's copy.
-          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/share/swift
-          echo 'Disk space after SDK cleanup'
-          df -h / /mnt
-          df -B1 / /mnt
           IMAGE="${MAESTROD_ECR_REGISTRY}/${MAESTROD_ECR_REPOSITORY}:${MAESTROD_ECR_TAG}"
           # Export only the node platform, not an index referencing unpulled manifests.
           docker pull --platform linux/amd64 "$IMAGE"
-          docker image inspect --format 'Image size (bytes): {{.Size}}' "$IMAGE"
-          echo 'Disk space after image pull'
-          df -h / /mnt
-          df -B1 / /mnt
           docker image save --platform linux/amd64 "$IMAGE" -o "$RUNNER_TEMP/maestrod.tar"
-          stat --format='Export size (bytes): %s' "$RUNNER_TEMP/maestrod.tar"
+          df -h /
           kind load image-archive "$RUNNER_TEMP/maestrod.tar" --name chart-testing
+          df -h /
           rm "$RUNNER_TEMP/maestrod.tar"
 
       - name: Install KEDA CRDs
