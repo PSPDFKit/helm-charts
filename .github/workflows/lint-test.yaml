@@ -93,8 +93,10 @@ jobs:
           MAESTROD_ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
           IMAGE="${MAESTROD_ECR_REGISTRY}/${MAESTROD_ECR_REPOSITORY}:${MAESTROD_ECR_TAG}"
-          docker pull "$IMAGE"
-          kind load docker-image "$IMAGE" --name chart-testing
+          # Export only the node platform, not an index referencing unpulled manifests.
+          docker pull --platform linux/amd64 "$IMAGE"
+          docker image save --platform linux/amd64 "$IMAGE" -o "$RUNNER_TEMP/maestrod.tar"
+          kind load image-archive "$RUNNER_TEMP/maestrod.tar" --name chart-testing
 
       - name: Install KEDA CRDs
         if: steps.list-changed.outputs.maestrod-changed == 'true'
