@@ -248,7 +248,7 @@
 
 ## 8.9.1 (2026-11-27)
 
-* `assetStorage.azure.accountName` now reaches Document Engine without `assetStorage.azure.accountKey`. Previously the chart wrote the account name only when the key was also set. This prepares the chart for Azure Blob Storage with Microsoft Entra workload identity, which a future Document Engine release will support. Installs that use an account key or a connection string render the same as before.
+* `assetStorage.azure.accountName` now reaches Document Engine without `assetStorage.azure.accountKey`. Previously the chart wrote the account name only when the key was also set. This prepares the chart for Azure Blob Storage with Microsoft Azure Workload Identity. Installs that use an account key or a connection string render the same as before.
 
 ## 8.9.0 (2026-11-04)
 
