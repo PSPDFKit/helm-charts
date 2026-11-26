@@ -922,13 +922,14 @@ observability:
       # @section -- D. Observability
       customTags: ""
 
-# -- (object) Image settings
+# -- (object) Image settings. If `image.tag` is empty, the chart uses the `nutrient.io/image-tag` annotation in `Chart.yaml`, else the chart `appVersion`. `helm show chart` shows both.
 # @section -- B. Environment
 # @notationType -- reference
 image:
   repository: pspdfkit/document-engine
   pullPolicy: IfNotPresent
-  # Defaults to the Chart appVersion
+  # Defaults to the `nutrient.io/image-tag` annotation in Chart.yaml,
+  # else to the chart appVersion. See `helm show chart`.
   tag: ""
 # -- Pull secrets
 # @section -- B. Environment
