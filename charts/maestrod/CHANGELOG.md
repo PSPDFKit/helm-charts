@@ -1,6 +1,8 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [1.0.0 (2026-11-26)](#100-2026-11-26)
+    - [Versioning](#versioning)
   - [0.11.6 (2026-11-23)](#0116-2026-11-23)
     - [Updated](#updated)
   - [0.11.5 (2026-11-06)](#0115-2026-11-06)
@@ -48,6 +50,27 @@
     - [Added](#added-2)
   - [0.5.0 (2026-05-27)](#050-2026-05-27)
     - [Added](#added-3)
+
+## 1.0.0 (2026-11-26)
+
+### Versioning
+
+The chart moves to 1.0.0 with no template or values changes. The appVersion
+stays at `1.12.2`. Under 0.x semver every minor bump counts as breaking, which
+makes a version range unusable for consumers that want automatic updates. From
+1.0.0 on, the chart version means:
+
+- **Patch**: a maestrod release (appVersion bump) or a fix that changes no
+  values and no rendered object shape.
+- **Minor**: a backward-compatible chart change, such as a new optional value
+  or resource. Existing values keep working and existing objects keep their
+  shape.
+- **Major**: a breaking change for consumers of the chart's values or generated
+  objects, such as a removed or renamed value, a changed default, or a change to
+  an immutable field such as the Deployment selector.
+
+Every chart version change alters the `helm.sh/chart` label on the Pod
+template, so rolling out any new chart version restarts the maestrod pods.
 
 ## 0.11.6 (2026-11-23)
 
