@@ -1,6 +1,7 @@
 # Changelog
 
 - [Changelog](#changelog)
+  - [8.9.1 (2026-11-27)](#891-2026-11-27)
   - [8.9.0 (2026-11-04)](#890-2026-11-04)
   - [8.8.0 (2026-10-30)](#880-2026-10-30)
   - [8.7.1 (2026-10-28)](#871-2026-10-28)
@@ -244,6 +245,10 @@
     - [Changed](#changed-67)
   - [2.0.0](#200)
     - [Changed](#changed-68)
+
+## 8.9.1 (2026-11-27)
+
+* `assetStorage.azure.accountName` now reaches Document Engine without `assetStorage.azure.accountKey`. Previously the chart wrote the account name only when the key was also set. This prepares the chart for Azure Blob Storage with Microsoft Azure Workload Identity. Installs that use an account key or a connection string render the same as before.
 
 ## 8.9.0 (2026-11-04)
 
